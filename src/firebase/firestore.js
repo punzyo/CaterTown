@@ -22,13 +22,45 @@ const data = {
     left: 0,
   },
 };
-async function updatePlayerPosition(docId, position) {
-    try {
-        const docRef = doc(db, "users", docId);
-        await updateDoc(docRef, position);
-        console.log("Document successfully updated!");
-      } catch (error) {
-        console.error("Error updating document: ", error);
+export async function updatePlayerPosition(playerName,position) {
+  const roomDocRef = doc(db, 'rooms', '001');
+
+  try {
+    await updateDoc(roomDocRef, {
+      [`users.${playerName}.position`]: {
+        top: position.top, 
+        left: position.left
       }
+    });
+    console.log("Position successfully updated!");
+  } catch (error) {
+    console.error("Error updating position: ", error);
   }
-  
+}
+
+export async function getPlayerPosition(playerName) {
+  const roomDocRef = doc(db, 'rooms', '001');
+
+  try {
+
+    const docSnap = await getDoc(roomDocRef);
+
+    if (docSnap.exists()) {
+   
+      const playerPosition = docSnap.data().users[playerName]?.position;
+      if (playerPosition) {
+        console.log(`${playerName}'s position:`, playerPosition);
+        return playerPosition;
+      } else {
+        console.log(`${playerName} does not exist in this room.`);
+        return null;
+      }
+    } else {
+      console.log("No such document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting document:", error);
+    return null;
+  }
+}

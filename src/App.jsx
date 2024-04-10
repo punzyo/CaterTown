@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import BaseGlobalStyle from './BaseGlobalStyle';
-
+import { updatePlayerPosition, getPlayerPosition } from './firebase/firestore';
 const wrapperWidth = '1400';
 const wrapperHeight = '1000';
 const mapBorder = '100';
@@ -13,6 +13,7 @@ const Wrapper = styled.div`
   height: ${wrapperHeight}px;
   border: 1px solid;
   overflow: hidden;
+  user-select: none;
 `;
 const Map = styled.div`
   position: relative;
@@ -39,72 +40,111 @@ const OtherPlayer = styled.div`
   background-color: black;
 `;
 function App() {
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-  const [playerPosition, setPlayerPosition] = useState({ top: 100, left: 100 });
+  const [position, setPosition] = useState(null);
+  const [otherPlayers, setOtherPlayers] = useState([]);
+  const [playerName, setPlayerName] = useState('');
+  const nameInput = useRef(null);
   useEffect(() => {
-    const handleKeyPress = (e) => {
+    const handleKeyPress = async (e) => {
+      let absolutePosition;
+      if (!playerName) return;
+      console.log('?');
       const { key } = e;
       const moveAmount = 10;
       switch (key) {
         case 'ArrowUp':
           setPosition((pos) => ({ ...pos, top: pos.top + moveAmount }));
-          playerPosToAbsolute({
+          absolutePosition = playerPosToAbsolute({
             left: position.left,
             top: position.top + moveAmount,
           });
+          await updatePlayerPosition(playerName, absolutePosition);
           break;
         case 'ArrowDown':
           setPosition((pos) => ({ ...pos, top: pos.top - moveAmount }));
-          playerPosToAbsolute({
+          absolutePosition = playerPosToAbsolute({
             left: position.left,
             top: position.top - moveAmount,
           });
+          await updatePlayerPosition(playerName, absolutePosition);
           break;
         case 'ArrowLeft':
           setPosition((pos) => ({ ...pos, left: pos.left + moveAmount }));
-          playerPosToAbsolute({
+          absolutePosition = playerPosToAbsolute({
             left: position.left + moveAmount,
             top: position.top,
           });
+          await updatePlayerPosition(playerName, absolutePosition);
           break;
         case 'ArrowRight':
           setPosition((pos) => ({ ...pos, left: pos.left - moveAmount }));
-          playerPosToAbsolute({
+          absolutePosition = playerPosToAbsolute({
             left: position.left - moveAmount,
             top: position.top,
           });
+          await updatePlayerPosition(playerName, absolutePosition);
           break;
         default:
           break;
       }
     };
-
     window.addEventListener('keydown', handleKeyPress);
-
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [position]);
+  useEffect(() => {
+    if (!playerName) return;
+    const updatePosition = async () => {
+      try {
+        const playerPosition = await getPlayerPosition(playerName);
+        const mapPosition = playerAbsoluteToMapPos(playerPosition);
+        setPosition(mapPosition);
+      } catch (error) {
+        console.error('Error updating position:', error);
+      }
+    };
 
+    updatePosition();
+  }, [playerName]);
   const playerPosToAbsolute = (position) => {
     const absoluteLeft =
       wrapperWidth / 2 - playerWidth / 2 - mapBorder - position.left;
     const absoluteTop =
       wrapperHeight / 2 - playerHeight / 2 - mapBorder - position.top;
     console.log(absoluteLeft, absoluteTop);
+    return { left: absoluteLeft, top: absoluteTop };
+  };
+
+  const playerAbsoluteToMapPos = (position) => {
+    const mapLeft =
+      wrapperWidth / 2 - playerWidth / 2 - mapBorder - position.left;
+    const mapTop =
+      wrapperHeight / 2 - playerHeight / 2 - mapBorder - position.top;
+    return { left: mapLeft, top: mapTop };
   };
   return (
     <>
       <BaseGlobalStyle />
-      <Wrapper>
-        <Map style={{ top: `${position.top}px`, left: `${position.left}px` }}>
-          <OtherPlayer
-            style={{
-              top: `${playerPosition.top}px`,
-              left: `${playerPosition.left}px`,
-            }}
-          />
-        </Map>
-        <Player></Player>
-      </Wrapper>
+      {playerName && (
+        <Wrapper>
+          {position && <Map style={{ top: `${position.top}px`, left: `${position.left}px` }}>
+            {playerPosition &&<OtherPlayer
+              style={{
+                top: `${playerPosition.top}px`,
+                left: `${playerPosition.left}px`,
+              }}
+            />}
+          </Map>}
+          {position && <Player></Player>}
+        </Wrapper>
+      )}
+      <input type="text" placeholder="輸入你的名稱" ref={nameInput} />
+      <button
+        onClick={() => {
+          setPlayerName(nameInput.current.value);
+        }}
+      >
+        送出
+      </button>
     </>
   );
 }
