@@ -1,7 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useReducer } from 'react';
 import styled from 'styled-components';
 import BaseGlobalStyle from './BaseGlobalStyle';
-import { updatePlayerPosition, getPlayerPosition, getOtherPlayersData } from './firebase/firestore';
+import {
+  updatePlayerPosition,
+  getPlayerPosition,
+  getOtherPlayersData,
+} from './firebase/firestore';
 const wrapperWidth = '1400';
 const wrapperHeight = '1000';
 const mapBorder = '100';
@@ -41,78 +45,89 @@ const OtherPlayer = styled.div`
   background-color: black;
   color: white;
 `;
+function positionReducer(state, action) {
+  switch (action.type) {
+    case 'move':
+      return {
+        ...state,
+        top:
+          action.payload.top !== undefined
+            ? state.top + action.payload.top
+            : state.top,
+        left:
+          action.payload.left !== undefined
+            ? state.left + action.payload.left
+            : state.left,
+      };
+    case 'SET_POSITION':
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 function App() {
-  const [position, setPosition] = useState(null);
+  const [position, dispatchPosition] = useReducer(positionReducer, null);
   const [otherPlayers, setOtherPlayers] = useState([]);
   const [playerName, setPlayerName] = useState('');
   const nameInput = useRef(null);
   useEffect(() => {
     const handleKeyPress = async (e) => {
-      let absolutePosition;
       if (!playerName) return;
-      console.log('?');
-      const { key } = e;
+      let move = { top: 0, left: 0 };
       const moveAmount = 10;
-      switch (key) {
+
+      switch (e.key) {
         case 'ArrowUp':
-          setPosition((pos) => ({ ...pos, top: pos.top + moveAmount }));
-          absolutePosition = playerPosToAbsolute({
-            left: position.left,
-            top: position.top + moveAmount,
-          });
-          await updatePlayerPosition(playerName, absolutePosition);
+          move.top = moveAmount;
           break;
         case 'ArrowDown':
-          setPosition((pos) => ({ ...pos, top: pos.top - moveAmount }));
-          absolutePosition = playerPosToAbsolute({
-            left: position.left,
-            top: position.top - moveAmount,
-          });
-          await updatePlayerPosition(playerName, absolutePosition);
+          move.top = -moveAmount;
           break;
         case 'ArrowLeft':
-          setPosition((pos) => ({ ...pos, left: pos.left + moveAmount }));
-          absolutePosition = playerPosToAbsolute({
-            left: position.left + moveAmount,
-            top: position.top,
-          });
-          await updatePlayerPosition(playerName, absolutePosition);
+          move.left = moveAmount;
           break;
         case 'ArrowRight':
-          setPosition((pos) => ({ ...pos, left: pos.left - moveAmount }));
-          absolutePosition = playerPosToAbsolute({
-            left: position.left - moveAmount,
-            top: position.top,
-          });
-          await updatePlayerPosition(playerName, absolutePosition);
+          move.left = -moveAmount;
           break;
         default:
-          break;
+          return;
       }
+
+      dispatchPosition({ type: 'move', payload: move });
+      const absolutePosition = playerPosToAbsolute({
+        top: position?.top + move.top,
+        left: position?.left + move.left,
+      });
+      await updatePlayerPosition(playerName, absolutePosition);
     };
+
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [position]);
+
   useEffect(() => {
     if (!playerName) return;
     const updatePosition = async () => {
       try {
         const playerPosition = await getPlayerPosition(playerName);
         const mapPosition = playerAbsoluteToMapPos(playerPosition);
-        setPosition(mapPosition);
+        dispatchPosition({ type: 'SET_POSITION', payload:mapPosition });
       } catch (error) {
         console.error('Error updating position:', error);
       }
     };
     const updateOtherPlayers = async () => {
-      const otherPlayersData = await getOtherPlayersData(playerName)
-      const otherPlayersArray = Object.entries(otherPlayersData).map(([name, data]) => ({
-        name,
-        ...data
-      }));
+      const otherPlayersData = await getOtherPlayersData(playerName);
+      const otherPlayersArray = Object.entries(otherPlayersData).map(
+        ([name, data]) => ({
+          name,
+          ...data,
+        })
+      );
       setOtherPlayers(otherPlayersArray);
-    }
-    updateOtherPlayers()
+    };
+    updateOtherPlayers();
     updatePosition();
   }, [playerName]);
   const playerPosToAbsolute = (position) => {
@@ -136,13 +151,24 @@ function App() {
       <BaseGlobalStyle />
       {playerName && (
         <Wrapper>
-          {position && <Map style={{ top: `${position.top}px`, left: `${position.left}px` }}>
-            {otherPlayers && otherPlayers.map((player) => (
-              <OtherPlayer style={{ top: `${player.position.top}px`, left: `${player.position.left}px` }} key={player.name}>
-                {player.name}
-              </OtherPlayer>
-            ))}
-          </Map>}
+          {position && (
+            <Map
+              style={{ top: `${position.top}px`, left: `${position.left}px` }}
+            >
+              {otherPlayers &&
+                otherPlayers.map((player) => (
+                  <OtherPlayer
+                    style={{
+                      top: `${player.position.top}px`,
+                      left: `${player.position.left}px`,
+                    }}
+                    key={player.name}
+                  >
+                    {player.name}
+                  </OtherPlayer>
+                ))}
+            </Map>
+          )}
           {position && <Player>{playerName}</Player>}
         </Wrapper>
       )}
