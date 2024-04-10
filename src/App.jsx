@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import BaseGlobalStyle from './BaseGlobalStyle';
-import { updatePlayerPosition, getPlayerPosition } from './firebase/firestore';
+import { updatePlayerPosition, getPlayerPosition, getOtherPlayersData } from './firebase/firestore';
 const wrapperWidth = '1400';
 const wrapperHeight = '1000';
 const mapBorder = '100';
@@ -31,6 +31,7 @@ const Player = styled.div`
   height: ${playerHeight}px;
   border: 1px solid;
   background-color: black;
+  color: white;
 `;
 const OtherPlayer = styled.div`
   position: absolute;
@@ -38,6 +39,7 @@ const OtherPlayer = styled.div`
   height: 100px;
   border: 1px solid;
   background-color: black;
+  color: white;
 `;
 function App() {
   const [position, setPosition] = useState(null);
@@ -102,7 +104,15 @@ function App() {
         console.error('Error updating position:', error);
       }
     };
-
+    const updateOtherPlayers = async () => {
+      const otherPlayersData = await getOtherPlayersData(playerName)
+      const otherPlayersArray = Object.entries(otherPlayersData).map(([name, data]) => ({
+        name,
+        ...data
+      }));
+      setOtherPlayers(otherPlayersArray);
+    }
+    updateOtherPlayers()
     updatePosition();
   }, [playerName]);
   const playerPosToAbsolute = (position) => {
@@ -127,14 +137,13 @@ function App() {
       {playerName && (
         <Wrapper>
           {position && <Map style={{ top: `${position.top}px`, left: `${position.left}px` }}>
-            {playerPosition &&<OtherPlayer
-              style={{
-                top: `${playerPosition.top}px`,
-                left: `${playerPosition.left}px`,
-              }}
-            />}
+            {otherPlayers && otherPlayers.map((player) => (
+              <OtherPlayer style={{ top: `${player.position.top}px`, left: `${player.position.left}px` }} key={player.name}>
+                {player.name}
+              </OtherPlayer>
+            ))}
           </Map>}
-          {position && <Player></Player>}
+          {position && <Player>{playerName}</Player>}
         </Wrapper>
       )}
       <input type="text" placeholder="輸入你的名稱" ref={nameInput} />

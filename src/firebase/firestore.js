@@ -64,3 +64,27 @@ export async function getPlayerPosition(playerName) {
     return null;
   }
 }
+
+
+export async function getOtherPlayersData( excludePlayerId) {
+  const roomDocRef = doc(db, 'rooms', '001');
+
+  try {
+    const docSnap = await getDoc(roomDocRef);
+
+    if (docSnap.exists()) {
+      const roomData = docSnap.data();
+      const users = roomData.users || {};
+      delete users[excludePlayerId];
+
+      console.log("Other players data:", users);
+      return users;
+    } else {
+      console.log("No such room exists!");
+      return {};
+    }
+  } catch (error) {
+    console.error("Error getting document:", error);
+    return {};
+  }
+}
