@@ -33,7 +33,7 @@ const Player = styled.div`
   width: ${playerWidth}px;
   height: ${playerHeight}px;
 
-  background-position: -767px -64px;
+  background-position: -767px -833px;
   background-size: 2048px 1088px; 
   background-image: url(/images/animals/calico_0.png);
   color: white;
@@ -66,50 +66,61 @@ function positionReducer(state, action) {
       return state;
   }
 }
-const frames = [
-  '-767px -64px', // 帧1
-  '-832px -64px', // 帧2
-  '-897px -64px', // 帧3
-  '-963px -64px', // 帧4
-];
+const frames = {
+ down:[ '-767px -64px',
+ '-832px -64px', 
+ '-897px -64px',
+ '-963px -64px'] 
+};
 function App() {
   const [position, dispatchPosition] = useReducer(positionReducer, null);
   const [currentFrame, setCurrentFrame] = useState(0);
+  const [direction, setDirection] = useState('down');
   const [playerName, setPlayerName] = useState('');
   const nameInput = useRef(null);
   const otherPlayers = useOtherPlayer(playerName);
-  
+  const directionYPositions = {
+    down: '-64px',
+    left: '-320px',
+    up: '-573px',
+    right: '-833px',
+  };
+
+  const framesXPositions = ['-767px', '-832px', '-897px', '-963px'];
   useEffect(() => {
     if (!playerName) return;
     const handleKeyPress = async (e) => {
       if (!playerName) return;
       let move = { top: 0, left: 0 };
-      const moveAmount = 10;
-
+      let moveDirection = direction; 
+  
       switch (e.key) {
         case 'ArrowUp':
-          move.top = moveAmount;
+          move.top = 10;
+          moveDirection = 'up';
           break;
         case 'ArrowDown':
-          move.top = -moveAmount;
+          move.top = -10;
+          moveDirection = 'down';
           break;
         case 'ArrowLeft':
-          move.left = moveAmount;
+          move.left = 10;
+          moveDirection = 'left';
           break;
         case 'ArrowRight':
-          move.left = -moveAmount;
+          move.left = -10;
+          moveDirection = 'right';
           break;
         default:
-          return;
+          return; // 如果按下的不是方向键，直接返回
       }
-
+  
+      // 更新方向和位置
+      setDirection(moveDirection);
+      setCurrentFrame((prevFrame) => (prevFrame + 1) % framesXPositions.length); 
       dispatchPosition({ type: 'move', payload: move });
-      const absolutePosition = playerPosToAbsolute({
-        top: position?.top + move.top,
-        left: position?.left + move.left,
-      });
+      const absolutePosition = playerPosToAbsolute({ top: position.top + move.top, left: position.left + move.left });
       await updatePlayerPosition(playerName, absolutePosition);
-      setCurrentFrame((prevFrame) => (prevFrame + 1) % frames.length);
     };
  
         window.addEventListener('keydown', handleKeyPress);
@@ -148,9 +159,7 @@ function App() {
     return { left: mapLeft, top: mapTop };
   };
 
-  const playerStyle = {
-    backgroundPosition: frames[currentFrame], // 使用状态来设置背景位置
-  };
+
   return (
     <>
       <BaseGlobalStyle />
@@ -174,7 +183,9 @@ function App() {
                 ))}
             </Map>
           )}
-          {position && <Player style={playerStyle}></Player>}
+          {position && <Player style={{
+              backgroundPosition: `${framesXPositions[currentFrame]} ${directionYPositions[direction]}`,
+            }}></Player>}
         </Wrapper>
       )}
       <input type="text" placeholder="輸入你的名稱" ref={nameInput} />
