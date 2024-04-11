@@ -15,7 +15,6 @@ const Wrapper = styled.div`
   position: relative;
   width: ${wrapperWidth}px;
   height: ${wrapperHeight}px;
-  border: 1px solid;
   overflow: hidden;
   user-select: none;
 `;
@@ -33,7 +32,7 @@ const Player = styled.div`
   transform: translate(-50%, -50%);
   width: ${playerWidth}px;
   height: ${playerHeight}px;
-  border: 1px solid;
+  border: 1px solid red;
   background-color: black;
   color: white;
 `;
@@ -41,7 +40,7 @@ const OtherPlayer = styled.div`
   position: absolute;
   width: 100px;
   height: 100px;
-  border: 1px solid;
+  border: 1px solid blue;
   background-color: black;
   color: white;
 `;
