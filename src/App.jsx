@@ -126,7 +126,6 @@ const mapIndex = {
   },
 };
 
-
 const map1 = {
   floor7: [
     { top: 0, left: 0 },
@@ -526,16 +525,16 @@ function App() {
       {playerName && (
         <Wrapper>
           {position && (
-            <Map1
-            position={position}
-            >
+            <Map1 position={position}>
               {otherPlayers &&
                 otherPlayers.map((player) => (
                   <OtherPlayer
                     style={{
                       top: `${player.position.top}px`,
                       left: `${player.position.left}px`,
-                      backgroundPosition: `${framesXPositions[player.position.frame]} ${directionYPositions[player.position.direction]}`
+                      backgroundPosition: `${
+                        framesXPositions[player.position.frame]
+                      } ${directionYPositions[player.position.direction]}`,
                     }}
                     key={player.name}
                   >
@@ -567,8 +566,7 @@ function App() {
 
 export default App;
 
-
- function Map1({position}) {
+function Map1({ position }) {
   const getItemStyles = (itemName) => {
     const item = mapIndex[itemName];
     if (!item) return {};
@@ -585,22 +583,22 @@ export default App;
     };
   };
   return (
-    <Map  $top={`${position.top}px`} $left={`${position.left}px`}>
-     {Object.keys(map1).map((itemType) =>
-          map1[itemType].map((position, index) => {
-            const itemStyles = getItemStyles(itemType);
-            return (
-              <MapImage
-                key={`${itemType}-${index}`}
-                width={`${itemStyles.width}px`}
-                height={`${itemStyles.height}px`}
-                left={`${position.left * 48}px`}
-                top={`${position.top * 48}px`}
-                backgroundPosition={itemStyles.backgroundPosition}
-              />
-            );
-          })
-        )}
+    <Map $top={`${position.top}px`} $left={`${position.left}px`}>
+      {Object.keys(map1).map((itemType) =>
+        map1[itemType].map((position, index) => {
+          const itemStyles = getItemStyles(itemType);
+          return (
+            <MapImage
+              key={`${itemType}-${index}`}
+              width={`${itemStyles.width}px`}
+              height={`${itemStyles.height}px`}
+              left={`${position.left * 48}px`}
+              top={`${position.top * 48}px`}
+              backgroundPosition={itemStyles.backgroundPosition}
+            />
+          );
+        })
+      )}
     </Map>
-  )
+  );
 }
