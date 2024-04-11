@@ -4,8 +4,8 @@ import BaseGlobalStyle from './BaseGlobalStyle';
 import {
   updatePlayerPosition,
   getPlayerPosition,
-  getOtherPlayersData,
 } from './firebase/firestore';
+import { useOtherPlayer } from './utils/hooks/useOherPlayer';
 const wrapperWidth = '1400';
 const wrapperHeight = '1000';
 const mapBorder = '100';
@@ -68,10 +68,13 @@ function positionReducer(state, action) {
 
 function App() {
   const [position, dispatchPosition] = useReducer(positionReducer, null);
-  const [otherPlayers, setOtherPlayers] = useState([]);
+
   const [playerName, setPlayerName] = useState('');
   const nameInput = useRef(null);
+  const otherPlayers = useOtherPlayer(playerName);
+  
   useEffect(() => {
+    if (!playerName) return;
     const handleKeyPress = async (e) => {
       if (!playerName) return;
       let move = { top: 0, left: 0 };
@@ -101,9 +104,11 @@ function App() {
       });
       await updatePlayerPosition(playerName, absolutePosition);
     };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+ 
+        window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress)
+    };
   }, [position]);
 
   useEffect(() => {
@@ -117,17 +122,6 @@ function App() {
         console.error('Error updating position:', error);
       }
     };
-    const updateOtherPlayers = async () => {
-      const otherPlayersData = await getOtherPlayersData(playerName);
-      const otherPlayersArray = Object.entries(otherPlayersData).map(
-        ([name, data]) => ({
-          name,
-          ...data,
-        })
-      );
-      setOtherPlayers(otherPlayersArray);
-    };
-    updateOtherPlayers();
     updatePosition();
   }, [playerName]);
   const playerPosToAbsolute = (position) => {

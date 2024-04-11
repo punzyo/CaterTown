@@ -14,14 +14,8 @@ import {
 } from 'firebase/firestore';
 
 
-const db = getFirestore(app);
-const docId = 'yili';
-const data = {
-  position: {
-    top: 0,
-    left: 0,
-  },
-};
+export const db = getFirestore(app);
+
 export async function updatePlayerPosition(playerName,position) {
   const roomDocRef = doc(db, 'rooms', '001');
 
@@ -88,3 +82,4 @@ export async function getOtherPlayersData( excludePlayerId) {
     return {};
   }
 }
+
