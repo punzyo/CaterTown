@@ -16,14 +16,16 @@ import {
 
 export const db = getFirestore(app);
 
-export async function updatePlayerPosition(playerName,position) {
+export async function updatePlayerPosition(playerName,data) {
   const roomDocRef = doc(db, 'rooms', '001');
-
+  console.log('21',data);
   try {
     await updateDoc(roomDocRef, {
       [`users.${playerName}.position`]: {
-        top: position.top, 
-        left: position.left
+        top: data.top, 
+        left: data.left,
+        direction:data.direction,
+        frame:data.frame
       }
     });
     console.log("Position successfully updated!");

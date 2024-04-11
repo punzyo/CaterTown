@@ -1,10 +1,7 @@
 import { useState, useEffect, useRef, useReducer } from 'react';
 import styled from 'styled-components';
 import BaseGlobalStyle from './BaseGlobalStyle';
-import {
-  updatePlayerPosition,
-  getPlayerPosition,
-} from './firebase/firestore';
+import { updatePlayerPosition, getPlayerPosition } from './firebase/firestore';
 import { useOtherPlayer } from './utils/hooks/useOherPlayer';
 const wrapperWidth = '1400';
 const wrapperHeight = '1000';
@@ -34,17 +31,18 @@ const Player = styled.div`
   height: ${playerHeight}px;
 
   background-position: -767px -833px;
-  background-size: 2048px 1088px; 
+  background-size: 2048px 1088px;
   background-image: url(/images/animals/calico_0.png);
-  color: white;
+  color: black;
 `;
 const OtherPlayer = styled.div`
   position: absolute;
   width: ${playerWidth}px;
   height: ${playerHeight}px;
-  border: 1px solid blue;
-  background-color: black;
-  color: white;
+  background-position: -767px -833px;
+  background-size: 2048px 1088px;
+  background-image: url(/images/animals/gold_0.png);
+  color: black;
 `;
 function positionReducer(state, action) {
   switch (action.type) {
@@ -66,12 +64,6 @@ function positionReducer(state, action) {
       return state;
   }
 }
-const frames = {
- down:[ '-767px -64px',
- '-832px -64px', 
- '-897px -64px',
- '-963px -64px'] 
-};
 function App() {
   const [position, dispatchPosition] = useReducer(positionReducer, null);
   const [currentFrame, setCurrentFrame] = useState(0);
@@ -92,40 +84,61 @@ function App() {
     const handleKeyPress = async (e) => {
       if (!playerName) return;
       let move = { top: 0, left: 0 };
-      let moveDirection = direction; 
+      let canMove = true; 
   
       switch (e.key) {
         case 'ArrowUp':
-          move.top = 10;
-          moveDirection = 'up';
+          if (position.top === (wrapperHeight / 2 - mapBorder - playerHeight / 2)) {
+            canMove = false; 
+          }
+          if (canMove) move.top = 10;
+          setDirection('up');
           break;
         case 'ArrowDown':
-          move.top = -10;
-          moveDirection = 'down';
+          if (position.top === (wrapperHeight / 2 - mapBorder - playerHeight / 2) * -1) {
+            canMove = false; 
+          }
+          if (canMove) move.top = -10;
+          setDirection('down');
           break;
         case 'ArrowLeft':
-          move.left = 10;
-          moveDirection = 'left';
+          if (position.left === (wrapperWidth / 2 - mapBorder - playerWidth / 2)) {
+            canMove = false; 
+          }
+          if (canMove) move.left = 10;
+          setDirection('left');
           break;
         case 'ArrowRight':
-          move.left = -10;
-          moveDirection = 'right';
+          if (position.left === (wrapperWidth / 2 - mapBorder - playerWidth / 2) * -1) {
+            canMove = false; 
+          }
+          if (canMove) move.left = -10;
+          setDirection('right');
           break;
         default:
-          return; // 如果按下的不是方向键，直接返回
+          return; 
       }
   
-      // 更新方向和位置
-      setDirection(moveDirection);
-      setCurrentFrame((prevFrame) => (prevFrame + 1) % framesXPositions.length); 
-      dispatchPosition({ type: 'move', payload: move });
-      const absolutePosition = playerPosToAbsolute({ top: position.top + move.top, left: position.left + move.left });
-      await updatePlayerPosition(playerName, absolutePosition);
+      if (canMove) {
+    
+        setCurrentFrame((prevFrame) => (prevFrame + 1) % framesXPositions.length);
+        dispatchPosition({ type: 'move', payload: move });
+        const absolutePosition = playerPosToAbsolute({
+          top: position.top + move.top,
+          left: position.left + move.left,
+        });
+        await updatePlayerPosition(playerName, {
+          ...absolutePosition,
+          direction: e.key.includes('Arrow') ? e.key.slice(5).toLowerCase() : '',
+          frame: currentFrame
+        });
+      }
     };
- 
-        window.addEventListener('keydown', handleKeyPress);
+  
+
+    window.addEventListener('keydown', handleKeyPress);
     return () => {
-      window.removeEventListener('keydown', handleKeyPress)
+      window.removeEventListener('keydown', handleKeyPress);
     };
   }, [position]);
 
@@ -135,7 +148,7 @@ function App() {
       try {
         const playerPosition = await getPlayerPosition(playerName);
         const mapPosition = playerAbsoluteToMapPos(playerPosition);
-        dispatchPosition({ type: 'SET_POSITION', payload:mapPosition });
+        dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
       } catch (error) {
         console.error('Error updating position:', error);
       }
@@ -159,7 +172,6 @@ function App() {
     return { left: mapLeft, top: mapTop };
   };
 
-
   return (
     <>
       <BaseGlobalStyle />
@@ -175,6 +187,7 @@ function App() {
                     style={{
                       top: `${player.position.top}px`,
                       left: `${player.position.left}px`,
+                      backgroundPosition: `${framesXPositions[player.position.frame]} ${directionYPositions[player.position.direction]}`
                     }}
                     key={player.name}
                   >
@@ -183,9 +196,13 @@ function App() {
                 ))}
             </Map>
           )}
-          {position && <Player style={{
-              backgroundPosition: `${framesXPositions[currentFrame]} ${directionYPositions[direction]}`,
-            }}></Player>}
+          {position && (
+            <Player
+              style={{
+                backgroundPosition: `${framesXPositions[currentFrame]} ${directionYPositions[direction]}`,
+              }}
+            ></Player>
+          )}
         </Wrapper>
       )}
       <input type="text" placeholder="輸入你的名稱" ref={nameInput} />
