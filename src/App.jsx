@@ -49,8 +49,8 @@ const mapIndex = {
   floor5: {
     width: 1,
     height: 1,
-    x: 10,
-    y: -2,
+    x: 11,
+    y: -3,
   },
   floor6: {
     width: 2,
@@ -81,10 +81,17 @@ const mapIndex = {
     height: 1,
     x: 13,
     y: -1,
-  },floor11: {
+  },
+  floor11: {
     width: 1,
     height: 1,
     x: 13,
+    y: -2,
+  },
+  floor12: {
+    width: 1,
+    height: 1,
+    x: 16,
     y: -2,
   },
   tree1: {
@@ -95,20 +102,200 @@ const mapIndex = {
   },
   tree2: {
     width: 2,
-    height: 3,
+    height: 2.5,
     x: 10,
-    y: -12,
+    y: -12.5,
   },
-  tree3:{
+  tree3: {
     width: 5,
     height: 3,
     x: 10,
     y: -15,
-  }
+  },
+  tree4: {
+    width: 5,
+    height: 3,
+    x: 10,
+    y: -18,
+  },
+  house1: {
+    width: 4,
+    height: 3,
+    x: 13,
+    y: -21,
+  },
 };
-const map1 = [{item:"tree3",position:{top:0,left:0}}]
-const wrapperWidth = '1400';
-const wrapperHeight = '1000';
+
+
+const map1 = {
+  floor7: [
+    { top: 0, left: 0 },
+    { top: 0, left: 1 },
+    { top: 0, left: 2 },
+    { top: 0, left: 3 },
+    { top: 0, left: 4 },
+    { top: 1, left: 0 },
+    { top: 1, left: 1 },
+    { top: 1, left: 2 },
+    { top: 1, left: 3 },
+    { top: 1, left: 4 },
+    { top: 1, left: 8 },
+    { top: 1, left: 9 },
+    { top: 1, left: 10 },
+    { top: 1, left: 11 },
+    { top: 1, left: 12 },
+    { top: 1, left: 13 },
+    { top: 1, left: 14 },
+    { top: 0, left: 8 },
+    { top: 0, left: 9 },
+    { top: 0, left: 10 },
+    { top: 0, left: 11 },
+    { top: 0, left: 12 },
+    { top: 0, left: 13 },
+    { top: 0, left: 14 },
+    { top: 2, left: 0 },
+    { top: 2, left: 1 },
+    { top: 2, left: 2 },
+    { top: 2, left: 3 },
+    { top: 2, left: 4 },
+    { top: 2, left: 8 },
+    { top: 2, left: 9 },
+    { top: 2, left: 10 },
+    { top: 2, left: 11 },
+    { top: 2, left: 12 },
+    { top: 2, left: 13 },
+    { top: 2, left: 14 },
+    { top: 3, left: 0 },
+    { top: 3, left: 1 },
+    { top: 3, left: 2 },
+    { top: 3, left: 3 },
+    { top: 3, left: 4 },
+    { top: 3, left: 8 },
+    { top: 3, left: 9 },
+    { top: 3, left: 10 },
+    { top: 3, left: 11 },
+    { top: 3, left: 12 },
+    { top: 3, left: 13 },
+    { top: 3, left: 14 },
+    { top: 4, left: 0 },
+    { top: 4, left: 1 },
+    { top: 4, left: 2 },
+    { top: 4, left: 3 },
+    { top: 4, left: 4 },
+    { top: 4, left: 8 },
+    { top: 4, left: 9 },
+    { top: 4, left: 13 },
+    { top: 4, left: 14 },
+    { top: 5, left: 8 },
+    { top: 5, left: 9 },
+    { top: 5, left: 13 },
+    { top: 5, left: 14 },
+    { top: 6, left: 13 },
+    { top: 6, left: 14 },
+    { top: 7, left: 0 },
+    { top: 7, left: 1 },
+    { top: 7, left: 2 },
+    { top: 7, left: 3 },
+    { top: 7, left: 4 },
+    { top: 7, left: 5 },
+    { top: 7, left: 6 },
+    { top: 7, left: 7 },
+    { top: 7, left: 10 },
+    { top: 7, left: 11 },
+    { top: 7, left: 12 },
+    { top: 7, left: 13 },
+    { top: 7, left: 14 },
+    { top: 8, left: 0 },
+    { top: 8, left: 1 },
+    { top: 8, left: 2 },
+    { top: 8, left: 3 },
+    { top: 8, left: 4 },
+    { top: 8, left: 5 },
+    { top: 8, left: 6 },
+    { top: 8, left: 7 },
+    { top: 8, left: 10 },
+    { top: 8, left: 11 },
+    { top: 8, left: 12 },
+    { top: 8, left: 13 },
+    { top: 8, left: 14 },
+    { top: 9, left: 0 },
+    { top: 9, left: 1 },
+    { top: 9, left: 2 },
+    { top: 9, left: 3 },
+    { top: 9, left: 4 },
+    { top: 9, left: 5 },
+    { top: 9, left: 6 },
+    { top: 9, left: 7 },
+    { top: 9, left: 10 },
+    { top: 9, left: 11 },
+    { top: 9, left: 12 },
+    { top: 9, left: 13 },
+    { top: 9, left: 14 },
+  ],
+  tree3: [{ top: 0, left: 0 }],
+  floor1: [
+    { top: 0, left: 6 },
+    { top: 1, left: 6 },
+    { top: 2, left: 6 },
+    { top: 3, left: 6 },
+    { top: 4, left: 6 },
+    { top: 5, left: 6 },
+  ],
+  floor3: [
+    { top: 0, left: 5 },
+    { top: 1, left: 5 },
+    { top: 2, left: 5 },
+    { top: 3, left: 5 },
+    { top: 4, left: 5 },
+    { top: 7, left: 8 },
+    { top: 8, left: 8 },
+    { top: 9, left: 8 },
+  ],
+  tree4: [{ top: 2, left: 0 }],
+  floor4: [{ top: 5, left: 5 }],
+  floor5: [
+    { top: 5, left: 0 },
+    { top: 6, left: 8 },
+  ],
+  floor6: [
+    { top: 6, left: 0 },
+    { top: 6, left: 2 },
+    { top: 6, left: 4 },
+  ],
+  floor8: [
+    { top: 5, left: 1 },
+    { top: 5, left: 3 },
+  ],
+  floor9: [
+    { top: 4, left: 7 },
+    { top: 6, left: 7 },
+  ],
+  floor11: [
+    { top: 5, left: 7 },
+    { top: 9, left: 9 },
+    { top: 6, left: 9 },
+    { top: 7, left: 9 },
+    { top: 8, left: 9 },
+    { top: 4, left: 7 },
+    { top: 3, left: 7 },
+    { top: 2, left: 7 },
+    { top: 1, left: 7 },
+    { top: 0, left: 7 },
+  ],
+  floor12: [{ top: 6, left: 9 }],
+  house1: [
+    { top: 7, left: 0 },
+    { top: 7, left: 4 },
+  ],
+  waterpool: [{ top: 4, left: 10 }],
+  floor2: [{ top: 6, left: 6 }],
+  tree2: [
+    { top: 0, left: 9 },
+    { top: 0, left: 12 },
+  ],
+};
+const wrapperWidth = '920';
+const wrapperHeight = '680';
 const mapBorder = '100';
 const playerWidth = '60';
 const playerHeight = '60';
@@ -153,11 +340,11 @@ const OtherPlayer = styled.div`
 `;
 const MapImage = styled.div`
   position: absolute;
-  width: 240px;
-  height: 144px;
-  left: 0;
-  top: 0;
-  background-position: 480px -720px;
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  left: ${(props) => props.left};
+  top: ${(props) => props.top};
+  background-position: ${(props) => props.backgroundPosition};
   background-image: url(/images/map/map1_48x48.png);
 `;
 function positionReducer(state, action) {
@@ -301,17 +488,46 @@ function App() {
       wrapperHeight / 2 - playerHeight / 2 - mapBorder - position.top;
     return { left: mapLeft, top: mapTop };
   };
+  const getItemStyles = (itemName) => {
+    const item = mapIndex[itemName];
+    if (!item) return {};
 
+    const width = item.width * 48;
+    const height = item.height * 48;
+    const backgroundPositionX = item.x * 48;
+    const backgroundPositionY = item.y * 48;
+
+    return {
+      width,
+      height,
+      backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
+    };
+  };
   return (
     <>
       <BaseGlobalStyle />
-      {map1.map()}
-      {/* {playerName && (
+      {/* <Wrapper>
+        {Object.keys(map1).map((itemType) =>
+          map1[itemType].map((position, index) => {
+            const itemStyles = getItemStyles(itemType);
+            return (
+              <MapImage
+                key={`${itemType}-${index}`}
+                width={`${itemStyles.width}px`}
+                height={`${itemStyles.height}px`}
+                left={`${position.left * 48}px`}
+                top={`${position.top * 48}px`}
+                backgroundPosition={itemStyles.backgroundPosition}
+              />
+            );
+          })
+        )}
+      </Wrapper> */}
+      {playerName && (
         <Wrapper>
           {position && (
-            <Map
-              // style={{ top: `${position.top}px`, left: `${position.left}px` }}
-              $top={`${position.top}px`} $left={`${position.left}px`}
+            <Map1
+            position={position}
             >
               {otherPlayers &&
                 otherPlayers.map((player) => (
@@ -326,7 +542,7 @@ function App() {
                     {player.name}
                   </OtherPlayer>
                 ))}
-            </Map>
+            </Map1>
           )}
           {position && (
             <Player
@@ -344,9 +560,47 @@ function App() {
         }}
       >
         送出
-      </button> */}
+      </button>
     </>
   );
 }
 
 export default App;
+
+
+ function Map1({position}) {
+  const getItemStyles = (itemName) => {
+    const item = mapIndex[itemName];
+    if (!item) return {};
+
+    const width = item.width * 48;
+    const height = item.height * 48;
+    const backgroundPositionX = item.x * 48;
+    const backgroundPositionY = item.y * 48;
+
+    return {
+      width,
+      height,
+      backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
+    };
+  };
+  return (
+    <Map  $top={`${position.top}px`} $left={`${position.left}px`}>
+     {Object.keys(map1).map((itemType) =>
+          map1[itemType].map((position, index) => {
+            const itemStyles = getItemStyles(itemType);
+            return (
+              <MapImage
+                key={`${itemType}-${index}`}
+                width={`${itemStyles.width}px`}
+                height={`${itemStyles.height}px`}
+                left={`${position.left * 48}px`}
+                top={`${position.top * 48}px`}
+                backgroundPosition={itemStyles.backgroundPosition}
+              />
+            );
+          })
+        )}
+    </Map>
+  )
+}
