@@ -21,7 +21,7 @@ html {
 
 body {
   font-weight: 400;
-
+  overflow: hidden;
   text-align: center;
   color: #3f3a3a;
   line-height: 2rem;

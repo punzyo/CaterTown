@@ -9,8 +9,8 @@ import { useOtherPlayer } from './utils/hooks/useOherPlayer';
 const wrapperWidth = '1400';
 const wrapperHeight = '1000';
 const mapBorder = '100';
-const playerWidth = '100';
-const playerHeight = '100';
+const playerWidth = '60';
+const playerHeight = '60';
 const Wrapper = styled.div`
   position: relative;
   width: ${wrapperWidth}px;
@@ -32,14 +32,16 @@ const Player = styled.div`
   transform: translate(-50%, -50%);
   width: ${playerWidth}px;
   height: ${playerHeight}px;
-  border: 1px solid red;
-  background-color: black;
+
+  background-position: -767px -64px;
+  background-size: 2048px 1088px; 
+  background-image: url(/images/animals/calico_0.png);
   color: white;
 `;
 const OtherPlayer = styled.div`
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: ${playerWidth}px;
+  height: ${playerHeight}px;
   border: 1px solid blue;
   background-color: black;
   color: white;
@@ -64,10 +66,15 @@ function positionReducer(state, action) {
       return state;
   }
 }
-
+const frames = [
+  '-767px -64px', // 帧1
+  '-832px -64px', // 帧2
+  '-897px -64px', // 帧3
+  '-963px -64px', // 帧4
+];
 function App() {
   const [position, dispatchPosition] = useReducer(positionReducer, null);
-
+  const [currentFrame, setCurrentFrame] = useState(0);
   const [playerName, setPlayerName] = useState('');
   const nameInput = useRef(null);
   const otherPlayers = useOtherPlayer(playerName);
@@ -102,6 +109,7 @@ function App() {
         left: position?.left + move.left,
       });
       await updatePlayerPosition(playerName, absolutePosition);
+      setCurrentFrame((prevFrame) => (prevFrame + 1) % frames.length);
     };
  
         window.addEventListener('keydown', handleKeyPress);
@@ -139,6 +147,10 @@ function App() {
       wrapperHeight / 2 - playerHeight / 2 - mapBorder - position.top;
     return { left: mapLeft, top: mapTop };
   };
+
+  const playerStyle = {
+    backgroundPosition: frames[currentFrame], // 使用状态来设置背景位置
+  };
   return (
     <>
       <BaseGlobalStyle />
@@ -162,7 +174,7 @@ function App() {
                 ))}
             </Map>
           )}
-          {position && <Player>{playerName}</Player>}
+          {position && <Player style={playerStyle}></Player>}
         </Wrapper>
       )}
       <input type="text" placeholder="輸入你的名稱" ref={nameInput} />
