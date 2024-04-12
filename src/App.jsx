@@ -45,7 +45,9 @@ const OtherPlayer = styled.div`
   position: absolute;
   width: ${playerWidth}px;
   height: ${playerHeight}px;
-  background-position: -767px -833px;
+  left: ${(props) => props.$left};
+  top: ${(props) => props.$top};
+  background-position: ${(props) => props.$backgroundPosition};
   background-size: 2048px 1088px;
   background-image: url(/images/animals/gold_0.png);
   color: black;
@@ -101,32 +103,35 @@ function App() {
     const handleKeyPress = async (e) => {
       if (!playerName) return;
       let move = { top: 0, left: 0 };
-
+      let keyDirection;
       switch (e.key) {
         case 'ArrowUp':
         case 'w':
         case 'W':
           move.top = map1.unit;
           setDirection('up');
+          keyDirection='up;'
           break;
         case 'ArrowDown':
         case 's':
         case 'S':
           move.top = -map1.unit;
           setDirection('down');
+          keyDirection='down'
           break;
         case 'ArrowLeft':
         case 'a':
         case 'A':
           move.left = map1.unit;
           setDirection('left');
-
+          keyDirection='left'
           break;
         case 'ArrowRight':
         case 'd':
         case 'D':
           move.left = -map1.unit;
           setDirection('right');
+          keyDirection='right'
           break;
         default:
           return;
@@ -159,7 +164,7 @@ function App() {
 
       await updatePlayerPosition(playerName, {
         ...absolutePosition,
-        direction: e.key.includes('Arrow') ? e.key.slice(5).toLowerCase() : '',
+        direction:keyDirection,
         frame: currentFrame,
       });
     };
@@ -242,13 +247,11 @@ function App() {
               {otherPlayers &&
                 otherPlayers.map((player) => (
                   <OtherPlayer
-                    style={{
-                      top: `${player.position.top}px`,
-                      left: `${player.position.left}px`,
-                      backgroundPosition: `${
-                        framesXPositions[player.position.frame]
-                      } ${directionYPositions[player.position.direction]}`,
-                    }}
+                    $top={`${player.position.top}px`}
+                    $left={`${player.position.left}px`}
+                    $backgroundPosition={`${
+                      framesXPositions[player.position.frame]
+                    } ${directionYPositions[player.position.direction]}`}
                     key={player.name}
                   >
                     {player.name}

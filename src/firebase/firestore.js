@@ -2,6 +2,7 @@ import { app } from './firebase';
 import {
   getFirestore,
   doc,
+  setDoc,
   addDoc,
   getDocs,
   getDoc,
@@ -16,19 +17,54 @@ import {
 
 export const db = getFirestore(app);
 
-export async function updatePlayerPosition(playerName,data) {
+export async function updatePlayerPosition(playerName, data) {
   const roomDocRef = doc(db, 'rooms', '001');
-  console.log('21',data);
+  console.log('21', data);
+
   try {
-    await updateDoc(roomDocRef, {
-      [`users.${playerName}.position`]: {
-        top: data.top, 
-        left: data.left,
-        direction:data.direction,
-        frame:data.frame
+    const roomSnap = await getDoc(roomDocRef);
+
+    if (roomSnap.exists()) {
+      let usersArray = roomSnap.data().users || [];
+      
+      const userIndex = usersArray.findIndex(user => user.name === playerName);
+      if (userIndex !== -1) {
+        usersArray[userIndex].position = { 
+          top: data.top, 
+          left: data.left,
+          direction: data.direction,
+          frame: data.frame 
+        };
+      } else {
+        usersArray.push({
+          name: playerName,
+          position: { 
+            top: data.top, 
+            left: data.left,
+            direction: data.direction,
+            frame: data.frame 
+          }
+        });
       }
-    });
-    console.log("Position successfully updated!");
+      
+      await updateDoc(roomDocRef, {
+        users: usersArray
+      });
+      console.log("Position successfully updated!");
+    } else {
+      await setDoc(roomDocRef, {
+        users: [{
+          name: playerName,
+          position: { 
+            top: data.top, 
+            left: data.left,
+            direction: data.direction,
+            frame: data.frame 
+          }
+        }]
+      });
+      console.log("New room created and position set!");
+    }
   } catch (error) {
     console.error("Error updating position: ", error);
   }
