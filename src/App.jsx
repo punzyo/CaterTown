@@ -7,8 +7,8 @@ import { map1, map1Index, map1Collision } from './assets/maps/map1';
 const wrapperWidth = '920';
 const wrapperHeight = '680';
 const mapBorder = '100';
-const mapWidth = (wrapperWidth - 2 * mapBorder) / map1.unit ;
-const mapHeight = (wrapperHeight - 2 * mapBorder) / map1.unit ;
+const mapWidth = (wrapperWidth - 2 * mapBorder) / map1.unit;
+const mapHeight = (wrapperHeight - 2 * mapBorder) / map1.unit;
 const playerWidth = '60';
 const playerHeight = '60';
 const Wrapper = styled.div`
@@ -49,15 +49,16 @@ const OtherPlayer = styled.div`
   background-size: 2048px 1088px;
   background-image: url(/images/animals/gold_0.png);
   color: black;
+  transition: top 0.2s, left 0.2s;
 `;
 const MapImage = styled.div`
   position: absolute;
   border: 1px solid black;
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-  left: ${(props) => props.left};
-  top: ${(props) => props.top};
-  background-position: ${(props) => props.backgroundPosition};
+  width: ${(props) => props.$width};
+  height: ${(props) => props.$height};
+  left: ${(props) => props.$left};
+  top: ${(props) => props.$top};
+  background-position: ${(props) => props.$backgroundPosition};
   background-image: url(/images/map/map1_48x48.png);
 `;
 function positionReducer(state, action) {
@@ -103,19 +104,27 @@ function App() {
 
       switch (e.key) {
         case 'ArrowUp':
+        case 'w':
+        case 'W':
           move.top = map1.unit;
           setDirection('up');
           break;
         case 'ArrowDown':
+        case 's':
+        case 'S':
           move.top = -map1.unit;
           setDirection('down');
           break;
         case 'ArrowLeft':
+        case 'a':
+        case 'A':
           move.left = map1.unit;
           setDirection('left');
 
           break;
         case 'ArrowRight':
+        case 'd':
+        case 'D':
           move.left = -map1.unit;
           setDirection('right');
           break;
@@ -131,7 +140,7 @@ function App() {
         y: Math.round(absolutePosition.top / map1.unit),
       };
       console.log(playerGrid);
-      console.log(mapWidth,mapHeight);
+      console.log(mapWidth, mapHeight);
       if (map1Collision.includes(`${playerGrid.x},${playerGrid.y}`)) {
         console.log('撞到東西');
         return;
@@ -270,7 +279,7 @@ function App() {
 
 export default App;
 
-function Map1({ position }) {
+function Map1({ position, children }) {
   const getItemStyles = (itemName) => {
     const item = map1Index[itemName];
     if (!item) return {};
@@ -294,15 +303,16 @@ function Map1({ position }) {
           return (
             <MapImage
               key={`${itemType}-${index}`}
-              width={`${itemStyles.width}px`}
-              height={`${itemStyles.height}px`}
-              left={`${position.left * map1.unit}px`}
-              top={`${position.top * map1.unit}px`}
-              backgroundPosition={itemStyles.backgroundPosition}
+              $width={`${itemStyles.width}px`}
+              $height={`${itemStyles.height}px`}
+              $left={`${position.left * map1.unit}px`}
+              $top={`${position.top * map1.unit}px`}
+              $backgroundPosition={itemStyles.backgroundPosition}
             />
           );
         })
       )}
+      {children}
     </Map>
   );
 }
