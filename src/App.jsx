@@ -3,299 +3,12 @@ import styled from 'styled-components';
 import BaseGlobalStyle from './BaseGlobalStyle';
 import { updatePlayerPosition, getPlayerPosition } from './firebase/firestore';
 import { useOtherPlayer } from './utils/hooks/useOherPlayer';
-const mapIndex = {
-  U: {
-    width: 4,
-    height: 1,
-    x: 4,
-    y: 0,
-  },
-  leftWater: {
-    width: 1,
-    height: 1,
-    x: 5,
-    y: 0,
-  },
-  waterpool: {
-    width: 3,
-    height: 3,
-    x: 8,
-    y: 0,
-  },
-  floor1: {
-    width: 1,
-    height: 1,
-    x: 9,
-    y: -2,
-  },
-  floor2: {
-    width: 1,
-    height: 1,
-    x: 10,
-    y: -1,
-  },
-  floor3: {
-    width: 1,
-    height: 1,
-    x: 10,
-    y: -2,
-  },
-  floor4: {
-    width: 1,
-    height: 1,
-    x: 10,
-    y: -3,
-  },
-  floor5: {
-    width: 1,
-    height: 1,
-    x: 11,
-    y: -3,
-  },
-  floor6: {
-    width: 2,
-    height: 1,
-    x: 12,
-    y: -1,
-  },
-  floor7: {
-    width: 1,
-    height: 1,
-    x: 11,
-    y: -2,
-  },
-  floor8: {
-    width: 2,
-    height: 1,
-    x: 12,
-    y: -3,
-  },
-  floor9: {
-    width: 1,
-    height: 1,
-    x: 13,
-    y: -3,
-  },
-  floor10: {
-    width: 1,
-    height: 1,
-    x: 13,
-    y: -1,
-  },
-  floor11: {
-    width: 1,
-    height: 1,
-    x: 13,
-    y: -2,
-  },
-  floor12: {
-    width: 1,
-    height: 1,
-    x: 16,
-    y: -2,
-  },
-  tree1: {
-    width: 8,
-    height: 3,
-    x: 10,
-    y: -10,
-  },
-  tree2: {
-    width: 2,
-    height: 2.5,
-    x: 10,
-    y: -12.5,
-  },
-  tree3: {
-    width: 5,
-    height: 3,
-    x: 10,
-    y: -15,
-  },
-  tree4: {
-    width: 5,
-    height: 3,
-    x: 10,
-    y: -18,
-  },
-  house1: {
-    width: 4,
-    height: 3,
-    x: 13,
-    y: -21,
-  },
-};
-
-const map1 = {
-  floor7: [
-    { top: 0, left: 0 },
-    { top: 0, left: 1 },
-    { top: 0, left: 2 },
-    { top: 0, left: 3 },
-    { top: 0, left: 4 },
-    { top: 1, left: 0 },
-    { top: 1, left: 1 },
-    { top: 1, left: 2 },
-    { top: 1, left: 3 },
-    { top: 1, left: 4 },
-    { top: 1, left: 8 },
-    { top: 1, left: 9 },
-    { top: 1, left: 10 },
-    { top: 1, left: 11 },
-    { top: 1, left: 12 },
-    { top: 1, left: 13 },
-    { top: 1, left: 14 },
-    { top: 0, left: 8 },
-    { top: 0, left: 9 },
-    { top: 0, left: 10 },
-    { top: 0, left: 11 },
-    { top: 0, left: 12 },
-    { top: 0, left: 13 },
-    { top: 0, left: 14 },
-    { top: 2, left: 0 },
-    { top: 2, left: 1 },
-    { top: 2, left: 2 },
-    { top: 2, left: 3 },
-    { top: 2, left: 4 },
-    { top: 2, left: 8 },
-    { top: 2, left: 9 },
-    { top: 2, left: 10 },
-    { top: 2, left: 11 },
-    { top: 2, left: 12 },
-    { top: 2, left: 13 },
-    { top: 2, left: 14 },
-    { top: 3, left: 0 },
-    { top: 3, left: 1 },
-    { top: 3, left: 2 },
-    { top: 3, left: 3 },
-    { top: 3, left: 4 },
-    { top: 3, left: 8 },
-    { top: 3, left: 9 },
-    { top: 3, left: 10 },
-    { top: 3, left: 11 },
-    { top: 3, left: 12 },
-    { top: 3, left: 13 },
-    { top: 3, left: 14 },
-    { top: 4, left: 0 },
-    { top: 4, left: 1 },
-    { top: 4, left: 2 },
-    { top: 4, left: 3 },
-    { top: 4, left: 4 },
-    { top: 4, left: 8 },
-    { top: 4, left: 9 },
-    { top: 4, left: 13 },
-    { top: 4, left: 14 },
-    { top: 5, left: 8 },
-    { top: 5, left: 9 },
-    { top: 5, left: 13 },
-    { top: 5, left: 14 },
-    { top: 6, left: 13 },
-    { top: 6, left: 14 },
-    { top: 7, left: 0 },
-    { top: 7, left: 1 },
-    { top: 7, left: 2 },
-    { top: 7, left: 3 },
-    { top: 7, left: 4 },
-    { top: 7, left: 5 },
-    { top: 7, left: 6 },
-    { top: 7, left: 7 },
-    { top: 7, left: 10 },
-    { top: 7, left: 11 },
-    { top: 7, left: 12 },
-    { top: 7, left: 13 },
-    { top: 7, left: 14 },
-    { top: 8, left: 0 },
-    { top: 8, left: 1 },
-    { top: 8, left: 2 },
-    { top: 8, left: 3 },
-    { top: 8, left: 4 },
-    { top: 8, left: 5 },
-    { top: 8, left: 6 },
-    { top: 8, left: 7 },
-    { top: 8, left: 10 },
-    { top: 8, left: 11 },
-    { top: 8, left: 12 },
-    { top: 8, left: 13 },
-    { top: 8, left: 14 },
-    { top: 9, left: 0 },
-    { top: 9, left: 1 },
-    { top: 9, left: 2 },
-    { top: 9, left: 3 },
-    { top: 9, left: 4 },
-    { top: 9, left: 5 },
-    { top: 9, left: 6 },
-    { top: 9, left: 7 },
-    { top: 9, left: 10 },
-    { top: 9, left: 11 },
-    { top: 9, left: 12 },
-    { top: 9, left: 13 },
-    { top: 9, left: 14 },
-  ],
-  tree3: [{ top: 0, left: 0 }],
-  floor1: [
-    { top: 0, left: 6 },
-    { top: 1, left: 6 },
-    { top: 2, left: 6 },
-    { top: 3, left: 6 },
-    { top: 4, left: 6 },
-    { top: 5, left: 6 },
-  ],
-  floor3: [
-    { top: 0, left: 5 },
-    { top: 1, left: 5 },
-    { top: 2, left: 5 },
-    { top: 3, left: 5 },
-    { top: 4, left: 5 },
-    { top: 7, left: 8 },
-    { top: 8, left: 8 },
-    { top: 9, left: 8 },
-  ],
-  tree4: [{ top: 2, left: 0 }],
-  floor4: [{ top: 5, left: 5 }],
-  floor5: [
-    { top: 5, left: 0 },
-    { top: 6, left: 8 },
-  ],
-  floor6: [
-    { top: 6, left: 0 },
-    { top: 6, left: 2 },
-    { top: 6, left: 4 },
-  ],
-  floor8: [
-    { top: 5, left: 1 },
-    { top: 5, left: 3 },
-  ],
-  floor9: [
-    { top: 4, left: 7 },
-    { top: 6, left: 7 },
-  ],
-  floor11: [
-    { top: 5, left: 7 },
-    { top: 9, left: 9 },
-    { top: 6, left: 9 },
-    { top: 7, left: 9 },
-    { top: 8, left: 9 },
-    { top: 4, left: 7 },
-    { top: 3, left: 7 },
-    { top: 2, left: 7 },
-    { top: 1, left: 7 },
-    { top: 0, left: 7 },
-  ],
-  floor12: [{ top: 6, left: 9 }],
-  house1: [
-    { top: 7, left: 0 },
-    { top: 7, left: 4 },
-  ],
-  waterpool: [{ top: 4, left: 10 }],
-  floor2: [{ top: 6, left: 6 }],
-  tree2: [
-    { top: 0, left: 9 },
-    { top: 0, left: 12 },
-  ],
-};
+import { map1, map1Index, map1Collision } from './assets/maps/map1';
 const wrapperWidth = '920';
 const wrapperHeight = '680';
 const mapBorder = '100';
+const mapWidth = (wrapperWidth - 2 * mapBorder) / map1.unit ;
+const mapHeight = (wrapperHeight - 2 * mapBorder) / map1.unit ;
 const playerWidth = '60';
 const playerHeight = '60';
 const Wrapper = styled.div`
@@ -339,6 +52,7 @@ const OtherPlayer = styled.div`
 `;
 const MapImage = styled.div`
   position: absolute;
+  border: 1px solid black;
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   left: ${(props) => props.left};
@@ -386,70 +100,59 @@ function App() {
     const handleKeyPress = async (e) => {
       if (!playerName) return;
       let move = { top: 0, left: 0 };
-      let canMove = true;
 
       switch (e.key) {
         case 'ArrowUp':
-          if (
-            position.top ===
-            wrapperHeight / 2 - mapBorder - playerHeight / 2
-          ) {
-            canMove = false;
-          }
-          if (canMove) move.top = 10;
+          move.top = map1.unit;
           setDirection('up');
           break;
         case 'ArrowDown':
-          if (
-            position.top ===
-            (wrapperHeight / 2 - mapBorder - playerHeight / 2) * -1
-          ) {
-            canMove = false;
-          }
-          if (canMove) move.top = -10;
+          move.top = -map1.unit;
           setDirection('down');
           break;
         case 'ArrowLeft':
-          if (
-            position.left ===
-            wrapperWidth / 2 - mapBorder - playerWidth / 2
-          ) {
-            canMove = false;
-          }
-          if (canMove) move.left = 10;
+          move.left = map1.unit;
           setDirection('left');
+
           break;
         case 'ArrowRight':
-          if (
-            position.left ===
-            (wrapperWidth / 2 - mapBorder - playerWidth / 2) * -1
-          ) {
-            canMove = false;
-          }
-          if (canMove) move.left = -10;
+          move.left = -map1.unit;
           setDirection('right');
           break;
         default:
           return;
       }
-
-      if (canMove) {
-        setCurrentFrame(
-          (prevFrame) => (prevFrame + 1) % framesXPositions.length
-        );
-        dispatchPosition({ type: 'move', payload: move });
-        const absolutePosition = playerPosToAbsolute({
-          top: position.top + move.top,
-          left: position.left + move.left,
-        });
-        await updatePlayerPosition(playerName, {
-          ...absolutePosition,
-          direction: e.key.includes('Arrow')
-            ? e.key.slice(5).toLowerCase()
-            : '',
-          frame: currentFrame,
-        });
+      const absolutePosition = playerPosToAbsolute({
+        top: position.top + move.top,
+        left: position.left + move.left,
+      });
+      const playerGrid = {
+        x: Math.round(absolutePosition.left / map1.unit),
+        y: Math.round(absolutePosition.top / map1.unit),
+      };
+      console.log(playerGrid);
+      console.log(mapWidth,mapHeight);
+      if (map1Collision.includes(`${playerGrid.x},${playerGrid.y}`)) {
+        console.log('撞到東西');
+        return;
+      } else if (
+        playerGrid.x < 0 ||
+        playerGrid.y < 0 ||
+        playerGrid.x >= mapWidth ||
+        playerGrid.y >= mapHeight
+      ) {
+        console.log('超出地圖邊界');
+        return;
       }
+
+      setCurrentFrame((prevFrame) => (prevFrame + 1) % framesXPositions.length);
+      dispatchPosition({ type: 'move', payload: move });
+
+      await updatePlayerPosition(playerName, {
+        ...absolutePosition,
+        direction: e.key.includes('Arrow') ? e.key.slice(5).toLowerCase() : '',
+        frame: currentFrame,
+      });
     };
 
     window.addEventListener('keydown', handleKeyPress);
@@ -488,13 +191,13 @@ function App() {
     return { left: mapLeft, top: mapTop };
   };
   const getItemStyles = (itemName) => {
-    const item = mapIndex[itemName];
+    const item = map1Index[itemName];
     if (!item) return {};
 
-    const width = item.width * 48;
-    const height = item.height * 48;
-    const backgroundPositionX = item.x * 48;
-    const backgroundPositionY = item.y * 48;
+    const width = item.width * map1.unit;
+    const height = item.height * map1.unit;
+    const backgroundPositionX = item.x * map1.unit;
+    const backgroundPositionY = item.y * map1.unit;
 
     return {
       width,
@@ -506,22 +209,23 @@ function App() {
     <>
       <BaseGlobalStyle />
       {/* <Wrapper>
-        {Object.keys(map1).map((itemType) =>
-          map1[itemType].map((position, index) => {
+        {Object.keys(map1.objects).map((itemType) =>
+          map1.objects[itemType].map((position, index) => {
             const itemStyles = getItemStyles(itemType);
             return (
               <MapImage
                 key={`${itemType}-${index}`}
                 width={`${itemStyles.width}px`}
                 height={`${itemStyles.height}px`}
-                left={`${position.left * 48}px`}
-                top={`${position.top * 48}px`}
+                left={`${position.left * map1.unit}px`}
+                top={`${position.top * map1.unit}px`}
                 backgroundPosition={itemStyles.backgroundPosition}
               />
             );
           })
         )}
       </Wrapper> */}
+      {/* <button onClick={generateCollisionMap}>創建碰撞array</button> */}
       {playerName && (
         <Wrapper>
           {position && (
@@ -568,13 +272,13 @@ export default App;
 
 function Map1({ position }) {
   const getItemStyles = (itemName) => {
-    const item = mapIndex[itemName];
+    const item = map1Index[itemName];
     if (!item) return {};
 
-    const width = item.width * 48;
-    const height = item.height * 48;
-    const backgroundPositionX = item.x * 48;
-    const backgroundPositionY = item.y * 48;
+    const width = item.width * map1.unit;
+    const height = item.height * map1.unit;
+    const backgroundPositionX = item.x * map1.unit;
+    const backgroundPositionY = item.y * map1.unit;
 
     return {
       width,
@@ -584,16 +288,16 @@ function Map1({ position }) {
   };
   return (
     <Map $top={`${position.top}px`} $left={`${position.left}px`}>
-      {Object.keys(map1).map((itemType) =>
-        map1[itemType].map((position, index) => {
+      {Object.keys(map1.objects).map((itemType) =>
+        map1.objects[itemType].map((position, index) => {
           const itemStyles = getItemStyles(itemType);
           return (
             <MapImage
               key={`${itemType}-${index}`}
               width={`${itemStyles.width}px`}
               height={`${itemStyles.height}px`}
-              left={`${position.left * 48}px`}
-              top={`${position.top * 48}px`}
+              left={`${position.left * map1.unit}px`}
+              top={`${position.top * map1.unit}px`}
               backgroundPosition={itemStyles.backgroundPosition}
             />
           );
