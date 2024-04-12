@@ -79,7 +79,8 @@ export async function getPlayerPosition(playerName) {
 
     if (docSnap.exists()) {
    
-      const playerPosition = docSnap.data().users[playerName]?.position;
+      const playerIndex = docSnap.data().users.findIndex(user => user.name === playerName);
+      const playerPosition = docSnap.data().users[playerIndex].position;
       if (playerPosition) {
         console.log(`${playerName}'s position:`, playerPosition);
         return playerPosition;
@@ -106,9 +107,7 @@ export async function getOtherPlayersData( excludePlayerId) {
 
     if (docSnap.exists()) {
       const roomData = docSnap.data();
-      const users = roomData.users || {};
-      delete users[excludePlayerId];
-
+      const users = roomData.users.filter(user => user.name!== excludePlayerId);
       console.log("Other players data:", users);
       return users;
     } else {

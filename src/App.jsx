@@ -86,7 +86,7 @@ function positionReducer(state, action) {
 function App() {
   const [position, dispatchPosition] = useReducer(positionReducer, null);
   const [currentFrame, setCurrentFrame] = useState(0);
-  const [direction, setDirection] = useState('down');
+  const [direction, setDirection] = useState();
   const [playerName, setPlayerName] = useState('');
   const nameInput = useRef(null);
   const otherPlayers = useOtherPlayer(playerName);
@@ -110,7 +110,7 @@ function App() {
         case 'W':
           move.top = map1.unit;
           setDirection('up');
-          keyDirection='up;'
+          keyDirection='up'
           break;
         case 'ArrowDown':
         case 's':
@@ -180,6 +180,7 @@ function App() {
     const updatePosition = async () => {
       try {
         const playerPosition = await getPlayerPosition(playerName);
+        setDirection(playerPosition.direction);
         const mapPosition = playerAbsoluteToMapPos(playerPosition);
         dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
       } catch (error) {
@@ -204,42 +205,11 @@ function App() {
       wrapperHeight / 2 - playerHeight / 2 - mapBorder - position.top;
     return { left: mapLeft, top: mapTop };
   };
-  const getItemStyles = (itemName) => {
-    const item = map1Index[itemName];
-    if (!item) return {};
 
-    const width = item.width * map1.unit;
-    const height = item.height * map1.unit;
-    const backgroundPositionX = item.x * map1.unit;
-    const backgroundPositionY = item.y * map1.unit;
-
-    return {
-      width,
-      height,
-      backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
-    };
-  };
   return (
     <>
       <BaseGlobalStyle />
-      {/* <Wrapper>
-        {Object.keys(map1.objects).map((itemType) =>
-          map1.objects[itemType].map((position, index) => {
-            const itemStyles = getItemStyles(itemType);
-            return (
-              <MapImage
-                key={`${itemType}-${index}`}
-                width={`${itemStyles.width}px`}
-                height={`${itemStyles.height}px`}
-                left={`${position.left * map1.unit}px`}
-                top={`${position.top * map1.unit}px`}
-                backgroundPosition={itemStyles.backgroundPosition}
-              />
-            );
-          })
-        )}
-      </Wrapper> */}
-      {/* <button onClick={generateCollisionMap}>創建碰撞array</button> */}
+
       {playerName && (
         <Wrapper>
           {position && (
@@ -319,3 +289,36 @@ function Map1({ position, children }) {
     </Map>
   );
 }
+      {/* <Wrapper>
+        {Object.keys(map1.objects).map((itemType) =>
+          map1.objects[itemType].map((position, index) => {
+            const itemStyles = getItemStyles(itemType);
+            return (
+              <MapImage
+                key={`${itemType}-${index}`}
+                width={`${itemStyles.width}px`}
+                height={`${itemStyles.height}px`}
+                left={`${position.left * map1.unit}px`}
+                top={`${position.top * map1.unit}px`}
+                backgroundPosition={itemStyles.backgroundPosition}
+              />
+            );
+          })
+        )}
+      </Wrapper> */}
+      {/* <button onClick={generateCollisionMap}>創建碰撞array</button> */}
+  // const getItemStyles = (itemName) => {
+  //   const item = map1Index[itemName];
+  //   if (!item) return {};
+
+  //   const width = item.width * map1.unit;
+  //   const height = item.height * map1.unit;
+  //   const backgroundPositionX = item.x * map1.unit;
+  //   const backgroundPositionY = item.y * map1.unit;
+
+  //   return {
+  //     width,
+  //     height,
+  //     backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
+  //   };
+  // };
