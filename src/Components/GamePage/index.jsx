@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useReducer } from 'react';
 import styled from 'styled-components';
-import BaseGlobalStyle from '@/BaseGlobalStyle';
 import { updatePlayerPosition, getPlayerPosition } from '@/firebase/firestore';
 import { useOtherPlayer } from '@/utils/hooks/useOherPlayer';
 import { map1, map1Collision, wrapperHeight, wrapperWidth, playerHeight, playerWidth, mapHeight, mapWidth, mapBorder } from '@/Components/Maps/map1.js';

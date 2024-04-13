@@ -1,14 +1,13 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const DIV = styled.div`
-height: 50px;
-border-radius: 10px;
-font-size:20px;
-padding: 5px 10px;
-  border-radius: 5px;
+const containerStyles = css`
+  border-radius: 10px;
+  font-size: 16px;
+  padding: 5px 10px;
   font-weight: 700;
   cursor: pointer;
   letter-spacing: 1px;
+  transition: background-color 200ms ease 0s, border-color 200ms ease 0s;
 `;
 const Wrapper = styled.main`
   width: 100%;
@@ -17,46 +16,183 @@ const Wrapper = styled.main`
 const Header = styled.header`
   width: 100%;
   height: 80px;
-  background-color: #fd823d;
+  padding: 10px 30px;
+  background-color: #333a64;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   .left {
+    display: flex;
+    align-items: center;
+    gap: 50px;
     width: 400px;
-    height:100%
+    height: 100%;
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    span {
+      color: #fff;
+      font-size: 50px;
+    }
   }
   .right {
+    align-items: center;
     display: flex;
     justify-content: space-between;
-    width: 600px;
+    width: 400px;
     height: 100%;
   }
 `;
-const Button = styled.button`
-${DIV}
-
-  border-radius: 10px;
+const Profile = styled.button`
+  ${containerStyles}
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color: inherit;
+  color: #fff;
+  &:hover {
+    background-color: #545c8f;
+  }
+  .userimg {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+`;
+const CreateSpace = styled.button`
+  ${containerStyles}
+  width: 150px;
+  height: 50px;
   box-shadow: 0 4px #c1a23c;
-  font-size:20px;
   color: #5e4800;
   background-color: #ffd95e;
-  padding: 5px 10px;
-  border-radius: 5px;
- 
-  transition: all .2s ease;
+  transition: all 0.2s ease;
   &:active {
     box-shadow: 0 1px #c1a23c;
     transform: translateY(3px);
+  }
+`;
+const SearchBar = styled.div`
+  width: 100%;
+  height: 72px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 30px;
+  background-color: #282d4e;
+`;
+const InputWrapper = styled.div`
+  ${containerStyles}
+  cursor: auto;
+  width: 200px;
+  height: 40px;
+  border: 1px solid #909ce2;
+  display: flex;
+  align-items: center;
+  .icon {
+    display: flex;
+    align-items: center;
+    svg {
+      color: #fff;
+      width: 35px;
+      height: 20px;
+    }
+  }
+  input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: #fff;
+    background-color: inherit;
+    &::placeholder {
+      font-weight: 500;
+    }
+  }
+`;
+
+const MainPage = styled.div`
+  background-color: #282d4e;
+  height: 100%;
+`;
+const RoomWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 50px;
+  gap: 40px;
+`;
+const Room = styled.div`
+  height: 250px;
+  border: 1px solid #fff;
+  .top {
+  }
+  .bottom {
   }
 `;
 export default function HomePage() {
   return (
     <Wrapper>
       <Header>
-        <div className='left'></div>
-        <div className='right'>
-            <Button>Create space</Button>
+        <div className="left">
+          <img src="/images/logo.png" alt="logo" />
+          <span>ChouChouZoo</span>
+        </div>
+        <div className="right">
+          <Profile>
+            <div className="userimg">
+              <img src="/images/profile.jpg" alt="" />
+            </div>
+            <div>
+              <span>林以理</span>
+            </div>
+          </Profile>
+          <CreateSpace>Create space</CreateSpace>
         </div>
       </Header>
+      <SearchBar>
+        <InputWrapper>
+          <div className="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+              />
+            </svg>
+          </div>
+          <input type="text" placeholder="Search" />
+        </InputWrapper>
+      </SearchBar>
+      <MainPage>
+        <RoomWrapper>
+          <Room>
+            <div className="top"></div>
+            <div className="bottom"></div>
+          </Room>
+          <Room></Room>
+          <Room></Room>
+        </RoomWrapper>
+      </MainPage>
     </Wrapper>
   );
 }

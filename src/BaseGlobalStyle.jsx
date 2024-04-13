@@ -2,9 +2,7 @@ import { createGlobalStyle } from "styled-components";
 import theme from "./theme";
 
 const BaseGlobalStyle = createGlobalStyle`/* 
-font-color:#3F3A3A #8B572A
-border-color:#979797
-background-color:#313538
+
 */
 
 /***** base *****/
@@ -13,7 +11,7 @@ background-color:#313538
   margin: 0;
   padding:0;
   box-sizing: border-box;
-  font-family: Noto Sans TC;
+  font-family:"DM Sans", sans-serif;
 }
 :root {
   height: 100%;
@@ -27,7 +25,10 @@ body {
   overflow: hidden;
   line-height: 2rem;
 }
-
+button {
+  border: none;
+  outline: none;
+}
 ul,
 ol {
   list-style: none
