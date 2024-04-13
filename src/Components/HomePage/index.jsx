@@ -36,6 +36,7 @@ const Header = styled.header`
     span {
       color: #fff;
       font-size: 50px;
+      letter-spacing: 6px;
     }
   }
   .right {
@@ -86,11 +87,11 @@ const CreateSpace = styled.button`
 `;
 const SearchBar = styled.div`
   width: 100%;
-  height: 72px;
+  height: 88px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 10px 30px;
+  padding: 20px 30px 0px 30px;
   background-color: #282d4e;
 `;
 const InputWrapper = styled.div`
@@ -131,15 +132,29 @@ const MainPage = styled.div`
 const RoomWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  padding: 50px;
-  gap: 40px;
+  padding: 20px 50px;
+  gap: 60px;
 `;
 const Room = styled.div`
-  height: 250px;
-  border: 1px solid #fff;
+  height: 300px;
+
   .top {
+    height: 80%;
+    background-image: url(/images/map1.png);
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
   }
   .bottom {
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color:#fff;
+    .mapName{
+      font-weight: 700;
+      color: #fff;
+    }
   }
 `;
 export default function HomePage() {
@@ -185,12 +200,16 @@ export default function HomePage() {
       </SearchBar>
       <MainPage>
         <RoomWrapper>
-          <Room>
-            <div className="top"></div>
-            <div className="bottom"></div>
-          </Room>
-          <Room></Room>
-          <Room></Room>
+          {new Array(6).fill(null).map(index=>
+          <Room key = {index}>
+          <div className="top"></div>
+          <div className="bottom">
+            <span className='mapName'>MapName</span>
+            <span className='date'>2024-04-13</span>
+          </div>
+        </Room>
+          )}
+          
         </RoomWrapper>
       </MainPage>
     </Wrapper>
