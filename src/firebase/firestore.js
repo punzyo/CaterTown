@@ -19,7 +19,6 @@ export const db = getFirestore(app);
 
 export async function updatePlayerPosition(playerName, data) {
   const roomDocRef = doc(db, 'rooms', '001');
-  console.log('21', data);
 
   try {
     const roomSnap = await getDoc(roomDocRef);
@@ -50,7 +49,6 @@ export async function updatePlayerPosition(playerName, data) {
       await updateDoc(roomDocRef, {
         users: usersArray
       });
-      console.log("Position successfully updated!");
     } else {
       await setDoc(roomDocRef, {
         users: [{
@@ -82,7 +80,6 @@ export async function getPlayerPosition(playerName) {
       const playerIndex = docSnap.data().users.findIndex(user => user.name === playerName);
       const playerPosition = docSnap.data().users[playerIndex].position;
       if (playerPosition) {
-        console.log(`${playerName}'s position:`, playerPosition);
         return playerPosition;
       } else {
         console.log(`${playerName} does not exist in this room.`);

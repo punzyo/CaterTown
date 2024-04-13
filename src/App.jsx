@@ -90,6 +90,9 @@ function App() {
   const [playerName, setPlayerName] = useState('');
   const nameInput = useRef(null);
   const otherPlayers = useOtherPlayer(playerName);
+  const movingTimer = useRef(null);
+  const keysPressed = useRef(false);
+  const canMove = useRef(true);
   const directionYPositions = {
     down: '-64px',
     left: '-320px',
@@ -101,7 +104,6 @@ function App() {
   useEffect(() => {
     if (!playerName) return;
     const handleKeyPress = async (e) => {
-      if (!playerName) return;
       let move = { top: 0, left: 0 };
       let keyDirection;
       switch (e.key) {
@@ -109,33 +111,42 @@ function App() {
         case 'w':
         case 'W':
           move.top = map1.unit;
-          setDirection('up');
-          keyDirection='up'
+          keyDirection = 'up';
           break;
         case 'ArrowDown':
         case 's':
         case 'S':
           move.top = -map1.unit;
-          setDirection('down');
-          keyDirection='down'
+          keyDirection = 'down';
           break;
         case 'ArrowLeft':
         case 'a':
         case 'A':
           move.left = map1.unit;
-          setDirection('left');
-          keyDirection='left'
+          keyDirection = 'left';
           break;
         case 'ArrowRight':
         case 'd':
         case 'D':
           move.left = -map1.unit;
-          setDirection('right');
-          keyDirection='right'
+          keyDirection = 'right';
           break;
         default:
           return;
       }
+      setDirection(keyDirection);
+     // console.log(keysPressed.current, direction, keyDirection);
+    //  if(direction!==keyDirection){
+    //   console.log('轉',direction, keyDirection);
+    //   clearTimeout(movingTimer.current)
+    //   movingTimer.current = setTimeout(() => {
+    //     handleKeyPress(e)
+    //   }, 150);
+      
+   // }
+     if(!canMove.current)return
+      
+console.log('要走囉');
       const absolutePosition = playerPosToAbsolute({
         top: position.top + move.top,
         left: position.left + move.left,
@@ -158,20 +169,32 @@ function App() {
         console.log('超出地圖邊界');
         return;
       }
+      //player can move
+      canMove.current = false;
+      keysPressed.current = true;
 
       setCurrentFrame((prevFrame) => (prevFrame + 1) % framesXPositions.length);
       dispatchPosition({ type: 'move', payload: move });
 
       await updatePlayerPosition(playerName, {
         ...absolutePosition,
-        direction:keyDirection,
+        direction: keyDirection,
         frame: currentFrame,
       });
+      
+     setTimeout(() => {
+        canMove.current =true;
+      }, 100);
     };
-
+    const handleKeyUp = () => {
+      clearTimeout(movingTimer.current);
+      keysPressed.current = false;
+    };
+    window.addEventListener('keyup', handleKeyUp);
     window.addEventListener('keydown', handleKeyPress);
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener('keyup', handleKeyUp);
     };
   }, [position]);
 
@@ -289,7 +312,8 @@ function Map1({ position, children }) {
     </Map>
   );
 }
-      {/* <Wrapper>
+{
+  /* <Wrapper>
         {Object.keys(map1.objects).map((itemType) =>
           map1.objects[itemType].map((position, index) => {
             const itemStyles = getItemStyles(itemType);
@@ -305,20 +329,23 @@ function Map1({ position, children }) {
             );
           })
         )}
-      </Wrapper> */}
-      {/* <button onClick={generateCollisionMap}>創建碰撞array</button> */}
-  // const getItemStyles = (itemName) => {
-  //   const item = map1Index[itemName];
-  //   if (!item) return {};
+      </Wrapper> */
+}
+{
+  /* <button onClick={generateCollisionMap}>創建碰撞array</button> */
+}
+// const getItemStyles = (itemName) => {
+//   const item = map1Index[itemName];
+//   if (!item) return {};
 
-  //   const width = item.width * map1.unit;
-  //   const height = item.height * map1.unit;
-  //   const backgroundPositionX = item.x * map1.unit;
-  //   const backgroundPositionY = item.y * map1.unit;
+//   const width = item.width * map1.unit;
+//   const height = item.height * map1.unit;
+//   const backgroundPositionX = item.x * map1.unit;
+//   const backgroundPositionY = item.y * map1.unit;
 
-  //   return {
-  //     width,
-  //     height,
-  //     backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
-  //   };
-  // };
+//   return {
+//     width,
+//     height,
+//     backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
+//   };
+// };
