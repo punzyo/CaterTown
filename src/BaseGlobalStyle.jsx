@@ -11,10 +11,13 @@ background-color:#313538
 
 * {
   margin: 0;
+  padding:0;
   box-sizing: border-box;
   font-family: Noto Sans TC;
 }
-
+:root {
+  height: 100%;
+}
 html {
   margin: 0 auto;
 }
@@ -22,16 +25,12 @@ html {
 body {
   font-weight: 400;
   overflow: hidden;
-  text-align: center;
-  color: #3f3a3a;
   line-height: 2rem;
 }
 
 ul,
 ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  list-style: none
   cursor: pointer;
 }
 
@@ -40,9 +39,6 @@ a {
   text-decoration: none;
 }
 
-main {
-  min-height: 100vh;
-}
 
 .hide {
   display: none;

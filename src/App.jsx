@@ -1,8 +1,11 @@
-import GamePage from "./Components/GamePage";
-
-
+import GamePage from './Components/GamePage';
+import HomePage from './Components/HomePage';
+import BaseGlobalStyle from '@/BaseGlobalStyle';
 export default function App() {
   return (
-    <><GamePage></GamePage></>
-  )
+    <>
+          <BaseGlobalStyle />
+      <HomePage />
+    </>
+  );
 }

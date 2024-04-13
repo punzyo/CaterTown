@@ -206,7 +206,7 @@ export default function GamePage() {
 
   return (
     <>
-      <BaseGlobalStyle />
+
 
       {playerName && (
         <Wrapper>
