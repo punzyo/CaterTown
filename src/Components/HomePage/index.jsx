@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
-
+import { useState } from 'react';
+import Dialog from './Dialog';
 const containerStyles = css`
   border-radius: 10px;
   font-size: 16px;
@@ -30,7 +31,7 @@ const Header = styled.header`
     img {
       width: 50px;
       height: 50px;
-      border-radius: 50%;
+      border-radius: 20%;
       object-fit: cover;
     }
     span {
@@ -158,8 +159,15 @@ const Room = styled.div`
   }
 `;
 export default function HomePage() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const openDialog = () => {
+    console.log('open');
+    setDialogOpen(true);
+  }
+  const closeDialog = () => setDialogOpen(false);
   return (
-    <Wrapper>
+    <Wrapper onClick={() => { if (dialogOpen) closeDialog(); }}>
       <Header>
         <div className="left">
           <img src="/images/logo.png" alt="logo" />
@@ -174,7 +182,7 @@ export default function HomePage() {
               <span>林以理</span>
             </div>
           </Profile>
-          <CreateSpace>Create space</CreateSpace>
+          <CreateSpace onClick={openDialog}>Create space</CreateSpace>
         </div>
       </Header>
       <SearchBar>
@@ -200,7 +208,7 @@ export default function HomePage() {
       </SearchBar>
       <MainPage>
         <RoomWrapper>
-          {new Array(6).fill(null).map(index=>
+          {new Array(6).fill(null).map((room,index)=>
           <Room key = {index}>
           <div className="top"></div>
           <div className="bottom">
@@ -212,6 +220,7 @@ export default function HomePage() {
           
         </RoomWrapper>
       </MainPage>
+      {dialogOpen && <Dialog onClose={closeDialog} />}
     </Wrapper>
   );
 }
