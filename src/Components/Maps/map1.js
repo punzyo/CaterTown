@@ -1,3 +1,4 @@
+
 export const map1Index = {
   U: {
     width: 4,
@@ -380,3 +381,10 @@ export const map1Collision = [
   '13,0',
   '13,1',
 ];
+export const wrapperWidth = '920';
+export const wrapperHeight = '680';
+export const mapBorder = '100';
+export const mapWidth = (wrapperWidth - 2 * mapBorder) / map1.unit;
+export const mapHeight = (wrapperHeight - 2 * mapBorder) / map1.unit;
+export const playerWidth = '60';
+export const playerHeight = '60';
