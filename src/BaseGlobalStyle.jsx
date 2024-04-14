@@ -16,11 +16,15 @@ const BaseGlobalStyle = createGlobalStyle`/*
 :root {
   height: 100%;
 }
+#root{
+  height: 100%;
+}
 html {
   margin: 0 auto;
 }
 
 body {
+  height:100%;
   font-weight: 400;
   overflow: hidden;
   line-height: 2rem;
