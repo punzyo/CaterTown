@@ -14,7 +14,6 @@ import {
   Timestamp,
   arrayUnion,
 } from 'firebase/firestore';
-import { useUserState } from '../utils/zustand';
 
 export const db = getFirestore(app);
 
@@ -178,4 +177,8 @@ export async function getUserRoomsbyId(userId) {
     console.error('Error getting user rooms:', error);
     throw new Error('Failed to fetch user rooms.');
   }
+}
+
+export async function getRoomData(roomId) {
+  
 }

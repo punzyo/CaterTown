@@ -3,27 +3,6 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styled from 'styled-components';
 
-const BackGround = styled.div`
-  position: relative;
-  border: 1px solid black;
-  border-radius:10px;
-  width: 90%;
-  height: 100%;
-  display:flex;
-  flex-direction: column;
-  justify-content: center;
-  color: white;
-  .slick-slider {
-    position: static;
-  }
-  button:before {
-    color: black;
-  }
-  .slick-dots {
-    height: 50px;
-  }
-
-`;
 const ImgDiv =styled.div`
 width: 40px;
 height: 70px;
@@ -34,6 +13,7 @@ background-image: url(/images/animals/${(props)=>props.$backgroundImage}.png);
 `
 
 export default function SimpleSlider({onSlideChange, data }) {
+
   const settings = {
     dots: false,
     infinite: true,
@@ -43,13 +23,13 @@ export default function SimpleSlider({onSlideChange, data }) {
     afterChange:onSlideChange 
   };
   return (
-    <BackGround>
+    <>
       <Slider {...settings}>
         {data.map((image, index) =>(
             <ImgDiv key={index} $backgroundImage={`${image}`}>
             </ImgDiv>
         ))}
       </Slider>
-    </BackGround>
+    </>
   );
 }

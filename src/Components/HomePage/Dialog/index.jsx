@@ -7,13 +7,32 @@ import { createRoom, addRoomToUser } from '../../../firebase/firestore';
 import { catImages } from '@/assets/charNames';
 const SliderWrapper = styled.div`
   width: 100%;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   .title {
     padding: 20px 0;
+  }
+`;
+const SliderStyle = styled.div`
+  position: relative;
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 90%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
+  .slick-slider {
+    position: static;
+  }
+  button:before {
+    color: black;
+  }
+  .slick-dots {
+    height: 50px;
   }
 `;
 const DialogWrapper = styled.div`
@@ -66,7 +85,6 @@ function Dialog({ onClose, userId }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const handleSlideChange = (index) => {
     setSelectedImageIndex(index);
-    console.log('3330', index);
   };
   const clickCreateRoom = async () => {
     const roomName = roomNameInput.value;
@@ -82,7 +100,13 @@ function Dialog({ onClose, userId }) {
       startingPoint,
       map,
     });
-    const isUpdated = await addRoomToUser({ userId, roomName,roomId,character,charName });
+    const isUpdated = await addRoomToUser({
+      userId,
+      roomName,
+      roomId,
+      character,
+      charName,
+    });
     if (isUpdated) clearInput();
   };
   const clearInput = () => {
@@ -162,7 +186,9 @@ function Dialog({ onClose, userId }) {
         </InputDiv>
         <SliderWrapper>
           <div className="title">選擇貓咪</div>
-          <SimpleSlider onSlideChange={handleSlideChange} data={catImages} />
+          <SliderStyle>
+            <SimpleSlider onSlideChange={handleSlideChange} data={catImages} />
+          </SliderStyle>
         </SliderWrapper>
         <CreateRoom>
           <button onClick={clickCreateRoom}>建立房間</button>
