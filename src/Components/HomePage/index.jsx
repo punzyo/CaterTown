@@ -220,7 +220,7 @@ export default function HomePage() {
           
         </RoomWrapper>
       </MainPage>
-      {dialogOpen && <Dialog onClose={closeDialog} />}
+      {dialogOpen && <Dialog onClose={closeDialog} userId={'yili'}/>}
     </Wrapper>
   );
 }

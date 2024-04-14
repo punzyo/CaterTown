@@ -6,10 +6,13 @@ export function useFormInput(initialValue) {
   function handleChange(e) {
     setValue(e.target.value);
   }
-
+  function clear() {
+    setValue('');
+  }
   const inputProps = {
     value: value,
-    onChange: handleChange
+    onChange: handleChange,
+    clear
   };
 
   return inputProps;

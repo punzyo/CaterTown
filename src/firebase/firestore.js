@@ -12,6 +12,7 @@ import {
   collection,
   onSnapshot,
   Timestamp,
+  arrayUnion 
 } from 'firebase/firestore';
 
 
@@ -117,3 +118,38 @@ export async function getOtherPlayersData( excludePlayerId) {
   }
 }
 
+export async function createRoom({userId, roomName, userName, character, map, startingPoint: position}) {
+  console.log(userId, roomName, userName, character, position,map);
+  try {
+    const roomDocRef = await addDoc(collection(db, 'rooms'), {
+      users: [{
+        userId,
+        userName,
+        character
+      }],
+      name: roomName,
+      createDate: Timestamp.now(), 
+      map
+    });
+    console.log("Document written with ID: ", roomDocRef.id);
+    return roomDocRef.id; 
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+} 
+
+export async function addRoomToUser ({userId, roomId}){
+  const userDocRef = doc(db, "users", userId);
+
+  try {
+    await updateDoc(userDocRef, {
+      rooms: arrayUnion(roomId) 
+    });
+    console.log("User updated with new room ID:", roomId);
+    return true;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return false;
+  }
+  
+}

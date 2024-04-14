@@ -388,3 +388,4 @@ export const mapWidth = (wrapperWidth - 2 * mapBorder) / map1.unit;
 export const mapHeight = (wrapperHeight - 2 * mapBorder) / map1.unit;
 export const playerWidth = '60';
 export const playerHeight = '60';
+export const startingPoint = {top:230, left:330, direction:"down", frame:0}
