@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Dialog from './Dialog';
 import { getUserDatabyId, getUserRoomsbyId } from '@/firebase/firestore';
 import { catsXPositions, catsYPositions } from '../../assets/charNames';
+import { useNavigate } from 'react-router-dom';
 const containerStyles = css`
   border-radius: 10px;
   font-size: 16px;
