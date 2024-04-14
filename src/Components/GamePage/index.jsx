@@ -1,9 +1,22 @@
 import { useState, useEffect, useRef, useReducer } from 'react';
+import { useParams , useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { updatePlayerPosition, getPlayerPosition } from '@/firebase/firestore';
 import { useOtherPlayer } from '@/utils/hooks/useOherPlayer';
-import { map1, map1Collision, wrapperHeight, wrapperWidth, playerHeight, playerWidth, mapHeight, mapWidth, mapBorder } from '@/Components/Maps/map1.js';
+import {
+  map1,
+  map1Collision,
+  wrapperHeight,
+  wrapperWidth,
+  playerHeight,
+  playerWidth,
+  mapHeight,
+  mapWidth,
+  mapBorder,
+} from '@/Components/Maps/map1.js';
 import Map1 from '@/Components/Maps/map1.jsx';
+import { catsXPositions, catsYPositions } from '../../assets/charNames';
+import { useUserState } from '../../utils/zustand';
 const Wrapper = styled.div`
   position: relative;
   width: ${wrapperWidth}px;
@@ -60,25 +73,24 @@ function positionReducer(state, action) {
   }
 }
 export default function GamePage() {
+  const { getUserData } = useUserState();
+  const user = getUserData();
+  const navigate = useNavigate();
+  const { userId } = useParams();
+
   const [position, dispatchPosition] = useReducer(positionReducer, null);
   const [currentFrame, setCurrentFrame] = useState(0);
   const [direction, setDirection] = useState();
-  const [playerName, setPlayerName] = useState('');
-  const nameInput = useRef(null);
-  const otherPlayers = useOtherPlayer(playerName);
+  const otherPlayers = useOtherPlayer(userId);
   const movingTimer = useRef(null);
   const keysPressed = useRef(false);
   const canMove = useRef(true);
-  const directionYPositions = {
-    down: '-64px',
-    left: '-320px',
-    up: '-573px',
-    right: '-833px',
-  };
 
-  const framesXPositions = ['-767px', '-832px', '-897px', '-963px'];
+  const directionYPositions = catsYPositions;
+  const framesXPositions = catsXPositions;
+
   useEffect(() => {
-    if (!playerName) return;
+    if (!user.id) return;
     const handleKeyPress = async (e) => {
       let move = { top: 0, left: 0 };
       let keyDirection;
@@ -150,10 +162,14 @@ export default function GamePage() {
       setCurrentFrame((prevFrame) => (prevFrame + 1) % framesXPositions.length);
       dispatchPosition({ type: 'move', payload: move });
 
-      await updatePlayerPosition(playerName, {
-        ...absolutePosition,
-        direction: keyDirection,
-        frame: currentFrame,
+      await updatePlayerPosition({
+        userId: user.id,
+        userData: {
+          ...absolutePosition,
+          direction: keyDirection,
+          frame: currentFrame,
+        },
+        roomId
       });
 
       setTimeout(() => {
@@ -173,10 +189,13 @@ export default function GamePage() {
   }, [position]);
 
   useEffect(() => {
-    if (!playerName) return;
+    if (!user.id) return;
     const updatePosition = async () => {
       try {
-        const playerPosition = await getPlayerPosition(playerName);
+        const playerPosition = await getPlayerPosition({
+          userId: user.id,
+          roomId,
+        });
         setDirection(playerPosition.direction);
         const mapPosition = playerAbsoluteToMapPos(playerPosition);
         dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
@@ -185,7 +204,8 @@ export default function GamePage() {
       }
     };
     updatePosition();
-  }, [playerName]);
+  }, [user.id]);
+  if (!roomId) navigate('/');
   const playerPosToAbsolute = (position) => {
     const absoluteLeft =
       wrapperWidth / 2 - playerWidth / 2 - mapBorder - position.left;
@@ -205,9 +225,7 @@ export default function GamePage() {
 
   return (
     <>
-
-
-      {playerName && (
+      {position && (
         <Wrapper>
           {position && (
             <Map1 position={position}>
@@ -235,18 +253,9 @@ export default function GamePage() {
           )}
         </Wrapper>
       )}
-      <input type="text" placeholder="輸入你的名稱" ref={nameInput} />
-      <button
-        onClick={() => {
-          setPlayerName(nameInput.current.value);
-        }}
-      >
-        送出
-      </button>
     </>
   );
 }
-
 
 {
   /* <Wrapper>

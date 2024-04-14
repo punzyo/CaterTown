@@ -60,8 +60,8 @@ const CreateRoom = styled.div`
 `;
 
 function Dialog({ onClose, userId }) {
-  const roomNameInput = useFormInput();
-  const charNameInput = useFormInput();
+  const roomNameInput = useFormInput('');
+  const charNameInput = useFormInput('');
   const mapInput = useRef();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const handleSlideChange = (index) => {
