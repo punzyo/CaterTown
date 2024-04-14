@@ -1,9 +1,21 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useFormInput } from '../../../utils/hooks/useFormInput';
+import SimpleSlider from '../../Silder';
+const SliderWrapper = styled.div`
+  width: 100%;
+
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  justify-content: center;
+  .title{
+    padding:20px 0;
+  }
+`
 const DialogWrapper = styled.div`
   width: 400px;
-  height: 400px;
+  height: 500px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -32,17 +44,26 @@ input{
   flex-grow: 1;
 }
 `
-const CreateRoom = styled.button`
-width:200px;
-height:40px;
-border: 1px solid;
-border-radius:5px;
-background-color: inherit;
-cursor: pointer;
+const CreateRoom = styled.div`
+  width:100%;
+button{
+  width:100%;
+  height:40px;
+  border: 1px solid;
+  border-radius:5px;
+  background-color: inherit;
+  cursor: pointer;
+}
+
 `
 function Dialog({ onClose }) {
   const roomNameInput = useFormInput()
   const nameInput = useFormInput()
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const handleSlideChange = (index)=>{
+    setSelectedImageIndex(index)
+    console.log('3330',index);
+  }
   return (
     <div
       style={{
@@ -90,17 +111,20 @@ function Dialog({ onClose }) {
           <p>地圖種類</p>
           <div>
           <label htmlFor="map">map1</label>
-          <input type="radio" name='map' id="map" value='map1' checked/>
+          <input type="radio" name='map' id="map" value='map1' checked readOnly/>
           </div>
         </InputDiv>
-        <div>
-          <p></p>
-        </div>
-        <div>
-          <CreateRoom>
+        <SliderWrapper >
+          <div className='title'>
+            選擇貓咪
+          </div>
+        <SimpleSlider onSlideChange={handleSlideChange}/>
+        </SliderWrapper>
+        <CreateRoom>
+          <button>
             建立房間
-          </CreateRoom>
-        </div>
+          </button>
+        </CreateRoom>
       </DialogWrapper>
     </div>
   );
