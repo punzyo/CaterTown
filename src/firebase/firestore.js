@@ -145,7 +145,8 @@ export async function addRoomToUser({ userId,roomName, roomId, character, charNa
   try {
     await setDoc(roomDocRef, {roomName,
      character,
-   charName
+   charName,
+   createDate: Timestamp.now(), 
     }, { merge: true }); 
     console.log("Room with character info set in user's collection with Room ID:", roomId);
     return true; 

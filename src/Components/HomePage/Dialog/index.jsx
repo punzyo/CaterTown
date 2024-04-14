@@ -4,6 +4,7 @@ import { useFormInput } from '../../../utils/hooks/useFormInput';
 import SimpleSlider from '../../Silder';
 import { startingPoint } from '../../Maps/map1';
 import { createRoom, addRoomToUser } from '../../../firebase/firestore';
+import { catImages } from '@/assets/charNames';
 const SliderWrapper = styled.div`
   width: 100%;
 
@@ -57,58 +58,7 @@ const CreateRoom = styled.div`
     cursor: pointer;
   }
 `;
-const catImages = [
-  'black_0',
-  'black_1',
-  'black_2',
-  'black_3',
-  'black_4',
-  'blue_0',
-  'blue_1',
-  'blue_2',
-  'blue_3',
-  'brown_0',
-  'brown_1',
-  'brown_2',
-  'brown_3',
-  'brown_4',
-  'brown_5',
-  'brown_6',
-  'brown_7',
-  'brown_8',
-  'calico_0',
-  'cotton_candy_blue_0',
-  'cotton_candy_pink_0',
-  'creme_0',
-  'creme_1',
-  'dark_0',
-  'game_boy_0',
-  'game_boy_1',
-  'game_boy_2',
-  'ghost_0',
-  'gold_0',
-  'grey_0',
-  'grey_1',
-  'grey_2',
-  'hairless_0',
-  'hairless_1',
-  'indigo_0',
-  'orange_0',
-  'orange_1',
-  'orange_2',
-  'orange_3',
-  'peach_0',
-  'pink_0',
-  'radioactive_0',
-  'red_0',
-  'red_1',
-  'seal_point_0',
-  'teal_0',
-  'white_0',
-  'white_grey_0',
-  'white_grey_1',
-  'yellow_0',
-];
+
 function Dialog({ onClose, userId }) {
   const roomNameInput = useFormInput();
   const charNameInput = useFormInput();

@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import { useState, useEffect } from 'react';
 import Dialog from './Dialog';
 import { getUserDatabyId, getUserRoomsbyId } from '@/firebase/firestore';
+import { catsXPositions, catsYPositions } from '../../assets/charNames';
 const containerStyles = css`
   border-radius: 10px;
   font-size: 16px;
@@ -136,10 +137,26 @@ const RoomWrapper = styled.div`
   grid-template-columns: repeat(3, 1fr);
   padding: 20px 50px;
   gap: 60px;
+  .mapName {
+    padding: 0 5px;
+    font-weight: 700;
+    color: #fff;
+  }
 `;
-const Room = styled.div`
-  height: 300px;
+const RoomCharacter = styled.div`
+  width: 60px;
+  height: 60px;
+  background-position: ${catsXPositions[0]} ${catsYPositions.down};
+  background-size: 2048px 1088px;
+  background-image: url(/images/animals/${(props) =>
+    props.$backgroundImage}.png);
+`;
 
+const Room = styled.div`
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   .top {
     height: 80%;
     background-image: url(/images/map1.png);
@@ -152,33 +169,37 @@ const Room = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color:#fff;
-    .mapName{
-      font-weight: 700;
-      color: #fff;
+    color: #fff;
+    div {
+      display: flex;
+      align-items: center;
     }
   }
 `;
 export default function HomePage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [userId, setUserId] = useState('yili');
-  const [userData, setUserData] = useState(null)
-  const [userRooms, setUserRooms] = useState(null)
-  useEffect(() =>{
-    const getUserData = async () =>{
+  const [userData, setUserData] = useState(null);
+  const [userRooms, setUserRooms] = useState(null);
+  useEffect(() => {
+    const getUserData = async () => {
       //await getUserDatabyId(userId)
-      const roomData = await getUserRoomsbyId(userId)
-      setUserRooms(roomData)
-    }
-    getUserData()
-  },[userId])
+      const roomData = await getUserRoomsbyId(userId);
+      setUserRooms(roomData);
+    };
+    getUserData();
+  }, [userId]);
   const openDialog = () => {
     console.log('open');
     setDialogOpen(true);
-  }
+  };
   const closeDialog = () => setDialogOpen(false);
   return (
-    <Wrapper onClick={() => { if (dialogOpen) closeDialog(); }}>
+    <Wrapper
+      onClick={() => {
+        if (dialogOpen) closeDialog();
+      }}
+    >
       <Header>
         <div className="left">
           <img src="/images/logo.png" alt="logo" />
@@ -219,19 +240,29 @@ export default function HomePage() {
       </SearchBar>
       <MainPage>
         <RoomWrapper>
-          {new Array(6).fill(null).map((room,index)=>
-          <Room key = {index}>
-          <div className="top"></div>
-          <div className="bottom">
-            <span className='mapName'>MapName</span>
-            <span className='date'>2024-04-13</span>
-          </div>
-        </Room>
-          )}
-          
+          {userRooms &&
+            userRooms.map((room, index) => (
+              <Room key={index}>
+                <span className="mapName">{room.roomName}</span>
+                <div className="top"></div>
+                <div className="bottom">
+                  <div>
+                    <RoomCharacter
+                      $backgroundImage={`${room.character}`}
+                    ></RoomCharacter>
+                    <span>{room.charName}</span>
+                  </div>
+                  <span className="date">
+                    {new Date(room.createDate.toDate())
+                      .toISOString()
+                      .slice(0, 10)}
+                  </span>
+                </div>
+              </Room>
+            ))}
         </RoomWrapper>
       </MainPage>
-      {dialogOpen && <Dialog onClose={closeDialog} userId={userId}/>}
+      {dialogOpen && <Dialog onClose={closeDialog} userId={userId} />}
     </Wrapper>
   );
 }
