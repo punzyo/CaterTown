@@ -118,13 +118,13 @@ export async function getOtherPlayersData( excludePlayerId) {
   }
 }
 
-export async function createRoom({userId, roomName, userName, character, map, startingPoint: position}) {
-  console.log(userId, roomName, userName, character, position,map);
+export async function createRoom({userId, roomName, charName, character, map, startingPoint: position}) {
+  console.log(userId, roomName, charName, character, position,map);
   try {
     const roomDocRef = await addDoc(collection(db, 'rooms'), {
       users: [{
         userId,
-        userName,
+        charName,
         character
       }],
       name: roomName,
@@ -138,18 +138,51 @@ export async function createRoom({userId, roomName, userName, character, map, st
   }
 } 
 
-export async function addRoomToUser ({userId, roomId}){
-  const userDocRef = doc(db, "users", userId);
+
+export async function addRoomToUser({ userId,roomName, roomId, character, charName }) {
+  const roomDocRef = doc(db, "users", userId, "rooms", roomId);
 
   try {
-    await updateDoc(userDocRef, {
-      rooms: arrayUnion(roomId) 
-    });
-    console.log("User updated with new room ID:", roomId);
-    return true;
+    await setDoc(roomDocRef, {roomName,
+     character,
+   charName
+    }, { merge: true }); 
+    console.log("Room with character info set in user's collection with Room ID:", roomId);
+    return true; 
   } catch (error) {
-    console.error("Error updating user:", error);
-    return false;
+    console.error("Error setting room with character info in user's collection:", error);
+    return false;  
   }
   
+}
+
+export async function getUserDatabyId(userId) {
+  const userDocRef = doc(db, "users", userId);
+  try {
+    const docSnap = await getDoc(userDocRef);
+    const data = docSnap.data()
+    console.log(data);
+  } 
+  catch (error) {
+    console.error(error)
+  }
+}
+
+export async function getUserRoomsbyId(userId) {
+  const roomsCollectionRef = collection(db, "users", userId, "rooms");
+
+  try {
+    const querySnapshot = await getDocs(roomsCollectionRef);
+    const rooms = querySnapshot.docs.map(doc => ({
+      id: doc.id, 
+      ...doc.data() 
+    }));
+
+    console.log("Rooms:", rooms);
+    return rooms; 
+  } 
+  catch (error) {
+    console.error("Error getting user rooms:", error);
+    throw new Error("Failed to fetch user rooms."); 
+  }
 }

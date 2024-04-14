@@ -111,7 +111,7 @@ const catImages = [
 ];
 function Dialog({ onClose, userId }) {
   const roomNameInput = useFormInput();
-  const nameInput = useFormInput();
+  const charNameInput = useFormInput();
   const mapInput = useRef();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const handleSlideChange = (index) => {
@@ -120,24 +120,24 @@ function Dialog({ onClose, userId }) {
   };
   const clickCreateRoom = async () => {
     const roomName = roomNameInput.value;
-    const userName = nameInput.value;
+    const charName = charNameInput.value;
     const map = mapInput.current.value;
     const character = catImages[selectedImageIndex];
 
     const roomId = await createRoom({
       userId,
       roomName,
-      userName,
+      charName,
       character,
       startingPoint,
       map,
     });
-    const isUpdated = await addRoomToUser({ userId, roomId });
+    const isUpdated = await addRoomToUser({ userId, roomName,roomId,character,charName });
     if (isUpdated) clearInput();
   };
   const clearInput = () => {
     roomNameInput.clear();
-    nameInput.clear();
+    charNameInput.clear();
     setSelectedImageIndex(0);
   };
   return (
@@ -191,8 +191,8 @@ function Dialog({ onClose, userId }) {
             type="text"
             name="name"
             id="name"
-            value={nameInput.value}
-            onChange={nameInput.onChange}
+            value={charNameInput.value}
+            onChange={charNameInput.onChange}
           />
         </InputDiv>
         <InputDiv>

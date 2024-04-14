@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Dialog from './Dialog';
+import { getUserDatabyId, getUserRoomsbyId } from '@/firebase/firestore';
 const containerStyles = css`
   border-radius: 10px;
   font-size: 16px;
@@ -160,7 +161,17 @@ const Room = styled.div`
 `;
 export default function HomePage() {
   const [dialogOpen, setDialogOpen] = useState(false);
-
+  const [userId, setUserId] = useState('yili');
+  const [userData, setUserData] = useState(null)
+  const [userRooms, setUserRooms] = useState(null)
+  useEffect(() =>{
+    const getUserData = async () =>{
+      //await getUserDatabyId(userId)
+      const roomData = await getUserRoomsbyId(userId)
+      setUserRooms(roomData)
+    }
+    getUserData()
+  },[userId])
   const openDialog = () => {
     console.log('open');
     setDialogOpen(true);
@@ -220,7 +231,7 @@ export default function HomePage() {
           
         </RoomWrapper>
       </MainPage>
-      {dialogOpen && <Dialog onClose={closeDialog} userId={'yili'}/>}
+      {dialogOpen && <Dialog onClose={closeDialog} userId={userId}/>}
     </Wrapper>
   );
 }
