@@ -24,7 +24,6 @@ const Wrapper = styled.div`
   height: ${wrapperHeight}px;
   overflow: hidden;
   user-select: none;
-  background-color: lightgray;
 `;
 
 const Player = styled.div`

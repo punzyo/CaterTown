@@ -211,6 +211,17 @@ export default function HomePage() {
     setDialogOpen(true);
   };
   const closeDialog = () => setDialogOpen(false);
+
+  const inviteFriends = ({roomId,roomName}) => {
+    const textToCopy = `http://localhost:5173/invite/${roomId}/${roomName}`;
+    navigator.clipboard.writeText(textToCopy)
+    .then(() => {
+      alert('邀請碼已複製到剪貼簿!')
+    })
+    .catch(err => {
+      console.error('複製邀請網址錯誤', err);
+    });
+  }
   return (
     <Wrapper
       onClick={() => {
@@ -281,7 +292,7 @@ export default function HomePage() {
                         .slice(0, 10)}
                     </span>
                     邀請朋友
-                    <span className='inviteIcon'> 
+                    <span className='inviteIcon' onClick={()=>{inviteFriends({roomId:room.id,roomName:room.roomName})}}> 
                         
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
