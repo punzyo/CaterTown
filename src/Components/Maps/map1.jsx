@@ -37,7 +37,17 @@ const Player = styled.div`
   background-position: -767px -833px;
   background-size: 2048px 1088px;
   background-image: url(/images/animals/${(props) => props.$character}.png);
-  color: black;
+  &::after{
+    content: '${(props) => props.$charName}';
+    font-size: 14px;
+    font-weight: bold;
+    position: absolute;
+    top: -14px;
+    width: 40px;
+    height: 40px;
+    color:black;
+    white-space: nowrap;
+  }
 `;
 const OtherPlayer = styled.div`
   position: absolute;
@@ -50,6 +60,17 @@ const OtherPlayer = styled.div`
   background-image: url(/images/animals/${(props) => props.$character}.png);
   color: black;
   transition: top 0.2s, left 0.2s;
+  &::after{
+    content: '${(props) => props.$charName}';
+    font-size: 14px;
+    font-weight: bold;
+    position: absolute;
+    top: -14px;
+    width: 40px;
+    height: 40px;
+    color:black;
+    white-space: nowrap;
+  }
 `;
 
 const Map = styled.div`
@@ -63,7 +84,7 @@ const Map = styled.div`
 `;
 const MapImage = styled.div`
   position: absolute;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0,0.3);
   width: ${(props) => props.$width};
   height: ${(props) => props.$height};
   left: ${(props) => props.$left};
@@ -100,6 +121,7 @@ export default function Map1({ setPlayer }) {
   const [currentFrame, setCurrentFrame] = useState(null);
   const [direction, setDirection] = useState();
   const [playerChar, setPlayerChar] = useState(null);
+  const [playerCharName, setPlayerCharName] = useState(null);
   const players = usePlayer({ userId, roomId });
   const movingTimer = useRef(null);
   const keysPressed = useRef(false);
@@ -220,6 +242,7 @@ export default function Map1({ setPlayer }) {
         const mapPosition = playerAbsoluteToMapPos(playerPosition);
         dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
         setPlayerChar(playerData.character)
+        setPlayerCharName(playerData.charName)
       } catch (error) {
         console.error('Error updating position:', error);
       }
@@ -292,8 +315,9 @@ export default function Map1({ setPlayer }) {
                     $backgroundPosition={`${
                       framesXPositions[player.position.frame]
                     } ${directionYPositions[player.position.direction]}`}
-                    $character={`${player.character}`}
+                    $character={player.character}
                     key={player.userId}
+                    $charName={player.charName}
                   >
                     {player.name}
                   </OtherPlayer>
@@ -306,6 +330,7 @@ export default function Map1({ setPlayer }) {
               style={{
                 backgroundPosition: `${framesXPositions[currentFrame]} ${directionYPositions[direction]}`,
               }}playerChar
+              $charName={playerCharName}
               $character={`${playerChar}`}
             ></Player>
           )}
