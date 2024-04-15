@@ -94,21 +94,21 @@ const OnlineStatus = styled.div`
   position: absolute;
   right: 4px;
   bottom: 0px;
-  border:2px solid black;
-  background-color: ${(props) => (props.$isOnline ? 'green' : 'gray')};;
+  border: 2px solid black;
+  background-color: ${(props) => (props.$isOnline ? 'green' : 'gray')};
   border-radius: 50%;
 `;
 export default function GamePage() {
   const { roomId, roomName } = useParams();
-  const {getUserData} = useUserState();
-  const userId = getUserData().id
+  const { getUserData } = useUserState();
+  const userId = getUserData().id;
   const [showSidebar, setShowSideBar] = useState(true);
-  const [player, setPlayer] = useState(null);
-  const onlineStatus = useRoomStatus({userId,roomId})
+  const [players, setPlayers] = useState(null);
+  const onlineStatus = useRoomStatus({ userId, roomId });
 
   return (
     <Wrapper>
-      <Map1 setPlayer={setPlayer} />
+      <Map1 setPlayer={setPlayers} />
       <BottomBar>
         <BottomLeft>
           <Logo />
@@ -150,20 +150,44 @@ export default function GamePage() {
         </Title>
         <SearchBar />
         <MemberWrapper>
-          <span>Online members</span>
-          {player && onlineStatus && userId&&
-            player.map((player, index) => {
-              return (
-                <MemberInfo key={player.userId}>
-                  <MemberIcon>
-                    <Cat image={player.character} />
-                    <OnlineStatus $isOnline={onlineStatus[player.userId].online}/>
-                  </MemberIcon>
-                  <span>{player.charName}</span>
-                </MemberInfo>
-              );
+          <span>Online Members</span>
+          {onlineStatus &&
+            players &&
+            players.map((player) => {
+              console.log(userId, '321', onlineStatus);
+              const isOnline = onlineStatus[player.userId]?.online || false;
+              if (isOnline) {
+                return (
+                  <MemberInfo key={player.userId}>
+                    <MemberIcon>
+                      <Cat image={player.character} />
+                      <OnlineStatus $isOnline={isOnline} />
+                    </MemberIcon>
+                    <span>{player.charName}</span>
+                  </MemberInfo>
+                );
+              }
+              return null;
             })}
-            <span>Offline members</span>
+          <span>Offline Members</span>
+          {onlineStatus &&
+            players &&
+            players.map((player) => {
+              console.log(userId, '321');
+              const isOnline = onlineStatus[player.userId]?.online || false;
+              if (!isOnline) {
+                return (
+                  <MemberInfo key={player.userId}>
+                    <MemberIcon>
+                      <Cat image={player.character} />
+                      <OnlineStatus $isOnline={isOnline} />
+                    </MemberIcon>
+                    <span>{player.charName}</span>
+                  </MemberInfo>
+                );
+              }
+              return null;
+            })}
         </MemberWrapper>
       </SideBar>
     </Wrapper>
