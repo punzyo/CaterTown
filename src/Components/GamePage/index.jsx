@@ -6,6 +6,7 @@ import Logo from '../Logo/index.jsx';
 import SearchBar from '../SearchBar/index.jsx';
 import InviteButton from '../InviteButton/index.jsx';
 import { useParams } from 'react-router-dom';
+import Cat from '../Cat/index.jsx';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -38,7 +39,7 @@ const SideBar = styled.div`
   position: absolute;
   right: ${(props) => (props.$isOpen ? '0' : '-300px')};
   transition: right 0.3s ease-in-out;
-  padding:15px;
+  padding: 15px;
   top: 0;
   background-color: #202540;
   button {
@@ -46,27 +47,62 @@ const SideBar = styled.div`
   }
 `;
 const Title = styled.div`
-display:flex;
-align-items: center;
-gap:10px;
-margin-bottom: 30px;
-`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+`;
 const LeaveRoom = styled.button`
   width: 50px;
   background-color: inherit;
   color: white;
   cursor: pointer;
 `;
-const MemberList = styled.div`
-
-`
+const MemberWrapper = styled.div`
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+const MemberInfo = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+`;
+const MemberIcon = styled.div`
+  position: relative;
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border: 1px solid #545c8f;
+  border-radius: 50%;
+  div:first-child {
+    position: absolute;
+    top: -3px;
+    right: 7px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+const OnlineStatus = styled.div`
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  right: 4px;
+  bottom: 0px;
+  border:2px solid black;
+  background-color: ${(props) => (props.$isOnline ? 'green' : 'gray')};;
+  border-radius: 50%;
+`;
 export default function GamePage() {
   const { roomId, roomName } = useParams();
-  console.log(roomId, roomName);
   const [showSidebar, setShowSideBar] = useState(true);
+  const [player, setPlayer] = useState(null);
   return (
     <Wrapper>
-      <Map1 />
+      <Map1 setPlayer={setPlayer} />
       <BottomBar>
         <BottomLeft>
           <Logo />
@@ -99,15 +135,29 @@ export default function GamePage() {
       <SideBar $isOpen={showSidebar}>
         <Title>
           {roomName}
-          <InviteButton roomId={roomId} roomName={roomName}/>
+          <InviteButton roomId={roomId} roomName={roomName} />
           <CloseButton
-          clickFunc={() => {
-            setShowSideBar(false);
-          }}
-        />
+            clickFunc={() => {
+              setShowSideBar(false);
+            }}
+          />
         </Title>
-       <MemberList/>
-        <SearchBar/>
+        <SearchBar />
+        <MemberWrapper>
+          <span>Members</span>
+          {player &&
+            player.map((player, index) => {
+              return (
+                <MemberInfo key={player.userId}>
+                  <MemberIcon>
+                    <Cat image={player.character} />
+                    <OnlineStatus $isOnline={player.online}/>
+                  </MemberIcon>
+                  <span>{player.charName}</span>
+                </MemberInfo>
+              );
+            })}
+        </MemberWrapper>
       </SideBar>
     </Wrapper>
   );

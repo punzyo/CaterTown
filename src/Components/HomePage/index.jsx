@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Dialog from './Dialog';
 import { getUserDatabyId, getUserRoomsbyId } from '@/firebase/firestore';
 import { catsXPositions, catsYPositions } from '../../assets/charNames';
@@ -9,6 +9,7 @@ import Button from '../Button';
 import Logo from '../Logo';
 import InviteButton from '../InviteButton';
 import SearchBar from '../SearchBar';
+import Cat from '../Cat';
 const containerStyles = css`
   border-radius: 10px;
   font-size: 16px;
@@ -107,15 +108,6 @@ const RoomWrapper = styled.div`
     color: #fff;
   }
 `;
-const RoomCharacter = styled.div`
-  width: 60px;
-  height: 60px;
-  background-position: ${catsXPositions[0]} ${catsYPositions.down};
-  background-size: 2048px 1088px;
-  background-image: url(/images/animals/${(props) =>
-    props.$backgroundImage}.png);
-`;
-
 const Room = styled.div`
   height: 400px;
   display: flex;
@@ -147,11 +139,12 @@ const Room = styled.div`
   }
 `;
 export default function HomePage() {
-  const { getUserData } = useUserState();
+  const { getUserData, setUser } = useUserState();
   const user = getUserData();
   const [dialogOpen, setDialogOpen] = useState(false);
   const userId = user.id;
-  const [userData, setUserData] = useState(null);
+  const idInput = useRef(null);
+  const nameInput= useRef(null);
   const [userRooms, setUserRooms] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
@@ -167,7 +160,9 @@ export default function HomePage() {
     setDialogOpen(true);
   };
   const closeDialog = () => setDialogOpen(false);
-
+const changeUser= ()=>{
+  setUser({id:idInput.current.value, name:nameInput.current.value})
+}
   return (
     <Wrapper
       onClick={() => {
@@ -180,6 +175,9 @@ export default function HomePage() {
             <span>ChouChouZoo</span>
           </Logo>
         </div>
+        <input type="text" placeholder='id' ref={idInput}/>
+        <input type="text" placeholder='name' ref={nameInput}/>
+        <button onClick={changeUser}>換人</button>
         <div className="right">
           <Profile>
             <div className="userimg">
@@ -213,9 +211,9 @@ export default function HomePage() {
                 ></div>
                 <div className="bottom">
                   <div>
-                    <RoomCharacter
-                      $backgroundImage={`${room.character}`}
-                    ></RoomCharacter>
+                    <Cat
+                      image={room.character}
+                    ></Cat>
                     <span>{room.charName}</span>
                   </div>
                   <div className="right">

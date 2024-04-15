@@ -108,6 +108,7 @@ export async function createRoom({
           charName,
           character,
           position,
+          online:false,
         },
       ],
       name: roomName,
@@ -125,7 +126,7 @@ export async function joinRoom({roomId, user}) {
 
   try {
     await updateDoc(roomDocRef, {
-      users: arrayUnion(user)
+      users: arrayUnion({...user, online:false})
     });
     console.log('User added to room with ID:', roomId);
   } catch (error) {

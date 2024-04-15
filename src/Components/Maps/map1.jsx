@@ -91,7 +91,7 @@ function positionReducer(state, action) {
       return state;
   }
 }
-export default function Map1() {
+export default function Map1({ setPlayer }) {
   const { getUserData } = useUserState();
   const userId = getUserData().id;
   const navigate = useNavigate();
@@ -176,7 +176,7 @@ export default function Map1() {
       //player can move
       canMove.current = false;
       keysPressed.current = true;
-      const nextframe = (currentFrame + 1) % framesXPositions.length
+      const nextframe = (currentFrame + 1) % framesXPositions.length;
       setCurrentFrame(nextframe);
       dispatchPosition({ type: 'move', payload: move });
 
@@ -208,7 +208,7 @@ export default function Map1() {
 
   useEffect(() => {
     if (!userId || !players) return;
-    const playerData = players.filter(player=>player.userId === userId);
+    const playerData = players.filter((player) => player.userId === userId);
     console.log(playerData);
     const updatePosition = async () => {
       try {
@@ -217,7 +217,7 @@ export default function Map1() {
           roomId,
         });
         setDirection(playerPosition.direction);
-        setCurrentFrame(playerPosition.frame)
+        setCurrentFrame(playerPosition.frame);
         const mapPosition = playerAbsoluteToMapPos(playerPosition);
         dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
       } catch (error) {
@@ -226,6 +226,9 @@ export default function Map1() {
     };
     updatePosition();
   }, [userId]);
+  useEffect(() => {
+    setPlayer(players);
+  }, [players]);
   if (!roomId) navigate('/');
   const playerPosToAbsolute = (position) => {
     const absoluteLeft =
@@ -281,7 +284,7 @@ export default function Map1() {
             )}
             {players &&
               players.map((player) => {
-                if(player.userId === userId) return
+                if (player.userId === userId) return;
                 return (
                   <OtherPlayer
                     $top={`${player.position.top}px`}
