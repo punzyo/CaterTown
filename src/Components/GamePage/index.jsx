@@ -6,7 +6,7 @@ import Logo from '../Logo/index.jsx';
 import SearchBar from '../SearchBar/index.jsx';
 import InviteButton from '../InviteButton/index.jsx';
 import { useParams } from 'react-router-dom';
-import Cat from '../Cat/index.jsx';
+import MemberList from './MemberList/index.jsx';
 import { useRoomStatus } from '../../utils/hooks/useRoomStatus.js';
 import { useUserState } from '../../utils/zustand.js';
 const bottomBarGHeight = '100px';
@@ -60,44 +60,16 @@ const LeaveRoom = styled.button`
   color: white;
   cursor: pointer;
 `;
-const MemberWrapper = styled.div`
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-const MemberInfo = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-`;
-const MemberIcon = styled.div`
-  position: relative;
+
+const GroupIcon = styled.button`
   width: 50px;
-  height: 50px;
-  background-color: white;
-  border: 1px solid #545c8f;
-  border-radius: 50%;
-  div:first-child {
-    position: absolute;
-    top: -3px;
-    right: 7px;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  background-color: inherit;
+  cursor: pointer;
+  svg {
+    fill: white;
   }
 `;
-const OnlineStatus = styled.div`
-  width: 12px;
-  height: 12px;
-  position: absolute;
-  right: 4px;
-  bottom: 0px;
-  border: 2px solid black;
-  background-color: ${(props) => (props.$isOnline ? 'green' : 'gray')};
-  border-radius: 50%;
-`;
+
 export default function GamePage() {
   const { roomId, roomName } = useParams();
   const { getUserData } = useUserState();
@@ -113,29 +85,33 @@ export default function GamePage() {
         <BottomLeft>
           <Logo />
         </BottomLeft>
-        <div
-          onClick={() => {
-            setShowSideBar(true);
-          }}
-        >
-          點我打開側邊
-        </div>
-        <LeaveRoom>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
+        <BottomLeft>
+          <GroupIcon
+            onClick={() => {
+              setShowSideBar((prevState) => !prevState);
+            }}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-            />
-          </svg>
-        </LeaveRoom>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+              <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM609.3 512H471.4c5.4-9.4 8.6-20.3 8.6-32v-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2h61.4C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z" />
+            </svg>
+          </GroupIcon>
+          <LeaveRoom>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+              />
+            </svg>
+          </LeaveRoom>
+        </BottomLeft>
       </BottomBar>
 
       <SideBar $isOpen={showSidebar}>
@@ -149,46 +125,13 @@ export default function GamePage() {
           />
         </Title>
         <SearchBar />
-        <MemberWrapper>
-          <span>Online Members</span>
-          {onlineStatus &&
-            players &&
-            players.map((player) => {
-              console.log(userId, '321', onlineStatus);
-              const isOnline = onlineStatus[player.userId]?.online || false;
-              if (isOnline) {
-                return (
-                  <MemberInfo key={player.userId}>
-                    <MemberIcon>
-                      <Cat image={player.character} />
-                      <OnlineStatus $isOnline={isOnline} />
-                    </MemberIcon>
-                    <span>{player.charName}</span>
-                  </MemberInfo>
-                );
-              }
-              return null;
-            })}
-          <span>Offline Members</span>
-          {onlineStatus &&
-            players &&
-            players.map((player) => {
-              console.log(userId, '321');
-              const isOnline = onlineStatus[player.userId]?.online || false;
-              if (!isOnline) {
-                return (
-                  <MemberInfo key={player.userId}>
-                    <MemberIcon>
-                      <Cat image={player.character} />
-                      <OnlineStatus $isOnline={isOnline} />
-                    </MemberIcon>
-                    <span>{player.charName}</span>
-                  </MemberInfo>
-                );
-              }
-              return null;
-            })}
-        </MemberWrapper>
+        {players && userId && onlineStatus && (
+          <MemberList
+            userId={userId}
+            players={players}
+            onlineStatus={onlineStatus}
+          />
+        )}
       </SideBar>
     </Wrapper>
   );

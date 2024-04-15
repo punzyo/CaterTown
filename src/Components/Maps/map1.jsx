@@ -329,7 +329,7 @@ export default function Map1({ setPlayer }) {
             <Player
               style={{
                 backgroundPosition: `${framesXPositions[currentFrame]} ${directionYPositions[direction]}`,
-              }}playerChar
+              }}
               $charName={playerCharName}
               $character={`${playerChar}`}
             ></Player>
