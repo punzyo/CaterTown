@@ -2,9 +2,9 @@ import { create } from "zustand";
 
 export const useUserState =  create((set, get) => ({
     user: {
-        name: '林以理',
+        name: '美樂蒂',
         email: '',
-        id: 'yili',
+        id: 'melody',
       },
       setUser: (userData) =>
         set((state) => ({

@@ -5,6 +5,7 @@ import { getUserDatabyId, getUserRoomsbyId } from '@/firebase/firestore';
 import { catsXPositions, catsYPositions } from '../../assets/charNames';
 import { useNavigate } from 'react-router-dom';
 import { useUserState } from '../../utils/zustand';
+import Button from '../Button';
 const containerStyles = css`
   border-radius: 10px;
   font-size: 16px;
@@ -77,18 +78,10 @@ const Profile = styled.button`
     }
   }
 `;
-const CreateSpace = styled.button`
+const CreateSpace = styled.div`
   ${containerStyles}
   width: 150px;
   height: 50px;
-  box-shadow: 0 4px #c1a23c;
-  color: #5e4800;
-  background-color: #ffd95e;
-  transition: all 0.2s ease;
-  &:active {
-    box-shadow: 0 1px #c1a23c;
-    transform: translateY(3px);
-  }
 `;
 const SearchBar = styled.div`
   width: 100%;
@@ -242,7 +235,9 @@ export default function HomePage() {
               <span>{user.name}</span>
             </div>
           </Profile>
-          <CreateSpace onClick={openDialog}>Create space</CreateSpace>
+          <CreateSpace>
+          <Button clickFunc={openDialog} content={'Create space'}></Button>
+          </CreateSpace>
         </div>
       </Header>
       <SearchBar>

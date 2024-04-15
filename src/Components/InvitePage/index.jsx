@@ -1,8 +1,13 @@
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { catImages } from '../../assets/charNames';
+import { useUserState } from '../../utils/zustand';
+import { useFormInput } from '../../utils/hooks/useFormInput';
+import { addRoomToUser, joinRoom } from '../../firebase/firestore';
+import Button from '../Button';
 import styled from 'styled-components';
 import SimpleSlider from '../Silder';
+import { startingPoint } from '../Maps/map1.js';
 const Wrapper = styled.main`
   width: 100%;
   height: 100%;
@@ -41,6 +46,15 @@ const Header = styled.header`
     justify-content: space-between;
     width: 400px;
     height: 100%;
+    .userImg{
+      width:40px;
+      height: 40px;
+      img{
+        width:100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
   }
 `;
 const MainWrapper =styled.div`
@@ -61,17 +75,29 @@ const Title = styled.h1`
   text-align: center;
   margin-bottom: 40px;
   `
+  const GameSettings = styled.div`
+  width:100%;
+  margin-top:30px;
+  display: flex;
+  gap:20px;
+
+  `
 const SilderWrapper = styled.div`
+background-color:white;
 position: relative;
     border-radius: 10px;
     border: 1px solid black;
     width: 320px;
     height: 180px;
+
     color: white;
   .slick-slider {
     display: flex;
     align-items: center;
     position: static;
+    .slick-list{
+      width:100%;
+    }
     height: 100%;
     button:before{
         color:white;
@@ -82,34 +108,33 @@ position: relative;
     .slick-next{
         right:-45px;
     }
-}
-`;
-const SliderStyle = styled.div`
-  position: relative;
-  border: 1px solid black;
-  border-radius: 10px;
-  width: 90%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  color: white;
-  .slick-slider {
-    position: static;
-  }
-  button:before {
-    color: black;
-  }
-  .slick-dots {
-    height: 50px;
-  }
-`;
+}`
+;
+const JoinButton = styled.div`
+width:200px;
+height:50px;
+border-radius:10px;
+font-weight:bold;
+margin-top:30px;
+`
 export default function InvitePage() {
+  const charNameInput = useFormInput('')
+  const{getUserData} = useUserState();
+  const user = getUserData()
   const { roomId, roomName } = useParams();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const handleSlideChange = (index) => {
     setSelectedImageIndex(index);
   };
+  const JoinRoom = async() =>{
+    await joinRoom({roomId,user:{
+        userId:user.id,
+        charName:charNameInput.value,
+        character:catImages[selectedImageIndex],
+        position:startingPoint,
+      },
+    })
+  }
   return (
     <Wrapper>
       <Header>
@@ -118,16 +143,40 @@ export default function InvitePage() {
           <span>ChouChouZoo</span>
         </div>
         <div className="right">
-          <div className="userimg">
+          <div className="userImg">
             <img src="/images/profile.jpg" alt="" />
+          </div>
+          <div>
+            {user.name}
           </div>
         </div>
       </Header>
       <MainWrapper>
       <Title>You have been invited to the room {roomName}!</Title>
+      
+      <span>請選擇角色!</span>
+      <GameSettings>
       <SilderWrapper>
+        
         <SimpleSlider onSlideChange={handleSlideChange} data={catImages} />
       </SilderWrapper>
+      <div >
+        <div>
+        <label htmlFor="name">角色名稱</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            value={charNameInput.value}
+            onChange={charNameInput.onChange}
+          />
+        </div>
+      </div>
+      </GameSettings>
+      <JoinButton>
+        <Button clickFunc={JoinRoom} content ={'加入房間'}/>
+      </JoinButton>
+
       </MainWrapper>
     </Wrapper>
   );

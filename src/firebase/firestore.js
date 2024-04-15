@@ -120,7 +120,19 @@ export async function createRoom({
     console.error('Error adding document: ', e);
   }
 }
+export async function joinRoom({roomId, user}) {
+  const roomDocRef = doc(db, 'rooms', roomId);
 
+  try {
+    await updateDoc(roomDocRef, {
+      users: arrayUnion(user)
+    });
+    console.log('User added to room with ID:', roomId);
+  } catch (error) {
+    console.error('Error joining room:', error);
+    throw error; 
+  }
+}
 export async function addRoomToUser({
   userId,
   roomName,
@@ -170,8 +182,6 @@ export async function getUserRoomsbyId(userId) {
       id: doc.id,
       ...doc.data(),
     }));
-
-    console.log('Rooms:', rooms);
     return rooms;
   } catch (error) {
     console.error('Error getting user rooms:', error);
