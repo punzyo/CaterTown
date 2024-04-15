@@ -7,6 +7,8 @@ import SearchBar from '../SearchBar/index.jsx';
 import InviteButton from '../InviteButton/index.jsx';
 import { useParams } from 'react-router-dom';
 import Cat from '../Cat/index.jsx';
+import { useRoomStatus } from '../../utils/hooks/useRoomStatus.js';
+import { useUserState } from '../../utils/zustand.js';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -98,8 +100,12 @@ const OnlineStatus = styled.div`
 `;
 export default function GamePage() {
   const { roomId, roomName } = useParams();
+  const {getUserData} = useUserState();
+  const userId = getUserData().id
   const [showSidebar, setShowSideBar] = useState(true);
   const [player, setPlayer] = useState(null);
+  const onlineStatus = useRoomStatus({userId,roomId})
+
   return (
     <Wrapper>
       <Map1 setPlayer={setPlayer} />
@@ -144,19 +150,20 @@ export default function GamePage() {
         </Title>
         <SearchBar />
         <MemberWrapper>
-          <span>Members</span>
-          {player &&
+          <span>Online members</span>
+          {player && onlineStatus && userId&&
             player.map((player, index) => {
               return (
                 <MemberInfo key={player.userId}>
                   <MemberIcon>
                     <Cat image={player.character} />
-                    <OnlineStatus $isOnline={player.online}/>
+                    <OnlineStatus $isOnline={onlineStatus[player.userId].online}/>
                   </MemberIcon>
                   <span>{player.charName}</span>
                 </MemberInfo>
               );
             })}
+            <span>Offline members</span>
         </MemberWrapper>
       </SideBar>
     </Wrapper>
