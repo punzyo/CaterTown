@@ -2,7 +2,7 @@ import { map1Index } from './map1';
 import styled from 'styled-components';
 import { useState, useEffect, useRef, useReducer } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { updatePlayerPosition, getPlayerPosition } from '@/firebase/firestore';
+import { updatePlayerPosition, getPlayerData } from '@/firebase/firestore';
 import { usePlayer } from '@/utils/hooks/useOherPlayer';
 import {
   map1,
@@ -36,7 +36,7 @@ const Player = styled.div`
 
   background-position: -767px -833px;
   background-size: 2048px 1088px;
-  background-image: url(/images/animals/calico_0.png);
+  background-image: url(/images/animals/${(props) => props.$character}.png);
   color: black;
 `;
 const OtherPlayer = styled.div`
@@ -94,12 +94,12 @@ function positionReducer(state, action) {
 export default function Map1({ setPlayer }) {
   const { getUserData } = useUserState();
   const userId = getUserData().id;
-  const navigate = useNavigate();
   const { roomId } = useParams();
 
   const [position, dispatchPosition] = useReducer(positionReducer, null);
   const [currentFrame, setCurrentFrame] = useState(null);
   const [direction, setDirection] = useState();
+  const [playerChar, setPlayerChar] = useState(null);
   const players = usePlayer({ userId, roomId });
   const movingTimer = useRef(null);
   const keysPressed = useRef(false);
@@ -208,18 +208,18 @@ export default function Map1({ setPlayer }) {
 
   useEffect(() => {
     if (!userId || !players) return;
-    const playerData = players.filter((player) => player.userId === userId);
-    console.log(playerData);
     const updatePosition = async () => {
       try {
-        const playerPosition = await getPlayerPosition({
+        const playerData = await getPlayerData({
           userId,
           roomId,
         });
+        const playerPosition =playerData.position
         setDirection(playerPosition.direction);
         setCurrentFrame(playerPosition.frame);
         const mapPosition = playerAbsoluteToMapPos(playerPosition);
         dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
+        setPlayerChar(playerData.character)
       } catch (error) {
         console.error('Error updating position:', error);
       }
@@ -229,7 +229,7 @@ export default function Map1({ setPlayer }) {
   useEffect(() => {
     setPlayer(players);
   }, [players]);
-  if (!roomId) navigate('/');
+
   const playerPosToAbsolute = (position) => {
     const absoluteLeft =
       wrapperWidth / 2 - playerWidth / 2 - mapBorder - position.left;
@@ -301,11 +301,12 @@ export default function Map1({ setPlayer }) {
               })}
           </Map>
 
-          {position && (
+          {position && playerChar &&(
             <Player
               style={{
                 backgroundPosition: `${framesXPositions[currentFrame]} ${directionYPositions[direction]}`,
-              }}
+              }}playerChar
+              $character={`${playerChar}`}
             ></Player>
           )}
         </Wrapper>

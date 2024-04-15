@@ -42,7 +42,7 @@ export async function updatePlayerPosition({ userId, userData, roomId }) {
   }
 }
 
-export async function getPlayerPosition({ userId, roomId }) {
+export async function getPlayerData({ userId, roomId }) {
   console.log('當前使用者', userId), '房間為', roomId;
   const roomDocRef = doc(db, 'rooms', roomId);
 
@@ -53,9 +53,9 @@ export async function getPlayerPosition({ userId, roomId }) {
       const playerIndex = docSnap
         .data()
         .users.findIndex((user) => user.userId === userId);
-      const playerPosition = docSnap.data().users[playerIndex].position;
-      if (playerPosition) {
-        return playerPosition;
+      const playerData = docSnap.data().users[playerIndex];
+      if (playerData) {
+        return playerData;
       } else {
         console.log(`${userId} does not exist in this room.`);
         return null;
