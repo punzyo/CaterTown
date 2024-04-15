@@ -14,6 +14,8 @@ import {
   Timestamp,
   arrayUnion,
 } from 'firebase/firestore';
+import { creatRtRoom } from './realtime';
+
 
 export const db = getFirestore(app);
 
@@ -116,6 +118,7 @@ export async function createRoom({
       map,
     });
     console.log('Document written with ID: ', roomDocRef.id);
+    creatRtRoom(roomDocRef.id)
     return roomDocRef.id;
   } catch (e) {
     console.error('Error adding document: ', e);

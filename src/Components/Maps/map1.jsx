@@ -15,7 +15,7 @@ import {
   mapWidth,
   mapBorder,
 } from '@/Components/Maps/map1.js';
-
+import { useRoomStatus } from '../../utils/hooks/useRoomStatus';
 import { catsXPositions, catsYPositions } from '../../assets/charNames';
 import { useUserState } from '../../utils/zustand';
 const Wrapper = styled.div`

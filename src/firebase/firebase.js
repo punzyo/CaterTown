@@ -6,6 +6,7 @@ import { initializeApp } from "firebase/app";
 const firebaseConfig = {
   apiKey: "AIzaSyCG5bD54A2ilBLg3rMfLfVJDjMb9LYy5Xo",
   authDomain: "videotest-e2b3f.firebaseapp.com",
+  databaseURL: "https://videotest-e2b3f-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "videotest-e2b3f",
   storageBucket: "videotest-e2b3f.appspot.com",
   messagingSenderId: "829733820578",
