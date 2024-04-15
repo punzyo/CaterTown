@@ -6,6 +6,9 @@ import { catsXPositions, catsYPositions } from '../../assets/charNames';
 import { useNavigate } from 'react-router-dom';
 import { useUserState } from '../../utils/zustand';
 import Button from '../Button';
+import Logo from '../Logo';
+import InviteButton from '../InviteButton';
+import SearchBar from '../SearchBar';
 const containerStyles = css`
   border-radius: 10px;
   font-size: 16px;
@@ -33,12 +36,6 @@ const Header = styled.header`
     gap: 50px;
     width: 400px;
     height: 100%;
-    img {
-      width: 50px;
-      height: 50px;
-      border-radius: 20%;
-      object-fit: cover;
-    }
     span {
       color: #fff;
       font-size: 50px;
@@ -83,7 +80,7 @@ const CreateSpace = styled.div`
   width: 150px;
   height: 50px;
 `;
-const SearchBar = styled.div`
+const SearchWrapper = styled.div`
   width: 100%;
   height: 88px;
   display: flex;
@@ -91,38 +88,10 @@ const SearchBar = styled.div`
   align-items: center;
   padding: 20px 30px 0px 30px;
   background-color: #282d4e;
-`;
-const InputWrapper = styled.div`
-  ${containerStyles}
-  cursor: auto;
-  width: 200px;
-  height: 40px;
-  border: 1px solid #909ce2;
-  display: flex;
-  align-items: center;
-  .icon {
-    display: flex;
-    align-items: center;
-    svg {
-      color: #fff;
-      width: 35px;
-      height: 20px;
-    }
-  }
-  input {
-    width: 100%;
-    height: 100%;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    color: #fff;
-    background-color: inherit;
-    &::placeholder {
-      font-weight: 500;
-    }
+  .inputWrapper {
+    width: 200px;
   }
 `;
-
 const MainPage = styled.div`
   background-color: #282d4e;
   height: 100%;
@@ -170,17 +139,11 @@ const Room = styled.div`
       display: flex;
       align-items: center;
     }
-    .right{
-      display:flex;
+    .right {
+      display: flex;
       align-items: center;
-      gap:10px;
-      .inviteIcon{
-        width:24px;
-        height:24px;
-        cursor: pointer;
-      }
+      gap: 10px;
     }
-    
   }
 `;
 export default function HomePage() {
@@ -205,16 +168,6 @@ export default function HomePage() {
   };
   const closeDialog = () => setDialogOpen(false);
 
-  const inviteFriends = ({roomId,roomName}) => {
-    const textToCopy = `http://localhost:5173/invite/${roomId}/${roomName}`;
-    navigator.clipboard.writeText(textToCopy)
-    .then(() => {
-      alert('邀請碼已複製到剪貼簿!')
-    })
-    .catch(err => {
-      console.error('複製邀請網址錯誤', err);
-    });
-  }
   return (
     <Wrapper
       onClick={() => {
@@ -223,8 +176,9 @@ export default function HomePage() {
     >
       <Header>
         <div className="left">
-          <img src="/images/logo.png" alt="logo" />
-          <span>ChouChouZoo</span>
+          <Logo>
+            <span>ChouChouZoo</span>
+          </Logo>
         </div>
         <div className="right">
           <Profile>
@@ -236,31 +190,15 @@ export default function HomePage() {
             </div>
           </Profile>
           <CreateSpace>
-          <Button clickFunc={openDialog} content={'Create space'}></Button>
+            <Button clickFunc={openDialog} content={'Create space'}></Button>
           </CreateSpace>
         </div>
       </Header>
-      <SearchBar>
-        <InputWrapper>
-          <div className="icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-              />
-            </svg>
-          </div>
-          <input type="text" placeholder="Search" />
-        </InputWrapper>
-      </SearchBar>
+      <SearchWrapper>
+        <div className="inputWrapper">
+          <SearchBar />
+        </div>
+      </SearchWrapper>
       <MainPage>
         <RoomWrapper>
           {userRooms &&
@@ -270,7 +208,7 @@ export default function HomePage() {
                 <div
                   className="top"
                   onClick={() => {
-                    navigate(`/chouchouzoo/${room.id}`);
+                    navigate(`/chouchouzoo/${room.id}/${room.roomName}`);
                   }}
                 ></div>
                 <div className="bottom">
@@ -280,30 +218,14 @@ export default function HomePage() {
                     ></RoomCharacter>
                     <span>{room.charName}</span>
                   </div>
-                  <div className='right'>
+                  <div className="right">
                     <span className="date">
                       {new Date(room.joinDate.toDate())
                         .toISOString()
                         .slice(0, 10)}
                     </span>
                     邀請朋友
-                    <span className='inviteIcon' onClick={()=>{inviteFriends({roomId:room.id,roomName:room.roomName})}}> 
-                        
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
-                        />
-                      </svg>
-                    </span>
+                    <InviteButton roomId={room.id} roomName={room.roomName} />
                   </div>
                 </div>
               </Room>

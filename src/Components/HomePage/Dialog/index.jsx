@@ -5,6 +5,7 @@ import SimpleSlider from '../../Silder';
 import { startingPoint } from '../../Maps/map1';
 import { createRoom, addRoomToUser } from '../../../firebase/firestore';
 import { catImages } from '@/assets/charNames';
+import CloseButton from '../../CloseButton';
 const SliderWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -43,14 +44,6 @@ const DialogWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 15px;
-`;
-const CloseButton = styled.button`
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  background-color: inherit;
 `;
 const Title = styled.p`
   margin-bottom: 20px;
@@ -133,22 +126,8 @@ function Dialog({ onClose, userId }) {
         onClick={(e) => e.stopPropagation()}
       >
         <Title>創建你的房間!</Title>
-        <CloseButton onClick={onClose}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18 18 6M6 6l12 12"
-            />
-          </svg>
-        </CloseButton>
+        <CloseButton clickFunc={onClose}/>
+         
         <InputDiv>
           <label htmlFor="roomName">房間名稱</label>
           <input

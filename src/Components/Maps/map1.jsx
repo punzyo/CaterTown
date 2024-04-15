@@ -290,7 +290,7 @@ export default function Map1() {
                       framesXPositions[player.position.frame]
                     } ${directionYPositions[player.position.direction]}`}
                     $character={`${player.character}`}
-                    key={player.name}
+                    key={player.userId}
                   >
                     {player.name}
                   </OtherPlayer>
