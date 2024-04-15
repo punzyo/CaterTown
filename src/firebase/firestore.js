@@ -145,7 +145,7 @@ export async function addRoomToUser({
   try {
     await setDoc(
       roomDocRef,
-      { roomName, character, charName, createDate: Timestamp.now() },
+      { roomName, character, charName, joinDate: Timestamp.now() },
       { merge: true }
     );
     console.log(

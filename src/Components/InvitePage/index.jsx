@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { catImages } from '../../assets/charNames';
 import { useUserState } from '../../utils/zustand';
@@ -118,6 +118,7 @@ font-weight:bold;
 margin-top:30px;
 `
 export default function InvitePage() {
+  const navigate = useNavigate();
   const charNameInput = useFormInput('')
   const{getUserData} = useUserState();
   const user = getUserData()
@@ -127,13 +128,27 @@ export default function InvitePage() {
     setSelectedImageIndex(index);
   };
   const JoinRoom = async() =>{
+    const userId = user.id
+    const charName = charNameInput.value
+    const character = catImages[selectedImageIndex]
     await joinRoom({roomId,user:{
-        userId:user.id,
-        charName:charNameInput.value,
-        character:catImages[selectedImageIndex],
+        userId,
+        charName,
+        character,
         position:startingPoint,
       },
     })
+    const joinedRoom = await addRoomToUser({
+      userId,
+      roomName,
+      roomId,
+      character,
+      charName,
+    })
+    if(joinedRoom){
+      charNameInput.clear()
+      navigate(`/chouchouzoo/${roomId}`)
+    }
   }
   return (
     <Wrapper>

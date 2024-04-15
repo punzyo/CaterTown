@@ -187,7 +187,7 @@ export default function HomePage() {
   const { getUserData } = useUserState();
   const user = getUserData();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [userId, setUserId] = useState('yili');
+  const userId = user.id;
   const [userData, setUserData] = useState(null);
   const [userRooms, setUserRooms] = useState(null);
   const navigate = useNavigate();
@@ -282,7 +282,7 @@ export default function HomePage() {
                   </div>
                   <div className='right'>
                     <span className="date">
-                      {new Date(room.createDate.toDate())
+                      {new Date(room.joinDate.toDate())
                         .toISOString()
                         .slice(0, 10)}
                     </span>

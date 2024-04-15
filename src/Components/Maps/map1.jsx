@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useState, useEffect, useRef, useReducer } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { updatePlayerPosition, getPlayerPosition } from '@/firebase/firestore';
-import { useOtherPlayer } from '@/utils/hooks/useOherPlayer';
+import { usePlayer } from '@/utils/hooks/useOherPlayer';
 import {
   map1,
   map1Collision,
@@ -47,7 +47,7 @@ const OtherPlayer = styled.div`
   top: ${(props) => props.$top};
   background-position: ${(props) => props.$backgroundPosition};
   background-size: 2048px 1088px;
-  background-image: url(/images/animals/gold_0.png);
+  background-image: url(/images/animals/${(props) => props.$character}.png);
   color: black;
   transition: top 0.2s, left 0.2s;
 `;
@@ -93,14 +93,14 @@ function positionReducer(state, action) {
 }
 export default function Map1() {
   const { getUserData } = useUserState();
-  const user = getUserData();
+  const userId = getUserData().id;
   const navigate = useNavigate();
   const { roomId } = useParams();
 
   const [position, dispatchPosition] = useReducer(positionReducer, null);
-  const [currentFrame, setCurrentFrame] = useState(0);
+  const [currentFrame, setCurrentFrame] = useState(null);
   const [direction, setDirection] = useState();
-  const otherPlayers = useOtherPlayer(user.id);
+  const players = usePlayer({ userId, roomId });
   const movingTimer = useRef(null);
   const keysPressed = useRef(false);
   const canMove = useRef(true);
@@ -108,7 +108,7 @@ export default function Map1() {
   const framesXPositions = catsXPositions;
 
   useEffect(() => {
-    if (!user.id) return;
+    if (!userId) return;
     const handleKeyPress = async (e) => {
       let move = { top: 0, left: 0 };
       let keyDirection;
@@ -176,16 +176,16 @@ export default function Map1() {
       //player can move
       canMove.current = false;
       keysPressed.current = true;
-
-      setCurrentFrame((prevFrame) => (prevFrame + 1) % framesXPositions.length);
+      const nextframe = (currentFrame + 1) % framesXPositions.length
+      setCurrentFrame(nextframe);
       dispatchPosition({ type: 'move', payload: move });
 
       await updatePlayerPosition({
-        userId: user.id,
+        userId,
         userData: {
           ...absolutePosition,
           direction: keyDirection,
-          frame: currentFrame,
+          frame: nextframe,
         },
         roomId,
       });
@@ -207,14 +207,17 @@ export default function Map1() {
   }, [position]);
 
   useEffect(() => {
-    if (!user.id) return;
+    if (!userId || !players) return;
+    const playerData = players.filter(player=>player.userId === userId);
+    console.log(playerData);
     const updatePosition = async () => {
       try {
         const playerPosition = await getPlayerPosition({
-          userId: user.id,
+          userId,
           roomId,
         });
         setDirection(playerPosition.direction);
+        setCurrentFrame(playerPosition.frame)
         const mapPosition = playerAbsoluteToMapPos(playerPosition);
         dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
       } catch (error) {
@@ -222,7 +225,7 @@ export default function Map1() {
       }
     };
     updatePosition();
-  }, [user.id]);
+  }, [userId]);
   if (!roomId) navigate('/');
   const playerPosToAbsolute = (position) => {
     const absoluteLeft =
@@ -276,19 +279,23 @@ export default function Map1() {
                 );
               })
             )}
-            {otherPlayers &&
-              otherPlayers.map((player) => (
-                <OtherPlayer
-                  $top={`${player.position.top}px`}
-                  $left={`${player.position.left}px`}
-                  $backgroundPosition={`${
-                    framesXPositions[player.position.frame]
-                  } ${directionYPositions[player.position.direction]}`}
-                  key={player.name}
-                >
-                  {player.name}
-                </OtherPlayer>
-              ))}
+            {players &&
+              players.map((player) => {
+                if(player.userId === userId) return
+                return (
+                  <OtherPlayer
+                    $top={`${player.position.top}px`}
+                    $left={`${player.position.left}px`}
+                    $backgroundPosition={`${
+                      framesXPositions[player.position.frame]
+                    } ${directionYPositions[player.position.direction]}`}
+                    $character={`${player.character}`}
+                    key={player.name}
+                  >
+                    {player.name}
+                  </OtherPlayer>
+                );
+              })}
           </Map>
 
           {position && (
