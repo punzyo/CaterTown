@@ -42,33 +42,33 @@ export async function updatePlayerPosition({ userId, userData, roomId }) {
   }
 }
 
-export async function getPlayerData({ userId, roomId }) {
-  console.log('當前使用者', userId), '房間為', roomId;
-  const roomDocRef = doc(db, 'rooms', roomId);
+// export async function getPlayerData({ userId, roomId }) {
+//   console.log('當前使用者', userId), '房間為', roomId;
+//   const roomDocRef = doc(db, 'rooms', roomId);
 
-  try {
-    const docSnap = await getDoc(roomDocRef);
+//   try {
+//     const docSnap = await getDoc(roomDocRef);
 
-    if (docSnap.exists()) {
-      const playerIndex = docSnap
-        .data()
-        .users.findIndex((user) => user.userId === userId);
-      const playerData = docSnap.data().users[playerIndex];
-      if (playerData) {
-        return playerData;
-      } else {
-        console.log(`${userId} does not exist in this room.`);
-        return null;
-      }
-    } else {
-      console.log('No such document!');
-      return null;
-    }
-  } catch (error) {
-    console.error('Error getting document:', error);
-    return null;
-  }
-}
+//     if (docSnap.exists()) {
+//       const playerIndex = docSnap
+//         .data()
+//         .users.findIndex((user) => user.userId === userId);
+//       const playerData = docSnap.data().users[playerIndex];
+//       if (playerData) {
+//         return playerData;
+//       } else {
+//         console.log(`${userId} does not exist in this room.`);
+//         return null;
+//       }
+//     } else {
+//       console.log('No such document!');
+//       return null;
+//     }
+//   } catch (error) {
+//     console.error('Error getting document:', error);
+//     return null;
+//   }
+// }
 
 export async function getOtherPlayersData(excludePlayerId) {
   const roomDocRef = doc(db, 'rooms', '001');
@@ -197,13 +197,15 @@ export async function sendPublicMessage({roomId,charName,message}) {
   const roomRef = doc(db, 'rooms', roomId);
 
   try {
-    await updateDoc(roomRef, {
-      publicMessages: arrayUnion({
-        charName: charName,
-        message: message
-      })
-    });
-    console.log("Message added successfully");
+
+    const roomSnap = await getDoc(roomRef);
+
+      const existingMessages = roomSnap.data().publicMessages || [];
+      existingMessages.push({ charName: charName, message: message });
+      await updateDoc(roomRef, {
+        publicMessages: existingMessages
+      });
+      console.log("Message added successfully");
   } catch (error) {
     console.error("Error adding message: ", error);
   }

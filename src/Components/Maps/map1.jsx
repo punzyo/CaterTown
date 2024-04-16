@@ -2,7 +2,7 @@ import { map1Index } from './map1';
 import styled from 'styled-components';
 import { useState, useEffect, useRef, useReducer } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { updatePlayerPosition, getPlayerData } from '@/firebase/firestore';
+import { updatePlayerPosition } from '@/firebase/firestore';
 import { usePlayer } from '@/utils/hooks/useOherPlayer';
 import {
   map1,
@@ -110,7 +110,7 @@ function positionReducer(state, action) {
       return state;
   }
 }
-export default function Map1({ players }) {
+export default function Map1({ players, playerCharName, setPlayerCharName }) {
   const { getUserData } = useUserState();
   const userId = getUserData().id;
   const { roomId } = useParams();
@@ -119,7 +119,6 @@ export default function Map1({ players }) {
   const [currentFrame, setCurrentFrame] = useState(null);
   const [direction, setDirection] = useState();
   const [playerChar, setPlayerChar] = useState(null);
-  const [playerCharName, setPlayerCharName] = useState(null);
  
   const movingTimer = useRef(null);
   const keysPressed = useRef(false);
@@ -231,24 +230,20 @@ export default function Map1({ players }) {
   }, [position]);
 
   useEffect(() => {
-    if (position) return;
+    if (position || !players) return;
     const updatePosition = async () => {
-      try {
-        const playerData = await getPlayerData({
-          userId,
-          roomId,
-        });
-        const playerPosition =playerData.position
+      console.log(players, userId);
+        const playerData =  players.filter(player=>player.userId === userId)
+        const playerPosition =playerData[0].position
         setDirection(playerPosition.direction);
         setCurrentFrame(playerPosition.frame);
         const mapPosition = playerAbsoluteToMapPos(playerPosition);
         dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
-        setPlayerChar(playerData.character)
-        setPlayerCharName(playerData.charName)
-      } catch (error) {
-        console.error('Error updating position:', error);
-      }
-    };
+        setPlayerChar(playerData[0].character)
+        console.log(playerData[0].charName,'asd');
+        setPlayerCharName(playerData[0].charName)
+      } 
+
     updatePosition();
   }, [players]);
 

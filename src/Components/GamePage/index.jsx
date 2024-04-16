@@ -82,14 +82,15 @@ export default function GamePage() {
   const [showSidebar, setShowSideBar] = useState(true);
   const onlineStatus = useRoomStatus({ userId, roomId });
   const playersData = usePlayer({ userId, roomId });
+  const [playerCharName, setPlayerCharName] = useState(null);
   const players = playersData.users
-  const messages = playersData.messages
+  const messages = playersData.publicMessages
 
   return (
     <Wrapper>
-      <Map1 players={players} />
+      <Map1 players={players} playerCharName={playerCharName} setPlayerCharName={setPlayerCharName}/>
       <BottomBar>
-      <PublicMessage/>
+      <PublicMessage playerCharName={playerCharName} roomId={roomId} messages={messages}/>
         <BottomLeft>
           <Logo />
         </BottomLeft>
