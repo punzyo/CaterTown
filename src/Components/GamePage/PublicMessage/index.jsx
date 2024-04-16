@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 import { useFormInput } from '../../../utils/hooks/useFormInput';
-import { sendPublicMessage } from '../../../firebase/firestore';
+import { sendPublicMessage, sendPrivateMessage } from '../../../firebase/firestore';
 import { useState, useEffect, useRef } from 'react';
-const messageTest = [
-  { charName: '班尼迪克但', message: 'hello' },
-  { charName: '抽抽我大哥', message: 'yoyo' },
-];
+import { usePrivateMessages } from '@/utils/hooks/usePrivateMessages';
+
 const messageHeight = '350px';
 
 const MessageWrapper = styled.div`
@@ -83,13 +81,19 @@ const MessageInput = styled.div`
 
 export default function PublicMessage({
   playerCharName,
+  userId,
   roomId,
   publicMessages,
   privateChannel,
-  setPrivateChannel,isPublicChannel,setIsPublicChannel
+  setPrivateChannel,
+  isPublicChannel,
+  setIsPublicChannel,
+  privateMessages,
+  privateCharName
 }) {
-  const playerpublicInput = useFormInput('');
+  const messageInput = useFormInput('');
   const messagesEndRef = useRef(null);
+ 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -99,12 +103,23 @@ export default function PublicMessage({
   }, [publicMessages]);
 
   const sendMessage = async () => {
-    console.log(roomId, playerCharName, playerpublicInput.value);
+
+   if(isPublicChannel){
     await sendPublicMessage({
       roomId,
       charName: playerCharName,
-      message: playerpublicInput.value,
+      message: messageInput.value,
     });
+   }
+   else{
+    await sendPrivateMessage({
+      userId,
+      roomId,
+      charName: playerCharName,
+      message: messageInput.value,
+      privateChannelId: privateChannel,
+    });
+   }
   };
 
   return (
@@ -126,7 +141,7 @@ export default function PublicMessage({
                 setIsPublicChannel(false);
               }}
             >
-              {privateChannel}
+              {privateCharName}
             </Channel>
           )}
         </ChannelWrapper>
@@ -137,21 +152,29 @@ export default function PublicMessage({
         </CloseIcon>
       </MessageController>
       <Messages>
-        {publicMessages &&
+        {isPublicChannel&& publicMessages &&
           publicMessages.map((message, index) => (
             <Message key={index}>
               <span>{message.charName} : </span>
               <span>{message.message}</span>
             </Message>
           ))}
+          {!isPublicChannel&& privateMessages&&
+          privateMessages.map((message, index) => (
+            <Message key={index}>
+              <span>{message.charName} : </span>
+              <span>{message.message}</span>
+            </Message>
+          ))}
+          {privateMessages&&console.log(privateMessages.message)}
         <div ref={messagesEndRef} />
       </Messages>
 
       <MessageInput>
         <input
           type="text"
-          value={playerpublicInput.value}
-          onChange={playerpublicInput.onChange}
+          value={messageInput.value}
+          onChange={messageInput.onChange}
         />
         <button onClick={sendMessage}>送出</button>
       </MessageInput>

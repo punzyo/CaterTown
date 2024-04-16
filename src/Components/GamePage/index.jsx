@@ -1,16 +1,17 @@
 import Map1 from '../Maps/map1.jsx';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CloseButton from '../CloseButton/index.jsx';
 import Logo from '../Logo/index.jsx';
 import SearchBar from '../SearchBar/index.jsx';
 import InviteButton from '../InviteButton/index.jsx';
 import { useParams } from 'react-router-dom';
-import MemberList from './MemberList/index.jsx';
 import { useRoomStatus } from '../../utils/hooks/useRoomStatus.js';
 import { useUserState } from '../../utils/zustand.js';
 import PublicMessage from './PublicMessage/index.jsx';
 import { usePlayer } from '../../utils/hooks/useOherPlayer.js';
+import { usePrivateMessages } from '../../utils/hooks/usePrivateMessages.js';
+import Cat from '../Cat'
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -72,7 +73,44 @@ const GroupIcon = styled.button`
     fill: white;
   }
 `;
-
+const MemberIcon = styled.div`
+  position: relative;
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border: 1px solid #545c8f;
+  border-radius: 50%;
+  div:first-child {
+    position: absolute;
+    top: -3px;
+    right: 7px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+const OnlineStatus = styled.div`
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  right: 4px;
+  bottom: 0px;
+  border: 2px solid black;
+  background-color: ${(props) => (props.$isOnline ? 'green' : 'gray')};
+  border-radius: 50%;
+`;
+const MemberWrapper = styled.div`
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+const MemberInfo = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+`;
 export default function GamePage() {
   const { roomId, roomName } = useParams();
   const { getUserData } = useUserState();
@@ -83,8 +121,42 @@ export default function GamePage() {
   const [playerCharName, setPlayerCharName] = useState(null);
   const players = playersData.users;
   const publicMessages = playersData.publicMessages;
-  const [privateChannel, setPrivateChannel] = useState('美樂蒂');
+  const [privateChannel, setPrivateChannel] = useState('');
+  const [privateCharName, setPrivateCharName] = useState(null);
   const [isPublicChannel, setIsPublicChannel] = useState(true);
+  const privateMessages = usePrivateMessages({
+    userId,
+    roomId,
+    privateChannelId: privateChannel,
+  });
+
+  
+  const [onlineMembers, setOnlineMembers] = useState([]);
+  const [offlineMembers, setOfflineMembers] = useState([]);
+
+  useEffect(() => {
+    if (!players||!onlineStatus) return;
+    const online = [];
+    const offline = [];
+    console.log(players);
+    players.forEach((player) => {
+      const isOnline = onlineStatus[player.userId]?.online || false;
+      if (player.userId === userId) {
+        isOnline ? online.unshift(player) : offline.unshift(player);
+      } else {
+        isOnline ? online.push(player) : offline.push(player);
+      }
+    });
+
+    setOnlineMembers(online);
+    setOfflineMembers(offline);
+  }, [players, onlineStatus, userId]); // 更新依赖
+
+  const changeChannel = (playerId) => {
+    setIsPublicChannel(false);
+    setPrivateChannel(playerId);
+  };
+
   return (
     <Wrapper>
       <Map1
@@ -137,15 +209,43 @@ export default function GamePage() {
         </Title>
         <SearchBar />
         {players && userId && onlineStatus && (
-          <MemberList
-            userId={userId}
-            players={players}
-            onlineStatus={onlineStatus}
-            setPrivateChannel={setPrivateChannel}
-            setIsPublicChannel={setIsPublicChannel}
-          />
+          <MemberWrapper>
+          <span>Online Members</span>
+          {onlineMembers.map((player) => (
+            <MemberInfo
+              key={player.userId}
+              onClick={() => {
+                changeChannel(player.userId);
+                setPrivateCharName(player.charName)
+              }}
+            >
+              <MemberIcon>
+                <Cat image={player.character} />
+                <OnlineStatus $isOnline={true} />
+              </MemberIcon>
+              <span>{player.charName}</span>
+            </MemberInfo>
+          ))}
+          <span>Offline Members</span>
+          {offlineMembers.map((player) => (
+            <MemberInfo
+              key={player.userId}
+              onClick={() => {
+                changeChannel(player.userId);
+                setPrivateCharName(player.charName)
+              }}
+            >
+              <MemberIcon>
+                <Cat image={player.character} />
+                <OnlineStatus $isOnline={false} />
+              </MemberIcon>
+              <span>{player.charName}</span>
+            </MemberInfo>
+          ))}
+        </MemberWrapper>
         )}
         <PublicMessage
+         userId={userId}
           playerCharName={playerCharName}
           roomId={roomId}
           publicMessages={publicMessages}
@@ -153,8 +253,13 @@ export default function GamePage() {
           setIsPublicChannel={setIsPublicChannel}
           privateChannel={privateChannel}
           setPrivateChannel={setPrivateChannel}
+          privateMessages={privateMessages}
+          privateCharName={privateCharName}
         />
       </SideBar>
     </Wrapper>
   );
 }
+
+
+  

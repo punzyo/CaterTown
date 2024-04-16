@@ -210,3 +210,33 @@ export async function sendPublicMessage({roomId,charName,message}) {
     console.error("Error adding message: ", error);
   }
 }
+
+export async function sendPrivateMessage({userId,roomId,charName,privateChannelId,message}) {
+  try {
+    // 排序 userId 和 privateChannelId 以创建一致的 document ID
+    const sortedIds = [userId, privateChannelId].sort();
+    const documentId = sortedIds.join(''); // 拼接成一个字符串，如 'user1user2'
+
+    const messageRef = doc(db, `rooms/${roomId}/users/${documentId}`);
+
+    // 获取当前消息文档的快照
+    const docSnapshot = await getDoc(messageRef);
+    const newMessage = {
+      charName,
+      message
+    };
+
+    if (docSnapshot.exists()) {
+      // 如果文档已存在，读取现有消息列表并添加新消息
+      let currentMessages = docSnapshot.data().messages || [];
+      currentMessages.push(newMessage);
+      await updateDoc(messageRef, { messages: currentMessages });
+    } else {
+      // 如果文档不存在，首次创建这个文档并初始化消息列表
+      await updateDoc(messageRef, { messages: [newMessage] }); // 注意这里应使用数组 [newMessage]
+    }
+  } catch (error) {
+    console.error("Failed to send message:", error);
+    throw new Error("Failed to send message");
+  }
+}
