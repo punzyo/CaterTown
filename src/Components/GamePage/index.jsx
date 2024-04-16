@@ -10,6 +10,7 @@ import MemberList from './MemberList/index.jsx';
 import { useRoomStatus } from '../../utils/hooks/useRoomStatus.js';
 import { useUserState } from '../../utils/zustand.js';
 import PublicMessage from './PublicMessage/index.jsx';
+import { usePlayer } from '../../utils/hooks/useOherPlayer.js';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -79,12 +80,14 @@ export default function GamePage() {
   const { getUserData } = useUserState();
   const userId = getUserData().id;
   const [showSidebar, setShowSideBar] = useState(true);
-  const [players, setPlayers] = useState(null);
   const onlineStatus = useRoomStatus({ userId, roomId });
+  const playersData = usePlayer({ userId, roomId });
+  const players = playersData.users
+  const messages = playersData.messages
 
   return (
     <Wrapper>
-      <Map1 setPlayer={setPlayers} />
+      <Map1 players={players} />
       <BottomBar>
       <PublicMessage/>
         <BottomLeft>

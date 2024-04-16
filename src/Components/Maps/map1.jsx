@@ -15,7 +15,6 @@ import {
   mapWidth,
   mapBorder,
 } from '@/Components/Maps/map1.js';
-import { useRoomStatus } from '../../utils/hooks/useRoomStatus';
 import { catsXPositions, catsYPositions } from '../../assets/charNames';
 import { useUserState } from '../../utils/zustand';
 const Wrapper = styled.div`
@@ -111,7 +110,7 @@ function positionReducer(state, action) {
       return state;
   }
 }
-export default function Map1({ setPlayer }) {
+export default function Map1({ players }) {
   const { getUserData } = useUserState();
   const userId = getUserData().id;
   const { roomId } = useParams();
@@ -121,7 +120,7 @@ export default function Map1({ setPlayer }) {
   const [direction, setDirection] = useState();
   const [playerChar, setPlayerChar] = useState(null);
   const [playerCharName, setPlayerCharName] = useState(null);
-  const players = usePlayer({ userId, roomId });
+ 
   const movingTimer = useRef(null);
   const keysPressed = useRef(false);
   const canMove = useRef(true);
@@ -130,7 +129,11 @@ export default function Map1({ setPlayer }) {
 
   useEffect(() => {
     if (!userId) return;
+    
     const handleKeyPress = async (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+        return; 
+      }
       let move = { top: 0, left: 0 };
       let keyDirection;
       switch (e.key) {
@@ -228,7 +231,7 @@ export default function Map1({ setPlayer }) {
   }, [position]);
 
   useEffect(() => {
-    if (!userId || !players) return;
+    if (position) return;
     const updatePosition = async () => {
       try {
         const playerData = await getPlayerData({
@@ -247,9 +250,6 @@ export default function Map1({ setPlayer }) {
       }
     };
     updatePosition();
-  }, [userId]);
-  useEffect(() => {
-    setPlayer(players);
   }, [players]);
 
   const playerPosToAbsolute = (position) => {

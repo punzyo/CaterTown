@@ -32,8 +32,8 @@ export const usePlayer = ({ userId, roomId }) => {
     if (!roomId) return;
     const roomRef = doc(db, 'rooms', roomId);
     const unsubscribe = onSnapshot(roomRef, async (docSnapshot) => {
-      const playerList = docSnapshot.data().users;
-      setPlayers(playerList);
+      const roomData = docSnapshot.data();
+      setPlayers(roomData);
     });
     return () => {
       unsubscribe();
