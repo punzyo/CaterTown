@@ -73,8 +73,6 @@ const GroupIcon = styled.button`
   }
 `;
 
-
-
 export default function GamePage() {
   const { roomId, roomName } = useParams();
   const { getUserData } = useUserState();
@@ -83,14 +81,18 @@ export default function GamePage() {
   const onlineStatus = useRoomStatus({ userId, roomId });
   const playersData = usePlayer({ userId, roomId });
   const [playerCharName, setPlayerCharName] = useState(null);
-  const players = playersData.users
-  const messages = playersData.publicMessages
-
+  const players = playersData.users;
+  const publicMessages = playersData.publicMessages;
+  const [privateChannel, setPrivateChannel] = useState('美樂蒂');
+  const [isPublicChannel, setIsPublicChannel] = useState(true);
   return (
     <Wrapper>
-      <Map1 players={players} playerCharName={playerCharName} setPlayerCharName={setPlayerCharName}/>
+      <Map1
+        players={players}
+        playerCharName={playerCharName}
+        setPlayerCharName={setPlayerCharName}
+      />
       <BottomBar>
-      <PublicMessage playerCharName={playerCharName} roomId={roomId} messages={messages}/>
         <BottomLeft>
           <Logo />
         </BottomLeft>
@@ -139,8 +141,19 @@ export default function GamePage() {
             userId={userId}
             players={players}
             onlineStatus={onlineStatus}
+            setPrivateChannel={setPrivateChannel}
+            setIsPublicChannel={setIsPublicChannel}
           />
         )}
+        <PublicMessage
+          playerCharName={playerCharName}
+          roomId={roomId}
+          publicMessages={publicMessages}
+          isPublicChannel={isPublicChannel}
+          setIsPublicChannel={setIsPublicChannel}
+          privateChannel={privateChannel}
+          setPrivateChannel={setPrivateChannel}
+        />
       </SideBar>
     </Wrapper>
   );

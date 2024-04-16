@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import {useMemo} from "react";
-import Cat from "../../Cat";
+import styled from 'styled-components';
+import { useMemo } from 'react';
+import Cat from '../../Cat';
 const MemberIcon = styled.div`
   position: relative;
   width: 50px;
@@ -39,48 +39,66 @@ const MemberInfo = styled.div`
   align-items: center;
   gap: 20px;
 `;
-const MemberList = ({ userId, players, onlineStatus }) => {
-    // 分离并排序在线和离线成员，不依赖于位置信息
-    const { onlineMembers, offlineMembers } = useMemo(() => {
-      const online = [];
-      const offline = [];
-  
-      players.forEach(player => {
-        const isOnline = onlineStatus[player.userId]?.online || false;
-        if (player.userId === userId) {
-          isOnline ? online.unshift(player) : offline.unshift(player);
-        } else {
-          isOnline ? online.push(player) : offline.push(player);
-        }
-      });
-    
-      return { onlineMembers: online, offlineMembers: offline };
-    }, [players, onlineStatus, userId])
-  
-    return (
-      <MemberWrapper>
-        <span>Online Members</span>
-        {onlineMembers.map(player => (
-          <MemberInfo key={player.userId}>
-            <MemberIcon>
-              <Cat image={player.character} />
-              <OnlineStatus $isOnline={true} />
-            </MemberIcon>
-            <span>{player.charName}</span>
-          </MemberInfo>
-        ))}
-        <span>Offline Members</span>
-        {offlineMembers.map(player => (
-          <MemberInfo key={player.userId}>
-            <MemberIcon>
-              <Cat image={player.character} />
-              <OnlineStatus $isOnline={false} />
-            </MemberIcon>
-            <span>{player.charName}</span>
-          </MemberInfo>
-        ))}
-      </MemberWrapper>
-    );
+const MemberList = ({
+  userId,
+  players,
+  onlineStatus,
+  setIsPublicChannel,
+  setPrivateChannel,
+}) => {
+  const { onlineMembers, offlineMembers } = useMemo(() => {
+    const online = [];
+    const offline = [];
+
+    players.forEach((player) => {
+      const isOnline = onlineStatus[player.userId]?.online || false;
+      if (player.userId === userId) {
+        isOnline ? online.unshift(player) : offline.unshift(player);
+      } else {
+        isOnline ? online.push(player) : offline.push(player);
+      }
+    });
+
+    return { onlineMembers: online, offlineMembers: offline };
+  }, [players, onlineStatus, userId]);
+  const changeChannel = (player) => {
+    setIsPublicChannel(false);
+    setPrivateChannel(player);
   };
-  
-  export default MemberList;
+  return (
+    <MemberWrapper>
+      <span>Online Members</span>
+      {onlineMembers.map((player) => (
+        <MemberInfo
+          key={player.userId}
+          onClick={() => {
+            changeChannel(player.charName);
+          }}
+        >
+          <MemberIcon>
+            <Cat image={player.character} />
+            <OnlineStatus $isOnline={true} />
+          </MemberIcon>
+          <span>{player.charName}</span>
+        </MemberInfo>
+      ))}
+      <span>Offline Members</span>
+      {offlineMembers.map((player) => (
+        <MemberInfo
+          key={player.userId}
+          onClick={() => {
+            changeChannel(player.charName);
+          }}
+        >
+          <MemberIcon>
+            <Cat image={player.character} />
+            <OnlineStatus $isOnline={false} />
+          </MemberIcon>
+          <span>{player.charName}</span>
+        </MemberInfo>
+      ))}
+    </MemberWrapper>
+  );
+};
+
+export default MemberList;
