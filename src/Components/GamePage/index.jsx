@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import MemberList from './MemberList/index.jsx';
 import { useRoomStatus } from '../../utils/hooks/useRoomStatus.js';
 import { useUserState } from '../../utils/zustand.js';
+import PublicMessage from './PublicMessage/index.jsx';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -32,6 +33,7 @@ const BottomBar = styled.div`
 `;
 const BottomLeft = styled.div`
   display: flex;
+  position: relative;
   gap: 15px;
   align-items: center;
 `;
@@ -70,6 +72,8 @@ const GroupIcon = styled.button`
   }
 `;
 
+
+
 export default function GamePage() {
   const { roomId, roomName } = useParams();
   const { getUserData } = useUserState();
@@ -82,6 +86,7 @@ export default function GamePage() {
     <Wrapper>
       <Map1 setPlayer={setPlayers} />
       <BottomBar>
+      <PublicMessage/>
         <BottomLeft>
           <Logo />
         </BottomLeft>

@@ -193,6 +193,18 @@ export async function getUserRoomsbyId(userId) {
   }
 }
 
-export async function getRoomData(roomId) {
-  
+export async function sendPublicMessage({roomId,charName,message}) {
+  const roomRef = doc(db, 'rooms', roomId);
+
+  try {
+    await updateDoc(roomRef, {
+      publicMessages: arrayUnion({
+        charName: charName,
+        message: message
+      })
+    });
+    console.log("Message added successfully");
+  } catch (error) {
+    console.error("Error adding message: ", error);
+  }
 }

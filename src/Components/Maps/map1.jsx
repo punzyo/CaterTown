@@ -22,7 +22,6 @@ const Wrapper = styled.div`
   position: relative;
   width: ${wrapperWidth}px;
   height: ${wrapperHeight}px;
-  overflow: hidden;
   user-select: none;
 `;
 
