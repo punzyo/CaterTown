@@ -2,7 +2,9 @@ import styled from 'styled-components';
 import { useFormInput } from '../../../utils/hooks/useFormInput';
 import {
   sendPublicMessage,
-  sendPrivateMessage,addUnreadMessage
+  sendPrivateMessage,
+  addUnreadMessage,
+  resetUnreadMessage,
 } from '../../../firebase/firestore';
 import { useState, useEffect, useRef } from 'react';
 import { usePrivateMessages } from '@/utils/hooks/usePrivateMessages';
@@ -51,6 +53,7 @@ const Channel = styled.div`
   text-align: center;
   border: 1px solid;
   background-color: ${(props) => (props.$selected ? 'gray' : '')};
+  cursor: pointer;
 `;
 const Messages = styled.div`
   width: 100%;
@@ -156,8 +159,8 @@ export default function PublicMessage({
       await addUnreadMessage({
         roomId,
         privateChannelId: privateChannel,
-        userId
-      })
+        userId,
+      });
     }
     messageInput.clear();
   };
@@ -171,6 +174,8 @@ export default function PublicMessage({
               $selected={isPublicChannel}
               onClick={() => {
                 setIsPublicChannel(true);
+                if(minimizeMessages)
+                setMinimizeMessages(false)
               }}
             >
               全體頻道
@@ -185,6 +190,8 @@ export default function PublicMessage({
                 $selected={!isPublicChannel}
                 onClick={() => {
                   setIsPublicChannel(false);
+                  if(minimizeMessages)
+                setMinimizeMessages(false)
                 }}
               >
                 {privateCharName}
@@ -192,7 +199,10 @@ export default function PublicMessage({
             )}
           </ChannelWrapper>
           <CloseIcon
-            onClick={() => {
+            onClick={async() => {
+              if(!minimizeMessages && privateChannel){
+                await resetUnreadMessage({roomId, privateChannelId:privateChannel, userId})
+              }
               setMinimizeMessages(!minimizeMessages);
             }}
           >

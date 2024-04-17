@@ -9,7 +9,7 @@ export const useUnreadMessages = ({ userId, roomId }) => {
   useEffect(() => {
     if (!roomId || !userId) return;
 
-    const messageRef = doc(db, `rooms/${roomId}/unreadMessages/${userId}`);
+    const messageRef = doc(db, `rooms/${roomId}/unReadMessages/${userId}`);
 
     const unsubscribe = onSnapshot(messageRef, (docSnapshot) => {
       if (docSnapshot.exists()) {

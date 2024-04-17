@@ -278,3 +278,29 @@ export async function addUnreadMessage({roomId, privateChannelId, userId}) {
     throw new Error("Failed to update unread message count");
   }
 }
+
+export async function resetUnreadMessage({roomId, privateChannelId, userId}) {
+  console.log('rest',roomId, privateChannelId, userId);
+  try {
+    // 定位到特定房间和频道的未读消息文档
+    const unreadMsgRef = doc(db, `rooms/${roomId}/unReadMessages/${userId}`);
+
+    // 获取当前未读消息计数的快照
+    const docSnapshot = await getDoc(unreadMsgRef);
+
+    // 检查文档是否存在，并重置未读消息计数
+    if (docSnapshot.exists()) {
+      // 更新指定用户的未读消息计数为0
+      await updateDoc(unreadMsgRef, {
+        [`messages.${privateChannelId}.count`]: 0
+      });
+      console.log('Unread message count reset successfully');
+    } else {
+      // 如果未读消息文档不存在，日志记录，实际操作可能不需要创建新记录
+      console.log('No unread message record to reset');
+    }
+  } catch (error) {
+    console.error("Failed to reset unread message count:", error);
+    throw new Error("Failed to reset unread message count");
+  }
+}
