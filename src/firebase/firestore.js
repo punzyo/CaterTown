@@ -42,33 +42,6 @@ export async function updatePlayerPosition({ userId, userData, roomId }) {
   }
 }
 
-// export async function getPlayerData({ userId, roomId }) {
-//   console.log('當前使用者', userId), '房間為', roomId;
-//   const roomDocRef = doc(db, 'rooms', roomId);
-
-//   try {
-//     const docSnap = await getDoc(roomDocRef);
-
-//     if (docSnap.exists()) {
-//       const playerIndex = docSnap
-//         .data()
-//         .users.findIndex((user) => user.userId === userId);
-//       const playerData = docSnap.data().users[playerIndex];
-//       if (playerData) {
-//         return playerData;
-//       } else {
-//         console.log(`${userId} does not exist in this room.`);
-//         return null;
-//       }
-//     } else {
-//       console.log('No such document!');
-//       return null;
-//     }
-//   } catch (error) {
-//     console.error('Error getting document:', error);
-//     return null;
-//   }
-// }
 
 export async function getOtherPlayersData(excludePlayerId) {
   const roomDocRef = doc(db, 'rooms', '001');
@@ -178,7 +151,7 @@ export async function getUserDatabyId(userId) {
 }
 
 export async function getUserRoomsbyId(userId) {
-  const roomsCollectionRef = collection(db, 'users', userId, 'rooms');
+  const roomsCollectionRef = collection(db,'users', userId, 'rooms');
 
   try {
     const querySnapshot = await getDocs(roomsCollectionRef);
