@@ -5,13 +5,14 @@ import CloseButton from '../CloseButton/index.jsx';
 import Logo from '../Logo/index.jsx';
 import SearchBar from '../SearchBar/index.jsx';
 import InviteButton from '../InviteButton/index.jsx';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useRoomStatus } from '../../utils/hooks/useRoomStatus.js';
 import { useUserState } from '../../utils/zustand.js';
 import PublicMessage from './PublicMessage/index.jsx';
 import { usePlayer } from '../../utils/hooks/useOherPlayer.js';
 import { usePrivateMessages } from '../../utils/hooks/usePrivateMessages.js';
-import Cat from '../Cat'
+import { useUnreadMessages } from '../../utils/hooks/useUnreadMessages.js';
+import Cat from '../Cat';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -32,7 +33,7 @@ const BottomBar = styled.div`
   padding: 10px 40px;
   background-color: #202540;
   border-top: 1px solid white;
-  z-index:10;
+  z-index: 10;
 `;
 const BottomLeft = styled.div`
   display: flex;
@@ -112,6 +113,18 @@ const MemberInfo = styled.div`
   align-items: center;
   gap: 20px;
 `;
+const UnreadIcon = styled.div`
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 export default function GamePage() {
   const { roomId, roomName } = useParams();
   const { getUserData } = useUserState();
@@ -123,7 +136,7 @@ export default function GamePage() {
   const players = playersData.users;
   const publicMessages = playersData.publicMessages;
   const [privateChannel, setPrivateChannel] = useState('');
-  const [minimizeMessages, setMinimizeMessages] = useState(true)
+  const [minimizeMessages, setMinimizeMessages] = useState(false);
   const [privateCharName, setPrivateCharName] = useState(null);
   const [isPublicChannel, setIsPublicChannel] = useState(true);
   const privateMessages = usePrivateMessages({
@@ -131,13 +144,17 @@ export default function GamePage() {
     roomId,
     privateChannelId: privateChannel,
   });
-
-  
+  const unreadMessages = useUnreadMessages({
+    userId,
+    roomId,
+    privateChannelId: privateChannel,
+  });
+  const navigate = useNavigate();
   const [onlineMembers, setOnlineMembers] = useState([]);
   const [offlineMembers, setOfflineMembers] = useState([]);
 
   useEffect(() => {
-    if (!players||!onlineStatus) return;
+    if (!players || !onlineStatus) return;
     const online = [];
     const offline = [];
     console.log(players);
@@ -152,7 +169,7 @@ export default function GamePage() {
 
     setOnlineMembers(online);
     setOfflineMembers(offline);
-  }, [players, onlineStatus, userId]); // 更新依赖
+  }, [players, onlineStatus, userId]);
 
   const changeChannel = (playerId) => {
     setIsPublicChannel(false);
@@ -180,7 +197,7 @@ export default function GamePage() {
               <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM609.3 512H471.4c5.4-9.4 8.6-20.3 8.6-32v-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2h61.4C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z" />
             </svg>
           </GroupIcon>
-          <LeaveRoom>
+          <LeaveRoom onClick={()=>{navigate('/')}}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -212,44 +229,50 @@ export default function GamePage() {
         <SearchBar />
         {players && userId && onlineStatus && (
           <MemberWrapper>
-          <span>Online Members</span>
-          {onlineMembers.map((player) => (
-            <MemberInfo
-              key={player.userId}
-              onClick={() => {
-                if(player.userId===userId) return
-                changeChannel(player.userId);
-                setPrivateCharName(player.charName)
-              }}
-            >
-              <MemberIcon>
-                <Cat image={player.character} />
-                <OnlineStatus $isOnline={true} />
-              </MemberIcon>
-              <span>{player.charName}</span>
-            </MemberInfo>
-          ))}
-          <span>Offline Members</span>
-          {offlineMembers.map((player) => (
-            <MemberInfo
-              key={player.userId}
-              onClick={() => {
-                changeChannel(player.userId);
-                setPrivateCharName(player.charName)
-                setMinimizeMessages(false)
-              }}
-            >
-              <MemberIcon>
-                <Cat image={player.character} />
-                <OnlineStatus $isOnline={false} />
-              </MemberIcon>
-              <span>{player.charName}</span>
-            </MemberInfo>
-          ))}
-        </MemberWrapper>
+            <span>Online Members</span>
+            {onlineMembers.map((player) => (
+              <MemberInfo
+                key={player.userId}
+                onClick={() => {
+                  if (player.userId === userId) return;
+                  changeChannel(player.userId);
+                  setPrivateCharName(player.charName);
+                }}
+              >
+                <MemberIcon>
+                  <Cat image={player.character} />
+                  <OnlineStatus $isOnline={true} />
+                  {unreadMessages[player.userId] && <UnreadIcon></UnreadIcon>}
+                </MemberIcon>
+                <span>{player.charName}</span>
+              </MemberInfo>
+            ))}
+            <span>Offline Members</span>
+            {offlineMembers.map((player) => (
+              <MemberInfo
+                key={player.userId}
+                onClick={() => {
+                  changeChannel(player.userId);
+                  setPrivateCharName(player.charName);
+                  setMinimizeMessages(false);
+                }}
+              >
+                <MemberIcon>
+                  <Cat image={player.character} />
+                  <OnlineStatus $isOnline={false} />
+                  {!!unreadMessages[player.userId] && (
+                    <UnreadIcon>
+                      {unreadMessages[player.userId].count}
+                    </UnreadIcon>
+                  )}
+                </MemberIcon>
+                <span>{player.charName}</span>
+              </MemberInfo>
+            ))}
+          </MemberWrapper>
         )}
         <PublicMessage
-         userId={userId}
+          userId={userId}
           playerCharName={playerCharName}
           roomId={roomId}
           publicMessages={publicMessages}
@@ -266,6 +289,3 @@ export default function GamePage() {
     </Wrapper>
   );
 }
-
-
-  

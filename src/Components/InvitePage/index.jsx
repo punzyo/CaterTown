@@ -147,7 +147,7 @@ export default function InvitePage() {
     })
     if(joinedRoom){
       charNameInput.clear()
-      navigate(`/chouchouzoo/${roomId}`)
+      navigate(`/chouchouzoo/${roomId}/${roomName}`)
     }
   }
   return (

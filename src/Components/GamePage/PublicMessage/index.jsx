@@ -1,28 +1,30 @@
 import styled from 'styled-components';
 import { useFormInput } from '../../../utils/hooks/useFormInput';
-import { sendPublicMessage, sendPrivateMessage } from '../../../firebase/firestore';
+import {
+  sendPublicMessage,
+  sendPrivateMessage,
+} from '../../../firebase/firestore';
 import { useState, useEffect, useRef } from 'react';
 import { usePrivateMessages } from '@/utils/hooks/usePrivateMessages';
 
 const messageHeight = '350px';
 const Wrapper = styled.div`
-width: 350px;
-height: ${(props) => (props.$minimizeMessages ? '0px' : '300px')};
-position: absolute;
-display:flex;
-flex-direction: column;
-bottom: ${(props) => (props.$minimizeMessages ? '-32px' : '0px')};
-right: 300px;
-`
+  width: 350px;
+  height: ${(props) => (props.$minimizeMessages ? '0px' : '300px')};
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  bottom: ${(props) => (props.$minimizeMessages ? '-32px' : '0px')};
+  right: 300px;
+`;
 const MessageWrapper = styled.div`
   width: 350px;
-  height:100%;
+  height: 100%;
   position: absolute;
   bottom: 60px;
   right: 0px;
   background-color: #202540;
   border-radius: 5px 5px 0 0;
-
 `;
 const Message = styled.div`
   width: 100%;
@@ -43,7 +45,7 @@ const ChannelWrapper = styled.div`
   display: flex;
 `;
 const Channel = styled.div`
-position:relative;
+  position: relative;
   width: 50%;
   height: 100%;
   text-align: center;
@@ -56,7 +58,6 @@ const Messages = styled.div`
   background-color: #202540;
   padding-top: ${(props) => (props.$minimizeMessages ? '0px' : '5px')};
   overflow-y: scroll;
-  
 `;
 const CloseIcon = styled.div`
   position: absolute;
@@ -92,14 +93,17 @@ const MessageInput = styled.div`
 `;
 
 const UnreadIcon = styled.div`
-position: absolute;
-top:-10px;
-right:5px;
-width:20px;
-height:20px;
-border-radius:50%;
-background-color:red;
-`
+  position: absolute;
+  top: -10px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 export default function PublicMessage({
   playerCharName,
@@ -113,102 +117,116 @@ export default function PublicMessage({
   privateMessages,
   privateCharName,
   minimizeMessages,
-  setMinimizeMessages
+  setMinimizeMessages,
 }) {
   const messageInput = useFormInput('');
   const messagesEndRef = useRef(null);
-  const [unreadPublicMessages, setUnreadPublicMessages] = useState(0)
- 
+  const [unreadPublicMessages, setUnreadPublicMessages] = useState(0);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
     scrollToBottom();
+    if (minimizeMessages) setUnreadPublicMessages((prevState) => prevState + 1);
   }, [publicMessages]);
 
+  useEffect(() => {
+    if (!minimizeMessages && isPublicChannel) {
+      setUnreadPublicMessages(0);
+    }
+  }, [minimizeMessages]);
   const sendMessage = async () => {
-    if(!messageInput.value) return
-   if(isPublicChannel){
-    await sendPublicMessage({
-      roomId,
-      charName: playerCharName,
-      message: messageInput.value,
-    });
-   }
-   else{
-    await sendPrivateMessage({
-      userId,
-      roomId,
-      charName: playerCharName,
-      message: messageInput.value,
-      privateChannelId: privateChannel,
-    });
-   }
-   messageInput.clear()
+    if (!messageInput.value) return;
+    if (isPublicChannel) {
+      await sendPublicMessage({
+        roomId,
+        charName: playerCharName,
+        message: messageInput.value,
+      });
+    } else {
+      await sendPrivateMessage({
+        userId,
+        roomId,
+        charName: playerCharName,
+        message: messageInput.value,
+        privateChannelId: privateChannel,
+      });
+    }
+    messageInput.clear();
   };
 
   return (
-    <Wrapper  $minimizeMessages={minimizeMessages}>
-   <MessageWrapper >
-      <MessageController>
-        <ChannelWrapper>
-          <Channel
-            $selected={isPublicChannel}
-            onClick={() => {
-              setIsPublicChannel(true);
-            }}
-          >
-            全體頻道
-            <UnreadIcon/>
-          </Channel>
-          {privateChannel && (
+    <Wrapper $minimizeMessages={minimizeMessages}>
+      <MessageWrapper>
+        <MessageController>
+          <ChannelWrapper>
             <Channel
-              $selected={!isPublicChannel}
+              $selected={isPublicChannel}
               onClick={() => {
-                setIsPublicChannel(false);
+                setIsPublicChannel(true);
               }}
             >
-              {privateCharName}
+              全體頻道
+              {!!unreadPublicMessages && (
+                <UnreadIcon>
+                  <span>{unreadPublicMessages}</span>
+                </UnreadIcon>
+              )}
             </Channel>
-          )}
-        </ChannelWrapper>
-        <CloseIcon onClick={()=>{setMinimizeMessages(!minimizeMessages)}}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-            <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
-          </svg>
-        </CloseIcon>
-      </MessageController>
-      <Messages $minimizeMessages={minimizeMessages}>
-        {isPublicChannel&& publicMessages &&
-          publicMessages.map((message, index) => (
-            <Message key={index}>
-              <span>{message.charName} : </span>
-              <span>{message.message}</span>
-            </Message>
-          ))}
-          {!isPublicChannel&& privateMessages&&
-          privateMessages.map((message, index) => (
-            <Message key={index}>
-              <span>{message.charName} : </span>
-              <span>{message.message}</span>
-            </Message>
-          ))}
-          {privateMessages&&console.log(privateMessages.message)}
-        <div ref={messagesEndRef} />
-      </Messages>
-
-    
-    </MessageWrapper>
-    { !minimizeMessages &&<MessageInput>
-        <input
-          type="text"
-          value={messageInput.value}
-          onChange={messageInput.onChange}
-        />
-        <button onClick={sendMessage}>送出</button>
-      </MessageInput>}
+            {privateChannel && (
+              <Channel
+                $selected={!isPublicChannel}
+                onClick={() => {
+                  setIsPublicChannel(false);
+                }}
+              >
+                {privateCharName}
+              </Channel>
+            )}
+          </ChannelWrapper>
+          <CloseIcon
+            onClick={() => {
+              setMinimizeMessages(!minimizeMessages);
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+            </svg>
+          </CloseIcon>
+        </MessageController>
+        <Messages $minimizeMessages={minimizeMessages}>
+          {isPublicChannel &&
+            publicMessages &&
+            publicMessages.map((message, index) => (
+              <Message key={index}>
+                <span>{message.charName} : </span>
+                <span>{message.message}</span>
+              </Message>
+            ))}
+          {!isPublicChannel &&
+            privateMessages &&
+            privateMessages.map((message, index) => (
+              <Message key={index}>
+                <span>{message.charName} : </span>
+                <span>{message.message}</span>
+              </Message>
+            ))}
+          {privateMessages && console.log(privateMessages.message)}
+          <div ref={messagesEndRef} />
+        </Messages>
+      </MessageWrapper>
+      {!minimizeMessages && (
+        <MessageInput>
+          <input
+            type="text"
+            value={messageInput.value}
+            onChange={messageInput.onChange}
+          />
+          <button onClick={sendMessage}>送出</button>
+        </MessageInput>
+      )}
     </Wrapper>
- 
   );
 }

@@ -100,7 +100,10 @@ function Dialog({ onClose, userId }) {
       character,
       charName,
     });
-    if (isUpdated) clearInput();
+    if (isUpdated) {
+      clearInput();
+      onClose();
+    }
   };
   const clearInput = () => {
     roomNameInput.clear();
@@ -126,8 +129,8 @@ function Dialog({ onClose, userId }) {
         onClick={(e) => e.stopPropagation()}
       >
         <Title>創建你的房間!</Title>
-        <CloseButton clickFunc={onClose}/>
-         
+        <CloseButton clickFunc={onClose} />
+
         <InputDiv>
           <label htmlFor="roomName">房間名稱</label>
           <input

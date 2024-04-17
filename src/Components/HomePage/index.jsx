@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Dialog from './Dialog';
 import { getUserDatabyId, getUserRoomsbyId } from '@/firebase/firestore';
 import { catsXPositions, catsYPositions } from '../../assets/charNames';
+import { useUserRooms } from '../../utils/hooks/useUserRooms';
 import { useNavigate } from 'react-router-dom';
 import { useUserState } from '../../utils/zustand';
 import Button from '../Button';
@@ -49,6 +50,9 @@ const Header = styled.header`
     justify-content: space-between;
     width: 400px;
     height: 100%;
+  }
+  input{
+    width:50px;
   }
 `;
 const Profile = styled.button`
@@ -145,16 +149,13 @@ export default function HomePage() {
   const userId = user.id;
   const idInput = useRef(null);
   const nameInput= useRef(null);
-  const [userRooms, setUserRooms] = useState(null);
+  const inviteInput= useRef(null);
+  const userRooms = useUserRooms(userId);
+
   const navigate = useNavigate();
-  useEffect(() => {
-    const getUserData = async () => {
-      //await getUserDatabyId(userId)
-      const roomData = await getUserRoomsbyId(userId);
-      setUserRooms(roomData);
-    };
-    getUserData();
-  }, [userId]);
+  useEffect(()=>{
+
+  },[dialogOpen])
   const openDialog = () => {
     console.log('open');
     setDialogOpen(true);
@@ -178,6 +179,8 @@ const changeUser= ()=>{
         <input type="text" placeholder='id' ref={idInput}/>
         <input type="text" placeholder='name' ref={nameInput}/>
         <button onClick={changeUser}>換人</button>
+        <input type="text" placeholder='邀請碼' ref={inviteInput}/>
+        <button onClick={()=>{navigate(`/invite/${inviteInput.current.value}`)}}>走起</button>
         <div className="right">
           <Profile>
             <div className="userimg">
