@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useFormInput } from '../../../utils/hooks/useFormInput';
 import {
   sendPublicMessage,
-  sendPrivateMessage,
+  sendPrivateMessage,addUnreadMessage
 } from '../../../firebase/firestore';
 import { useState, useEffect, useRef } from 'react';
 import { usePrivateMessages } from '@/utils/hooks/usePrivateMessages';
@@ -153,6 +153,11 @@ export default function PublicMessage({
         message: messageInput.value,
         privateChannelId: privateChannel,
       });
+      await addUnreadMessage({
+        roomId,
+        privateChannelId: privateChannel,
+        userId
+      })
     }
     messageInput.clear();
   };

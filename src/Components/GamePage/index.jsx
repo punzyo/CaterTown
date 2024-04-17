@@ -12,6 +12,7 @@ import PublicMessage from './PublicMessage/index.jsx';
 import { usePlayer } from '../../utils/hooks/useOherPlayer.js';
 import { usePrivateMessages } from '../../utils/hooks/usePrivateMessages.js';
 import { useUnreadMessages } from '../../utils/hooks/useUnreadMessages.js';
+import { usePublicMessages } from '../../utils/hooks/usePublicMessages.js';
 import Cat from '../Cat';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
@@ -134,7 +135,7 @@ export default function GamePage() {
   const playersData = usePlayer({ userId, roomId });
   const [playerCharName, setPlayerCharName] = useState(null);
   const players = playersData.users;
-  const publicMessages = playersData.publicMessages;
+  const publicMessages = usePublicMessages(roomId);
   const [privateChannel, setPrivateChannel] = useState('');
   const [minimizeMessages, setMinimizeMessages] = useState(false);
   const [privateCharName, setPrivateCharName] = useState(null);

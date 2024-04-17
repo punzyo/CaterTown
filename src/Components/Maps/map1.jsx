@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useState, useEffect, useRef, useReducer } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { updatePlayerPosition } from '@/firebase/firestore';
-import { usePlayer } from '@/utils/hooks/useOherPlayer';
 import {
   map1,
   map1Collision,
@@ -75,7 +74,7 @@ const Map = styled.div`
   position: relative;
   top: ${(props) => props.$top};
   left: ${(props) => props.$left};
-  width: 100%;
+  width: ${wrapperWidth}px;
   height: 100%;
   border: ${mapBorder}px solid gray;
   transition: top 0.2s, left 0.2s;

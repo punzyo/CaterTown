@@ -12,7 +12,7 @@ import {
   collection,
   onSnapshot,
   Timestamp,
-  arrayUnion,
+  arrayUnion,increment 
 } from 'firebase/firestore';
 import { creatRtRoom } from './realtime';
 
@@ -193,19 +193,28 @@ export async function getUserRoomsbyId(userId) {
   }
 }
 
-export async function sendPublicMessage({roomId,charName,message}) {
-  const roomRef = doc(db, 'rooms', roomId);
+export async function sendPublicMessage({roomId, charName, message}) {
+  const messagesRef = doc(db, `rooms/${roomId}/publicMessages/messages`);
 
   try {
+    // 获取当前的messages文档
+    const messagesSnap = await getDoc(messagesRef);
 
-    const roomSnap = await getDoc(roomRef);
+    // 构建新消息对象
+    const newMessage = { charName, message,postTime:Timestamp.now()};
 
-      const existingMessages = roomSnap.data().publicMessages || [];
-      existingMessages.push({ charName: charName, message: message });
-      await updateDoc(roomRef, {
-        publicMessages: existingMessages
+    if (messagesSnap.exists()) {
+      // 如果messages文档已存在，添加新消息到数组中
+      await updateDoc(messagesRef, {
+        messages: arrayUnion(newMessage)
       });
-      console.log("Message added successfully");
+    } else {
+      // 如果messages文档不存在，首次创建文档并初始化messages数组
+      await setDoc(messagesRef, {
+        messages: [newMessage]
+      });
+    }
+    console.log("Message added successfully");
   } catch (error) {
     console.error("Error adding message: ", error);
   }
@@ -238,5 +247,34 @@ export async function sendPrivateMessage({userId,roomId,charName,privateChannelI
   } catch (error) {
     console.error("Failed to send message:", error);
     throw new Error("Failed to send message");
+  }
+}
+
+export async function addUnreadMessage({roomId, privateChannelId, userId}) {
+  try {
+    // 定位到特定房间和频道的未读消息文档
+    const unreadMsgRef = doc(db, `rooms/${roomId}/unReadMessages/${privateChannelId}`);
+
+    // 获取当前未读消息计数的快照
+    const docSnapshot = await getDoc(unreadMsgRef);
+
+    // 检查文档是否存在，并更新或设置未读消息计数
+    if (docSnapshot.exists()) {
+      // 更新指定用户的未读消息计数
+      await updateDoc(unreadMsgRef, {
+        [`messages.${userId}.count`]: increment(1)
+      });
+    } else {
+      // 如果未读消息文档不存在，首次为该用户创建未读消息计数
+      await setDoc(unreadMsgRef, {
+        messages: {
+          [userId]: { count: 1 }
+        }
+      });
+    }
+    console.log('+++');
+  } catch (error) {
+    console.error("Failed to add unread message count:", error);
+    throw new Error("Failed to update unread message count");
   }
 }

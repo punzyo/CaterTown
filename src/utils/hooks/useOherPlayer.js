@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/firestore';
 
-export const usePlayer = ({ userId, roomId }) => {
+export const usePlayer = ({ roomId }) => {
   const [players, setPlayers] = useState([]);
   
   useEffect(() => {
