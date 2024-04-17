@@ -5,16 +5,24 @@ import { useState, useEffect, useRef } from 'react';
 import { usePrivateMessages } from '@/utils/hooks/usePrivateMessages';
 
 const messageHeight = '350px';
-
+const Wrapper = styled.div`
+width: 350px;
+height: ${(props) => (props.$minimizeMessages ? '0px' : '300px')};
+position: absolute;
+display:flex;
+flex-direction: column;
+bottom: ${(props) => (props.$minimizeMessages ? '-32px' : '0px')};
+right: 300px;
+`
 const MessageWrapper = styled.div`
   width: 350px;
-  height: ${messageHeight};
+  height:100%;
   position: absolute;
-  bottom: 0;
-  right: 300px;
+  bottom: 60px;
+  right: 0px;
   background-color: #202540;
-  border: 1px solid #333a64;
   border-radius: 5px 5px 0 0;
+
 `;
 const Message = styled.div`
   width: 100%;
@@ -26,6 +34,8 @@ const MessageController = styled.div`
   width: 100%;
   height: 30px;
   border-bottom: 1px solid;
+  border: 1px solid black;
+  background-color: #202540;
 `;
 const ChannelWrapper = styled.div`
   width: 250px;
@@ -33,6 +43,7 @@ const ChannelWrapper = styled.div`
   display: flex;
 `;
 const Channel = styled.div`
+position:relative;
   width: 50%;
   height: 100%;
   text-align: center;
@@ -41,10 +52,11 @@ const Channel = styled.div`
 `;
 const Messages = styled.div`
   width: 100%;
-  height: 300px;
-  padding-top: 5px;
-  padding-bottom: 15px;
+  height: ${(props) => (props.$minimizeMessages ? '0px' : '300px')};
+  background-color: #202540;
+  padding-top: ${(props) => (props.$minimizeMessages ? '0px' : '5px')};
   overflow-y: scroll;
+  
 `;
 const CloseIcon = styled.div`
   position: absolute;
@@ -58,7 +70,7 @@ const CloseIcon = styled.div`
 `;
 const MessageInput = styled.div`
   position: absolute;
-  bottom: 0;
+  bottom: 0px;
   width: 100%;
   height: 30px;
   background-color: white;
@@ -75,9 +87,19 @@ const MessageInput = styled.div`
     padding: 5px 10px;
     cursor: pointer;
     border: 1px solid;
-    color: black;
+    color: black !important;
   }
 `;
+
+const UnreadIcon = styled.div`
+position: absolute;
+top:-10px;
+right:5px;
+width:20px;
+height:20px;
+border-radius:50%;
+background-color:red;
+`
 
 export default function PublicMessage({
   playerCharName,
@@ -89,10 +111,13 @@ export default function PublicMessage({
   isPublicChannel,
   setIsPublicChannel,
   privateMessages,
-  privateCharName
+  privateCharName,
+  minimizeMessages,
+  setMinimizeMessages
 }) {
   const messageInput = useFormInput('');
   const messagesEndRef = useRef(null);
+  const [unreadPublicMessages, setUnreadPublicMessages] = useState(0)
  
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -103,7 +128,7 @@ export default function PublicMessage({
   }, [publicMessages]);
 
   const sendMessage = async () => {
-
+    if(!messageInput.value) return
    if(isPublicChannel){
     await sendPublicMessage({
       roomId,
@@ -120,10 +145,12 @@ export default function PublicMessage({
       privateChannelId: privateChannel,
     });
    }
+   messageInput.clear()
   };
 
   return (
-    <MessageWrapper>
+    <Wrapper  $minimizeMessages={minimizeMessages}>
+   <MessageWrapper >
       <MessageController>
         <ChannelWrapper>
           <Channel
@@ -133,6 +160,7 @@ export default function PublicMessage({
             }}
           >
             全體頻道
+            <UnreadIcon/>
           </Channel>
           {privateChannel && (
             <Channel
@@ -145,13 +173,13 @@ export default function PublicMessage({
             </Channel>
           )}
         </ChannelWrapper>
-        <CloseIcon>
+        <CloseIcon onClick={()=>{setMinimizeMessages(!minimizeMessages)}}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
             <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
           </svg>
         </CloseIcon>
       </MessageController>
-      <Messages>
+      <Messages $minimizeMessages={minimizeMessages}>
         {isPublicChannel&& publicMessages &&
           publicMessages.map((message, index) => (
             <Message key={index}>
@@ -170,14 +198,17 @@ export default function PublicMessage({
         <div ref={messagesEndRef} />
       </Messages>
 
-      <MessageInput>
+    
+    </MessageWrapper>
+    { !minimizeMessages &&<MessageInput>
         <input
           type="text"
           value={messageInput.value}
           onChange={messageInput.onChange}
         />
         <button onClick={sendMessage}>送出</button>
-      </MessageInput>
-    </MessageWrapper>
+      </MessageInput>}
+    </Wrapper>
+ 
   );
 }

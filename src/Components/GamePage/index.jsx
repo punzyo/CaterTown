@@ -32,6 +32,7 @@ const BottomBar = styled.div`
   padding: 10px 40px;
   background-color: #202540;
   border-top: 1px solid white;
+  z-index:10;
 `;
 const BottomLeft = styled.div`
   display: flex;
@@ -122,6 +123,7 @@ export default function GamePage() {
   const players = playersData.users;
   const publicMessages = playersData.publicMessages;
   const [privateChannel, setPrivateChannel] = useState('');
+  const [minimizeMessages, setMinimizeMessages] = useState(true)
   const [privateCharName, setPrivateCharName] = useState(null);
   const [isPublicChannel, setIsPublicChannel] = useState(true);
   const privateMessages = usePrivateMessages({
@@ -215,6 +217,7 @@ export default function GamePage() {
             <MemberInfo
               key={player.userId}
               onClick={() => {
+                if(player.userId===userId) return
                 changeChannel(player.userId);
                 setPrivateCharName(player.charName)
               }}
@@ -233,6 +236,7 @@ export default function GamePage() {
               onClick={() => {
                 changeChannel(player.userId);
                 setPrivateCharName(player.charName)
+                setMinimizeMessages(false)
               }}
             >
               <MemberIcon>
@@ -255,6 +259,8 @@ export default function GamePage() {
           setPrivateChannel={setPrivateChannel}
           privateMessages={privateMessages}
           privateCharName={privateCharName}
+          minimizeMessages={minimizeMessages}
+          setMinimizeMessages={setMinimizeMessages}
         />
       </SideBar>
     </Wrapper>
