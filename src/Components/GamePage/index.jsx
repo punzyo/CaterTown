@@ -140,9 +140,18 @@ const UnreadIcon = styled.div`
 `;
 
 const ControlWrapper = styled.div`
-width: 300px;
-height: 100%;
-border: 1px solid red;
+width: 260px;
+height: 90%;
+display: flex;
+align-items: center;
+border-radius: 5px;
+.lk-control-bar{
+  width: 100%;
+  .lk-button{
+    background-color: #aaa;
+    border: 1px solid black;
+  }
+}
 `
 export default function GamePage() {
   const { roomId, roomName } = useParams();
@@ -230,11 +239,7 @@ export default function GamePage() {
             <TracksManager isLocal={true}>
                 {localTracks => <LocalTracks tracks={localTracks} />}
             </TracksManager>
-            <button
-              onClick={() => getToken({ roomId, charName: playerCharName })}
-            >
-              加入多人通訊
-            </button>
+
             <ControlWrapper>
               <ControlBar
                 controls={{
@@ -247,6 +252,11 @@ export default function GamePage() {
                 variation="minimal"
               />
             </ControlWrapper>
+            <button
+              onClick={() => getToken({ roomId, charName: playerCharName })}
+            >
+              加入多人通訊
+            </button>
           </BottomLeft>
           <BottomLeft>
             <GroupIcon

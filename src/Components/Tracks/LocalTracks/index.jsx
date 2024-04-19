@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 import { CarouselLayout, ParticipantTile } from '@livekit/components-react';
-const VideoTracks = styled.div`
-  width: 200px;
-  height: 100px;
-  border: 1px solid red;
+const TracksWrapper = styled.div`
+  width: 150px;
+  height: 90%;
+
 `;
 export function LocalTracks({ tracks }) {
   return (
-    <VideoTracks>
+    <TracksWrapper>
       <CarouselLayout tracks={tracks} style={{ height: 'auto' }}>
         <ParticipantTile />
       </CarouselLayout>
-    </VideoTracks>
+    </TracksWrapper>
   );
 }
