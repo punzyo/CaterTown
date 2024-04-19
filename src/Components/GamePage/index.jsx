@@ -14,7 +14,6 @@ import { usePrivateMessages } from '../../utils/hooks/usePrivateMessages.js';
 import { useUnreadMessages } from '../../utils/hooks/useUnreadMessages.js';
 import { usePublicMessages } from '../../utils/hooks/usePublicMessages.js';
 import { resetUnreadMessage } from '../../firebase/firestore.js';
-import Cat from '../Cat';
 import '@livekit/components-styles';
 import {
   ControlBar,
@@ -24,6 +23,8 @@ import {
 import TracksManager from '../TracksManager/index.jsx';
 import { LocalTracks } from '../Tracks/LocalTracks/index.jsx';
 import { RemoteTracks } from '../Tracks/RemoteTracks/index.jsx';
+import MemberIcon from '../MemberIcon/index.jsx';
+import OnlineStatus from '../OnlineStatus/index.jsx';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -87,33 +88,6 @@ const GroupIcon = styled.button`
   }
 `;
 
-
-const MemberIcon = styled.div`
-  position: relative;
-  width: 50px;
-  height: 50px;
-  background-color: white;
-  border: 1px solid #545c8f;
-  border-radius: 50%;
-  div:first-child {
-    position: absolute;
-    top: -3px;
-    right: 7px;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`;
-const OnlineStatus = styled.div`
-  width: 12px;
-  height: 12px;
-  position: absolute;
-  right: 4px;
-  bottom: 0px;
-  border: 2px solid black;
-  background-color: ${(props) => (props.$isOnline ? 'green' : 'gray')};
-  border-radius: 50%;
-`;
 const MemberWrapper = styled.div`
   margin-top: 30px;
   display: flex;
@@ -126,33 +100,41 @@ const MemberInfo = styled.div`
   align-items: center;
   gap: 20px;
 `;
-const UnreadIcon = styled.div`
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: red;
+
+const ProfileWrapper = styled.div`
+position: relative;
+  width: 200px;
+  height: 90%;
+  border-radius: 5px;
+  border: 1px solid black;
   display: flex;
   align-items: center;
-  justify-content: center;
+  .onlineBox{
+    height: 100%;
+    display: flex;
+    align-items: end;
+    p{
+      margin-left: 20px;
+    }
+    font-size: 10px;
+  }
+`;
+const ControlWrapper = styled.div`
+  width: 260px;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  .lk-control-bar {
+    width: 100%;
+    border-top: none;
+    .lk-button {
+      background-color: #aaa;
+      border: 1px solid black;
+    }
+  }
 `;
 
-const ControlWrapper = styled.div`
-width: 260px;
-height: 90%;
-display: flex;
-align-items: center;
-border-radius: 5px;
-.lk-control-bar{
-  width: 100%;
-  .lk-button{
-    background-color: #aaa;
-    border: 1px solid black;
-  }
-}
-`
 export default function GamePage() {
   const { roomId, roomName } = useParams();
   const [token, setToken] = useState(null);
@@ -224,7 +206,7 @@ export default function GamePage() {
         token={token}
         serverUrl="wss://chouchouzoo-ffphmeoa.livekit.cloud"
         data-lk-theme="default"
-        style={{backgroundColor: 'inherit' }}
+        style={{ backgroundColor: 'inherit' }}
       >
         <RoomAudioRenderer />
 
@@ -237,9 +219,21 @@ export default function GamePage() {
           <BottomLeft>
             <Logo />
             <TracksManager isLocal={true}>
-                {localTracks => <LocalTracks tracks={localTracks} />}
+              {(localTracks) => <LocalTracks tracks={localTracks} />}
             </TracksManager>
-
+            <ProfileWrapper>
+            <MemberIcon
+                    image={onlineMembers[0]?.character}
+                    isOnline={null}
+                    unreadMessages={0}
+                  />
+                  <span>{playerCharName}</span>
+                  <div className='onlineBox'>
+                    <p>上線中</p>
+                  <OnlineStatus isOnline={true}/>
+                  </div>
+                  
+            </ProfileWrapper>
             <ControlWrapper>
               <ControlBar
                 controls={{
@@ -252,6 +246,7 @@ export default function GamePage() {
                 variation="minimal"
               />
             </ControlWrapper>
+
             <button
               onClick={() => getToken({ roomId, charName: playerCharName })}
             >
@@ -289,10 +284,10 @@ export default function GamePage() {
               </svg>
             </LeaveRoom>
           </BottomLeft>
-      
+
           <TracksManager isLocal={false}>
-                {remoteTracks => <RemoteTracks tracks={remoteTracks} />}
-            </TracksManager>
+            {(remoteTracks) => <RemoteTracks tracks={remoteTracks} />}
+          </TracksManager>
         </BottomBar>
 
         <SideBar $isOpen={showSidebar}>
@@ -326,15 +321,11 @@ export default function GamePage() {
                     });
                   }}
                 >
-                  <MemberIcon>
-                    <Cat image={player.character} />
-                    <OnlineStatus $isOnline={true} />
-                    {!!unreadMessages[player.userId]?.count && (
-                      <UnreadIcon>
-                        {unreadMessages[player.userId].count}
-                      </UnreadIcon>
-                    )}
-                  </MemberIcon>
+                  <MemberIcon
+                    image={player.character}
+                    isOnline={true}
+                    unreadMessages={unreadMessages[player.userId]?.count}
+                  />
                   <span>{player.charName}</span>
                 </MemberInfo>
               ))}
@@ -353,15 +344,11 @@ export default function GamePage() {
                     });
                   }}
                 >
-                  <MemberIcon>
-                    <Cat image={player.character} />
-                    <OnlineStatus $isOnline={false} />
-                    {!!unreadMessages[player.userId]?.count && (
-                      <UnreadIcon>
-                        {unreadMessages[player.userId].count}
-                      </UnreadIcon>
-                    )}
-                  </MemberIcon>
+                  <MemberIcon
+                    image={player.character}
+                    isOnline={false}
+                    unreadMessages={unreadMessages[player.userId]?.count}
+                  />
                   <span>{player.charName}</span>
                 </MemberInfo>
               ))}
@@ -386,4 +373,3 @@ export default function GamePage() {
     </Wrapper>
   );
 }
-
