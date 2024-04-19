@@ -18,14 +18,12 @@ import Cat from '../Cat';
 import '@livekit/components-styles';
 import {
   ControlBar,
-  CarouselLayout,
   LiveKitRoom,
-  ParticipantTile,
   RoomAudioRenderer,
 } from '@livekit/components-react';
-import { useTracks } from '@livekit/components-react';
-import { Track } from 'livekit-client';
 import TracksManager from '../TracksManager/index.jsx';
+import { LocalTracks } from '../Tracks/LocalTracks/index.jsx';
+import { RemoteTracks } from '../Tracks/RemoteTracks/index.jsx';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -89,11 +87,7 @@ const GroupIcon = styled.button`
   }
 `;
 
-const VideoTracks = styled.div`
-  width: 200px;
-  height: 100px;
-  border: 1px solid red;
-`;
+
 const MemberIcon = styled.div`
   position: relative;
   width: 50px;
@@ -220,15 +214,10 @@ export default function GamePage() {
         audio={false}
         token={token}
         serverUrl="wss://chouchouzoo-ffphmeoa.livekit.cloud"
-        // Use the default LiveKit theme for nice styles.
         data-lk-theme="default"
-        style={{ height: '100vh', backgroundColor: 'inherit' }}
+        style={{backgroundColor: 'inherit' }}
       >
-        {/* Your custom component with basic video conferencing functionality. */}
-        {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
         <RoomAudioRenderer />
-        {/* Controls for the user to start/stop audio, video, and screen 
-      share tracks and to leave the room. */}
 
         <Map1
           players={players}
@@ -387,33 +376,4 @@ export default function GamePage() {
     </Wrapper>
   );
 }
-function LocalTracks() {
-  const allTracks = useTracks(
-    [{ source: Track.Source.Camera, withPlaceholder: true, local: true }],
-    { onlySubscribed: false }
-  );
-  const localTracks = allTracks.filter((track) => track.participant.isLocal);
-  return (
-    <VideoTracks>
-      <CarouselLayout tracks={localTracks} style={{ height: 'auto' }}>
-        <ParticipantTile />
-      </CarouselLayout>
-    </VideoTracks>
-  );
-}
 
-function RemoteTracks() {
-  const allTracks = useTracks(
-    [{ source: Track.Source.Camera, withPlaceholder: true, local: true }],
-    { onlySubscribed: false }
-  );
-  const remoteTracks = allTracks.filter((track) => !track.participant.isLocal);
-
-  return (
-    <VideoTracks>
-    <CarouselLayout tracks={remoteTracks} style={{ height: 'auto' }}>
-      <ParticipantTile />
-    </CarouselLayout>
-    </VideoTracks>
-  );
-}
