@@ -7,7 +7,7 @@ position: relative;
     top:-200px;
     left: -360px;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, 130px);
     gap: 30px;
     overflow: visible;
     padding: 10px;

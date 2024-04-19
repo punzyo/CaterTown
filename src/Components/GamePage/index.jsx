@@ -209,7 +209,7 @@ export default function GamePage() {
         data-lk-theme="default"
         style={{ backgroundColor: 'inherit' }}
       >
-        <RoomAudioRenderer />
+        <RoomAudioRenderer muted={false}/>
 
         <Map1
           players={players}
