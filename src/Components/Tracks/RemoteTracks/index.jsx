@@ -1,65 +1,85 @@
 import styled from 'styled-components';
-import { useRef } from 'react';
-import {
-    CarouselLayout,
-    ParticipantTile,
-  } from '@livekit/components-react';
-  const VideoTracks = styled.div`
-  width: 800px;
-  height: 100px;
-  border: 1px solid red;
-`;
-export default function RemoteTracks({tracks}) {
+import { CarouselLayout, ParticipantTile } from '@livekit/components-react';
+const VideoTracks = styled.div`
+position: relative;
+  .lk-carousel {
+    position: absolute;
+    top:-200px;
+    left: -360px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 30px;
+    overflow: visible;
+    padding: 10px;
+    > div:nth-child(1) {
+      grid-column: 3 / 4;
+      grid-row: 1 / 2;
+    }  
+    > div:nth-child(2) {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+    }  
+    > div:nth-child(3) {
+      grid-column: 4 / 5;
+      grid-row: 1 / 2;
+    }  
 
-    return (
-      <VideoTracks>
-      <MyGridLayout tracks={tracks} style={{ height: 'auto' }}>
-        <ParticipantTile />
-      </MyGridLayout>
-      </VideoTracks>
-    );
+    > div:nth-child(6) {
+      grid-column: 1 / 5;
+      grid-row: 2 / 3;
+    }
+
+    > div:nth-child(8) {
+      grid-column: 1 / 5;
+      grid-row: 3 / 4;
+    }
+    > div:nth-child(9) {
+      grid-column: 5 / -1;
+      grid-row: 3 / 4;
+    }
+    > div:nth-child(10) {
+      grid-column: 1 / 2;
+      grid-row: 4/ 5;
+    }
   }
-  import { TrackLoop } from '@livekit/components-react';
 
-/** @public */
+  .lk-carousel > div {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    width: 130px;
+    font-size: 20px;
+  }
+`;
+export default function RemoteTracks({ tracks }) {
+  return (
+    <VideoTracks>
+      <CarouselLayout tracks={tracks} style={{ height: 'auto' }}>
+        <ParticipantTile />
+      </CarouselLayout>
+    </VideoTracks>
+  );
+}
+import { TrackLoop } from '@livekit/components-react';
 
-
-/**
- * The `GridLayout` component displays a list of tracks in a grid container.
- * It will display tracks in a defined grid layout.
- * @example
- * ```tsx
- * const tracks = useTracks([Track.Source.Camera]);
- * <GridLayout tracks={tracks}>
- *   <ParticipantTile />
- * </GridLayout>
- * ```
- * @public
- */
-const YOYO = styled.div`
-  .grid-container {
+const StyledGridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* 5列 */
   gap: 10px;
-  background-color: #2196F3;
+  background-color: #2196f3;
   padding: 10px;
-}
 
-.grid-container > div {
-  background-color: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  padding: 20px;
-  font-size: 30px;
-}
-`
-export function MyGridLayout({ tracks, ...props }) {
-  const gridRef = useRef<HTMLDivElement>(null);
+  > div {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px;
+    font-size: 30px;
+  }
+`;
 
+export function MyCarouselLayout({ tracks, ...props }) {
   return (
-    <YOYO ref={gridRef} className="grid-container" {...props}>
-      <TrackLoop tracks={tracks}>
-        {props.children}
-      </TrackLoop>
-    </YOYO>
+    <aside className="lk-carousel" {...props}>
+      <TrackLoop tracks={tracks}>{props.children}</TrackLoop>
+    </aside>
   );
 }

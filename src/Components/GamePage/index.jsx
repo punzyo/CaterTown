@@ -25,6 +25,7 @@ import  LocalTracks  from '../Tracks/LocalTracks/index.jsx';
 import  RemoteTracks  from '../Tracks/RemoteTracks/index.jsx';
 import MemberIcon from '../MemberIcon/index.jsx';
 import OnlineStatus from '../OnlineStatus/index.jsx';
+
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -320,7 +321,7 @@ export default function GamePage() {
                   }}
                 >
                   <MemberIcon
-                    image={player.character}
+                    image={player?.character}
                     isOnline={true}
                     unreadMessages={unreadMessages[player.userId]?.count}
                   />
@@ -343,7 +344,7 @@ export default function GamePage() {
                   }}
                 >
                   <MemberIcon
-                    image={player.character}
+                    image={player?.character}
                     isOnline={false}
                     unreadMessages={unreadMessages[player.userId]?.count}
                   />
