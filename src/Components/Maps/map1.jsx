@@ -16,6 +16,8 @@ import {
 } from '@/Components/Maps/map1.js';
 import { catsXPositions, catsYPositions } from '../../assets/charNames';
 import { useUserState } from '../../utils/zustand';
+import TracksManager from '../TracksManager';
+import  RemoteTracks  from '../Tracks/RemoteTracks';
 const Wrapper = styled.div`
   position: relative;
   width: ${wrapperWidth}px;
@@ -325,13 +327,20 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
               }}
               $charName={playerCharName}
               $character={`${playerChar}`}
-            ></Player>
+            >
+
+<TracksManager isLocal={false}>
+            {(remoteTracks) => <RemoteTracks tracks={remoteTracks} />}
+          </TracksManager>
+            </Player>
           )}
         </Wrapper>
       )}
     </>
   );
 }
+
+
 
 {
   /* <Wrapper>

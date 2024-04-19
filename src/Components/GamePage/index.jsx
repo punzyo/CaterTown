@@ -21,8 +21,8 @@ import {
   RoomAudioRenderer,
 } from '@livekit/components-react';
 import TracksManager from '../TracksManager/index.jsx';
-import { LocalTracks } from '../Tracks/LocalTracks/index.jsx';
-import { RemoteTracks } from '../Tracks/RemoteTracks/index.jsx';
+import  LocalTracks  from '../Tracks/LocalTracks/index.jsx';
+import  RemoteTracks  from '../Tracks/RemoteTracks/index.jsx';
 import MemberIcon from '../MemberIcon/index.jsx';
 import OnlineStatus from '../OnlineStatus/index.jsx';
 const bottomBarGHeight = '100px';
@@ -285,9 +285,7 @@ export default function GamePage() {
             </LeaveRoom>
           </BottomLeft>
 
-          <TracksManager isLocal={false}>
-            {(remoteTracks) => <RemoteTracks tracks={remoteTracks} />}
-          </TracksManager>
+
         </BottomBar>
 
         <SideBar $isOpen={showSidebar}>

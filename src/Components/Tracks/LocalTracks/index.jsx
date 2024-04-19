@@ -5,7 +5,7 @@ const TracksWrapper = styled.div`
   height: 90%;
 
 `;
-export function LocalTracks({ tracks }) {
+export default function LocalTracks({ tracks }) {
   return (
     <TracksWrapper>
       <CarouselLayout tracks={tracks} style={{ height: 'auto' }}>
