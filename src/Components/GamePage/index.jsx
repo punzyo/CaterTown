@@ -15,6 +15,17 @@ import { useUnreadMessages } from '../../utils/hooks/useUnreadMessages.js';
 import { usePublicMessages } from '../../utils/hooks/usePublicMessages.js';
 import { resetUnreadMessage } from '../../firebase/firestore.js';
 import Cat from '../Cat';
+import '@livekit/components-styles';
+import {
+  ControlBar,
+  CarouselLayout,
+  LiveKitRoom,
+  ParticipantTile,
+  RoomAudioRenderer,
+} from '@livekit/components-react';
+import { useTracks } from '@livekit/components-react';
+import { Track } from 'livekit-client';
+import TracksManager from '../TracksManager/index.jsx';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -30,7 +41,7 @@ const BottomBar = styled.div`
   height: ${bottomBarGHeight};
   display: flex;
   justify-content: space-between;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   padding: 10px 40px;
   background-color: #202540;
@@ -46,7 +57,7 @@ const BottomLeft = styled.div`
 const SideBar = styled.div`
   width: 300px;
   height: calc(100% - ${bottomBarGHeight});
-  position: absolute;
+  position: fixed;
   right: ${(props) => (props.$isOpen ? '0' : '-300px')};
   transition: right 0.3s ease-in-out;
   padding: 15px;
@@ -76,6 +87,12 @@ const GroupIcon = styled.button`
   svg {
     fill: white;
   }
+`;
+
+const VideoTracks = styled.div`
+  width: 200px;
+  height: 100px;
+  border: 1px solid red;
 `;
 const MemberIcon = styled.div`
   position: relative;
@@ -127,8 +144,17 @@ const UnreadIcon = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+const ControlWrapper = styled.div`
+width: 300px;
+height: 100%;
+border: 1px solid red;
+`
 export default function GamePage() {
   const { roomId, roomName } = useParams();
+  const [token, setToken] = useState(null);
+  const liveKitUrl = import.meta.env.VITE_LIVEKIT_SERVER_URL;
+  console.log(liveKitUrl);
   const { getUserData } = useUserState();
   const userId = getUserData().id;
   const [showSidebar, setShowSideBar] = useState(true);
@@ -177,134 +203,217 @@ export default function GamePage() {
     setIsPublicChannel(false);
     setPrivateChannel(playerId);
   };
-
+  const getToken = async ({ roomId, charName }) => {
+    const response = await fetch(
+      `http://localhost:3000/getToken?roomId=${encodeURIComponent(
+        roomId
+      )}&charName=${charName}`
+    );
+    const token = await response.text();
+    console.log(token);
+    setToken(token);
+  };
   return (
     <Wrapper>
-      <Map1
-        players={players}
-        playerCharName={playerCharName}
-        setPlayerCharName={setPlayerCharName}
-      />
-      <BottomBar>
-        <BottomLeft>
-          <Logo />
-        </BottomLeft>
-        <BottomLeft>
-          <GroupIcon
-            onClick={() => {
-              setShowSideBar((prevState) => !prevState);
-            }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-              <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM609.3 512H471.4c5.4-9.4 8.6-20.3 8.6-32v-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2h61.4C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z" />
-            </svg>
-          </GroupIcon>
-          <LeaveRoom
-            onClick={() => {
-              navigate('/');
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-              />
-            </svg>
-          </LeaveRoom>
-        </BottomLeft>
-      </BottomBar>
+      <LiveKitRoom
+        video={false}
+        audio={false}
+        token={token}
+        serverUrl="wss://chouchouzoo-ffphmeoa.livekit.cloud"
+        // Use the default LiveKit theme for nice styles.
+        data-lk-theme="default"
+        style={{ height: '100vh', backgroundColor: 'inherit' }}
+      >
+        {/* Your custom component with basic video conferencing functionality. */}
+        {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
+        <RoomAudioRenderer />
+        {/* Controls for the user to start/stop audio, video, and screen 
+      share tracks and to leave the room. */}
 
-      <SideBar $isOpen={showSidebar}>
-        <Title>
-          {roomName}
-          <InviteButton roomId={roomId} roomName={roomName} />
-          <CloseButton
-            clickFunc={() => {
-              setShowSideBar(false);
-            }}
-          />
-        </Title>
-        <SearchBar />
-        {players && userId && onlineStatus && (
-          <MemberWrapper>
-            <span>Online Members</span>
-            {onlineMembers.map((player) => (
-              <MemberInfo
-                key={player.userId}
-                onClick={async () => {
-                  if (player.userId === userId) return;
-                  if (privateChannel === player.userId && !minimizeMessages)
-                    return;
-                  changeChannel(player.userId);
-                  setPrivateCharName(player.charName);
-                  setMinimizeMessages(false);
-                  await resetUnreadMessage({
-                    roomId,
-                    userId,
-                    privateChannelId: player.userId,
-                  });
-                }}
-              >
-                <MemberIcon>
-                  <Cat image={player.character} />
-                  <OnlineStatus $isOnline={true} />
-                  {!!unreadMessages[player.userId]?.count && <UnreadIcon>{unreadMessages[player.userId].count}</UnreadIcon>}
-                </MemberIcon>
-                <span>{player.charName}</span>
-              </MemberInfo>
-            ))}
-            <span>Offline Members</span>
-            {offlineMembers.map((player) => (
-              <MemberInfo
-                key={player.userId}
-                onClick={async() => {
-                  changeChannel(player.userId);
-                  setPrivateCharName(player.charName);
-                  setMinimizeMessages(false);
-                  await resetUnreadMessage({
-                    roomId,
-                    userId,
-                    privateChannelId: player.userId,
-                  });
-                }}
-              >
-                <MemberIcon>
-                  <Cat image={player.character} />
-                  <OnlineStatus $isOnline={false} />
-                  {!!unreadMessages[player.userId]?.count && (
-                    <UnreadIcon>
-                      {unreadMessages[player.userId].count}
-                    </UnreadIcon>
-                  )}
-                </MemberIcon>
-                <span>{player.charName}</span>
-              </MemberInfo>
-            ))}
-          </MemberWrapper>
-        )}
-        <PublicMessage
-          userId={userId}
+        <Map1
+          players={players}
           playerCharName={playerCharName}
-          roomId={roomId}
-          publicMessages={publicMessages}
-          isPublicChannel={isPublicChannel}
-          setIsPublicChannel={setIsPublicChannel}
-          privateChannel={privateChannel}
-          setPrivateChannel={setPrivateChannel}
-          privateMessages={privateMessages}
-          privateCharName={privateCharName}
-          minimizeMessages={minimizeMessages}
-          setMinimizeMessages={setMinimizeMessages}
+          setPlayerCharName={setPlayerCharName}
         />
-      </SideBar>
+        <BottomBar>
+          <BottomLeft>
+            <Logo />
+            <TracksManager isLocal={true}>
+                {localTracks => <LocalTracks tracks={localTracks} />}
+            </TracksManager>
+            <button
+              onClick={() => getToken({ roomId, charName: playerCharName })}
+            >
+              加入多人通訊
+            </button>
+            <ControlWrapper>
+              <ControlBar
+                controls={{
+                  camera: true,
+                  microphone: true,
+                  screenShare: true,
+                  leave: false,
+                }}
+                saveUserChoices={true}
+                variation="minimal"
+              />
+            </ControlWrapper>
+          </BottomLeft>
+          <BottomLeft>
+            <GroupIcon
+              onClick={() => {
+                setShowSideBar((prevState) => !prevState);
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM609.3 512H471.4c5.4-9.4 8.6-20.3 8.6-32v-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2h61.4C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z" />
+              </svg>
+            </GroupIcon>
+            <LeaveRoom
+              onClick={() => {
+                navigate('/');
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                />
+              </svg>
+            </LeaveRoom>
+          </BottomLeft>
+      
+          <TracksManager isLocal={false}>
+                {remoteTracks => <RemoteTracks tracks={remoteTracks} />}
+            </TracksManager>
+        </BottomBar>
+
+        <SideBar $isOpen={showSidebar}>
+          <Title>
+            {roomName}
+            <InviteButton roomId={roomId} roomName={roomName} />
+            <CloseButton
+              clickFunc={() => {
+                setShowSideBar(false);
+              }}
+            />
+          </Title>
+          <SearchBar />
+          {players && userId && onlineStatus && (
+            <MemberWrapper>
+              <span>Online Members</span>
+              {onlineMembers.map((player) => (
+                <MemberInfo
+                  key={player.userId}
+                  onClick={async () => {
+                    if (player.userId === userId) return;
+                    if (privateChannel === player.userId && !minimizeMessages)
+                      return;
+                    changeChannel(player.userId);
+                    setPrivateCharName(player.charName);
+                    setMinimizeMessages(false);
+                    await resetUnreadMessage({
+                      roomId,
+                      userId,
+                      privateChannelId: player.userId,
+                    });
+                  }}
+                >
+                  <MemberIcon>
+                    <Cat image={player.character} />
+                    <OnlineStatus $isOnline={true} />
+                    {!!unreadMessages[player.userId]?.count && (
+                      <UnreadIcon>
+                        {unreadMessages[player.userId].count}
+                      </UnreadIcon>
+                    )}
+                  </MemberIcon>
+                  <span>{player.charName}</span>
+                </MemberInfo>
+              ))}
+              <span>Offline Members</span>
+              {offlineMembers.map((player) => (
+                <MemberInfo
+                  key={player.userId}
+                  onClick={async () => {
+                    changeChannel(player.userId);
+                    setPrivateCharName(player.charName);
+                    setMinimizeMessages(false);
+                    await resetUnreadMessage({
+                      roomId,
+                      userId,
+                      privateChannelId: player.userId,
+                    });
+                  }}
+                >
+                  <MemberIcon>
+                    <Cat image={player.character} />
+                    <OnlineStatus $isOnline={false} />
+                    {!!unreadMessages[player.userId]?.count && (
+                      <UnreadIcon>
+                        {unreadMessages[player.userId].count}
+                      </UnreadIcon>
+                    )}
+                  </MemberIcon>
+                  <span>{player.charName}</span>
+                </MemberInfo>
+              ))}
+            </MemberWrapper>
+          )}
+          <PublicMessage
+            userId={userId}
+            playerCharName={playerCharName}
+            roomId={roomId}
+            publicMessages={publicMessages}
+            isPublicChannel={isPublicChannel}
+            setIsPublicChannel={setIsPublicChannel}
+            privateChannel={privateChannel}
+            setPrivateChannel={setPrivateChannel}
+            privateMessages={privateMessages}
+            privateCharName={privateCharName}
+            minimizeMessages={minimizeMessages}
+            setMinimizeMessages={setMinimizeMessages}
+          />
+        </SideBar>
+      </LiveKitRoom>
     </Wrapper>
+  );
+}
+function LocalTracks() {
+  const allTracks = useTracks(
+    [{ source: Track.Source.Camera, withPlaceholder: true, local: true }],
+    { onlySubscribed: false }
+  );
+  const localTracks = allTracks.filter((track) => track.participant.isLocal);
+  return (
+    <VideoTracks>
+      <CarouselLayout tracks={localTracks} style={{ height: 'auto' }}>
+        <ParticipantTile />
+      </CarouselLayout>
+    </VideoTracks>
+  );
+}
+
+function RemoteTracks() {
+  const allTracks = useTracks(
+    [{ source: Track.Source.Camera, withPlaceholder: true, local: true }],
+    { onlySubscribed: false }
+  );
+  const remoteTracks = allTracks.filter((track) => !track.participant.isLocal);
+
+  return (
+    <VideoTracks>
+    <CarouselLayout tracks={remoteTracks} style={{ height: 'auto' }}>
+      <ParticipantTile />
+    </CarouselLayout>
+    </VideoTracks>
   );
 }
