@@ -51,8 +51,8 @@ const Header = styled.header`
     width: 400px;
     height: 100%;
   }
-  input{
-    width:50px;
+  input {
+    width: 50px;
   }
 `;
 const Profile = styled.button`
@@ -148,22 +148,20 @@ export default function HomePage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const userId = user.id;
   const idInput = useRef(null);
-  const nameInput= useRef(null);
-  const inviteInput= useRef(null);
+  const nameInput = useRef(null);
+  const inviteInput = useRef(null);
   const userRooms = useUserRooms(userId);
 
   const navigate = useNavigate();
-  useEffect(()=>{
-
-  },[dialogOpen])
+  useEffect(() => {}, [dialogOpen]);
   const openDialog = () => {
     console.log('open');
     setDialogOpen(true);
   };
   const closeDialog = () => setDialogOpen(false);
-const changeUser= ()=>{
-  setUser({id:idInput.current.value, name:nameInput.current.value})
-}
+  const changeUser = () => {
+    setUser({ id: idInput.current.value, name: nameInput.current.value });
+  };
   return (
     <Wrapper
       onClick={() => {
@@ -176,11 +174,17 @@ const changeUser= ()=>{
             <span>ChouChouZoo</span>
           </Logo>
         </div>
-        <input type="text" placeholder='id' ref={idInput}/>
-        <input type="text" placeholder='name' ref={nameInput}/>
+        <input type="text" placeholder="id" ref={idInput} />
+        <input type="text" placeholder="name" ref={nameInput} />
         <button onClick={changeUser}>換人</button>
-        <input type="text" placeholder='邀請碼' ref={inviteInput}/>
-        <button onClick={()=>{navigate(`/invite/${inviteInput.current.value}`)}}>走起</button>
+        <input type="text" placeholder="邀請碼" ref={inviteInput} />
+        <button
+          onClick={() => {
+            navigate(`/invite/${inviteInput.current.value}`);
+          }}
+        >
+          走起
+        </button>
         <div className="right">
           <Profile>
             <div className="userimg">
@@ -214,9 +218,7 @@ const changeUser= ()=>{
                 ></div>
                 <div className="bottom">
                   <div>
-                    <Cat
-                      image={room.character}
-                    ></Cat>
+                    <Cat image={room.character}></Cat>
                     <span>{room.charName}</span>
                   </div>
                   <div className="right">
