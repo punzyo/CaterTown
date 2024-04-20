@@ -78,12 +78,12 @@ export function RemotTracks({ tracks }) {
 }
 
 const VideoContainer = styled.div`
-
-  width: ${(props) => (props.$isFullScreen ? 'calc(500px)' : '150px')};
-  height: ${(props) => (props.$isFullScreen ? 'calc(400px)' : '100px')};
+position:  ${(props) => (props.$isFullScreen ? 'fixed' : 'relative')};;
+  width: ${(props) => (props.$isFullScreen ? 'calc(100vw - 300px)' : '150px')};
+  height: ${(props) => (props.$isFullScreen ? 'calc(100vh - 100px)' : '100px')};
   border: 1px solid ${(props) => (props.$isSpeaking ? 'blue' : '')};
-  left: ${(props) => (props.$isFullScreen ? '0px' : '')};
-  top: ${(props) => (props.$isFullScreen ? '-350px' : '')};
+  left: ${(props) => (props.$isFullScreen ? '-430px' : '')};
+  top: ${(props) => (props.$isFullScreen ? '-309px' : '')};
   border-radius: 5px;
   z-index: ${(props) => (props.$isFullScreen ? '15' : '10')};
   .lk-participant-media-video {
@@ -97,7 +97,7 @@ const VideoContainer = styled.div`
     opacity: 0.9;
     background-color: rgba(255, 255, 255, 0.2);
     white-space: nowrap;
-    font-size: 16px;
+    font-size: ${(props) => (props.$isFullScreen ? '40px' : '12px')};
     padding: 0px 5px;
     border-radius: 5px;
   }
@@ -111,10 +111,13 @@ const FullscreenButton = styled.button`
   background-color: inherit;
   color: white;
   border: none;
-  width: 20px;
-  height: 20px;
+  width: ${(props) => (props.$isFullScreen ? '50px' : '15px')};
+  height: ${(props) => (props.$isFullScreen ? '50px' : '15px')};
   cursor: pointer;
   svg {
+    position: absolute;;
+    top: 0;
+    right: 0;
     width: 100%;
     height: 100%;
     fill: white;
@@ -123,10 +126,10 @@ const FullscreenButton = styled.button`
 
 const Wrapper = styled.div`
   position: relative;
-  top: -250px;
-  left: -360px;
+  top: -230px;
+  left: -415px;
   display: grid;
-  grid-template-columns: repeat(5, 130px);
+  grid-template-columns: repeat(5, 150px);
   gap: 30px;
   overflow: visible;
   padding: 10px;
@@ -179,8 +182,8 @@ const VedioBottom = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
-  position: absolute;
-  bottom: 0px;
+position: relative;
+top:-105px;
   font-size: 16px;
 `;
 
@@ -201,8 +204,11 @@ export default function RemoteTracks({ tracks }) {
                 >
                   <VideoTrack trackRef={trackRef} />
                   <span className="name">{trackRef.participant.identity}</span>
-                  <VedioBottom>
+       
                     <FullscreenButton
+                    $isFullScreen={
+                      fullScreenTrack === trackRef.participant.identity
+                    }
                       onClick={() => {
                         if (fullScreenTrack) {
                           setFullScreenTrack(null);
@@ -218,7 +224,7 @@ export default function RemoteTracks({ tracks }) {
                         <path d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z" />
                       </svg>
                     </FullscreenButton>
-                  </VedioBottom>
+              
                 </VideoContainer>
               </>
             )
