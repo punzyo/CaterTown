@@ -352,8 +352,9 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
               $character={`${playerChar}`}
             >
               <TracksManager isLocal={false} nearbyPlayers={nearbyPlayers}>
-                {(remoteTracks) => <RemoteTracks tracks={remoteTracks} />}
+                {(remoteTracks) => <RemoteTracks tracks={remoteTracks} nearbyPlayers={nearbyPlayers} />}
               </TracksManager>
+              
             </Player>
           )}
         </Wrapper>

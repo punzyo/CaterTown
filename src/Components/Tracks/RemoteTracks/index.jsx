@@ -9,6 +9,7 @@ import {
   AudioTrack 
 } from '@livekit/components-react';
 import React,{ useRef, useState, useEffect } from 'react';
+import AudioManager from '../../TracksManager/AudioTracks';
 const VideoTracks = styled.div`
   position: relative;
   .lk-carousel {
@@ -188,10 +189,10 @@ top:-105px;
   font-size: 16px;
 `;
 
-export default function RemoteTracks({ tracks }) {
+export default function RemoteTracks({ tracks,nearbyPlayers }) {
   const [fullScreenTrack, setFullScreenTrack] = useState('');
   const refs = useRef({});
-
+  const [audioVolume, setAudioVolume] = useState({});
   // 初始化每个track的ref
   useEffect(() => {
     tracks.forEach(track => {
@@ -206,15 +207,16 @@ export default function RemoteTracks({ tracks }) {
         <TrackRefContext.Consumer>
           {(trackRef) =>
             trackRef && (
-              <>{console.log(trackRef)}
+              <>
                 <VideoContainer
                   $isSpeaking={trackRef.participant.isSpeaking}
                   $isFullScreen={
                     fullScreenTrack === trackRef.participant.identity
                   }
                 >
+                  {console.log('3333333333333333',trackRef)}
                   <VideoTrack trackRef={trackRef} ref={refs.current[trackRef.participant.identity]} />
-                  <AudioTrack trackRef={trackRef} />
+                  {/* <AudioTrack trackRef={trackRef} /> */}
                   <input
                   type="range"
                   min="0"
@@ -222,12 +224,19 @@ export default function RemoteTracks({ tracks }) {
                   step="0.01"
                   defaultValue="1"
                   onChange={(e) => {
-                    const videoElement = refs.current[trackRef.participant.identity].current;
-                    if (videoElement) {
-                      console.log(videoElement.muted,e.target.value);
-                      videoElement.muted=false;
-                      videoElement.volume = parseInt(e.target.value);
-                    }
+                    // const videoElement = refs.current[trackRef.participant.identity].current;
+                    console.log(trackRef.participant.identity,'WWW',e.target.value);
+                    setAudioVolume(prevAudioVolume => {
+                      return {
+                        ...prevAudioVolume,
+                        [trackRef.participant.identity]:parseFloat(e.target.value)
+                      };
+                    });
+                    // if (videoElement) {
+                    //   console.log(videoElement.muted,e.target.value);
+                    //   videoElement.muted=false;
+                    //   videoElement.volume = parseFloat(e.target.value);
+                    // }
                   }}
                 />
                   <span className="name">{trackRef.participant.identity}</span>
@@ -258,6 +267,7 @@ export default function RemoteTracks({ tracks }) {
           }
         </TrackRefContext.Consumer>
       </TrackLoop>
+      <AudioManager isLocal={false} nearbyPlayers={nearbyPlayers} audioVolume={audioVolume}/>
     </Wrapper>
   );
 }
