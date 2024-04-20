@@ -23,7 +23,6 @@ export default function TracksManager({ isLocal, children, nearbyPlayers }) {
           nearbyPlayers.includes(track.participant.identity))
   );
 
-  console.log(cameraTracks, screenShareTracks);
   const finalTracks = cameraTracks.map((cameraTrack) => {
     const screenShareTrack = screenShareTracks.find(
       (ssTrack) =>

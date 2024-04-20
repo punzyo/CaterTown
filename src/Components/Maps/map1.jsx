@@ -32,7 +32,7 @@ const Player = styled.div`
   transform: translate(-50%, -50%);
   width: ${playerWidth}px;
   height: ${playerHeight}px;
-
+  z-index: 10;
   background-position: -767px -833px;
   background-size: 2048px 1088px;
   background-image: url(/images/animals/${(props) => props.$character}.png);
