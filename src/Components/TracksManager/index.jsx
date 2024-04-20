@@ -1,28 +1,28 @@
 import { useTracks } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 export default function TracksManager({ isLocal, children, nearbyPlayers }) {
-  const cameraTracks = useTracks(
-    [{ source: Track.Source.Camera, withPlaceholder: true }],
+  const allTracks = useTracks(
+    [
+      { source: Track.Source.Camera, withPlaceholder: true },
+      { source: Track.Source.ScreenShare, withPlaceholder: true }
+    ],
     { onlySubscribed: false }
-  ).filter((track) =>
-    isLocal
-      ? track.participant.isLocal
-      : !track.participant.isLocal &&
-        nearbyPlayers.includes(track.participant.identity)
+  );
+  console.log(allTracks);
+  
+  const cameraTracks = allTracks.filter(track => 
+    track.source === Track.Source.Camera &&
+    (isLocal ? track.participant.isLocal : !track.participant.isLocal && nearbyPlayers.includes(track.participant.identity))
   );
 
-  const screenShareTracks = useTracks(
-    [{ source: Track.Source.ScreenShare, withPlaceholder: true }],
-    { onlySubscribed: false }
-  ).filter(
-    (track) =>
-      track.publication &&
-      (isLocal
-        ? track.participant.isLocal
-        : !track.participant.isLocal &&
-          nearbyPlayers.includes(track.participant.identity))
+  console.log("Filtered camera tracks:", cameraTracks);
+
+  const screenShareTracks = allTracks.filter(track => 
+    track.source === Track.Source.ScreenShare && track.publication &&
+    (isLocal ? track.participant.isLocal : !track.participant.isLocal && nearbyPlayers.includes(track.participant.identity))
   );
 
+  console.log("Filtered screen share tracks:", screenShareTracks);
   const finalTracks = cameraTracks.map((cameraTrack) => {
     const screenShareTrack = screenShareTracks.find(
       (ssTrack) =>
@@ -30,6 +30,6 @@ export default function TracksManager({ isLocal, children, nearbyPlayers }) {
     );
     return screenShareTrack ? screenShareTrack : cameraTrack;
   });
-
+  console.log(finalTracks);
   return children(finalTracks);
 }

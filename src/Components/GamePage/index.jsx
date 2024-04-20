@@ -211,7 +211,7 @@ export default function GamePage() {
         style={{ backgroundColor: 'inherit' }}
         
       >
-        <RoomAudioRenderer muted={false}/>
+        {/* <RoomAudioRenderer muted={false}/> */}
 
         <Map1
           players={players}

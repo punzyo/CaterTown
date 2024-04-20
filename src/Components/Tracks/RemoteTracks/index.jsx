@@ -6,8 +6,9 @@ import {
   TrackLoop,
   TrackRefContext,
   AudioVisualizer,
+  AudioTrack 
 } from '@livekit/components-react';
-import { useState } from 'react';
+import React,{ useRef, useState, useEffect } from 'react';
 const VideoTracks = styled.div`
   position: relative;
   .lk-carousel {
@@ -189,20 +190,46 @@ top:-105px;
 
 export default function RemoteTracks({ tracks }) {
   const [fullScreenTrack, setFullScreenTrack] = useState('');
+  const refs = useRef({});
+
+  // 初始化每个track的ref
+  useEffect(() => {
+    tracks.forEach(track => {
+      if (!refs.current[track.participant.identity]) {
+        refs.current[track.participant.identity] = React.createRef();
+      }
+    });
+  }, [tracks]);
   return (
     <Wrapper>
       <TrackLoop tracks={tracks}>
         <TrackRefContext.Consumer>
           {(trackRef) =>
             trackRef && (
-              <>
+              <>{console.log(trackRef)}
                 <VideoContainer
                   $isSpeaking={trackRef.participant.isSpeaking}
                   $isFullScreen={
                     fullScreenTrack === trackRef.participant.identity
                   }
                 >
-                  <VideoTrack trackRef={trackRef} />
+                  <VideoTrack trackRef={trackRef} ref={refs.current[trackRef.participant.identity]} />
+                  <AudioTrack trackRef={trackRef} />
+                  <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  defaultValue="1"
+                  onChange={(e) => {
+                    const videoElement = refs.current[trackRef.participant.identity].current;
+                    if (videoElement) {
+                      console.log(videoElement.muted,e.target.value);
+                      videoElement.muted=false;
+                      videoElement.volume = parseInt(e.target.value);
+                    }
+                  }}
+                />
                   <span className="name">{trackRef.participant.identity}</span>
        
                     <FullscreenButton
