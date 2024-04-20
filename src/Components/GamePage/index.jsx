@@ -153,6 +153,7 @@ export default function GamePage() {
   const [minimizeMessages, setMinimizeMessages] = useState(false);
   const [privateCharName, setPrivateCharName] = useState(null);
   const [isPublicChannel, setIsPublicChannel] = useState(true);
+
   const privateMessages = usePrivateMessages({
     userId,
     roomId,
@@ -208,6 +209,7 @@ export default function GamePage() {
         serverUrl="wss://chouchouzoo-ffphmeoa.livekit.cloud"
         data-lk-theme="default"
         style={{ backgroundColor: 'inherit' }}
+        
       >
         <RoomAudioRenderer muted={false}/>
 

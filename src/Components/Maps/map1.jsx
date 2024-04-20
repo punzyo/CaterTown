@@ -120,7 +120,7 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
   const [currentFrame, setCurrentFrame] = useState(null);
   const [direction, setDirection] = useState();
   const [playerChar, setPlayerChar] = useState(null);
-
+  const [nearbyPlayers, setNearbyPlayers] = useState([]);
   const movingTimer = useRef(null);
   const keysPressed = useRef(false);
   const canMove = useRef(true);
@@ -235,6 +235,7 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
   }, [position]);
 
   useEffect(() => {
+    //initializate player position
     if (position || !players) return;
     const updatePosition = async () => {
       console.log(players, userId);
@@ -251,6 +252,24 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
 
     updatePosition();
   }, [players]);
+  useEffect(() => {
+    if (!players || !position) return;
+    countNearbyPlayers(players);
+  }, [players, position]);
+
+  const countNearbyPlayers = (players) => {
+    const gridRange = 96;
+    const myPosition = playerPosToAbsolute(position);
+    const nearbyPlayers = players.filter((player) => {
+      const xInRange =
+        Math.abs(player.position.left - myPosition.left) <= gridRange;
+      const yInRange =
+        Math.abs(player.position.top - myPosition.top) <= gridRange;
+      return player.charName !== playerCharName && xInRange && yInRange;
+    });
+    setNearbyPlayers(nearbyPlayers.map((player) => player.charName));
+    return;
+  };
 
   const playerPosToAbsolute = (position) => {
     const absoluteLeft =
@@ -332,7 +351,7 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
               $charName={playerCharName}
               $character={`${playerChar}`}
             >
-              <TracksManager isLocal={false}>
+              <TracksManager isLocal={false} nearbyPlayers={nearbyPlayers}>
                 {(remoteTracks) => <RemoteTracks tracks={remoteTracks} />}
               </TracksManager>
             </Player>

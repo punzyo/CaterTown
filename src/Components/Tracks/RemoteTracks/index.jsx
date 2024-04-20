@@ -48,7 +48,18 @@ position: relative;
     text-align: center;
     width: 130px;
     font-size: 20px;
+    animation: fadeIn 0.5s ease-out forwards;
+
   }
+  @keyframes fadeIn {
+    from {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 `;
 export default function RemoteTracks({ tracks }) {
   return (
