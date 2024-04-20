@@ -17,7 +17,7 @@ import {
 import { catsXPositions, catsYPositions } from '../../assets/charNames';
 import { useUserState } from '../../utils/zustand';
 import TracksManager from '../TracksManager';
-import  RemoteTracks  from '../Tracks/RemoteTracks';
+import RemoteTracks from '../Tracks/RemoteTracks';
 const Wrapper = styled.div`
   position: relative;
   width: ${wrapperWidth}px;
@@ -36,7 +36,7 @@ const Player = styled.div`
   background-position: -767px -833px;
   background-size: 2048px 1088px;
   background-image: url(/images/animals/${(props) => props.$character}.png);
-  &::after{
+  &::after {
     content: '${(props) => props.$charName}';
     font-size: 14px;
     font-weight: bold;
@@ -44,7 +44,7 @@ const Player = styled.div`
     top: -14px;
     width: 40px;
     height: 40px;
-    color:black;
+    color: black;
     white-space: nowrap;
   }
 `;
@@ -59,7 +59,7 @@ const OtherPlayer = styled.div`
   background-image: url(/images/animals/${(props) => props.$character}.png);
   color: black;
   transition: top 0.2s, left 0.2s;
-  &::after{
+  &::after {
     content: '${(props) => props.$charName}';
     font-size: 14px;
     font-weight: bold;
@@ -67,7 +67,7 @@ const OtherPlayer = styled.div`
     top: -14px;
     width: 40px;
     height: 40px;
-    color:black;
+    color: black;
     white-space: nowrap;
   }
 `;
@@ -83,7 +83,7 @@ const Map = styled.div`
 `;
 const MapImage = styled.div`
   position: absolute;
-  border: 1px solid rgba(0, 0, 0,0.3);
+  border: 1px solid rgba(0, 0, 0, 0.3);
   width: ${(props) => props.$width};
   height: ${(props) => props.$height};
   left: ${(props) => props.$left};
@@ -120,7 +120,7 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
   const [currentFrame, setCurrentFrame] = useState(null);
   const [direction, setDirection] = useState();
   const [playerChar, setPlayerChar] = useState(null);
- 
+
   const movingTimer = useRef(null);
   const keysPressed = useRef(false);
   const canMove = useRef(true);
@@ -129,10 +129,14 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
 
   useEffect(() => {
     if (!userId) return;
-    
+
     const handleKeyPress = async (e) => {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
-        return; 
+      if (
+        e.target.tagName === 'INPUT' ||
+        e.target.tagName === 'TEXTAREA' ||
+        e.target.isContentEditable
+      ) {
+        return;
       }
       let move = { top: 0, left: 0 };
       let keyDirection;
@@ -234,16 +238,16 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
     if (position || !players) return;
     const updatePosition = async () => {
       console.log(players, userId);
-        const playerData =  players.filter(player=>player.userId === userId)
-        const playerPosition =playerData[0].position
-        setDirection(playerPosition.direction);
-        setCurrentFrame(playerPosition.frame);
-        const mapPosition = playerAbsoluteToMapPos(playerPosition);
-        dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
-        setPlayerChar(playerData[0].character)
-        console.log(playerData[0].charName,'asd');
-        setPlayerCharName(playerData[0].charName)
-      } 
+      const playerData = players.filter((player) => player.userId === userId);
+      const playerPosition = playerData[0].position;
+      setDirection(playerPosition.direction);
+      setCurrentFrame(playerPosition.frame);
+      const mapPosition = playerAbsoluteToMapPos(playerPosition);
+      dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
+      setPlayerChar(playerData[0].character);
+      console.log(playerData[0].charName, 'asd');
+      setPlayerCharName(playerData[0].charName);
+    };
 
     updatePosition();
   }, [players]);
@@ -320,7 +324,7 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
               })}
           </Map>
 
-          {position && playerChar &&(
+          {position && playerChar && (
             <Player
               style={{
                 backgroundPosition: `${framesXPositions[currentFrame]} ${directionYPositions[direction]}`,
@@ -328,10 +332,9 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
               $charName={playerCharName}
               $character={`${playerChar}`}
             >
-
-<TracksManager isLocal={false}>
-            {(remoteTracks) => <RemoteTracks tracks={remoteTracks} />}
-          </TracksManager>
+              <TracksManager isLocal={false}>
+                {(remoteTracks) => <RemoteTracks tracks={remoteTracks} />}
+              </TracksManager>
             </Player>
           )}
         </Wrapper>
@@ -339,8 +342,6 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
     </>
   );
 }
-
-
 
 {
   /* <Wrapper>
