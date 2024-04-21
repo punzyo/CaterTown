@@ -3,7 +3,7 @@ import { useState } from 'react';
 import {
   TrackLoop,
   VideoTrack,
-  TrackRefContext,
+  TrackRefContext,ConnectionQualityIndicator  
 } from '@livekit/components-react';
 import VideoContainer from '../VedioContainer'
 import FullscreenButton from '../../FullscreenButton';
@@ -43,7 +43,7 @@ export default function LocalTracks({ tracks }) {
                   isLocal={true}
                 >
                   <VideoTrack trackRef={trackRef} />
-                  <span className="name">{trackRef.participant.identity}</span>
+                 
                 </VideoContainer>
             )
           }
