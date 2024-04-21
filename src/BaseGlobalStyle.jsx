@@ -35,7 +35,7 @@ button {
 }
 ul,
 ol {
-  list-style: none
+  list-style: none;
   cursor: pointer;
 }
 

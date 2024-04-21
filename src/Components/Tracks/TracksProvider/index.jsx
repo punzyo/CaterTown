@@ -1,6 +1,7 @@
 import { Track } from 'livekit-client';
 import { useTracks } from '@livekit/components-react';
 import { usePlayerTracks } from '../../../utils/zustand';
+import { useEffect } from 'react';
 
 const TracksProvider = ({children}) => {
   const { setTracks } = usePlayerTracks();
@@ -12,10 +13,13 @@ const TracksProvider = ({children}) => {
     ],
     { onlySubscribed: false }
   );
+//setTracks(allTracks); GG here
+
+useEffect(() => {
 
   
-
-  return <>{children}</>;
+},[])
+  return <></>;
 };
 
 export default TracksProvider;

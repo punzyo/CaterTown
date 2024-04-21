@@ -211,7 +211,7 @@ export default function GamePage() {
         style={{ backgroundColor: 'inherit' }}
       >
         {/* <RoomAudioRenderer muted={false}/> */}
-
+<TracksProvider></TracksProvider>
           <Map1
             players={players}
             playerCharName={playerCharName}

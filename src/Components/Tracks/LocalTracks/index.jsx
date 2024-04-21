@@ -1,16 +1,54 @@
 import styled from 'styled-components';
-import { CarouselLayout, ParticipantTile } from '@livekit/components-react';
+import { useState } from 'react';
+import {
+  TrackLoop,
+  VideoTrack,
+  TrackRefContext,
+} from '@livekit/components-react';
+import VideoContainer from '../VedioContainer'
+import FullscreenButton from '../../FullscreenButton';
 const TracksWrapper = styled.div`
+display: flex;
+justify-content: center;
   width: 150px;
-  height: 90%;
-
+  height: 95%;
+  >div{
+    width: 130px;
+    height: 100%;
+  }
 `;
+
 export default function LocalTracks({ tracks }) {
+  console.log(tracks);
+  const [fullScreenTrack, setFullScreenTrack] = useState(null);
   return (
     <TracksWrapper>
-      <CarouselLayout tracks={tracks} style={{ height: 'auto' }}>
-        <ParticipantTile />
-      </CarouselLayout>
+      <TrackLoop tracks={tracks}>
+        <TrackRefContext.Consumer>
+          {(trackRef) =>
+            trackRef && (
+
+                <VideoContainer
+                  isSpeaking={trackRef.participant.isSpeaking}
+                  isFullScreen={
+                    fullScreenTrack === trackRef.participant.identity
+                  }
+                  clickFunc={() => {
+                    if (fullScreenTrack === trackRef.participant.identity) {
+                      setFullScreenTrack(null);
+                    } else {
+                      setFullScreenTrack(trackRef.participant.identity);
+                    }
+                  }}
+                  isLocal={true}
+                >
+                  <VideoTrack trackRef={trackRef} />
+                  <span className="name">{trackRef.participant.identity}</span>
+                </VideoContainer>
+            )
+          }
+        </TrackRefContext.Consumer>
+      </TrackLoop>
     </TracksWrapper>
   );
 }
