@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
   top: ${(props) =>
     props.$isFullScreen ? (props.$isLocal ? '0px' : '-309px') : ''};
   border-radius: 5px;
-  z-index: ${(props) => (props.$isFullScreen ? '15' : '10')};
+  z-index: ${(props) => (props.$isFullScreen ? '15' : '5')};
   .lk-participant-media-video {
     width: 100%;
     border-radius: 5px;

@@ -25,8 +25,10 @@ export const usePlayerTracks = create((set, get) => ({
   localTracks: [],
   remoteTracks: [],
   nearbyPlayers: [],
-
-
-
   setNearbyPlayers: (players) => set({ nearbyPlayers: players }),
+}));
+
+export const useGameSettings = create((set, get) => ({
+  isFullScreen: false,
+  setIsFullScreen: (isFullScreen) => set({ isFullScreen }),
 }));

@@ -10,9 +10,8 @@ import {
 } from '@livekit/components-react';
 import React, { useRef, useState, useEffect } from 'react';
 import AudioManager from '../../TracksManager/AudioTracks';
-import  VideoContainer  from '../VedioContainer';
-import FullscreenButton from '../../FullscreenButton';
-
+import VideoContainer from '../VedioContainer';
+import { useGameSettings } from '../../../utils/zustand';
 const Wrapper = styled.div`
   position: relative;
   top: -230px;
@@ -66,8 +65,9 @@ const Wrapper = styled.div`
     }
   }
 `;
-
+const AudioController = styled.input``;
 export default function RemoteTracks({ tracks, nearbyPlayers }) {
+  const { setIsFullScreen } = useGameSettings();
   const [fullScreenTrack, setFullScreenTrack] = useState('');
   const refs = useRef({});
   const [audioVolume, setAudioVolume] = useState({});
@@ -87,15 +87,17 @@ export default function RemoteTracks({ tracks, nearbyPlayers }) {
             trackRef && (
               <>
                 <VideoContainer
-                isSpeaking={trackRef.participant.isSpeaking}
+                  isSpeaking={trackRef.participant.isSpeaking}
                   isFullScreen={
                     fullScreenTrack === trackRef.participant.identity
                   }
                   clickFunc={() => {
                     if (fullScreenTrack) {
                       setFullScreenTrack(null);
+                      setIsFullScreen(false);
                     } else {
                       setFullScreenTrack(trackRef.participant.identity);
+                      setIsFullScreen(true);
                     }
                   }}
                   isLocal={false}
@@ -105,7 +107,7 @@ export default function RemoteTracks({ tracks, nearbyPlayers }) {
                     trackRef={trackRef}
                     ref={refs.current[trackRef.participant.identity]}
                   />
-                  <input
+                  <AudioController
                     type="range"
                     min="0"
                     max="1"

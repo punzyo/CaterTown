@@ -25,7 +25,7 @@ import LocalTracks from '../Tracks/LocalTracks/index.jsx';
 import TracksProvider  from '../Tracks/TracksProvider/index.jsx';
 import MemberIcon from '../MemberIcon/index.jsx';
 import OnlineStatus from '../OnlineStatus/index.jsx';
-
+import { useGameSettings } from '../../utils/zustand.js';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -63,6 +63,7 @@ const SideBar = styled.div`
   padding: 15px;
   top: 0;
   background-color: #202540;
+  z-index: ${(props) => (props.$isFullScreen ? '5' : '10')};;
   button {
     color: white;
   }
@@ -167,7 +168,7 @@ export default function GamePage() {
   const navigate = useNavigate();
   const [onlineMembers, setOnlineMembers] = useState([]);
   const [offlineMembers, setOfflineMembers] = useState([]);
-
+const{isFullScreen} = useGameSettings()
   useEffect(() => {
     if (!players || !onlineStatus) return;
     const online = [];
@@ -287,7 +288,7 @@ export default function GamePage() {
             </BottomLeft>
           </BottomBar>
 
-          <SideBar $isOpen={showSidebar}>
+          <SideBar $isOpen={showSidebar} $isFullScreen={isFullScreen}>
             <Title>
               {roomName}
               <InviteButton roomId={roomId} roomName={roomName} />

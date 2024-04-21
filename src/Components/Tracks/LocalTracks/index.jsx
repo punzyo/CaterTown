@@ -3,10 +3,11 @@ import { useState } from 'react';
 import {
   TrackLoop,
   VideoTrack,
-  TrackRefContext,ConnectionQualityIndicator  
+  TrackRefContext  
 } from '@livekit/components-react';
 import VideoContainer from '../VedioContainer'
-import FullscreenButton from '../../FullscreenButton';
+import { useGameSettings } from '../../../utils/zustand';
+useGameSettings
 const TracksWrapper = styled.div`
 display: flex;
 justify-content: center;
@@ -19,7 +20,7 @@ justify-content: center;
 `;
 
 export default function LocalTracks({ tracks }) {
-  console.log(tracks);
+  const { setIsFullScreen } = useGameSettings();
   const [fullScreenTrack, setFullScreenTrack] = useState(null);
   return (
     <TracksWrapper>
@@ -36,8 +37,10 @@ export default function LocalTracks({ tracks }) {
                   clickFunc={() => {
                     if (fullScreenTrack === trackRef.participant.identity) {
                       setFullScreenTrack(null);
+                      setIsFullScreen(false)
                     } else {
                       setFullScreenTrack(trackRef.participant.identity);
+                      setIsFullScreen(true)
                     }
                   }}
                   isLocal={true}
