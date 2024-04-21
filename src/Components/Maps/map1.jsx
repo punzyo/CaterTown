@@ -18,12 +18,20 @@ import { catsXPositions, catsYPositions } from '../../assets/charNames';
 import { useUserState } from '../../utils/zustand';
 import TracksManager from '../TracksManager';
 import RemoteTracks from '../Tracks/RemoteTracks';
-const Wrapper = styled.div`
+const Wrapper =styled.div`
+width: 100%;
+height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+
+`
+const MapWrapper = styled.div`
   position: relative;
   width: ${wrapperWidth}px;
   height: ${wrapperHeight}px;
   user-select: none;
-  margin:0 auto;
+  /* margin:0 auto; */
 `;
 
 const Player = styled.div`
@@ -74,11 +82,12 @@ const OtherPlayer = styled.div`
 `;
 
 const Map = styled.div`
+
   position: relative;
   top: ${(props) => props.$top};
   left: ${(props) => props.$left};
   width: ${wrapperWidth}px;
-  height: 100%;
+  height: ${wrapperHeight}px;
   border: ${mapBorder}px solid gray;
   transition: top 0.2s, left 0.2s;
 `;
@@ -305,9 +314,10 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
     };
   };
   return (
-    <>
+    <Wrapper>
+    
       {position && (
-        <Wrapper>
+        <MapWrapper>
           <Map $top={`${position.top}px`} $left={`${position.left}px`}>
             {Object.keys(map1.objects).map((itemType) =>
               map1.objects[itemType].map((position, index) => {
@@ -358,14 +368,14 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
               
             </Player>
           )}
-        </Wrapper>
+        </MapWrapper>
       )}
-    </>
+    </Wrapper>
   );
 }
 
 {
-  /* <Wrapper>
+  /* <MapWrapper>
         {Object.keys(map1.objects).map((itemType) =>
           map1.objects[itemType].map((position, index) => {
             const itemStyles = getItemStyles(itemType);
@@ -381,7 +391,7 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
             );
           })
         )}
-      </Wrapper> */
+      </MapWrapper> */
 }
 {
   /* <button onClick={generateCollisionMap}>創建碰撞array</button> */

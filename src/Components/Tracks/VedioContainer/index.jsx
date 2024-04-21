@@ -9,9 +9,9 @@ export const Wrapper = styled.div`
     props.$isFullScreen ? 'calc(100vh - 100px) !important' : '100px'} ;
   border: 1px solid ${(props) => (props.$isSpeaking ? 'blue' : 'black')};
   left: ${(props) =>
-    props.$isFullScreen ? (props.$isLocal ? '0px' : '-740px') : ''};
+    props.$isFullScreen ? (props.$isLocal ? '0px' : '-930px') : ''};
   top: ${(props) =>
-    props.$isFullScreen ? (props.$isLocal ? '0px' : '-309px') : ''};
+    props.$isFullScreen ? (props.$isLocal ? '0px' : '-490px') : ''};
   border-radius: 5px;
   z-index: ${(props) => (props.$isFullScreen ? '15' : '5')};
   .lk-participant-media-video {
