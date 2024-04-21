@@ -65,7 +65,49 @@ const Wrapper = styled.div`
     }
   }
 `;
-const AudioController = styled.input``;
+const AudioController = styled.input`
+position: relative;
+appearance: none;
+-webkit-appearance: none;
+background-color: black;
+border-radius: 10px;
+width:100px;
+width:80px;
+opacity: 0.1;
+position:absolute;
+bottom: 5px;
+left:5px;
+&:hover{
+  opacity: 0.8;
+}
+&::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 10px;
+  background: #888;
+  cursor: pointer;
+  
+}
+&::before{
+    width: ${(props) => props.$widthPercent}%;
+    height: 8px;
+    border-radius: 10px;
+    content: '';
+    position: absolute;
+    left:0px;
+    background: #eee;
+  }
+&::-webkit-slider-thumb {
+  position:relative;
+  bottom:3px;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background-color: #fff !important;
+  cursor: pointer;
+}
+`;
 export default function RemoteTracks({ tracks, nearbyPlayers }) {
   const { setIsFullScreen } = useGameSettings();
   const [fullScreenTrack, setFullScreenTrack] = useState('');
@@ -113,11 +155,12 @@ export default function RemoteTracks({ tracks, nearbyPlayers }) {
                     max="1"
                     step="0.01"
                     defaultValue="1"
+                    $widthPercent={audioVolume[trackRef.participant.identity] * 100}
                     onChange={(e) => {
                       console.log(
                         trackRef.participant.identity,
                         'WWW',
-                        e.target.value
+                        audioVolume[trackRef.participant.identity]
                       );
                       setAudioVolume((prevAudioVolume) => {
                         return {

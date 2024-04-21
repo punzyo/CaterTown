@@ -3,13 +3,16 @@ const Wrapper = styled.button`
   position: absolute;
   right: 5px;
   bottom: 5px;
-  opacity: 0.2;
+  opacity: 0.1;
   background-color: inherit;
   color: white;
   border: none;
   width: ${(props) => (props.$isFullScreen ? '50px' : '15px')};
   height: ${(props) => (props.$isFullScreen ? '50px' : '15px')};
   cursor: pointer;
+  &:hover{
+    opacity: 0.5;
+  }
   svg {
     position: absolute;
     top: 0;

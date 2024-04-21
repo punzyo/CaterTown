@@ -23,6 +23,7 @@ const Wrapper = styled.div`
   width: ${wrapperWidth}px;
   height: ${wrapperHeight}px;
   user-select: none;
+  margin:0 auto;
 `;
 
 const Player = styled.div`
