@@ -242,7 +242,7 @@ const{isFullScreen} = useGameSettings()
                     camera: true,
                     microphone: true,
                     screenShare: true,
-                    leave: false,
+                    leave: true,
                   }}
                   saveUserChoices={true}
                   variation="minimal"

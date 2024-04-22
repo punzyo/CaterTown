@@ -6,6 +6,7 @@ export const usePlayer = ({ roomId }) => {
   const [players, setPlayers] = useState([]);
   
   useEffect(() => {
+    console.log('我掛了');
     if (!roomId) return;
     const roomRef = doc(db, 'rooms', roomId);
     const unsubscribe = onSnapshot(roomRef, async (docSnapshot) => {
@@ -13,8 +14,9 @@ export const usePlayer = ({ roomId }) => {
       setPlayers(roomData);
     });
     return () => {
+      console.log('我重新來過');
       unsubscribe();
     };
-  }, [roomId]);
+  }, []);
   return players;
 };

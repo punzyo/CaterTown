@@ -11,7 +11,7 @@ export default function TracksManager({ isLocal, children, nearbyPlayers }) {
 
   const finalTracks = allTracks.reduce((acc, track) => {
     const participantIdentity = track.participant.identity;
-    const isLocalCheck = isLocal ? track.participant.isLocal : !track.participant.isLocal && nearbyPlayers.includes(participantIdentity);
+    const isLocalCheck = isLocal ? track.participant.isLocal : !track.participant.isLocal && nearbyPlayers.some(player => player.charName === participantIdentity);
     
     if (isLocalCheck) {
       if (track.source === Track.Source.ScreenShare && track.publication) {

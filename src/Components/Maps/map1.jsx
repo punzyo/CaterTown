@@ -277,7 +277,14 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
         Math.abs(player.position.top - myPosition.top) <= gridRange;
       return player.charName !== playerCharName && xInRange && yInRange;
     });
-    setNearbyPlayers(nearbyPlayers.map((player) => player.charName));
+    setNearbyPlayers(nearbyPlayers.map((player) => {
+      return(
+        {
+          charName :player.charName,
+          character:player.character
+        }
+      )
+    }));
     return;
   };
 
