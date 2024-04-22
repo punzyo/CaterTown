@@ -126,9 +126,10 @@ export default function RemoteTracks({ tracks, nearbyPlayers }) {
       <TrackLoop tracks={tracks}>
         <TrackRefContext.Consumer>
           {(trackRef) =>
-            trackRef && (
+            trackRef && (trackRef.participant.isCameraEnabled ||trackRef.participant.isScreenShareEnabled ||trackRef.participant.isMicrophoneEnabled) &&(
               <>
                 <VideoContainer
+                  hidePlaceholder={trackRef.participant.isCameraEnabled ||trackRef.participant.isScreenShareEnabled}
                   isSpeaking={trackRef.participant.isSpeaking}
                   isFullScreen={
                     fullScreenTrack === trackRef.participant.identity
@@ -142,7 +143,6 @@ export default function RemoteTracks({ tracks, nearbyPlayers }) {
                       setIsFullScreen(true);
                     }
                   }}
-                  isLocal={false}
                 >
                   {console.log('3333333333333333', trackRef)}
                   <VideoTrack

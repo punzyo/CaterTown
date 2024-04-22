@@ -3,17 +3,19 @@ import { useState } from 'react';
 import {
   TrackLoop,
   VideoTrack,
-  TrackRefContext  
+  TrackRefContext,
 } from '@livekit/components-react';
-import VideoContainer from '../VedioContainer'
+import VideoContainer from '../VedioContainer';
 import { useGameSettings } from '../../../utils/zustand';
-useGameSettings
+useGameSettings;
 const TracksWrapper = styled.div`
-display: flex;
-justify-content: center;
-  width: 150px;
+  display: flex;
+  justify-content: center;
+  width: 130px;
   height: 95%;
-  >div{
+  background-color: black;
+  border-radius: 5px;
+  > div {
     width: 130px;
     height: 100%;
   }
@@ -28,26 +30,21 @@ export default function LocalTracks({ tracks }) {
         <TrackRefContext.Consumer>
           {(trackRef) =>
             trackRef && (
-
-                <VideoContainer
-                  isSpeaking={trackRef.participant.isSpeaking}
-                  isFullScreen={
-                    fullScreenTrack === trackRef.participant.identity
+              <VideoContainer
+                isSpeaking={trackRef.participant.isSpeaking}
+                isFullScreen={fullScreenTrack === trackRef.participant.identity}
+                clickFunc={() => {
+                  if (fullScreenTrack === trackRef.participant.identity) {
+                    setFullScreenTrack(null);
+                    setIsFullScreen(false);
+                  } else {
+                    setFullScreenTrack(trackRef.participant.identity);
+                    setIsFullScreen(true);
                   }
-                  clickFunc={() => {
-                    if (fullScreenTrack === trackRef.participant.identity) {
-                      setFullScreenTrack(null);
-                      setIsFullScreen(false)
-                    } else {
-                      setFullScreenTrack(trackRef.participant.identity);
-                      setIsFullScreen(true)
-                    }
-                  }}
-                  isLocal={true}
-                >
-                  <VideoTrack trackRef={trackRef} />
-                 
-                </VideoContainer>
+                }}
+              >
+                <VideoTrack trackRef={trackRef} />
+              </VideoContainer>
             )
           }
         </TrackRefContext.Consumer>

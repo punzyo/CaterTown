@@ -10,6 +10,7 @@ const Wrapper = styled.button`
   width: ${(props) => (props.$isFullScreen ? '50px' : '15px')};
   height: ${(props) => (props.$isFullScreen ? '50px' : '15px')};
   cursor: pointer;
+  z-index: 2;
   &:hover{
     opacity: 0.5;
   }

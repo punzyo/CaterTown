@@ -36,9 +36,9 @@ const MapWrapper = styled.div`
 
 const Player = styled.div`
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: calc(50% - ${playerHeight/2}px);
+  left: calc(50% - ${playerWidth/2}px);
+  /* transform: translate(-50%, -50%); */
   width: ${playerWidth}px;
   height: ${playerHeight}px;
   z-index: 10;
