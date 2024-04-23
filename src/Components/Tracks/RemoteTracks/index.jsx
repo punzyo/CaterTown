@@ -72,6 +72,7 @@ const AudioController = styled.input`
   width: 80px;
   opacity: 0.1;
   position: absolute;
+  z-index: 2;
   bottom: 5px;
   left: 5px;
   &:hover {
@@ -104,8 +105,26 @@ const AudioController = styled.input`
     cursor: pointer;
   }
 `;
+const MemberIconWrapper = styled.div`
+  background-color: inherit;
+  border-radius: 50%;
+
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  >div>div{
+    width:25px;
+    height:25px;
+    transform:scale(0.8);
+    background-position: -785px -75px;
+  }
+`;
 export default function RemoteTracks({ tracks, nearbyPlayers }) {
-  const { setIsFullScreen } = useGameSettings();
+  const { isFullScreen, setIsFullScreen } = useGameSettings();
   const [fullScreenTrack, setFullScreenTrack] = useState('');
   const refs = useRef({});
   const [audioVolume, setAudioVolume] = useState({});
@@ -153,6 +172,7 @@ export default function RemoteTracks({ tracks, nearbyPlayers }) {
                       trackRef={trackRef}
                       ref={refs.current[trackRef.participant.identity]}
                     />
+
                     <AudioController
                       type="range"
                       min="0"
@@ -178,7 +198,17 @@ export default function RemoteTracks({ tracks, nearbyPlayers }) {
                         });
                       }}
                     />
-                    <MemberIcon />
+                    {!isFullScreen && <MemberIconWrapper>
+                      <MemberIcon
+                        image={
+                          nearbyPlayers.find(
+                            (player) =>
+                              player.charName === trackRef.participant.identity
+                          )?.character
+                        }
+                        isOnline={null}
+                      />
+                    </MemberIconWrapper>}
                     <span className="name">
                       {trackRef.participant.identity}
                     </span>
@@ -188,13 +218,12 @@ export default function RemoteTracks({ tracks, nearbyPlayers }) {
             }
           </TrackRefContext.Consumer>
         </TrackLoop>
-       
       </Wrapper>
       <AudioManager
-          isLocal={false}
-          nearbyPlayers={nearbyPlayers}
-          audioVolume={audioVolume}
-        />
+        isLocal={false}
+        nearbyPlayers={nearbyPlayers}
+        audioVolume={audioVolume}
+      />
     </>
   );
 }

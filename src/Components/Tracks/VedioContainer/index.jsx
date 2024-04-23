@@ -20,7 +20,7 @@ export const Wrapper = styled.div`
     position: absolute;
     left: 5px;
     top: 5px;
-    opacity: 0.9;
+    opacity: 0.8;
     background-color: rgba(255, 255, 255, 0.2);
     white-space: nowrap;
     font-size: ${(props) => (props.$isFullScreen ? '40px' : '12px')};

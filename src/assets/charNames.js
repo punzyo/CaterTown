@@ -52,10 +52,10 @@ export const catImages = [
 ];
 
 export const catsYPositions = {
-  down: '-64px',
+  down: '-67px',
   left: '-320px',
   up: '-573px',
   right: '-833px',
 };
 
-export const catsXPositions = ['-767px', '-832px', '-897px', '-963px'];
+export const catsXPositions = ['-774px', '-832px', '-897px', '-963px'];

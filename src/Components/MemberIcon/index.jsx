@@ -3,15 +3,15 @@ import Cat from '../Cat';
 import OnlineStatus from '../OnlineStatus';
 const Wrapper = styled.div`
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 100%;
+  height: 100%;
   background-color: ${(props) => (props.$isOnline!==null ? 'white' : 'inherit')};
   border: 1px solid  ${(props) => (props.$isOnline!==null ? '#545c8f' : 'inherit')};
   border-radius: 50%;
   div:first-child {
     position: absolute;
-    top: -3px;
-    right: 7px;
+    top: -0px;
+    right: 0px;
     width: 100%;
     height: 100%;
     object-fit: cover;
