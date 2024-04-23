@@ -147,7 +147,6 @@ export default function GamePage() {
   const { roomId, roomName } = useParams();
   const [token, setToken] = useState(null);
   const liveKitUrl = import.meta.env.VITE_LIVEKIT_SERVER_URL;
-  console.log(liveKitUrl);
   const { getUserData } = useUserState();
   const userId = getUserData().id;
   const [showSidebar, setShowSideBar] = useState(true);
@@ -160,7 +159,8 @@ export default function GamePage() {
   const [minimizeMessages, setMinimizeMessages] = useState(false);
   const [privateCharName, setPrivateCharName] = useState(null);
   const [isPublicChannel, setIsPublicChannel] = useState(true);
-
+  const [gitHubId, setGitHubId] =useState(null);
+  const [permissionLevel, setPermissionLevel] = useState(null)
   const privateMessages = usePrivateMessages({
     userId,
     roomId,
@@ -175,7 +175,7 @@ export default function GamePage() {
   const [onlineMembers, setOnlineMembers] = useState([]);
   const [offlineMembers, setOfflineMembers] = useState([]);
   const { isFullScreen } = useGameSettings();
-
+  const pullRequests =useConditionalPullRequests({userId,roomId, gitHubId, permissionLevel})
   useEffect(() => {
     if (!players || !onlineStatus) return;
     const online = [];
@@ -224,6 +224,11 @@ export default function GamePage() {
           players={players}
           playerCharName={playerCharName}
           setPlayerCharName={setPlayerCharName}
+          permissionLevel={permissionLevel}
+          setPermissionLevel={setPermissionLevel}
+          gitHubId={gitHubId}
+          setGitHubId={setGitHubId}
+          pullRequests={pullRequests}
         />
         <BottomBar>
           <BottomLeft>

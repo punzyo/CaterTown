@@ -18,6 +18,7 @@ import { catsXPositions, catsYPositions } from '../../assets/charNames';
 import { useUserState } from '../../utils/zustand';
 import TracksManager from '../TracksManager';
 import RemoteTracks from '../Tracks/RemoteTracks';
+import PRMark from '../PRMark';
 const Wrapper =styled.div`
 width: 100%;
 height: 100%;
@@ -47,10 +48,10 @@ const Player = styled.div`
   background-image: url(/images/animals/${(props) => props.$character}.png);
   &::after {
     content: '${(props) => props.$charName}';
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     position: absolute;
-    top: -14px;
+    bottom: -26px;
     width: 40px;
     height: 40px;
     color: black;
@@ -70,10 +71,10 @@ const OtherPlayer = styled.div`
   transition: top 0.2s, left 0.2s;
   &::after {
     content: '${(props) => props.$charName}';
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     position: absolute;
-    top: -14px;
+    bottom: -26px;
     width: 40px;
     height: 40px;
     color: black;
@@ -121,7 +122,7 @@ function positionReducer(state, action) {
       return state;
   }
 }
-export default function Map1({ players, playerCharName, setPlayerCharName }) {
+export default function Map1({ players, playerCharName, setPlayerCharName,permissionLevel, setPermissionLevel,gitHubId,setGitHubId, pullRequests  }) {
   const { getUserData } = useUserState();
   const userId = getUserData().id;
   const { roomId } = useParams();
@@ -258,6 +259,8 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
       setPlayerChar(playerData[0].character);
       console.log(playerData[0].charName, 'asd');
       setPlayerCharName(playerData[0].charName);
+      setPermissionLevel(playerData[0].permissionLevel);
+      setGitHubId(playerData[0].gitHubId);
     };
 
     updatePosition();
@@ -355,7 +358,7 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
                     key={player.userId}
                     $charName={player.charName}
                   >
-                    {player.name}
+                    {permissionLevel==='admin' && <PRMark githubId={player.gitHubId} pullRequests={pullRequests}/>}
                   </OtherPlayer>
                 );
               })}
@@ -372,7 +375,8 @@ export default function Map1({ players, playerCharName, setPlayerCharName }) {
               <TracksManager isLocal={false} nearbyPlayers={nearbyPlayers}>
                 {(remoteTracks) => <RemoteTracks tracks={remoteTracks} nearbyPlayers={nearbyPlayers} />}
               </TracksManager>
-              
+              {<PRMark githubId={gitHubId} pullRequests={pullRequests}/>}
+
             </Player>
           )}
         </MapWrapper>
