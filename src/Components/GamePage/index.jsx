@@ -258,6 +258,7 @@ export default function GamePage() {
                   screenShare: true,
                   leave: true,
                 }}
+                settings={true}
                 saveUserChoices={true}
                 variation="minimal"
               />
