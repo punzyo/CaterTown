@@ -3,10 +3,11 @@ import { useState } from 'react';
 import SimplePRContent from './SimplePRContent';
 const Wrapper = styled.div`
   position: absolute;
+  z-index: 5;
   top: -25px;
   width: 60px;
   height: 40px;
-  img {
+  >img {
     width: 100%;
     height: 100%;
   }
@@ -86,7 +87,7 @@ export default function PRMark({ githubId, pullRequests }) {
                 {openPullRequests.map((pr, index) => {
                   if (showMorePRs == false && index >= 3) return;
                   return (
-                    <SimplePRContent key={pr.id} pullRequests={pr}>{pr.title}</SimplePRContent>
+                    <SimplePRContent key={pr.id} pullRequests={pr} index={index}>{pr.title}</SimplePRContent>
                   );
                 })}
                 
