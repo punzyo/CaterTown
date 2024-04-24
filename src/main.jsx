@@ -4,7 +4,7 @@ import './index.css'
 import HomePage from './Components/Pages/HomePage'
 import GamePage from './Components/Pages/GamePage'
 import InvitePage from './Components/Pages/InvitePage'
-import SignInPage from './Components/Pages/SignInPage/index.jsx'
+import SignUpPage from './Components/Pages/SignUpPage/index.jsx'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route index element={<HomePage />} />
         <Route path="chouchouzoo/:roomId/:roomName" element={<GamePage />} />
         <Route path="invite/:roomId/:roomName" element={<InvitePage />} />
-        <Route path="signIn" element={<SignInPage />} />
+        <Route path="signup" element={<SignUpPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

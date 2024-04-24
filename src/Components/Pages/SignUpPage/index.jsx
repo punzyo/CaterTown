@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Cat from '../../Cat';
-import { useFormInput } from '../../../utils/hooks/useFormInput';
+import useValidatedInput from '../../../utils/hooks/useValidatedInput';
 import { registerUsertoAuth } from '../../../firebase/auth';
 import { saveUserToFirestore } from '../../../firebase/firestore';
 
@@ -67,7 +67,9 @@ const InputWrapper = styled.div`
     border: 1px solid black;
     border-radius: 5px;
     &:focus {
-      border: 1px solid #1e84d8;
+      border: 1px solid
+        ${(props) =>
+          props.$value ? (props.$isValid ? 'green' : 'red') : '#1e84d8'};
     }
   }
 `;
@@ -85,20 +87,18 @@ const SignInUpButton = styled.button`
     background-color: #242b53;
   }
 `;
-export default function SignInPage() {
-  const name = useFormInput('');
-  const email = useFormInput('');
-  const password = useFormInput('');
+export default function SignUpPage() {
+  const name = useValidatedInput('', /^[A-Za-z' -]+$/);
+  const email = useValidatedInput('', /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+  const password = useValidatedInput('', /^.{6,}$/);
 
-  const signIn = async (e) => {
+  const signIn = async ({ e, name, email, password }) => {
     e.preventDefault();
-    const name = name.value
-    const email = email.value
-    const password = password.value
-    const authID = registerUsertoAuth({email, password})
-    if(authID){
-        const dbUser = await saveUserToFirestore({authID,name,email})
-        alert('存到firestore成功', dbUser)
+
+    const authID = await registerUsertoAuth({ email, password });
+    if (authID) {
+      const isSaveSucess = await saveUserToFirestore({ authID, name, email });
+      alert(isSaveSucess===true?'註冊大成功':'註冊大失敗')
     }
   };
   return (
@@ -113,8 +113,17 @@ export default function SignInPage() {
           <p>Get Start!</p>
         </Middle>
         <Bottom>
-          <form onSubmit={signIn}>
-            <InputWrapper>
+          <form
+            onSubmit={(e) => {
+              signIn({
+                e,
+                name: name.value,
+                email: email.value,
+                password: password.value,
+              });
+            }}
+          >
+            <InputWrapper $isValid={name.isValid} $value={name.value}>
               <label htmlFor="name">Name</label>
               <input
                 type="text"
@@ -124,7 +133,7 @@ export default function SignInPage() {
                 onChange={name.onChange}
               />
             </InputWrapper>
-            <InputWrapper>
+            <InputWrapper $isValid={email.isValid} $value={email.value}>
               <label htmlFor="email">Email</label>
               <input
                 type="text"
@@ -133,16 +142,16 @@ export default function SignInPage() {
                 onChange={email.onChange}
               />
             </InputWrapper>
-            <InputWrapper>
+            <InputWrapper $isValid={password.isValid} $value={password.value}>
               <label htmlFor="password">Password</label>
               <input
-                type="text"
+                type="password"
                 placeholder="******"
                 value={password.value}
                 onChange={password.onChange}
               />
             </InputWrapper>
-            <SignInUpButton type="submit">Sign in</SignInUpButton>
+            <SignInUpButton type="submit">Sign up</SignInUpButton>
           </form>
         </Bottom>
       </SignInWrapper>

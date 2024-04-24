@@ -281,14 +281,17 @@ export async function resetUnreadMessage({roomId, privateChannelId, userId}) {
 
 
 export async function saveUserToFirestore({authID, name, email}) {
+  console.log(authID,name);
   try {
     const userRef = doc(db, 'users', authID);
     await setDoc(userRef, {
-      name: name,
-      email: email
+      name,
+      email
     });
+    return true
     console.log('User data saved successfully!');
   } catch (error) {
+    return false
     console.error('Error saving user data:', error);
   }
 }

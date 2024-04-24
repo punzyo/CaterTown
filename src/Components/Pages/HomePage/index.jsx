@@ -215,7 +215,7 @@ export default function HomePage() {
             </div>
           </Profile>
           <SignIn onClick={()=>{
-              navigate('/signIn')
+              navigate('/signup')
             }}>
             <button >
               註冊
