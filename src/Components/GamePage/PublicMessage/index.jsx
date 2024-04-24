@@ -121,6 +121,7 @@ export default function PublicMessage({
   privateCharName,
   minimizeMessages,
   setMinimizeMessages,
+  unreadMessages,
 }) {
   const messageInput = useFormInput('');
   const messagesEndRef = useRef(null);
@@ -132,8 +133,15 @@ export default function PublicMessage({
 
   useEffect(() => {
     scrollToBottom();
-    if (minimizeMessages) setUnreadPublicMessages((prevState) => prevState + 1);
-  }, [publicMessages]);
+    if (minimizeMessages ||(!minimizeMessages &&!isPublicChannel)) {
+      setUnreadPublicMessages((prevState) => prevState + 1);
+    }
+    // else{
+    //   if(isPublicChannel){
+    //     setUnreadPublicMessages
+    //   }
+    // }
+  }, [publicMessages, privateMessages]);
 
   useEffect(() => {
     if (!minimizeMessages && isPublicChannel) {
@@ -174,8 +182,8 @@ export default function PublicMessage({
               $selected={isPublicChannel}
               onClick={() => {
                 setIsPublicChannel(true);
-                if(minimizeMessages)
-                setMinimizeMessages(false)
+                if (minimizeMessages) setMinimizeMessages(false);
+                if (!minimizeMessages) setUnreadPublicMessages(0);
               }}
             >
               全體頻道
@@ -190,18 +198,31 @@ export default function PublicMessage({
                 $selected={!isPublicChannel}
                 onClick={() => {
                   setIsPublicChannel(false);
-                  if(minimizeMessages)
-                setMinimizeMessages(false)
+                  if (minimizeMessages) setMinimizeMessages(false);
+                  resetUnreadMessage({
+                    roomId,
+                    userId,
+                    privateChannelId: privateChannel,
+                  });
                 }}
               >
                 {privateCharName}
+                {unreadMessages[privateChannel].count > 0 && (
+                  <UnreadIcon>
+                    <span>{unreadMessages[privateChannel].count}</span>
+                  </UnreadIcon>
+                )}
               </Channel>
             )}
           </ChannelWrapper>
           <CloseIcon
-            onClick={async() => {
-              if(!minimizeMessages && privateChannel){
-                await resetUnreadMessage({roomId, privateChannelId:privateChannel, userId})
+            onClick={async () => {
+              if (!minimizeMessages && privateChannel) {
+                await resetUnreadMessage({
+                  roomId,
+                  privateChannelId: privateChannel,
+                  userId,
+                });
               }
               setMinimizeMessages(!minimizeMessages);
             }}

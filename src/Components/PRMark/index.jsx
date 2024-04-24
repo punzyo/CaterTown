@@ -6,7 +6,7 @@ const Wrapper = styled.div`
   top: -25px;
   width: 60px;
   height: 40px;
-  img {
+  >img {
     width: 100%;
     height: 100%;
   }

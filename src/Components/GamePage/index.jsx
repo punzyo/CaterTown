@@ -170,6 +170,8 @@ export default function GamePage() {
     userId,
     roomId,
     privateChannelId: privateChannel,
+    isPublicChannel,
+    minimizeMessages
   });
   const navigate = useNavigate();
   const [onlineMembers, setOnlineMembers] = useState([]);
@@ -322,8 +324,7 @@ export default function GamePage() {
                   key={player.userId}
                   onClick={async () => {
                     if (player.userId === userId) return;
-                    if (privateChannel === player.userId && !minimizeMessages)
-                      return;
+
                     changeChannel(player.userId);
                     setPrivateCharName(player.charName);
                     setMinimizeMessages(false);
@@ -331,6 +332,11 @@ export default function GamePage() {
                       roomId,
                       userId,
                       privateChannelId: player.userId,
+                    });
+                    await resetUnreadMessage({
+                      roomId,
+                      userId,
+                      privateChannelId: privateChannel,
                     });
                   }}
                 >
@@ -355,6 +361,11 @@ export default function GamePage() {
                       roomId,
                       userId,
                       privateChannelId: player.userId,
+                    });
+                    await resetUnreadMessage({
+                      roomId,
+                      userId,
+                      privateChannelId: privateChannel,
                     });
                   }}
                 >
@@ -383,6 +394,7 @@ export default function GamePage() {
             privateCharName={privateCharName}
             minimizeMessages={minimizeMessages}
             setMinimizeMessages={setMinimizeMessages}
+            unreadMessages={unreadMessages}
           />
         </SideBar>
       </LiveKitRoom>
