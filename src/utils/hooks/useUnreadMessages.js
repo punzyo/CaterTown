@@ -25,13 +25,8 @@ export function useUnreadMessages({
           const data = docSnapshot.data();
 
           const privateChannelCount =
-            data.messages[privateChannelId]?.count || 0;
-          console.log(
-            privateChannelCount,
-            isPublicChannel,
-            privateChannelId,
-            'check'
-          );
+            data?.messages[privateChannelId]?.count || 0;
+    
           if (
             !minimizeMessages &&
             !isPublicChannel &&

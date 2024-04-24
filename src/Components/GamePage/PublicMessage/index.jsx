@@ -205,7 +205,7 @@ export default function PublicMessage({
                 }}
               >
                 {privateCharName}
-                {unreadMessages[privateChannel].count > 0 && (
+                {unreadMessages[privateChannel]?.count > 0 && (
                   <UnreadIcon>
                     <span>{unreadMessages[privateChannel].count}</span>
                   </UnreadIcon>
