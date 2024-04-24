@@ -16,8 +16,8 @@ const Wrapper = styled.div`
   background-size: cover;
 `;
 const SignInWrapper = styled.div`
-  width: 350px;
-  height: 395px;
+  width: 360px;
+  height: 510px;
   background-color: white;
   border-radius: 10px;
   padding: 10px 15px;
@@ -39,11 +39,24 @@ const Top = styled.div`
 
 const Middle = styled.div`
   width: 100%;
-  margin: 10px 0;
   font-size: 36px;
+  line-height: 42px;
   font-weight: bold;
   letter-spacing: 1px;
   text-align: center;
+  >p:first-of-type{
+    font-size: 40px;
+  }
+  >p{
+    display: flex;
+    font-family: "Jersey 25", sans-serif;
+  font-weight: 400;
+  }
+  >p:nth-of-type(even){
+    padding-right:20px;
+    justify-content: flex-end;
+    
+  }
 `;
 const Bottom = styled.div`
   form {
@@ -110,7 +123,10 @@ export default function SignUpPage() {
           <Cat image="brown_8" />
         </Top>
         <Middle>
-          <p>Get Start!</p>
+          <p>Choose</p>
+          <p>ChouChou Zoo</p>
+          <p>No more</p>
+          <p>Monday blue</p>
         </Middle>
         <Bottom>
           <form
