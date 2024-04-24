@@ -11,6 +11,8 @@ const Wrapper = styled.div`
     width: 100%;
     height: 100%;
   }
+  cursor: pointer;
+  color: white;
 `;
 const PRWRapper = styled.div`
   position: absolute;
@@ -62,17 +64,18 @@ const ShowMoreBtn = styled.button`
   }
 `;
 export default function PRMark({ githubId, pullRequests }) {
+  const [showPR, setShowPR] = useState(false);
   const [showMorePRs, setShowMorePRs] = useState(false);
   const openPullRequests = pullRequests[githubId]?.prs.filter(
     (pr) => pr.state === 'open'
   );
   console.log(githubId, openPullRequests);
   return (
-    <Wrapper>
+    <Wrapper onClick={()=>{setShowPR(!showPR)}}>
       {openPullRequests?.length > 0 && (
         <>
           <img src="/PR_mark.webp" alt="exclamation mark" />
-          <PRWRapper>
+          {showPR && <PRWRapper>
             <SmallPRWrapper PRNumbers={openPullRequests.length}>
               {console.log(openPullRequests.length)}
               <div className="title">
@@ -92,7 +95,8 @@ export default function PRMark({ githubId, pullRequests }) {
                 })}
                 
                   <ShowMoreBtn
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation()
                       setShowMorePRs(!showMorePRs);
                     }}
                   >
@@ -132,7 +136,7 @@ export default function PRMark({ githubId, pullRequests }) {
                   </ShowMoreBtn>
               </SimplePRWrapper>
             </SmallPRWrapper>
-          </PRWRapper>
+          </PRWRapper>}
         </>
       )}
     </Wrapper>

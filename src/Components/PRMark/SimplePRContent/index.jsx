@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 `;
 const DetailPRWrapper = styled.div`
   position: absolute;
-  right: 200px;
+  right: 150px;
   width: 300px;
   z-index: 500;
   background-color: #242b53;
@@ -92,15 +92,15 @@ padding:5px;
 }
 `;
 export default function SimplePRContent({ pullRequests, children, index }) {
-  const [isHovered, setIsHovered] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <Wrapper
-    // onMouseEnter={() => setIsHovered(true)}
-    // onMouseLeave={() => setIsHovered(false)}
+    onMouseEnter={() => setIsHovered(true)}
+    onMouseLeave={() => setIsHovered(false)}
     >
       {children}
-      {isHovered && index === 3 && (
+      {isHovered && (
         <DetailPRWrapper>
           <DetailPR>
             <DetailPRTop>

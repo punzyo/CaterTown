@@ -69,6 +69,7 @@ const OtherPlayer = styled.div`
   background-image: url(/images/animals/${(props) => props.$character}.png);
   color: black;
   transition: top 0.2s, left 0.2s;
+  z-index:10;
   &::after {
     content: '${(props) => props.$charName}';
     font-size: 12px;

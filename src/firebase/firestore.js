@@ -253,6 +253,7 @@ export async function addUnreadMessage({roomId, privateChannelId, userId}) {
 }
 
 export async function resetUnreadMessage({roomId, privateChannelId, userId}) {
+  if(!privateChannelId)return
   console.log('rest',roomId, privateChannelId, userId);
   try {
     // 定位到特定房间和频道的未读消息文档

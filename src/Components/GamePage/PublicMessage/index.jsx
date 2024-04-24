@@ -132,15 +132,13 @@ export default function PublicMessage({
   };
 
   useEffect(() => {
-    scrollToBottom();
-    if (minimizeMessages ||(!minimizeMessages &&!isPublicChannel)) {
+    if (minimizeMessages || (!minimizeMessages && !isPublicChannel)) {
+      console.log('HEHE', minimizeMessages, isPublicChannel);
       setUnreadPublicMessages((prevState) => prevState + 1);
     }
-    // else{
-    //   if(isPublicChannel){
-    //     setUnreadPublicMessages
-    //   }
-    // }
+  }, [publicMessages]);
+  useEffect(() => {
+    scrollToBottom();
   }, [publicMessages, privateMessages]);
 
   useEffect(() => {

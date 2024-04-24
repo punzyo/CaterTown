@@ -202,7 +202,7 @@ export default function GamePage() {
   };
   const getToken = async ({ roomId, charName }) => {
     const response = await fetch(
-      `http://localhost:3000/getToken?roomId=${encodeURIComponent(
+      `${liveKitUrl}/getToken?roomId=${encodeURIComponent(
         roomId
       )}&charName=${charName}`
     );
