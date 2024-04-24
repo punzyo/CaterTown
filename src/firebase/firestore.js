@@ -278,3 +278,17 @@ export async function resetUnreadMessage({roomId, privateChannelId, userId}) {
     throw new Error("Failed to reset unread message count");
   }
 }
+
+
+export async function saveUserToFirestore({authID, name, email}) {
+  try {
+    const userRef = doc(db, 'users', authID);
+    await setDoc(userRef, {
+      name: name,
+      email: email
+    });
+    console.log('User data saved successfully!');
+  } catch (error) {
+    console.error('Error saving user data:', error);
+  }
+}

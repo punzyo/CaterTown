@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import Cat from '../../Cat';
 import { useFormInput } from '../../../utils/hooks/useFormInput';
+import { registerUsertoAuth } from '../../../firebase/auth';
+import { saveUserToFirestore } from '../../../firebase/firestore';
+
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -78,7 +81,7 @@ const SignInUpButton = styled.button`
   color: white;
   border: none;
   cursor: pointer;
-  &:hover{
+  &:hover {
     background-color: #242b53;
   }
 `;
@@ -86,6 +89,18 @@ export default function SignInPage() {
   const name = useFormInput('');
   const email = useFormInput('');
   const password = useFormInput('');
+
+  const signIn = async (e) => {
+    e.preventDefault();
+    const name = name.value
+    const email = email.value
+    const password = password.value
+    const authID = registerUsertoAuth({email, password})
+    if(authID){
+        const dbUser = await saveUserToFirestore({authID,name,email})
+        alert('存到firestore成功', dbUser)
+    }
+  };
   return (
     <Wrapper>
       <SignInWrapper>
@@ -98,7 +113,7 @@ export default function SignInPage() {
           <p>Get Start!</p>
         </Middle>
         <Bottom>
-          <form>
+          <form onSubmit={signIn}>
             <InputWrapper>
               <label htmlFor="name">Name</label>
               <input
