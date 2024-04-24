@@ -142,6 +142,26 @@ const Room = styled.div`
     }
   }
 `;
+const SignIn = styled.div`
+  ${containerStyles}
+  width: 100px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color:  #1c2147;
+  color: #fff;
+  &:hover {
+    background-color: #545c8f;
+  }
+  button{
+  font-size: 16px;
+font-weight: bold;
+    background-color: inherit;
+    color: #fff;
+  }
+`
 export default function HomePage() {
   const { getUserData, setUser } = useUserState();
   const user = getUserData();
@@ -194,6 +214,13 @@ export default function HomePage() {
               <span>{user.name}</span>
             </div>
           </Profile>
+          <SignIn onClick={()=>{
+              navigate('/signIn')
+            }}>
+            <button >
+              註冊
+            </button>
+          </SignIn>
           <CreateSpace>
             <Button clickFunc={openDialog} content={'Create space'}></Button>
           </CreateSpace>
