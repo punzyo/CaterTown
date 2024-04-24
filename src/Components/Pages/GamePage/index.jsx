@@ -1,28 +1,28 @@
-import Map1 from '../Maps/map1.jsx';
+import Map1 from '../../Maps/map1.jsx';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import CloseButton from '../CloseButton/index.jsx';
-import Logo from '../Logo/index.jsx';
-import SearchBar from '../SearchBar/index.jsx';
-import InviteButton from '../InviteButton/index.jsx';
+import CloseButton from '../../Buttons/CloseButton/index.jsx';
+import Logo from '../../Logo/index.jsx';
+import SearchBar from '../../SearchBar/index.jsx';
+import InviteButton from '../../Buttons/InviteButton/index.jsx';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useRoomStatus } from '../../utils/hooks/useRoomStatus.js';
-import { useUserState } from '../../utils/zustand.js';
+import { useRoomStatus } from '../../../utils/hooks/useRoomStatus.js';
+import { useUserState } from '../../../utils/zustand.js';
 import PublicMessage from './PublicMessage/index.jsx';
-import { usePlayer } from '../../utils/hooks/useOherPlayer.js';
-import { usePrivateMessages } from '../../utils/hooks/usePrivateMessages.js';
-import { useUnreadMessages } from '../../utils/hooks/useUnreadMessages.js';
-import { usePublicMessages } from '../../utils/hooks/usePublicMessages.js';
-import { resetUnreadMessage } from '../../firebase/firestore.js';
+import { usePlayer } from '../../../utils/hooks/useOherPlayer.js';
+import { usePrivateMessages } from '../../../utils/hooks/usePrivateMessages.js';
+import { useUnreadMessages } from '../../../utils/hooks/useUnreadMessages.js';
+import { usePublicMessages } from '../../../utils/hooks/usePublicMessages.js';
+import { resetUnreadMessage } from '../../../firebase/firestore.js';
 import '@livekit/components-styles';
 import { ControlBar, LiveKitRoom } from '@livekit/components-react';
-import TracksManager from '../TracksManager/index.jsx';
-import LocalTracks from '../Tracks/LocalTracks/index.jsx';
-import TracksProvider from '../Tracks/TracksProvider/index.jsx';
-import MemberIcon from '../MemberIcon/index.jsx';
-import OnlineStatus from '../OnlineStatus/index.jsx';
-import { useGameSettings } from '../../utils/zustand.js';
-import { useConditionalPullRequests } from '../../utils/hooks/useConditionalPullRequests';
+import TracksManager from '../../TracksManager/index.jsx';
+import LocalTracks from '../../Tracks/LocalTracks/index.jsx';
+import TracksProvider from '../../Tracks/TracksProvider/index.jsx';
+import MemberIcon from '../../MemberIcon/index.jsx';
+import OnlineStatus from '../../OnlineStatus/index.jsx';
+import { useGameSettings } from '../../../utils/zustand.js';
+import { useConditionalPullRequests } from '../../../utils/hooks/useConditionalPullRequests.js';
 
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
@@ -138,11 +138,11 @@ const MemberIconWrapper = styled.div`
   position: relative;
   width: 50px;
   height: 50px;
-`
+`;
 const ProfileIconWrapper = styled.div`
-width: 50px;
-height: 100%;
-`
+  width: 50px;
+  height: 100%;
+`;
 export default function GamePage() {
   const { roomId, roomName } = useParams();
   const [token, setToken] = useState(null);
@@ -159,8 +159,8 @@ export default function GamePage() {
   const [minimizeMessages, setMinimizeMessages] = useState(false);
   const [privateCharName, setPrivateCharName] = useState(null);
   const [isPublicChannel, setIsPublicChannel] = useState(true);
-  const [gitHubId, setGitHubId] =useState(null);
-  const [permissionLevel, setPermissionLevel] = useState(null)
+  const [gitHubId, setGitHubId] = useState(null);
+  const [permissionLevel, setPermissionLevel] = useState(null);
   const privateMessages = usePrivateMessages({
     userId,
     roomId,
@@ -171,13 +171,18 @@ export default function GamePage() {
     roomId,
     privateChannelId: privateChannel,
     isPublicChannel,
-    minimizeMessages
+    minimizeMessages,
   });
   const navigate = useNavigate();
   const [onlineMembers, setOnlineMembers] = useState([]);
   const [offlineMembers, setOfflineMembers] = useState([]);
   const { isFullScreen } = useGameSettings();
-  const pullRequests =useConditionalPullRequests({userId,roomId, gitHubId, permissionLevel})
+  const pullRequests = useConditionalPullRequests({
+    userId,
+    roomId,
+    gitHubId,
+    permissionLevel,
+  });
   useEffect(() => {
     if (!players || !onlineStatus) return;
     const online = [];
@@ -240,11 +245,11 @@ export default function GamePage() {
             </TracksManager>
             <ProfileWrapper>
               <ProfileIconWrapper>
-              <MemberIcon
-                image={onlineMembers[0]?.character}
-                isOnline={null}
-                unreadMessages={0}
-              />
+                <MemberIcon
+                  image={onlineMembers[0]?.character}
+                  isOnline={null}
+                  unreadMessages={0}
+                />
               </ProfileIconWrapper>
               <span>{playerCharName}</span>
               <div className="onlineBox">
@@ -341,11 +346,12 @@ export default function GamePage() {
                   }}
                 >
                   <MemberIconWrapper>
-                  <MemberIcon
-                    image={player?.character}
-                    isOnline={true}
-                    unreadMessages={unreadMessages[player.userId]?.count}
-                  /></MemberIconWrapper>
+                    <MemberIcon
+                      image={player?.character}
+                      isOnline={true}
+                      unreadMessages={unreadMessages[player.userId]?.count}
+                    />
+                  </MemberIconWrapper>
                   <span>{player.charName}</span>
                 </MemberInfo>
               ))}
@@ -370,11 +376,11 @@ export default function GamePage() {
                   }}
                 >
                   <MemberIconWrapper>
-                  <MemberIcon
-                    image={player?.character}
-                    isOnline={false}
-                    unreadMessages={unreadMessages[player.userId]?.count}
-                  />
+                    <MemberIcon
+                      image={player?.character}
+                      isOnline={false}
+                      unreadMessages={unreadMessages[player.userId]?.count}
+                    />
                   </MemberIconWrapper>
                   <span>{player.charName}</span>
                 </MemberInfo>

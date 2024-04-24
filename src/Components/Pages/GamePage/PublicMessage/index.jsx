@@ -1,13 +1,12 @@
 import styled from 'styled-components';
-import { useFormInput } from '../../../utils/hooks/useFormInput';
+import { useFormInput } from '../../../../utils/hooks/useFormInput';
 import {
   sendPublicMessage,
   sendPrivateMessage,
   addUnreadMessage,
   resetUnreadMessage,
-} from '../../../firebase/firestore';
+} from '../../../../firebase/firestore';
 import { useState, useEffect, useRef } from 'react';
-import { usePrivateMessages } from '@/utils/hooks/usePrivateMessages';
 
 const messageHeight = '350px';
 const Wrapper = styled.div`

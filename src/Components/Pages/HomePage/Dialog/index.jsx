@@ -1,11 +1,11 @@
 import { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { useFormInput } from '../../../utils/hooks/useFormInput';
-import SimpleSlider from '../../Silder';
-import { startingPoint } from '../../Maps/map1';
-import { createRoom, addRoomToUser } from '../../../firebase/firestore';
+import { useFormInput } from '../../../../utils/hooks/useFormInput';
+import SimpleSlider from '../../../Silder';
+import { startingPoint } from '../../../Maps/map1';
+import { createRoom, addRoomToUser } from '../../../../firebase/firestore';
 import { catImages } from '@/assets/charNames';
-import CloseButton from '../../CloseButton';
+import CloseButton from '../../../Buttons/CloseButton';
 const SliderWrapper = styled.div`
   width: 100%;
   display: flex;
