@@ -4,6 +4,7 @@ import Cat from '../../Cat';
 import useValidatedInput from '../../../utils/hooks/useValidatedInput';
 import { signInToAuth } from '../../../firebase/auth';
 import { getUserFromFirestore } from '../../../firebase/firestore';
+import { useUserState } from '../../../utils/zustand';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -101,17 +102,25 @@ const SignUpButton = styled.button`
   cursor: pointer;
 `;
 export default function SignInPage() {
+  const { user, setUser } = useUserState();
   const navigate = useNavigate();
-  const email = useValidatedInput('', /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-  const password = useValidatedInput('', /^.{6,}$/);
+  if(user) navigate('/')
+  const emailInput = useValidatedInput('', /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+  const passwordInput = useValidatedInput('', /^.{6,}$/);
 
   const signIn = async ({ e, email, password }) => {
     e.preventDefault();
-    const user = await signInToAuth(email, password);
-    console.log('登入成功!',user.uid);
-    if(!user) alert('登入失敗')
-    const userData = await getUserFromFirestore(user.uid)
-    console.log('獲取使用者資料成功!', userData);
+    try {
+      const user = await signInToAuth(email, password);
+      const userData = await getUserFromFirestore(user.uid);
+      setUser(userData);
+      localStorage.setItem('ChouChouZooUser', JSON.stringify(userData));
+      navigate('/')
+    } catch (error) {
+      alert('登入失敗', error);
+    }
+    emailInput.clear();
+    passwordInput.clear();
   };
   return (
     <Wrapper>
@@ -129,27 +138,27 @@ export default function SignInPage() {
             onSubmit={(e) => {
               signIn({
                 e,
-                email: email.value,
-                password: password.value,
+                email: emailInput.value,
+                password: passwordInput.value,
               });
             }}
           >
-            <InputWrapper $isValid={email.isValid} $value={email.value}>
+            <InputWrapper $isValid={emailInput.isValid} $value={emailInput.value}>
               <label htmlFor="email">Email</label>
               <input
                 type="text"
                 placeholder="chou@gmail.com"
-                value={email.value}
-                onChange={email.onChange}
+                value={emailInput.value}
+                onChange={emailInput.onChange}
               />
             </InputWrapper>
-            <InputWrapper $isValid={password.isValid} $value={password.value}>
+            <InputWrapper $isValid={passwordInput.isValid} $value={passwordInput.value}>
               <label htmlFor="password">Password</label>
               <input
                 type="password"
                 placeholder="******"
-                value={password.value}
-                onChange={password.onChange}
+                value={passwordInput.value}
+                onChange={passwordInput.onChange}
               />
             </InputWrapper>
             <SignInUpButton type="submit">Sign in</SignInUpButton>

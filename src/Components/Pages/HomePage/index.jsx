@@ -163,15 +163,12 @@ font-weight: bold;
   }
 `
 export default function HomePage() {
-  const { getUserData, setUser } = useUserState();
-  const user = getUserData();
+  const { user, setUser } = useUserState();
   const [dialogOpen, setDialogOpen] = useState(false);
   const userId = user.id;
   const idInput = useRef(null);
   const nameInput = useRef(null);
-  const inviteInput = useRef(null);
   const userRooms = useUserRooms(userId);
-
   const navigate = useNavigate();
   useEffect(() => {}, [dialogOpen]);
   const openDialog = () => {
@@ -182,6 +179,7 @@ export default function HomePage() {
   const changeUser = () => {
     setUser({ id: idInput.current.value, name: nameInput.current.value });
   };
+
   return (
     <Wrapper
       onClick={() => {
@@ -197,14 +195,6 @@ export default function HomePage() {
         <input type="text" placeholder="id" ref={idInput} />
         <input type="text" placeholder="name" ref={nameInput} />
         <button onClick={changeUser}>換人</button>
-        <input type="text" placeholder="邀請碼" ref={inviteInput} />
-        <button
-          onClick={() => {
-            navigate(`/invite/${inviteInput.current.value}`);
-          }}
-        >
-          走起
-        </button>
         <div className="right">
           <Profile>
             <div className="userimg">

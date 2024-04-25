@@ -26,7 +26,6 @@ html {
 body {
   height:100%;
   font-weight: 400;
-  overflow: hidden;
   line-height: 2rem;
 }
 button {

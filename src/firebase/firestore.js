@@ -12,10 +12,10 @@ import {
   collection,
   onSnapshot,
   Timestamp,
-  arrayUnion,increment 
+  arrayUnion,
+  increment,
 } from 'firebase/firestore';
 import { creatRtRoom } from './realtime';
-
 
 export const db = getFirestore(app);
 
@@ -41,7 +41,6 @@ export async function updatePlayerPosition({ userId, userData, roomId }) {
     console.error('Error updating position: ', error);
   }
 }
-
 
 export async function getOtherPlayersData(excludePlayerId) {
   const roomDocRef = doc(db, 'rooms', '001');
@@ -83,7 +82,7 @@ export async function createRoom({
           charName,
           character,
           position,
-          online:false,
+          online: false,
         },
       ],
       name: roomName,
@@ -91,23 +90,23 @@ export async function createRoom({
       map,
     });
     console.log('Document written with ID: ', roomDocRef.id);
-    creatRtRoom(roomDocRef.id)
+    creatRtRoom(roomDocRef.id);
     return roomDocRef.id;
   } catch (e) {
     console.error('Error adding document: ', e);
   }
 }
-export async function joinRoom({roomId, user}) {
+export async function joinRoom({ roomId, user }) {
   const roomDocRef = doc(db, 'rooms', roomId);
 
   try {
     await updateDoc(roomDocRef, {
-      users: arrayUnion({...user, online:false})
+      users: arrayUnion({ ...user, online: false }),
     });
     console.log('User added to room with ID:', roomId);
   } catch (error) {
     console.error('Error joining room:', error);
-    throw error; 
+    throw error;
   }
 }
 export async function addRoomToUser({
@@ -151,7 +150,7 @@ export async function getUserDatabyId(userId) {
 }
 
 export async function getUserRoomsbyId(userId) {
-  const roomsCollectionRef = collection(db,'users', userId, 'rooms');
+  const roomsCollectionRef = collection(db, 'users', userId, 'rooms');
 
   try {
     const querySnapshot = await getDocs(roomsCollectionRef);
@@ -166,7 +165,7 @@ export async function getUserRoomsbyId(userId) {
   }
 }
 
-export async function sendPublicMessage({roomId, charName, message}) {
+export async function sendPublicMessage({ roomId, charName, message }) {
   const messagesRef = doc(db, `rooms/${roomId}/publicMessages/messages`);
 
   try {
@@ -174,40 +173,46 @@ export async function sendPublicMessage({roomId, charName, message}) {
     const messagesSnap = await getDoc(messagesRef);
 
     // 构建新消息对象
-    const newMessage = { charName, message,postTime:Timestamp.now()};
+    const newMessage = { charName, message, postTime: Timestamp.now() };
 
     if (messagesSnap.exists()) {
       // 如果messages文档已存在，添加新消息到数组中
       await updateDoc(messagesRef, {
-        messages: arrayUnion(newMessage)
+        messages: arrayUnion(newMessage),
       });
     } else {
       // 如果messages文档不存在，首次创建文档并初始化messages数组
       await setDoc(messagesRef, {
-        messages: [newMessage]
+        messages: [newMessage],
       });
     }
-    console.log("Message added successfully");
+    console.log('Message added successfully');
   } catch (error) {
-    console.error("Error adding message: ", error);
+    console.error('Error adding message: ', error);
   }
 }
 
-export async function sendPrivateMessage({userId,roomId,charName,privateChannelId,message}) {
+export async function sendPrivateMessage({
+  userId,
+  roomId,
+  charName,
+  privateChannelId,
+  message,
+}) {
   try {
     // 排序 userId 和 privateChannelId 以创建一致的 document ID
     const sortedIds = [userId, privateChannelId].sort();
     const documentId = sortedIds.join(''); // 拼接成一个字符串，如 'user1user2'
-  
+
     const messageRef = doc(db, `rooms/${roomId}/users/${documentId}`);
-  
+
     // 获取当前消息文档的快照
     const docSnapshot = await getDoc(messageRef);
     const newMessage = {
       charName,
-      message
+      message,
     };
-  
+
     if (docSnapshot.exists()) {
       // 如果文档已存在，读取现有消息列表并添加新消息
       let currentMessages = docSnapshot.data().messages || [];
@@ -218,15 +223,18 @@ export async function sendPrivateMessage({userId,roomId,charName,privateChannelI
       await setDoc(messageRef, { messages: [newMessage] });
     }
   } catch (error) {
-    console.error("Failed to send message:", error);
-    throw new Error("Failed to send message");
+    console.error('Failed to send message:', error);
+    throw new Error('Failed to send message');
   }
 }
 
-export async function addUnreadMessage({roomId, privateChannelId, userId}) {
+export async function addUnreadMessage({ roomId, privateChannelId, userId }) {
   try {
     // 定位到特定房间和频道的未读消息文档
-    const unreadMsgRef = doc(db, `rooms/${roomId}/unReadMessages/${privateChannelId}`);
+    const unreadMsgRef = doc(
+      db,
+      `rooms/${roomId}/unReadMessages/${privateChannelId}`
+    );
 
     // 获取当前未读消息计数的快照
     const docSnapshot = await getDoc(unreadMsgRef);
@@ -235,26 +243,26 @@ export async function addUnreadMessage({roomId, privateChannelId, userId}) {
     if (docSnapshot.exists()) {
       // 更新指定用户的未读消息计数
       await updateDoc(unreadMsgRef, {
-        [`messages.${userId}.count`]: increment(1)
+        [`messages.${userId}.count`]: increment(1),
       });
     } else {
       // 如果未读消息文档不存在，首次为该用户创建未读消息计数
       await setDoc(unreadMsgRef, {
         messages: {
-          [userId]: { count: 1 }
-        }
+          [userId]: { count: 1 },
+        },
       });
     }
     console.log('+++');
   } catch (error) {
-    console.error("Failed to add unread message count:", error);
-    throw new Error("Failed to update unread message count");
+    console.error('Failed to add unread message count:', error);
+    throw new Error('Failed to update unread message count');
   }
 }
 
-export async function resetUnreadMessage({roomId, privateChannelId, userId}) {
-  if(!privateChannelId)return
-  console.log('rest',roomId, privateChannelId, userId);
+export async function resetUnreadMessage({ roomId, privateChannelId, userId }) {
+  if (!privateChannelId) return;
+  console.log('rest', roomId, privateChannelId, userId);
   try {
     // 定位到特定房间和频道的未读消息文档
     const unreadMsgRef = doc(db, `rooms/${roomId}/unReadMessages/${userId}`);
@@ -266,7 +274,7 @@ export async function resetUnreadMessage({roomId, privateChannelId, userId}) {
     if (docSnapshot.exists()) {
       // 更新指定用户的未读消息计数为0
       await updateDoc(unreadMsgRef, {
-        [`messages.${privateChannelId}.count`]: 0
+        [`messages.${privateChannelId}.count`]: 0,
       });
       console.log('Unread message count reset successfully');
     } else {
@@ -274,39 +282,39 @@ export async function resetUnreadMessage({roomId, privateChannelId, userId}) {
       console.log('No unread message record to reset');
     }
   } catch (error) {
-    console.error("Failed to reset unread message count:", error);
-    throw new Error("Failed to reset unread message count");
+    console.error('Failed to reset unread message count:', error);
+    throw new Error('Failed to reset unread message count');
   }
 }
 
-
-export async function saveUserToFirestore({authID, name, email}) {
-  console.log(authID,name);
+export async function saveUserToFirestore({ authID, name, email }) {
+  console.log(authID, name);
   try {
     const userRef = doc(db, 'users', authID);
     await setDoc(userRef, {
       name,
-      email
+      email,
     });
-    return true
+    return true;
   } catch (error) {
-    return false
+    return false;
   }
 }
 
 export async function getUserFromFirestore(authID) {
   console.log(authID);
   try {
-    const userRef = doc(db, 'users', authID); // 確保這個路徑是正確的
+    const userRef = doc(db, 'users', authID);
     const docSnapshot = await getDoc(userRef);
     if (docSnapshot.exists()) {
-      return docSnapshot.data();
+      const userData = docSnapshot.data();
+      return { id: authID, ...userData };
     } else {
       console.log('No such document!');
-      return null; // 如果文檔不存在，返回 null 或其他適當的值
+      return null;
     }
   } catch (error) {
     console.error('Error getting user data', error);
-    return null; // 確保在錯誤處理中返回 null 或其他錯誤指示
+    return null;
   }
 }

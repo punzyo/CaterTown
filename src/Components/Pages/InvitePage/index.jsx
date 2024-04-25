@@ -119,8 +119,8 @@ const JoinButton = styled.div`
 export default function InvitePage() {
   const navigate = useNavigate();
   const charNameInput = useFormInput('');
-  const { getUserData } = useUserState();
-  const user = getUserData();
+  const { user } = useUserState();
+  if(!user)navigate('/signin')
   const { roomId, roomName } = useParams();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const handleSlideChange = (index) => {
