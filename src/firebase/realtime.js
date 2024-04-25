@@ -16,8 +16,8 @@ export const creatRtRoom = async (roomId) => {
 };
 
 export const joinRtRoom = async (roomId, userId) => {
-    const userRoomRef = ref(rtdb, `rooms/${roomId}/users/${userId}`);
+  const userRoomRef = ref(rtdb, `rooms/${roomId}/users/${userId}`);
 
   set(userRoomRef, { online: true });
   onDisconnect(userRoomRef).set({ online: false });
-}
+};

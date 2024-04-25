@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import Cat from '../../Cat';
 import useValidatedInput from '../../../utils/hooks/useValidatedInput';
-import { registerUserToAuth } from '../../../firebase/auth';
-import { saveUserToFirestore } from '../../../firebase/firestore';
+import { signInToAuth } from '../../../firebase/auth';
+import { getUserFromFirestore } from '../../../firebase/firestore';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -15,15 +15,13 @@ const Wrapper = styled.div`
   gap: 10px;
   background-image: url('/signInBg.png');
   background-size: cover;
- 
 `;
-const SignUpWrapper = styled.div`
+const SignInWrapper = styled.div`
   width: 360px;
-  height: 530px;
+  height: 340px;
   background-color: white;
   border-radius: 10px;
   padding: 10px 15px;
-
 `;
 const Top = styled.div`
   width: 100%;
@@ -42,22 +40,10 @@ const Top = styled.div`
 
 const Middle = styled.div`
   width: 100%;
-  font-size: 28px;
+  font-size: 32px;
   line-height: 42px;
   font-weight: bold;
   text-align: center;
-  > p:nth-of-type(odd) {
-    font-size: 32px;
-  }
-  > p {
-    display: flex;
-    font-family: 'Work Sans', sans-serif;
-    font-optical-sizing: auto;
-  }
-  > p:nth-of-type(even) {
-    padding-right: 20px;
-    justify-content: flex-end;
-  }
 `;
 const Bottom = styled.div`
   form {
@@ -87,7 +73,7 @@ const InputWrapper = styled.div`
     }
   }
 `;
-const SignUpButton = styled.button`
+const SignInUpButton = styled.button`
   width: 100%;
   height: 40px;
   margin-top: 10px;
@@ -101,7 +87,8 @@ const SignUpButton = styled.button`
     background-color: #242b53;
   }
 `;
-const SignInButton = styled.button`
+
+const SignUpButton = styled.button`
   display: block;
   width: 60px;
   height: 40px;
@@ -113,57 +100,40 @@ const SignInButton = styled.button`
   border: none;
   cursor: pointer;
 `;
-export default function SignUpPage() {
+export default function SignInPage() {
   const navigate = useNavigate();
-  const name = useValidatedInput('', /^[A-Za-z' -]+$/);
   const email = useValidatedInput('', /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   const password = useValidatedInput('', /^.{6,}$/);
 
-  const signUp = async ({ e, name, email, password }) => {
+  const signIn = async ({ e, email, password }) => {
     e.preventDefault();
-
-    const authID = await registerUserToAuth({ email, password });
-    if (authID) {
-      const isSaveSucess = await saveUserToFirestore({ authID, name, email });
-      alert(isSaveSucess === true ? '註冊大成功' : '註冊大失敗');
-      navigate('signin');
-    }
+    const user = await signInToAuth(email, password);
+    console.log('登入成功!',user.uid);
+    if(!user) alert('登入失敗')
+    const userData = await getUserFromFirestore(user.uid)
+    console.log('獲取使用者資料成功!', userData);
   };
   return (
     <Wrapper>
-      <SignUpWrapper>
+      <SignInWrapper>
         <Top>
-          <Cat image="brown_8" />
-          <Cat image="brown_8" />
-          <Cat image="brown_8" />
+          <Cat image="gold_0" />
+          <Cat image="gold_0" />
+          <Cat image="gold_0" />
         </Top>
         <Middle>
-          <p>Choose</p>
-          <p>ChouChou Zoo</p>
-          <p>No more</p>
-          <p>Monday blue</p>
+          <p>Sign in</p>
         </Middle>
         <Bottom>
           <form
             onSubmit={(e) => {
-              signUp({
+              signIn({
                 e,
-                name: name.value,
                 email: email.value,
                 password: password.value,
               });
             }}
           >
-            <InputWrapper $isValid={name.isValid} $value={name.value}>
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                id="name"
-                placeholder="John"
-                value={name.value}
-                onChange={name.onChange}
-              />
-            </InputWrapper>
             <InputWrapper $isValid={email.isValid} $value={email.value}>
               <label htmlFor="email">Email</label>
               <input
@@ -182,11 +152,17 @@ export default function SignUpPage() {
                 onChange={password.onChange}
               />
             </InputWrapper>
-            <SignUpButton type="submit">Sign up</SignUpButton>
+            <SignInUpButton type="submit">Sign in</SignInUpButton>
           </form>
-          <SignInButton onClick={()=>{    navigate('/signin');}}>Sign in</SignInButton>
+          <SignUpButton
+            onClick={() => {
+              navigate('/signup');
+            }}
+          >
+            Sign up
+          </SignUpButton>
         </Bottom>
-      </SignUpWrapper>
+      </SignInWrapper>
     </Wrapper>
   );
 }

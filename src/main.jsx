@@ -5,6 +5,7 @@ import HomePage from './Components/Pages/HomePage'
 import GamePage from './Components/Pages/GamePage'
 import InvitePage from './Components/Pages/InvitePage'
 import SignUpPage from './Components/Pages/SignUpPage/index.jsx'
+import SignInPage from './Components/Pages/SiginInPage/index.jsx'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="chouchouzoo/:roomId/:roomName" element={<GamePage />} />
         <Route path="invite/:roomId/:roomName" element={<InvitePage />} />
         <Route path="signup" element={<SignUpPage />} />
+        <Route path="signin" element={<SignInPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

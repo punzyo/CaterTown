@@ -289,9 +289,24 @@ export async function saveUserToFirestore({authID, name, email}) {
       email
     });
     return true
-    console.log('User data saved successfully!');
   } catch (error) {
     return false
-    console.error('Error saving user data:', error);
+  }
+}
+
+export async function getUserFromFirestore(authID) {
+  console.log(authID);
+  try {
+    const userRef = doc(db, 'users', authID); // 確保這個路徑是正確的
+    const docSnapshot = await getDoc(userRef);
+    if (docSnapshot.exists()) {
+      return docSnapshot.data();
+    } else {
+      console.log('No such document!');
+      return null; // 如果文檔不存在，返回 null 或其他適當的值
+    }
+  } catch (error) {
+    console.error('Error getting user data', error);
+    return null; // 確保在錯誤處理中返回 null 或其他錯誤指示
   }
 }

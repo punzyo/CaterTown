@@ -21,14 +21,14 @@ export const useUserState =  create((set, get) => ({
         }),
       getUserData: () => get().user,
 }));
-export const usePlayerTracks = create((set, get) => ({
+export const usePlayerTracks = create((set) => ({
   localTracks: [],
   remoteTracks: [],
   nearbyPlayers: [],
   setNearbyPlayers: (players) => set({ nearbyPlayers: players }),
 }));
 
-export const useGameSettings = create((set, get) => ({
+export const useGameSettings = create((set) => ({
   isFullScreen: false,
   setIsFullScreen: (isFullScreen) => set({ isFullScreen }),
 }));
