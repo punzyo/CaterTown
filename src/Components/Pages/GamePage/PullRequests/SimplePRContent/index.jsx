@@ -15,7 +15,8 @@ const Wrapper = styled.div`
 `;
 const DetailPRWrapper = styled.div`
   position: absolute;
-  right: 150px;
+  top:-50px;
+  right: 160px;
   width: 300px;
   z-index: 500;
   background-color: #242b53;
@@ -28,7 +29,6 @@ const DetailPR = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-
 `;
 const DetailPRTop = styled.div`
   width: 100%;
@@ -59,45 +59,45 @@ const DetailPRBottom = styled.div`
     display: flex;
     flex-direction: column;
   }
-.description{
-  width: 100%;
-  flex-grow: 1;
-  background-color: white;
-  border-radius: 5px ;
-  color: black;
-  letter-spacing: 0;
-  font-size: 12px;
-  font-weight: bold;
-padding:5px;
-  overflow: auto;
-  &::-webkit-scrollbar {
-    width: 8px;  
-    height: 8px; 
-}
+  .description {
+    width: 100%;
+    flex-grow: 1;
+    background-color: white;
+    border-radius: 5px;
+    color: black;
+    letter-spacing: 0;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px;
+    overflow: auto;
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
 
-/* 设置滚动条轨道的样式 */
-&::-webkit-scrollbar-track {
-    background: inherit; 
-}
+    /* 设置滚动条轨道的样式 */
+    &::-webkit-scrollbar-track {
+      background: inherit;
+    }
 
-/* 设置滚动条滑块的样式 */
-&::-webkit-scrollbar-thumb {
-    background: #888; 
-}
+    /* 设置滚动条滑块的样式 */
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+    }
 
-/* 当鼠标悬停在滚动条上时，改变滑块的颜色 */
-&::-webkit-scrollbar-thumb:hover {
-    background: #222; /* 滑块悬停时的颜色 */
-}
-}
+    /* 当鼠标悬停在滚动条上时，改变滑块的颜色 */
+    &::-webkit-scrollbar-thumb:hover {
+      background: #222; /* 滑块悬停时的颜色 */
+    }
+  }
 `;
-export default function SimplePRContent({ pullRequests, children, index }) {
+export default function SimplePRContent({ pullRequests, children }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <Wrapper
-    onMouseEnter={() => setIsHovered(true)}
-    onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {children}
       {isHovered && (
@@ -115,7 +115,7 @@ export default function SimplePRContent({ pullRequests, children, index }) {
                 <span>Base branch: {pullRequests.baseBranch}</span>
                 <span>Description:</span>
               </div>
-              <div className='description'>
+              <div className="description">
                 <Markdown>{pullRequests.description}</Markdown>
               </div>
             </DetailPRBottom>

@@ -23,7 +23,7 @@ import MemberIcon from '../../MemberIcon/index.jsx';
 import OnlineStatus from '../../OnlineStatus/index.jsx';
 import { useGameSettings } from '../../../utils/zustand.js';
 import { useConditionalPullRequests } from '../../../utils/hooks/useConditionalPullRequests.js';
-import { Room } from 'livekit-client';
+import PullRequests from './PullRequests/index.jsx';
 
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
@@ -160,7 +160,7 @@ const MemberIconWrapper = styled.div`
 `;
 const ProfileIconWrapper = styled.div`
   width: 50px;
-  height: 100%;
+  height: 50px;
 `;
 export default function GamePage() {
   const { roomId, roomName } = useParams();
@@ -342,6 +342,7 @@ export default function GamePage() {
         </BottomBar>
 
         <SideBar $isOpen={showSidebar} $isFullScreen={isFullScreen}>
+          <PullRequests></PullRequests>
           <Title>
             {roomName}
             <InviteButton roomId={roomId} roomName={roomName} />
