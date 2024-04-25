@@ -18,6 +18,8 @@ const MapWrapper = styled.div.attrs({
   position: relative;
   top: 50px;
   user-select: none;
+  z-index:10;
+  
 `;
 
 const MapTile = styled.div.attrs((props) => ({
@@ -25,8 +27,10 @@ const MapTile = styled.div.attrs((props) => ({
     left: `${props.$left}px`,
     top: `${props.$top}px`,
     backgroundColor: props.selected ? 'blue' : 'gray', // 根據是否選中來改變背景顏色
+    opacity: 0.4,
   },
 }))`
+
   position: absolute;
   border: 1px solid rgba(0, 0, 0, 0.3);
   width: ${gridSize}px;
@@ -34,6 +38,8 @@ const MapTile = styled.div.attrs((props) => ({
   cursor: pointer; // 添加點選游標
 `;
 const MapImage = styled.div`
+z-index: -1;
+
   position: absolute;
   left: 0;
   top: 40px;
@@ -76,21 +82,42 @@ export default function MapEditor() {
     // 创建新的素材对象，确保每个素材类型的位置信息独立
     const newObjects = { ...objects };
   
-    // 获取当前素材类型的位置信息
-    const currentTypePositions = selectedPositions.map(({ x, y }) => ({
-      left: x,
-      top: y,
-    }));
-  
-    // 更新或添加当前素材类型的位置信息
-    newObjects[currentType] = currentTypePositions;
+    // 检查当前素材类型的位置信息是否已经存在
+    if (newObjects[currentType]) {
+      // 如果已经存在，则将新的位置信息追加到现有位置信息的后面
+      newObjects[currentType] = [
+        ...newObjects[currentType],
+        ...selectedPositions.map(({ x, y }) => ({ left: x, top: y })),
+      ];
+    } else {
+      // 如果不存在，则创建一个新的位置信息数组
+      newObjects[currentType] = selectedPositions.map(({ x, y }) => ({
+        left: x,
+        top: y,
+      }));
+    }
   
     setObjects(newObjects); // 更新objects状态
     console.log(newObjects); // 打印或处理新的地图数据
   };
+  const handleDeleteClick = (x, y) => {
+    // 过滤掉与被点击位置相同的素材位置
+    setSelectedPositions([])
+    const newObjects = {};
+    for (const itemType in objects) {
+      const updatedPositions = objects[itemType].filter(
+        (pos) => pos.left !== x || pos.top !== y
+      );
+      if (updatedPositions.length > 0) {
+        newObjects[itemType] = updatedPositions;
+      }
+    }
+    setObjects(newObjects);
+  
+    console.log('Delete button clicked at position:', x, y); // 添加调试语句
+  };
   
   
-
   const renderMapTiles = () => {
     const tiles = [];
     for (let y = 0; y < wrapperHeight / gridSize; y++) {
@@ -100,13 +127,28 @@ export default function MapEditor() {
           (pos) => pos.x === x && pos.y === y
         );
         tiles.push(
-          <MapTile
-            key={`${x}-${y}`}
-            $left={x * gridSize}
-            $top={y * gridSize}
-            selected={isSelected} // 这里使用isSelected，确保背景颜色根据选中状态变化
-            onClick={() => handleTileClick(x, y)}
-          />
+          <div style={{ position: 'relative' }} key={`${x}-${y}`}>
+            <MapTile
+              $left={x * gridSize}
+              $top={y * gridSize}
+              selected={isSelected} // 这里使用isSelected，确保背景颜色根据选中状态变化
+              onClick={() => handleTileClick(x, y)}
+            />
+            {isSelected && (
+              <button
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 1000, // 确保按钮在最上层
+                }}
+                onClick={() => handleDeleteClick(x, y)} // 绑定删除按钮的点击事件
+              >
+                Delete
+              </button>
+            )}
+          </div>
         );
       }
     }
@@ -147,6 +189,7 @@ export default function MapEditor() {
       backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
     };
   };
+  
 
   return (
     <>
