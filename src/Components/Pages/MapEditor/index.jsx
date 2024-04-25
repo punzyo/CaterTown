@@ -5,11 +5,11 @@ import { useState } from 'react';
 const wrapperWidth = '3080';
 const wrapperHeight = '2600';
 const mapBorder = '100';
-const mapWidth = (wrapperWidth - 2 * mapBorder) / map1.unit;
-const mapHeight = (wrapperHeight - 2 * mapBorder) / map1.unit;
-const playerWidth = '60';
-const playerHeight = '60';
-const startingPoint = { top: 230, left: 330, direction: 'down', frame: 0 };
+// const mapWidth = (wrapperWidth - 2 * mapBorder) / map1.unit;
+// const mapHeight = (wrapperHeight - 2 * mapBorder) / map1.unit;
+// const playerWidth = '60';
+// const playerHeight = '60';
+// const startingPoint = { top: 230, left: 330, direction: 'down', frame: 0 };
 
 const MapWrapper = styled.div`
   position: relative;
