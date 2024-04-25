@@ -23,6 +23,7 @@ import MemberIcon from '../../MemberIcon/index.jsx';
 import OnlineStatus from '../../OnlineStatus/index.jsx';
 import { useGameSettings } from '../../../utils/zustand.js';
 import { useConditionalPullRequests } from '../../../utils/hooks/useConditionalPullRequests.js';
+import { Room } from 'livekit-client';
 
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
@@ -120,7 +121,6 @@ const ProfileWrapper = styled.div`
   }
 `;
 const ControlWrapper = styled.div`
-  width: 260px;
   height: 90%;
   display: flex;
   align-items: center;
@@ -132,6 +132,25 @@ const ControlWrapper = styled.div`
       background-color: #aaa;
       border: 1px solid black;
     }
+  }
+`;
+
+const JoinButton = styled.div`
+  border-radius: 10px;
+  font-size: 16px;
+  padding: 5px 10px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background-color 200ms ease 0s, border-color 200ms ease 0s;
+
+  height: 40px;
+  display: flex;
+  align-items: center;
+  background-color: #242b5f;
+  button {
+    background-color: inherit;
+    cursor: pointer;
   }
 `;
 const MemberIconWrapper = styled.div`
@@ -183,6 +202,9 @@ export default function GamePage() {
     gitHubId,
     permissionLevel,
   });
+
+  const [isConnected, setIsConnected] = useState(false);
+
   useEffect(() => {
     if (!players || !onlineStatus) return;
     const online = [];
@@ -224,6 +246,8 @@ export default function GamePage() {
         serverUrl="wss://chouchouzoo-ffphmeoa.livekit.cloud"
         data-lk-theme="default"
         style={{ backgroundColor: 'inherit' }}
+        onConnected={() => setIsConnected(true)}
+        onDisconnected={() => setIsConnected(false)}
       >
         {/* <RoomAudioRenderer muted={false}/> */}
         <TracksProvider></TracksProvider>
@@ -258,24 +282,31 @@ export default function GamePage() {
               </div>
             </ProfileWrapper>
             <ControlWrapper>
-              <ControlBar
-                controls={{
-                  camera: true,
-                  microphone: true,
-                  screenShare: true,
-                  leave: true,
-                }}
-                settings={true}
-                saveUserChoices={true}
-                variation="minimal"
-              />
+              {isConnected && (
+                <ControlBar
+                  controls={{
+                    camera: true,
+                    microphone: true,
+                    screenShare: true,
+                    leave: true,
+                  }}
+                  settings={true}
+                  saveUserChoices={true}
+                  variation="minimal"
+                />
+              )}
+              {!isConnected && (
+                <JoinButton>
+                  <button
+                    onClick={() =>
+                      getToken({ roomId, charName: playerCharName })
+                    }
+                  >
+                    多人通訊
+                  </button>
+                </JoinButton>
+              )}
             </ControlWrapper>
-
-            <button
-              onClick={() => getToken({ roomId, charName: playerCharName })}
-            >
-              加入多人通訊
-            </button>
           </BottomLeft>
           <BottomLeft>
             <GroupIcon

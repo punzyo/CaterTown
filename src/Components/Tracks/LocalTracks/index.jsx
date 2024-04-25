@@ -31,6 +31,10 @@ export default function LocalTracks({ tracks }) {
           {(trackRef) =>
             trackRef && (
               <VideoContainer
+              hidePlaceholder={
+                trackRef.participant.isCameraEnabled ||
+                trackRef.participant.isScreenShareEnabled
+              }
                 isSpeaking={trackRef.participant.isSpeaking}
                 isFullScreen={fullScreenTrack === trackRef.participant.identity}
                 clickFunc={() => {

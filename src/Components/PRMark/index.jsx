@@ -3,7 +3,7 @@ import { useState } from 'react';
 import SimplePRContent from './SimplePRContent';
 const Wrapper = styled.div`
   position: absolute;
-  z-index: 5;
+  z-index: 15;
   top: -25px;
   width: 60px;
   height: 40px;
@@ -76,7 +76,7 @@ export default function PRMark({ githubId, pullRequests }) {
         <>
           <img src="/PR_mark.webp" alt="exclamation mark" />
           {showPR && <PRWRapper>
-            <SmallPRWrapper PRNumbers={openPullRequests.length}>
+            <SmallPRWrapper>
               {console.log(openPullRequests.length)}
               <div className="title">
                 <GitHubLogo>
