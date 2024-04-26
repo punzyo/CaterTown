@@ -174,7 +174,6 @@ export default function MapEditor() {
   
 
   const getItemStyles = (itemName) => {
-    console.log(itemName, '321');
     const item = map1Index[itemName];
     if (!item) return {};
 

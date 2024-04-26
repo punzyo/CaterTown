@@ -1,6 +1,6 @@
 import { map1Index } from './map1';
 import styled from 'styled-components';
-import { useState, useEffect, useRef, useReducer } from 'react';
+import { useState, useEffect, useRef, useReducer, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { updatePlayerPosition } from '@/firebase/firestore';
 import {
@@ -324,46 +324,48 @@ export default function Map1({ players, playerCharName, setPlayerCharName,permis
       backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
     };
   };
+  const mapElements = useMemo(() => (
+    Object.keys(map1.objects).map(itemType => 
+      map1.objects[itemType].map((pos, index) => {
+        const itemStyles = getItemStyles(itemType);
+        return (
+          <MapImage
+            key={`${itemType}-${index}`}
+            $width={`${itemStyles.width}px`}
+            $height={`${itemStyles.height}px`}
+            $left={`${pos.left * map1.unit}px`}
+            $top={`${pos.top * map1.unit}px`}
+            $backgroundPosition={itemStyles.backgroundPosition}
+          />
+        );
+      })
+    )
+  ), [map1]);
+
+  const playerElements = useMemo(() => (
+    players?.filter(player => player.userId !== userId).map(player => (
+      <OtherPlayer
+        key={player.userId}
+        $top={`${player.position.top}px`}
+        $left={`${player.position.left}px`}
+        $backgroundPosition={`${framesXPositions[player.position.frame]} ${directionYPositions[player.position.direction]}`}
+        $character={player.character}
+        $charName={player.charName}
+      >
+        {permissionLevel === 'admin' && <PRMark githubId={player.githubId} pullRequests={pullRequests}/>}
+      </OtherPlayer>
+    ))
+  ), [players, userId, permissionLevel, pullRequests]);
+
   return (
     <Wrapper>
     
       {position && (
         <MapWrapper>
-          <Map $top={`${position.top}px`} $left={`${position.left}px`}>
-            {Object.keys(map1.objects).map((itemType) =>
-              map1.objects[itemType].map((position, index) => {
-                const itemStyles = getItemStyles(itemType);
-                return (
-                  <MapImage
-                    key={`${itemType}-${index}`}
-                    $width={`${itemStyles.width}px`}
-                    $height={`${itemStyles.height}px`}
-                    $left={`${position.left * map1.unit}px`}
-                    $top={`${position.top * map1.unit}px`}
-                    $backgroundPosition={itemStyles.backgroundPosition}
-                  />
-                );
-              })
-            )}
-            {players &&
-              players.map((player) => {
-                if (player.userId === userId) return;
-                return (
-                  <OtherPlayer
-                    $top={`${player.position.top}px`}
-                    $left={`${player.position.left}px`}
-                    $backgroundPosition={`${
-                      framesXPositions[player.position.frame]
-                    } ${directionYPositions[player.position.direction]}`}
-                    $character={player.character}
-                    key={player.userId}
-                    $charName={player.charName}
-                  >
-                    {permissionLevel==='admin' && <PRMark githubId={player.gitHubId} pullRequests={pullRequests}/>}
-                  </OtherPlayer>
-                );
-              })}
-          </Map>
+           <Map $top={`${position.top}px`} $left={`${position.left}px`}>
+          {mapElements}
+          {playerElements}
+        </Map>
 
           {position && playerChar && (
             <Player
