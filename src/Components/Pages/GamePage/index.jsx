@@ -1,4 +1,4 @@
-import Map1 from '../../Maps/map1.jsx';
+import Map from '../../Maps/map.jsx';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import CloseButton from '../../Buttons/CloseButton/index.jsx';
@@ -251,7 +251,7 @@ export default function GamePage() {
       >
         {/* <RoomAudioRenderer muted={false}/> */}
         <TracksProvider></TracksProvider>
-        <Map1
+        <Map
           players={players}
           playerCharName={playerCharName}
           setPlayerCharName={setPlayerCharName}

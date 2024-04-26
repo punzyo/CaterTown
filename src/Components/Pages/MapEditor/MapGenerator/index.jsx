@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { map1Index } from '../../../Maps/map1';
+import { map2 } from '../../../Maps/map2';
 import { useState } from 'react';
 import { useFormInput } from '../../../../utils/hooks/useFormInput';
-import { map2 } from '../../../Maps/map2';
+import { mapIndex } from '../../../Maps/map1';
 
 // 這裡放置你的地圖資料和其他所需的 import
 
@@ -56,7 +56,7 @@ z-index: -1;
 
 export default function MapEditor() {
   const [selectedPositions, setSelectedPositions] = useState([]);
-  const [objects, setObjects] = useState(map2);
+  const [objects, setObjects] = useState(map2.objects);
   const itemTypeInput = useFormInput(''); // 使用hook来处理输入
 
   const handleTileClick = (x, y) => {
@@ -174,7 +174,7 @@ export default function MapEditor() {
   
 
   const getItemStyles = (itemName) => {
-    const item = map1Index[itemName];
+    const item = mapIndex[itemName];
     if (!item) return {};
 
     const width = item.width * 48;
@@ -188,10 +188,36 @@ export default function MapEditor() {
       backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
     };
   };
-  
+  function processMap() {
+    const collisions = {};
+    
+    for (const key in objects) {
+        const object = objects[key];
+        const { width, height, collision } = mapIndex[key];
+        
+        if (collision) {
+            for (let i = 0; i < object.length; i++) {
+                const { left, top } = object[i];
+                for (let x = left; x < left + width; x++) {
+                    for (let y = top; y < top + height; y++) {
+                        collisions[`${x},${y}`] = true;
+                    }
+                }
+            }
+        }
+    }
+    
+    console.log(collisions); 
+}
+
+
+
+
+
 
   return (
     <>
+    <button onClick={processMap}>產出碰撞座標</button>
       <input
         value={itemTypeInput.value}
         onChange={itemTypeInput.onChange}

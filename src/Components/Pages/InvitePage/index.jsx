@@ -7,7 +7,7 @@ import { addRoomToUser, joinRoom } from '../../../firebase/firestore.js';
 import Button from '../../Buttons/Button/index.jsx';
 import styled from 'styled-components';
 import SimpleSlider from '../../Silder/index.jsx';
-import { startingPoint } from '../../Maps/map1.js';
+import { map1 } from '../../Maps/map1.js';
 const Wrapper = styled.main`
   width: 100%;
   height: 100%;
@@ -136,7 +136,7 @@ export default function InvitePage() {
         userId,
         charName,
         character,
-        position: startingPoint,
+        position: map1.startingPoint,
       },
     });
     const joinedRoom = await addRoomToUser({

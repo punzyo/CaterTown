@@ -1,5 +1,5 @@
 
-export const map1Index = {
+export const mapIndex = {
   U: {
     width: 4,
     height: 1,
@@ -192,19 +192,19 @@ export const map1Index = {
     height: 1,
     x: 14,
     y: -1,
-    collision: true,
+    collision: false,
   },floor28: {
     width: 1,
     height: 1,
     x: 16,
     y: -1,
-    collision: true,
+    collision: false,
   },floor29: {
     width: 1,
     height: 1,
     x: 11,
     y: -1,
-    collision: true,
+    collision: false,
   },
   water:{
     width: 1,
@@ -371,19 +371,19 @@ export const map1Index = {
     height: 2,
     x:-5,
     y: -8,
-    collision: false,
+    collision: true,
   },rockFloor13: {
     width: 1,
     height: 1,
     x:-5,
     y: -10,
-    collision: false,
+    collision: true,
   },rockFloor14: {
     width: 1,
     height: 1,
     x:0,
     y: -10,
-    collision: false,
+    collision: true,
   },waterFloor1: {
     width: 2,
     height: 2,
@@ -785,6 +785,12 @@ export const map1Index = {
 
 export const map1 = {
   unit: 48,
+  width:720,
+  height:480,
+  border:0,
+  unitWidth:15,
+  unitHeight:10,
+  startingPoint:{top:230, left:330, direction:"down", frame:0},
   objects: {
     floor7: [
       { top: 0, left: 0 },
@@ -941,7 +947,7 @@ export const map1 = {
       { top: 0, left: 7 },
     ],
     floor12: [{ top: 6, left: 9 }],
-    house1: [
+    redHouse1: [
       { top: 7, left: 0 },
       { top: 7, left: 4 },
     ],
@@ -954,79 +960,39 @@ export const map1 = {
   },
 };
 
-export const map1Collision = [
-  '0,0',
-  '0,1',
-  '0,2',
-  '1,0',
-  '1,1',
-  '1,2',
-  '2,0',
-  '2,1',
-  '2,2',
-  '3,0',
-  '3,1',
-  '3,2',
-  '4,0',
-  '4,1',
-  '4,2',
-  '0,3',
-  '0,4',
-  '1,3',
-  '1,4',
-  '2,3',
-  '2,4',
-  '3,3',
-  '3,4',
-  '4,3',
-  '4,4',
-  '0,7',
-  '0,8',
-  '0,9',
-  '1,7',
-  '1,8',
-  '1,9',
-  '2,7',
-  '2,8',
-  '2,9',
-  '3,7',
-  '3,8',
-  '3,9',
-  '4,7',
-  '4,8',
-  '4,9',
-  '5,7',
-  '5,8',
-  '5,9',
-  '6,7',
-  '6,8',
-  '6,9',
-  '7,7',
-  '7,8',
-  '7,9',
-  '10,4',
-  '10,5',
-  '10,6',
-  '11,4',
-  '11,5',
-  '11,6',
-  '12,4',
-  '12,5',
-  '12,6',
-  '9,0',
-  '9,1',
-  '10,0',
-  '10,1',
-  '12,0',
-  '12,1',
-  '13,0',
-  '13,1',
-];
-export const wrapperWidth = '920';
-export const wrapperHeight = '680';
-export const mapBorder = '100';
-export const mapWidth = (wrapperWidth - 2 * mapBorder) / map1.unit;
-export const mapHeight = (wrapperHeight - 2 * mapBorder) / map1.unit;
+export const map1Collision = {
+  '0,0': true, '0,1': true, '0,2': true,
+  '1,0': true, '1,1': true, '1,2': true,
+  '2,0': true, '2,1': true, '2,2': true,
+  '3,0': true, '3,1': true, '3,2': true,
+  '4,0': true, '4,1': true, '4,2': true,
+  '0,3': true, '0,4': true,
+  '1,3': true, '1,4': true,
+  '2,3': true, '2,4': true,
+  '3,3': true, '3,4': true,
+  '4,3': true, '4,4': true,
+  '0,7': true, '0,8': true, '0,9': true,
+  '1,7': true, '1,8': true, '1,9': true,
+  '2,7': true, '2,8': true, '2,9': true,
+  '3,7': true, '3,8': true, '3,9': true,
+  '4,7': true, '4,8': true, '4,9': true,
+  '5,7': true, '5,8': true, '5,9': true,
+  '6,7': true, '6,8': true, '6,9': true,
+  '7,7': true, '7,8': true, '7,9': true,
+  '10,4': true, '10,5': true, '10,6': true,
+  '11,4': true, '11,5': true, '11,6': true,
+  '12,4': true, '12,5': true, '12,6': true,
+  '9,0': true, '9,1': true,
+  '10,0': true, '10,1': true,
+  '12,0': true, '12,1': true,
+  '13,0': true, '13,1': true,
+};
+// export const map1Collision = null
 export const playerWidth = '60';
 export const playerHeight = '60';
-export const startingPoint = {top:230, left:330, direction:"down", frame:0}
+// export const startingPoint = {top:230, left:330, direction:"down", frame:0}
+// export const wrapperWidth = '720';
+// export const wrapperHeight = '480';
+// export const mapBorder = '0';
+// export const mapUnitWidth = (wrapperWidth - 2 * mapBorder) / map1.unit;
+// export const mapUnitHeight = (wrapperHeight - 2 * mapBorder) / map1.unit;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { map1, map1Index, map1Collision } from '../../Maps/map1.js';
+import { map1, mapIndex, map1Collision } from '../../Maps/map1.js';
 import { useFormInput } from '../../../utils/hooks/useFormInput.js';
 import { useState } from 'react';
 const wrapperWidth = '3080';
@@ -38,7 +38,7 @@ export default function MapEditor() {
   const inputW = useFormInput('0');
   const inputH = useFormInput('0');
   const getItemStyles = (itemName) => {
-    const item = map1Index[itemName];
+    const item = mapIndex[itemName];
     if (!item) return {};
 
     const width = item.width * map1.unit;
@@ -54,7 +54,7 @@ export default function MapEditor() {
   };
   return (
     <MapWrapper>
-              <input type="text" value={inputW.value} onChange={inputW.onChange} />
+      <input type="text" value={inputW.value} onChange={inputW.onChange} />
       <input type="text" value={inputH.value} onChange={inputH.onChange} />
       <input type="text" value={inputX.value} onChange={inputX.onChange} />
       <input type="text" value={inputY.value} onChange={inputY.onChange} />

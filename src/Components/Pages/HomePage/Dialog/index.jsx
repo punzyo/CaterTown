@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useFormInput } from '../../../../utils/hooks/useFormInput';
 import SimpleSlider from '../../../Silder';
-import { startingPoint } from '../../../Maps/map1';
+import { map1 } from '../../../Maps/map1';
 import { createRoom, addRoomToUser } from '../../../../firebase/firestore';
 import { catImages } from '@/assets/charNames';
 import CloseButton from '../../../Buttons/CloseButton';
@@ -90,7 +90,7 @@ function Dialog({ onClose, userId }) {
       roomName,
       charName,
       character,
-      startingPoint,
+      startingPoint:map1.startingPoint,
       map,
     });
     const isUpdated = await addRoomToUser({

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { map1Index } from '../../../Maps/map1';
+import { mapIndex } from '../../../Maps/map1';
 
 const Wrapper = styled.div`
   width: 100vh;
@@ -20,7 +20,7 @@ const MapImage = styled.div`
 function MapImages() {
   return (
     <Wrapper>
-      {Object.entries(map1Index).map(
+      {Object.entries(mapIndex).map(
         ([key, { width, height, x, y, collision }]) => (
           <div key={key}>
             <MapImage

@@ -1,4 +1,4 @@
-import { map1Index } from './map1';
+import { mapIndex } from './map1';
 import styled from 'styled-components';
 import { useState, useEffect, useRef, useReducer, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -6,14 +6,10 @@ import { updatePlayerPosition } from '@/firebase/firestore';
 import {
   map1,
   map1Collision,
-  wrapperHeight,
-  wrapperWidth,
   playerHeight,
   playerWidth,
-  mapHeight,
-  mapWidth,
-  mapBorder,
 } from '@/Components/Maps/map1.js';
+import { map2,map2Collision } from './map2.js';
 import { catsXPositions, catsYPositions } from '../../assets/charNames';
 import { useUserState } from '../../utils/zustand';
 import TracksManager from '../TracksManager';
@@ -25,12 +21,12 @@ height: 100%;
   display: flex;
   justify-content: center;
   align-items:center;
-
+overflow: hidden;
 `
 const MapWrapper = styled.div`
   position: relative;
-  width: ${wrapperWidth}px;
-  height: ${wrapperHeight}px;
+  width: ${map2.width}px;
+  height: ${map2.height}px;
   user-select: none;
   /* margin:0 auto; */
 `;
@@ -83,14 +79,14 @@ const OtherPlayer = styled.div`
   }
 `;
 
-const Map = styled.div`
+const MapABC = styled.div`
 
   position: relative;
   top: ${(props) => props.$top};
   left: ${(props) => props.$left};
-  width: ${wrapperWidth}px;
-  height: ${wrapperHeight}px;
-  border: ${mapBorder}px solid gray;
+  width: ${map2.width}px;
+  height: ${map2.height}px;
+  border: ${map2.border}px solid gray;
   transition: top 0.2s, left 0.2s;
 `;
 const MapImage = styled.div`
@@ -123,7 +119,7 @@ function positionReducer(state, action) {
       return state;
   }
 }
-export default function Map1({ players, playerCharName, setPlayerCharName,permissionLevel, setPermissionLevel,gitHubId,setGitHubId, pullRequests  }) {
+export default function Map({ players, playerCharName, setPlayerCharName,permissionLevel, setPermissionLevel,gitHubId,setGitHubId, pullRequests  }) {
   const { getUserData } = useUserState();
   const userId = getUserData().id;
   const { roomId } = useParams();
@@ -156,25 +152,25 @@ export default function Map1({ players, playerCharName, setPlayerCharName,permis
         case 'ArrowUp':
         case 'w':
         case 'W':
-          move.top = map1.unit;
+          move.top = map2.unit;
           keyDirection = 'up';
           break;
         case 'ArrowDown':
         case 's':
         case 'S':
-          move.top = -map1.unit;
+          move.top = -map2.unit;
           keyDirection = 'down';
           break;
         case 'ArrowLeft':
         case 'a':
         case 'A':
-          move.left = map1.unit;
+          move.left = map2.unit;
           keyDirection = 'left';
           break;
         case 'ArrowRight':
         case 'd':
         case 'D':
-          move.left = -map1.unit;
+          move.left = -map2.unit;
           keyDirection = 'right';
           break;
         default:
@@ -198,17 +194,17 @@ export default function Map1({ players, playerCharName, setPlayerCharName,permis
         left: position.left + move.left,
       });
       const playerGrid = {
-        x: Math.round(absolutePosition.left / map1.unit),
-        y: Math.round(absolutePosition.top / map1.unit),
+        x: Math.round(absolutePosition.left / map2.unit),
+        y: Math.round(absolutePosition.top / map2.unit),
       };
-      if (map1Collision.includes(`${playerGrid.x},${playerGrid.y}`)) {
+      if (map2Collision[`${playerGrid.x},${playerGrid.y}`]) {
         console.log('撞到東西');
         return;
       } else if (
         playerGrid.x < 0 ||
         playerGrid.y < 0 ||
-        playerGrid.x >= mapWidth ||
-        playerGrid.y >= mapHeight
+        playerGrid.x >= map2.unitWidth ||
+        playerGrid.y >= map2.unitHeight
       ) {
         console.log('超出地圖邊界');
         return;
@@ -258,7 +254,6 @@ export default function Map1({ players, playerCharName, setPlayerCharName,permis
       const mapPosition = playerAbsoluteToMapPos(playerPosition);
       dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
       setPlayerChar(playerData[0].character);
-      console.log(playerData[0].charName, 'asd');
       setPlayerCharName(playerData[0].charName);
       setPermissionLevel(playerData[0].permissionLevel);
       setGitHubId(playerData[0].gitHubId);
@@ -294,29 +289,29 @@ export default function Map1({ players, playerCharName, setPlayerCharName,permis
 
   const playerPosToAbsolute = (position) => {
     const absoluteLeft =
-      wrapperWidth / 2 - playerWidth / 2 - mapBorder - position.left;
+      map2.width / 2 - playerWidth / 2 - map2.border - position.left;
     const absoluteTop =
-      wrapperHeight / 2 - playerHeight / 2 - mapBorder - position.top;
+      map2.height / 2 - playerHeight / 2 - map2.border - position.top;
     console.log(absoluteLeft, absoluteTop);
     return { left: absoluteLeft, top: absoluteTop };
   };
 
   const playerAbsoluteToMapPos = (position) => {
     const mapLeft =
-      wrapperWidth / 2 - playerWidth / 2 - mapBorder - position.left;
+      map2.width / 2 - playerWidth / 2 - map2.border - position.left;
     const mapTop =
-      wrapperHeight / 2 - playerHeight / 2 - mapBorder - position.top;
+      map2.height / 2 - playerHeight / 2 - map2.border - position.top;
     return { left: mapLeft, top: mapTop };
   };
 
   const getItemStyles = (itemName) => {
-    const item = map1Index[itemName];
+    const item = mapIndex[itemName];
     if (!item) return {};
 
-    const width = item.width * map1.unit;
-    const height = item.height * map1.unit;
-    const backgroundPositionX = item.x * map1.unit;
-    const backgroundPositionY = item.y * map1.unit;
+    const width = item.width * map2.unit;
+    const height = item.height * map2.unit;
+    const backgroundPositionX = item.x * map2.unit;
+    const backgroundPositionY = item.y * map2.unit;
 
     return {
       width,
@@ -325,22 +320,22 @@ export default function Map1({ players, playerCharName, setPlayerCharName,permis
     };
   };
   const mapElements = useMemo(() => (
-    Object.keys(map1.objects).map(itemType => 
-      map1.objects[itemType].map((pos, index) => {
+    Object.keys(map2.objects).map(itemType => 
+      map2.objects[itemType].map((pos, index) => {
         const itemStyles = getItemStyles(itemType);
         return (
           <MapImage
             key={`${itemType}-${index}`}
             $width={`${itemStyles.width}px`}
             $height={`${itemStyles.height}px`}
-            $left={`${pos.left * map1.unit}px`}
-            $top={`${pos.top * map1.unit}px`}
+            $left={`${pos.left * map2.unit}px`}
+            $top={`${pos.top * map2.unit}px`}
             $backgroundPosition={itemStyles.backgroundPosition}
           />
         );
       })
     )
-  ), [map1]);
+  ), [map2]);
 
   const playerElements = useMemo(() => (
     players?.filter(player => player.userId !== userId).map(player => (
@@ -362,10 +357,10 @@ export default function Map1({ players, playerCharName, setPlayerCharName,permis
     
       {position && (
         <MapWrapper>
-           <Map $top={`${position.top}px`} $left={`${position.left}px`}>
+           <MapABC $top={`${position.top}px`} $left={`${position.left}px`}>
           {mapElements}
           {playerElements}
-        </Map>
+        </MapABC>
 
           {position && playerChar && (
             <Player
@@ -390,7 +385,7 @@ export default function Map1({ players, playerCharName, setPlayerCharName,permis
 
 {
   /* <MapWrapper>
-        {Object.keys(map1.objects).map((itemType) =>
+        {Object.keys(map2.objects).map((itemType) =>
           map1.objects[itemType].map((position, index) => {
             const itemStyles = getItemStyles(itemType);
             return (
@@ -398,8 +393,8 @@ export default function Map1({ players, playerCharName, setPlayerCharName,permis
                 key={`${itemType}-${index}`}
                 width={`${itemStyles.width}px`}
                 height={`${itemStyles.height}px`}
-                left={`${position.left * map1.unit}px`}
-                top={`${position.top * map1.unit}px`}
+                left={`${position.left * map2.unit}px`}
+                top={`${position.top * map2.unit}px`}
                 backgroundPosition={itemStyles.backgroundPosition}
               />
             );
@@ -411,13 +406,13 @@ export default function Map1({ players, playerCharName, setPlayerCharName,permis
   /* <button onClick={generateCollisionMap}>創建碰撞array</button> */
 }
 // const getItemStyles = (itemName) => {
-//   const item = map1Index[itemName];
+//   const item = mapIndex[itemName];
 //   if (!item) return {};
 
-//   const width = item.width * map1.unit;
-//   const height = item.height * map1.unit;
-//   const backgroundPositionX = item.x * map1.unit;
-//   const backgroundPositionY = item.y * map1.unit;
+//   const width = item.width * map2.unit;
+//   const height = item.height * map2.unit;
+//   const backgroundPositionX = item.x * map2.unit;
+//   const backgroundPositionY = item.y * map2.unit;
 
 //   return {
 //     width,
