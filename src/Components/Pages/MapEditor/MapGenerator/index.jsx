@@ -27,8 +27,8 @@ const MapTile = styled.div.attrs((props) => ({
   style: {
     left: `${props.$left}px`,
     top: `${props.$top}px`,
-    backgroundColor: props.selected ? 'blue' : 'gray', // 根據是否選中來改變背景顏色
-    opacity: 0.4,
+
+ 
   },
 }))`
 
@@ -39,12 +39,11 @@ const MapTile = styled.div.attrs((props) => ({
   cursor: pointer; // 添加點選游標
 `;
 const MapImage = styled.div`
-z-index: -1;
+
 
   position: absolute;
   left: 0;
   top: 40px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
   width: ${(props) => props.$width};
   height: ${(props) => props.$height};
   left: ${(props) => props.$left};
