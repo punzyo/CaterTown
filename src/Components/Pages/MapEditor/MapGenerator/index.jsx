@@ -2,11 +2,12 @@ import styled from 'styled-components';
 import { map1Index } from '../../../Maps/map1';
 import { useState } from 'react';
 import { useFormInput } from '../../../../utils/hooks/useFormInput';
+import { map2 } from '../../../Maps/map2';
 
 // 這裡放置你的地圖資料和其他所需的 import
 
-const wrapperWidth = 2080; // 更新寬度
-const wrapperHeight = 1560; // 更新高度
+const wrapperWidth = 1920; // 更新寬度
+const wrapperHeight = 1440; // 更新高度
 const gridSize = 48; // 每格大小
 
 const MapWrapper = styled.div.attrs({
@@ -50,12 +51,12 @@ z-index: -1;
   top: ${(props) => props.$top};
   background-position: ${(props) => props.$backgroundPosition};
   background-image: url(/images/map/map1_48x48.png);
-  background-color: gray;
+  background-color: inherit;
 `;
 
 export default function MapEditor() {
   const [selectedPositions, setSelectedPositions] = useState([]);
-  const [objects, setObjects] = useState({});
+  const [objects, setObjects] = useState(map2);
   const itemTypeInput = useFormInput(''); // 使用hook来处理输入
 
   const handleTileClick = (x, y) => {
@@ -98,7 +99,6 @@ export default function MapEditor() {
     }
   
     setObjects(newObjects); // 更新objects状态
-    console.log(newObjects); // 打印或处理新的地图数据
   };
   const handleDeleteClick = (x, y) => {
     // 过滤掉与被点击位置相同的素材位置
