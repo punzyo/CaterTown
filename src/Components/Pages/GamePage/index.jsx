@@ -20,11 +20,10 @@ import TracksManager from '../../TracksManager/index.jsx';
 import LocalTracks from '../../Tracks/LocalTracks/index.jsx';
 import TracksProvider from '../../Tracks/TracksProvider/index.jsx';
 import MemberIcon from '../../MemberIcon/index.jsx';
-import OnlineStatus from '../../OnlineStatus/index.jsx';
 import { useGameSettings } from '../../../utils/zustand.js';
 import { useConditionalPullRequests } from '../../../utils/hooks/useConditionalPullRequests.js';
 import PullRequests from './PullRequests/index.jsx';
-
+import PlayerProfile from './PlayerProfile/index.jsx';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -46,6 +45,7 @@ const BottomBar = styled.div`
   background-color: #202540;
   border-top: 1px solid white;
   z-index: 10;
+  cursor: pointer;
 `;
 const BottomLeft = styled.div`
   display: flex;
@@ -102,24 +102,7 @@ const MemberInfo = styled.div`
   gap: 20px;
 `;
 
-const ProfileWrapper = styled.div`
-  position: relative;
-  width: 200px;
-  height: 90%;
-  border-radius: 5px;
-  border: 1px solid black;
-  display: flex;
-  align-items: center;
-  .onlineBox {
-    height: 100%;
-    display: flex;
-    align-items: end;
-    p {
-      margin-left: 20px;
-    }
-    font-size: 10px;
-  }
-`;
+
 const ControlWrapper = styled.div`
   height: 90%;
   display: flex;
@@ -155,10 +138,6 @@ const JoinButton = styled.div`
 `;
 const MemberIconWrapper = styled.div`
   position: relative;
-  width: 50px;
-  height: 50px;
-`;
-const ProfileIconWrapper = styled.div`
   width: 50px;
   height: 50px;
 `;
@@ -267,20 +246,7 @@ export default function GamePage() {
             <TracksManager isLocal={true}>
               {(localTracks) => <LocalTracks tracks={localTracks} />}
             </TracksManager>
-            <ProfileWrapper>
-              <ProfileIconWrapper>
-                <MemberIcon
-                  image={onlineMembers[0]?.character}
-                  isOnline={null}
-                  unreadMessages={0}
-                />
-              </ProfileIconWrapper>
-              <span>{playerCharName}</span>
-              <div className="onlineBox">
-                <p>上線中</p>
-                <OnlineStatus isOnline={true} />
-              </div>
-            </ProfileWrapper>
+            <PlayerProfile image={onlineMembers[0]?.character} playerCharName={playerCharName} gitHubId={gitHubId} permissionLevel={permissionLevel}/>
             <ControlWrapper>
               {isConnected && (
                 <ControlBar

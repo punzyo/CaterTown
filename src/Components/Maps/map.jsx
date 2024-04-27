@@ -1,28 +1,24 @@
 import { mapIndex } from './map1';
 import styled from 'styled-components';
 import { useState, useEffect, useRef, useReducer, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { updatePlayerPosition } from '@/firebase/firestore';
-import {
-  map1,
-  map1Collision,
-  playerHeight,
-  playerWidth,
-} from '@/Components/Maps/map1.js';
-import { map2,map2Collision,map2Room } from './map2.js';
+import { playerHeight, playerWidth } from '@/Components/Maps/map1.js';
+import { map2, map2Collision, map2Room } from './map2.js';
 import { catsXPositions, catsYPositions } from '../../assets/charNames';
 import { useUserState } from '../../utils/zustand';
 import TracksManager from '../TracksManager';
 import RemoteTracks from '../Tracks/RemoteTracks';
 import PRMark from '../PRMark';
-const Wrapper =styled.div`
-width: 100%;
-height: 100%;
+import { useGameSettings } from '../../utils/zustand';
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
-  align-items:center;
-overflow: hidden;
-`
+  align-items: center;
+  overflow: hidden;
+`;
 const MapWrapper = styled.div`
   position: relative;
   width: ${map2.width}px;
@@ -33,8 +29,8 @@ const MapWrapper = styled.div`
 
 const Player = styled.div`
   position: absolute;
-  top: calc(50% - ${playerHeight/2}px);
-  left: calc(50% - ${playerWidth/2}px);
+  top: calc(50% - ${playerHeight / 2}px);
+  left: calc(50% - ${playerWidth / 2}px);
   /* transform: translate(-50%, -50%); */
   width: ${playerWidth}px;
   height: ${playerHeight}px;
@@ -65,7 +61,7 @@ const OtherPlayer = styled.div`
   background-image: url(/images/animals/${(props) => props.$character}.png);
   color: black;
   transition: top 0.2s, left 0.2s;
-  z-index:10;
+  z-index: 10;
   &::after {
     content: '${(props) => props.$charName}';
     font-size: 12px;
@@ -80,7 +76,6 @@ const OtherPlayer = styled.div`
 `;
 
 const MapABC = styled.div`
-
   position: relative;
   top: ${(props) => props.$top};
   left: ${(props) => props.$left};
@@ -119,7 +114,16 @@ function positionReducer(state, action) {
       return state;
   }
 }
-export default function Map({ players, playerCharName, setPlayerCharName,permissionLevel, setPermissionLevel,gitHubId,setGitHubId, pullRequests  }) {
+export default function Map({
+  players,
+  playerCharName,
+  setPlayerCharName,
+  permissionLevel,
+  setPermissionLevel,
+  gitHubId,
+  setGitHubId,
+  pullRequests,
+}) {
   const { getUserData } = useUserState();
   const userId = getUserData().id;
   const { roomId } = useParams();
@@ -133,6 +137,7 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
   const movingTimer = useRef(null);
   const keysPressed = useRef(false);
   const canMove = useRef(true);
+  const { resetPosition, setResetPosition } = useGameSettings();
   const directionYPositions = catsYPositions;
   const framesXPositions = catsXPositions;
 
@@ -198,7 +203,7 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
         x: Math.round(absolutePosition.left / map2.unit),
         y: Math.round(absolutePosition.top / map2.unit),
       };
-      console.log(playerGrid,'你的位置');
+      console.log(playerGrid, '你的位置');
       if (map2Collision[`${playerGrid.x},${playerGrid.y}`]) {
         console.log('撞到東西');
         return;
@@ -213,10 +218,10 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
       }
       //player can move
       let enterRoom = map2Room[`${playerGrid.x},${playerGrid.y}`];
-      if(enterRoom === undefined) enterRoom = room;
+      if (enterRoom === undefined) enterRoom = room;
       setRoom(enterRoom);
 
-      console.log(enterRoom,'room');
+      console.log(enterRoom, 'room');
       canMove.current = false;
       keysPressed.current = true;
       const nextframe = (currentFrame + 1) % framesXPositions.length;
@@ -231,7 +236,7 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
           frame: nextframe,
         },
         roomId,
-        room:enterRoom
+        room: enterRoom,
       });
 
       setTimeout(() => {
@@ -274,12 +279,27 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
     if (!players || !position) return;
     countNearbyPlayers(players);
   }, [players, position]);
-
+  useEffect(() => {
+    if (!resetPosition) return;
+    const resetPosition = playerAbsoluteToMapPos(map2.startingPoint);
+    setDirection(map2.startingPoint.direction);
+    setCurrentFrame(map2.startingPoint.frame);
+    dispatchPosition({ type: 'SET_POSITION', payload: resetPosition });
+    updatePlayerPosition({
+      userId,
+      userData: {
+        ...map2.startingPoint,
+      },
+      roomId,
+      room: '',
+    });
+    setResetPosition(false);
+  }, [resetPosition]);
   const countNearbyPlayers = (players) => {
     const gridRange = 96;
     const myPosition = playerPosToAbsolute(position);
     let nearbyPlayers;
-    if(!room){
+    if (!room) {
       console.log('沒房間');
       nearbyPlayers = players.filter((player) => {
         const xInRange =
@@ -288,21 +308,20 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
           Math.abs(player.position.top - myPosition.top) <= gridRange;
         return player.charName !== playerCharName && xInRange && yInRange;
       });
+    } else {
+      console.log('有房間');
+      nearbyPlayers = players.filter((player) => {
+        return player.charName !== playerCharName && player.room === room;
+      });
     }
-   else{
-    console.log('有房間');
-    nearbyPlayers = players.filter((player) => {
-      return player.charName !== playerCharName && player.room ===room;
-   })
-  }
-    setNearbyPlayers(nearbyPlayers.map((player) => {
-      return(
-        {
-          charName :player.charName,
-          character:player.character
-        }
-      )
-    }));
+    setNearbyPlayers(
+      nearbyPlayers.map((player) => {
+        return {
+          charName: player.charName,
+          character: player.character,
+        };
+      })
+    );
     return;
   };
 
@@ -338,48 +357,57 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
       backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
     };
   };
-  const mapElements = useMemo(() => (
-    Object.keys(map2.objects).map(itemType => 
-      map2.objects[itemType].map((pos, index) => {
-        const itemStyles = getItemStyles(itemType);
-        return (
-          <MapImage
-            key={`${itemType}-${index}`}
-            $width={`${itemStyles.width}px`}
-            $height={`${itemStyles.height}px`}
-            $left={`${pos.left * map2.unit}px`}
-            $top={`${pos.top * map2.unit}px`}
-            $backgroundPosition={itemStyles.backgroundPosition}
-          />
-        );
-      })
-    )
-  ), [map2]);
+  const mapElements = useMemo(
+    () =>
+      Object.keys(map2.objects).map((itemType) =>
+        map2.objects[itemType].map((pos, index) => {
+          const itemStyles = getItemStyles(itemType);
+          return (
+            <MapImage
+              key={`${itemType}-${index}`}
+              $width={`${itemStyles.width}px`}
+              $height={`${itemStyles.height}px`}
+              $left={`${pos.left * map2.unit}px`}
+              $top={`${pos.top * map2.unit}px`}
+              $backgroundPosition={itemStyles.backgroundPosition}
+            />
+          );
+        })
+      ),
+    [map2]
+  );
 
-  const playerElements = useMemo(() => (
-    players?.filter(player => player.userId !== userId).map(player => (
-      <OtherPlayer
-        key={player.userId}
-        $top={`${player.position.top}px`}
-        $left={`${player.position.left}px`}
-        $backgroundPosition={`${framesXPositions[player.position.frame]} ${directionYPositions[player.position.direction]}`}
-        $character={player.character}
-        $charName={player.charName}
-      >
-        {permissionLevel === 'admin' && <PRMark githubId={player.githubId} pullRequests={pullRequests}/>}
-      </OtherPlayer>
-    ))
-  ), [players, userId, permissionLevel, pullRequests]);
+  const playerElements = useMemo(
+    () =>
+      players
+        ?.filter((player) => player.userId !== userId)
+        .map((player) => (
+          <OtherPlayer
+            key={player.userId}
+            $top={`${player.position.top}px`}
+            $left={`${player.position.left}px`}
+            $backgroundPosition={`${framesXPositions[player.position.frame]} ${
+              directionYPositions[player.position.direction]
+            }`}
+            $character={player.character}
+            $charName={player.charName}
+          >
+            {permissionLevel === 'admin' && (
+              <PRMark githubId={player.githubId} pullRequests={pullRequests} />
+            )}
+          </OtherPlayer>
+        )),
+    [players, userId, permissionLevel, pullRequests]
+  );
 
   return (
     <Wrapper>
-    
       {position && (
         <MapWrapper>
-           <MapABC $top={`${position.top}px`} $left={`${position.left}px`}>
-          {mapElements}
-          {playerElements}
-        </MapABC>
+          <MapABC $top={`${position.top}px`} $left={`${position.left}px`}>
+            {mapElements}
+            {playerElements}
+          </MapABC>
 
           {position && playerChar && (
             <Player
@@ -390,10 +418,14 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
               $character={`${playerChar}`}
             >
               <TracksManager isLocal={false} nearbyPlayers={nearbyPlayers}>
-                {(remoteTracks) => <RemoteTracks tracks={remoteTracks} nearbyPlayers={nearbyPlayers} />}
+                {(remoteTracks) => (
+                  <RemoteTracks
+                    tracks={remoteTracks}
+                    nearbyPlayers={nearbyPlayers}
+                  />
+                )}
               </TracksManager>
-              {<PRMark githubId={gitHubId} pullRequests={pullRequests}/>}
-
+              {<PRMark githubId={gitHubId} pullRequests={pullRequests} />}
             </Player>
           )}
         </MapWrapper>
