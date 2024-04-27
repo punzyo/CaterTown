@@ -3,6 +3,7 @@ import MemberIcon from '../../../MemberIcon';
 import OnlineStatus from '../../../OnlineStatus';
 import { useState } from 'react';
 import GitHubLogo from '../../../GitHubLogo';
+import { useGameSettings } from '../../../../utils/zustand';
 const Wrapper = styled.div`
   position: relative;
   width: 200px;
@@ -28,8 +29,8 @@ const IconWrapper = styled.div`
 const ProfileWrapper = styled.div`
   position: absolute;
   width: 250px;
-  height: 200px;
-  top: -210px;
+  height: 300px;
+  top: -310px;
   left: 0;
   padding: 10px;
   background-color: #282d4e;
@@ -57,23 +58,27 @@ const ProfileWrapper = styled.div`
       font-weight: bold;
     }
   }
-  .bottom {
-    background-color: #3e477c;
+  .middle {
     display: flex;
     flex-direction: column;
     gap: 10px;
     > div {
+      &:hover {
+        background-color: #3e477c;
+      }
       height: 36px;
       display: flex;
       align-items: center;
       padding: 5px;
-      justify-content: space-between;
-      border: 1px solid black;
-      > div:first-of-type{
-        width: 80px;
+      > div:first-of-type {
+        width: 100px;
         display: flex;
         align-items: center;
         gap: 5px;
+      }
+      border-radius: 5px;
+      >svg{
+        margin-left: auto;
       }
     }
     svg {
@@ -89,6 +94,7 @@ export default function PlayerProfile({
   gitHubId,
   permissionLevel,
 }) {
+  const { setResetPosition } = useGameSettings();
   const [showProfile, setShowProfile] = useState(false);
   return (
     <Wrapper
@@ -115,14 +121,13 @@ export default function PlayerProfile({
             <span>{playerCharName}</span>
           </div>
         </div>
-        <div className="bottom">
+        <div className="middle">
           <div>
             <div className="github">
               <GitHubLogo />
               <span>GitHub </span>
-             
             </div>
-            <span>{gitHubId?gitHubId:'尚未填寫'}</span>
+            <span>{gitHubId ? gitHubId : '尚未填寫'}</span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
               <path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" />
             </svg>
@@ -134,8 +139,16 @@ export default function PlayerProfile({
               </svg>
               <span>權限</span>
             </div>
-            <div>
               <span>{permissionLevel}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
+
+          </div>
+          <div onClick={() => setResetPosition(true)}>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z" />
+              </svg>
+              <span>回到起點</span>
             </div>
           </div>
         </div>

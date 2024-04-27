@@ -1,16 +1,19 @@
-import { mapIndex } from './map1';
+import { mapIndex } from './map1.js';
 import styled from 'styled-components';
 import { useState, useEffect, useRef, useReducer, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { updatePlayerPosition } from '@/firebase/firestore';
-import { playerHeight, playerWidth } from '@/Components/Maps/map1.js';
+import { playerHeight,playerWidth } from './map1.js';
 import { map2, map2Collision, map2Room } from './map2.js';
-import { catsXPositions, catsYPositions } from '../../assets/charNames';
-import { useUserState } from '../../utils/zustand';
-import TracksManager from '../TracksManager';
-import RemoteTracks from '../Tracks/RemoteTracks';
-import PRMark from '../PRMark';
-import { useGameSettings } from '../../utils/zustand';
+import {
+  catsXPositions,
+  catsYPositions,
+} from '../../../../assets/charNames.js';
+import { useUserState } from '../../../../utils/zustand.js';
+import TracksManager from '../../../TracksManager/index.jsx';
+import RemoteTracks from '../../../Tracks/RemoteTracks/index.jsx';
+import PRMark from '../../../PRMark/index.jsx';
+import { useGameSettings } from '../../../../utils/zustand.js';
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -84,18 +87,18 @@ const MapABC = styled.div`
   border: ${map2.border}px solid gray;
   transition: top 0.2s, left 0.2s;
 `;
-const MapImage = styled.div.attrs(props => ({
+const MapImage = styled.div.attrs((props) => ({
   style: {
     width: `${props.$width}`,
     height: `${props.$height}`,
     left: `${props.$left}`,
     top: `${props.$top}`,
     backgroundPosition: props.$backgroundPosition,
-  }
+  },
 }))`
   position: absolute;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  background-image: url(/images/map/map1_48x48.png); // 假设背景图片是固定的
+  background-image: url(/images/map/map1_48x48.png);
 `;
 
 function positionReducer(state, action) {
@@ -285,6 +288,7 @@ export default function Map({
   }, [players, position]);
   useEffect(() => {
     if (!resetPosition) return;
+    console.log('AA重來ㄌ');
     const newPosition = playerAbsoluteToMapPos(map2.startingPoint);
     setDirection(map2.startingPoint.direction);
     setCurrentFrame(map2.startingPoint.frame);
@@ -437,41 +441,3 @@ export default function Map({
     </Wrapper>
   );
 }
-
-{
-  /* <MapWrapper>
-        {Object.keys(map2.objects).map((itemType) =>
-          map1.objects[itemType].map((position, index) => {
-            const itemStyles = getItemStyles(itemType);
-            return (
-              <MapImage
-                key={`${itemType}-${index}`}
-                width={`${itemStyles.width}px`}
-                height={`${itemStyles.height}px`}
-                left={`${position.left * map2.unit}px`}
-                top={`${position.top * map2.unit}px`}
-                backgroundPosition={itemStyles.backgroundPosition}
-              />
-            );
-          })
-        )}
-      </MapWrapper> */
-}
-{
-  /* <button onClick={generateCollisionMap}>創建碰撞array</button> */
-}
-// const getItemStyles = (itemName) => {
-//   const item = mapIndex[itemName];
-//   if (!item) return {};
-
-//   const width = item.width * map2.unit;
-//   const height = item.height * map2.unit;
-//   const backgroundPositionX = item.x * map2.unit;
-//   const backgroundPositionY = item.y * map2.unit;
-
-//   return {
-//     width,
-//     height,
-//     backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
-//   };
-// };

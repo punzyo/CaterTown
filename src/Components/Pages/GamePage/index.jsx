@@ -1,4 +1,4 @@
-import Map from '../../Maps/map.jsx';
+import Map from './Maps/map.jsx';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import CloseButton from '../../Buttons/CloseButton/index.jsx';
@@ -101,7 +101,6 @@ const MemberInfo = styled.div`
   align-items: center;
   gap: 20px;
 `;
-
 
 const ControlWrapper = styled.div`
   height: 90%;
@@ -246,7 +245,12 @@ export default function GamePage() {
             <TracksManager isLocal={true}>
               {(localTracks) => <LocalTracks tracks={localTracks} />}
             </TracksManager>
-            <PlayerProfile image={onlineMembers[0]?.character} playerCharName={playerCharName} gitHubId={gitHubId} permissionLevel={permissionLevel}/>
+            <PlayerProfile
+              image={onlineMembers[0]?.character}
+              playerCharName={playerCharName}
+              gitHubId={gitHubId}
+              permissionLevel={permissionLevel}
+            />
             <ControlWrapper>
               {isConnected && (
                 <ControlBar
