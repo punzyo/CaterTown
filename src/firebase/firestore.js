@@ -43,28 +43,28 @@ export async function updatePlayerPosition({ userId, userData, roomId,room }) {
   }
 }
 
-export async function getOtherPlayersData(excludePlayerId) {
-  const roomDocRef = doc(db, 'rooms', '001');
+// export async function getOtherPlayersData(excludePlayerId) {
+//   const roomDocRef = doc(db, 'rooms', '001');
 
-  try {
-    const docSnap = await getDoc(roomDocRef);
+//   try {
+//     const docSnap = await getDoc(roomDocRef);
 
-    if (docSnap.exists()) {
-      const roomData = docSnap.data();
-      const users = roomData.users.filter(
-        (user) => user.userId !== excludePlayerId
-      );
-      console.log('Other players data:', users);
-      return users;
-    } else {
-      console.log('No such room exists!');
-      return {};
-    }
-  } catch (error) {
-    console.error('Error getting document:', error);
-    return {};
-  }
-}
+//     if (docSnap.exists()) {
+//       const roomData = docSnap.data();
+//       const users = roomData.users.filter(
+//         (user) => user.userId !== excludePlayerId
+//       );
+//       console.log('Other players data:', users);
+//       return users;
+//     } else {
+//       console.log('No such room exists!');
+//       return {};
+//     }
+//   } catch (error) {
+//     console.error('Error getting document:', error);
+//     return {};
+//   }
+// }
 
 export async function createRoom({
   userId,
@@ -319,5 +319,28 @@ export async function getUserFromFirestore(authID) {
   } catch (error) {
     console.error('Error getting user data', error);
     return null;
+  }
+}
+export async function editPlayerGitHub({userId, gitHubId, roomId}){
+  const roomDocRef = doc(db, "rooms", roomId);
+  try {
+    const roomSnap = await getDoc(roomDocRef);
+    if (roomSnap.exists()) {
+      let usersArray = roomSnap.data().users;
+      const userIndex = usersArray.findIndex(user => user.userId === userId);
+      if (userIndex !== -1) {
+        usersArray[userIndex].gitHubId = gitHubId;
+        await updateDoc(roomDocRef, {
+          users: usersArray
+        });
+        console.log("GitHub ID updated successfully!");
+      } else {
+        console.log("User not found!");
+      }
+    } else {
+      console.log("Room not found!");
+    }
+  } catch (error) {
+    console.error("Error updating GitHub ID: ", error);
   }
 }

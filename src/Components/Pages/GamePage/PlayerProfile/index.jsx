@@ -4,6 +4,7 @@ import OnlineStatus from '../../../OnlineStatus';
 import { useState } from 'react';
 import GitHubLogo from '../../../GitHubLogo';
 import { useGameSettings } from '../../../../utils/zustand';
+import { useFormInput } from '../../../../utils/hooks/useFormInput';
 const Wrapper = styled.div`
   position: relative;
   width: 200px;
@@ -21,6 +22,7 @@ const Wrapper = styled.div`
     }
     font-size: 10px;
   }
+  /* cursor: auto; */
 `;
 const IconWrapper = styled.div`
   width: 50px;
@@ -30,7 +32,7 @@ const ProfileWrapper = styled.div`
   position: absolute;
   width: 250px;
   height: 300px;
-  top: -310px;
+  bottom: 75px;
   left: 0;
   padding: 10px;
   background-color: #282d4e;
@@ -62,6 +64,10 @@ const ProfileWrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    .github:hover {
+      background-color: ${(props) =>
+        props.$editGitHubId ? 'inherit' : '#3e477c'};
+    }
     > div {
       &:hover {
         background-color: #3e477c;
@@ -77,8 +83,9 @@ const ProfileWrapper = styled.div`
         gap: 5px;
       }
       border-radius: 5px;
-      >svg{
+      > svg {
         margin-left: auto;
+        /* cursor: pointer; */
       }
     }
     svg {
@@ -86,6 +93,25 @@ const ProfileWrapper = styled.div`
       height: 16px;
       fill: white;
     }
+    input {
+      height: 90%;
+      padding: 5px;
+      border: 1px solid #3e477c;
+      outline: none;
+      border-radius: 5px;
+      background-color: inherit;
+      width: 130px;
+      margin: 0 auto;
+      &:focus {
+        border: 1px solid #3e477c;
+      }
+    }
+  }
+  .hr {
+    width: 90%;
+    height: 1px;
+    background-color: #3e477c;
+    margin: 15px auto;
   }
 `;
 export default function PlayerProfile({
@@ -96,6 +122,16 @@ export default function PlayerProfile({
 }) {
   const { setResetPosition } = useGameSettings();
   const [showProfile, setShowProfile] = useState(false);
+  const [editGitHubId, setEditGitHubId] = useState(false);
+  const gitHubIdInput = useFormInput(gitHubId);
+
+  const handleGitHubSubmit = () => {
+    setEditGitHubId(false);
+    if (gitHubIdInput.value === gitHubId) return;
+    console.log('New GitHub ID:', gitHubIdInput.value);
+
+    gitHubIdInput.clear();
+  };
   return (
     <Wrapper
       onClick={() => {
@@ -110,7 +146,7 @@ export default function PlayerProfile({
         <p>上線中</p>
         <OnlineStatus isOnline={true} />
       </div>
-      <ProfileWrapper>
+      <ProfileWrapper $editGitHubId={editGitHubId}>
         <div className="top">
           <div className="left">
             <IconWrapper>
@@ -122,15 +158,32 @@ export default function PlayerProfile({
           </div>
         </div>
         <div className="middle">
-          <div>
-            <div className="github">
+          <div
+            className="github"
+            onClick={() => {
+              setEditGitHubId(true);
+            }}
+          >
+            <div>
               <GitHubLogo />
               <span>GitHub </span>
             </div>
-            <span>{gitHubId ? gitHubId : '尚未填寫'}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-              <path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" />
-            </svg>
+            {editGitHubId ? (
+              <input
+                type="text"
+                value={gitHubIdInput.value}
+                onChange={gitHubIdInput.onChange}
+                onBlur={handleGitHubSubmit}
+                autoFocus
+              />
+            ) : (
+              <span>{gitHubId ? gitHubId : '尚未填寫'}</span>
+            )}
+            {!editGitHubId && (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" />
+              </svg>
+            )}
           </div>
           <div>
             <div>
@@ -139,9 +192,10 @@ export default function PlayerProfile({
               </svg>
               <span>權限</span>
             </div>
-              <span>{permissionLevel}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
-
+            <span>{permissionLevel}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z" />
+            </svg>
           </div>
           <div onClick={() => setResetPosition(true)}>
             <div>
@@ -151,6 +205,9 @@ export default function PlayerProfile({
               <span>回到起點</span>
             </div>
           </div>
+        </div>
+        <div className="hr">
+          <div className="bottom"></div>
         </div>
       </ProfileWrapper>
     </Wrapper>
