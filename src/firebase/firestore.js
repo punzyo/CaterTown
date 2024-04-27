@@ -19,9 +19,9 @@ import { creatRtRoom } from './realtime';
 
 export const db = getFirestore(app);
 
-export async function updatePlayerPosition({ userId, userData, roomId }) {
+export async function updatePlayerPosition({ userId, userData, roomId,room }) {
   const roomDocRef = doc(db, 'rooms', roomId);
-  console.log(userData);
+  console.log('my Room', room);
   try {
     const roomSnap = await getDoc(roomDocRef);
     let usersArray = roomSnap.data().users;
@@ -33,6 +33,7 @@ export async function updatePlayerPosition({ userId, userData, roomId }) {
         direction: userData.direction,
         frame: userData.frame,
       };
+      usersArray[userIndex].room = room;
     }
     await updateDoc(roomDocRef, {
       users: usersArray,
@@ -82,7 +83,8 @@ export async function createRoom({
           charName,
           character,
           position,
-          online: false,
+          permissionLevel:"admin",
+          room:''
         },
       ],
       name: roomName,
@@ -101,7 +103,7 @@ export async function joinRoom({ roomId, user }) {
 
   try {
     await updateDoc(roomDocRef, {
-      users: arrayUnion({ ...user, online: false }),
+      users: arrayUnion({ ...user, permissionLevel:"student",room:'' }),
     });
     console.log('User added to room with ID:', roomId);
   } catch (error) {

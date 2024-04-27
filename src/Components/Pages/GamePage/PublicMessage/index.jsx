@@ -125,12 +125,19 @@ export default function PublicMessage({
   const messageInput = useFormInput('');
   const messagesEndRef = useRef(null);
   const [unreadPublicMessages, setUnreadPublicMessages] = useState(0);
+  const messageInit=useRef(true)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
+    console.log('訊息改變囉',publicMessages);
+    // if(messageInit.current){
+    //   setUnreadPublicMessages(0);
+    //   messageInit.current = false
+    //   return
+    // }
     if (minimizeMessages || (!minimizeMessages && !isPublicChannel)) {
       console.log('HEHE', minimizeMessages, isPublicChannel);
       setUnreadPublicMessages((prevState) => prevState + 1);
@@ -145,6 +152,7 @@ export default function PublicMessage({
       setUnreadPublicMessages(0);
     }
   }, [minimizeMessages]);
+
   const sendMessage = async () => {
     if (!messageInput.value) return;
     if (isPublicChannel) {

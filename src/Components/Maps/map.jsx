@@ -9,7 +9,7 @@ import {
   playerHeight,
   playerWidth,
 } from '@/Components/Maps/map1.js';
-import { map2,map2Collision } from './map2.js';
+import { map2,map2Collision,map2Room } from './map2.js';
 import { catsXPositions, catsYPositions } from '../../assets/charNames';
 import { useUserState } from '../../utils/zustand';
 import TracksManager from '../TracksManager';
@@ -129,6 +129,7 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
   const [direction, setDirection] = useState();
   const [playerChar, setPlayerChar] = useState(null);
   const [nearbyPlayers, setNearbyPlayers] = useState([]);
+  const [room, setRoom] = useState('');
   const movingTimer = useRef(null);
   const keysPressed = useRef(false);
   const canMove = useRef(true);
@@ -197,6 +198,7 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
         x: Math.round(absolutePosition.left / map2.unit),
         y: Math.round(absolutePosition.top / map2.unit),
       };
+      console.log(playerGrid,'你的位置');
       if (map2Collision[`${playerGrid.x},${playerGrid.y}`]) {
         console.log('撞到東西');
         return;
@@ -210,6 +212,11 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
         return;
       }
       //player can move
+      let enterRoom = map2Room[`${playerGrid.x},${playerGrid.y}`];
+      if(enterRoom === undefined) enterRoom = room;
+      setRoom(enterRoom);
+
+      console.log(enterRoom,'room');
       canMove.current = false;
       keysPressed.current = true;
       const nextframe = (currentFrame + 1) % framesXPositions.length;
@@ -224,6 +231,7 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
           frame: nextframe,
         },
         roomId,
+        room:enterRoom
       });
 
       setTimeout(() => {
@@ -257,6 +265,7 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
       setPlayerCharName(playerData[0].charName);
       setPermissionLevel(playerData[0].permissionLevel);
       setGitHubId(playerData[0].gitHubId);
+      setRoom(playerData[0].room);
     };
 
     updatePosition();
@@ -269,13 +278,23 @@ export default function Map({ players, playerCharName, setPlayerCharName,permiss
   const countNearbyPlayers = (players) => {
     const gridRange = 96;
     const myPosition = playerPosToAbsolute(position);
-    const nearbyPlayers = players.filter((player) => {
-      const xInRange =
-        Math.abs(player.position.left - myPosition.left) <= gridRange;
-      const yInRange =
-        Math.abs(player.position.top - myPosition.top) <= gridRange;
-      return player.charName !== playerCharName && xInRange && yInRange;
-    });
+    let nearbyPlayers;
+    if(!room){
+      console.log('沒房間');
+      nearbyPlayers = players.filter((player) => {
+        const xInRange =
+          Math.abs(player.position.left - myPosition.left) <= gridRange;
+        const yInRange =
+          Math.abs(player.position.top - myPosition.top) <= gridRange;
+        return player.charName !== playerCharName && xInRange && yInRange;
+      });
+    }
+   else{
+    console.log('有房間');
+    nearbyPlayers = players.filter((player) => {
+      return player.charName !== playerCharName && player.room ===room;
+   })
+  }
     setNearbyPlayers(nearbyPlayers.map((player) => {
       return(
         {

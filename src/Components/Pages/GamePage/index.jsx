@@ -175,7 +175,7 @@ export default function GamePage() {
   const players = playersData.users;
   const publicMessages = usePublicMessages(roomId);
   const [privateChannel, setPrivateChannel] = useState('');
-  const [minimizeMessages, setMinimizeMessages] = useState(false);
+  const [minimizeMessages, setMinimizeMessages] = useState(true);
   const [privateCharName, setPrivateCharName] = useState(null);
   const [isPublicChannel, setIsPublicChannel] = useState(true);
   const [gitHubId, setGitHubId] = useState(null);
@@ -290,7 +290,6 @@ export default function GamePage() {
                     screenShare: true,
                     leave: true,
                   }}
-                  settings={true}
                   saveUserChoices={true}
                   variation="minimal"
                 />
