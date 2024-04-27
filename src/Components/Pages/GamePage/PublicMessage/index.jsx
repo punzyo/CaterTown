@@ -132,12 +132,12 @@ export default function PublicMessage({
   };
 
   useEffect(() => {
-    console.log('訊息改變囉',publicMessages);
-    // if(messageInit.current){
-    //   setUnreadPublicMessages(0);
-    //   messageInit.current = false
-    //   return
-    // }
+    if(publicMessages.length===0) return
+    if(messageInit.current){
+      setUnreadPublicMessages(0);
+      messageInit.current = false
+      return
+    }
     if (minimizeMessages || (!minimizeMessages && !isPublicChannel)) {
       console.log('HEHE', minimizeMessages, isPublicChannel);
       setUnreadPublicMessages((prevState) => prevState + 1);

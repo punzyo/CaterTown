@@ -84,7 +84,8 @@ export async function createRoom({
           character,
           position,
           permissionLevel:"admin",
-          room:''
+          room:'',
+          gitHubId:''
         },
       ],
       name: roomName,
@@ -103,7 +104,7 @@ export async function joinRoom({ roomId, user }) {
 
   try {
     await updateDoc(roomDocRef, {
-      users: arrayUnion({ ...user, permissionLevel:"student",room:'' }),
+      users: arrayUnion({ ...user, permissionLevel:"student",room:'', gitHubId:'' }),
     });
     console.log('User added to room with ID:', roomId);
   } catch (error) {
