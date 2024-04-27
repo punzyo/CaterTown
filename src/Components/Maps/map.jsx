@@ -84,16 +84,20 @@ const MapABC = styled.div`
   border: ${map2.border}px solid gray;
   transition: top 0.2s, left 0.2s;
 `;
-const MapImage = styled.div`
+const MapImage = styled.div.attrs(props => ({
+  style: {
+    width: `${props.$width}`,
+    height: `${props.$height}`,
+    left: `${props.$left}`,
+    top: `${props.$top}`,
+    backgroundPosition: props.$backgroundPosition,
+  }
+}))`
   position: absolute;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  width: ${(props) => props.$width};
-  height: ${(props) => props.$height};
-  left: ${(props) => props.$left};
-  top: ${(props) => props.$top};
-  background-position: ${(props) => props.$backgroundPosition};
-  background-image: url(/images/map/map1_48x48.png);
+  background-image: url(/images/map/map1_48x48.png); // 假设背景图片是固定的
 `;
+
 function positionReducer(state, action) {
   switch (action.type) {
     case 'move':
@@ -281,10 +285,10 @@ export default function Map({
   }, [players, position]);
   useEffect(() => {
     if (!resetPosition) return;
-    const resetPosition = playerAbsoluteToMapPos(map2.startingPoint);
+    const newPosition = playerAbsoluteToMapPos(map2.startingPoint);
     setDirection(map2.startingPoint.direction);
     setCurrentFrame(map2.startingPoint.frame);
-    dispatchPosition({ type: 'SET_POSITION', payload: resetPosition });
+    dispatchPosition({ type: 'SET_POSITION', payload: newPosition });
     updatePlayerPosition({
       userId,
       userData: {
