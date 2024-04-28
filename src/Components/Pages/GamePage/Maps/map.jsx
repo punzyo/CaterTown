@@ -14,6 +14,8 @@ import TracksManager from '../../../TracksManager/index.jsx';
 import RemoteTracks from '../../../Tracks/RemoteTracks/index.jsx';
 import PRMark from '../../../PRMark/index.jsx';
 import { useGameSettings } from '../../../../utils/zustand.js';
+import BroadcastMarquee from '../BroadcastMarquee/index.jsx';
+import Marquee from 'react-fast-marquee';
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -121,6 +123,13 @@ function positionReducer(state, action) {
       return state;
   }
 }
+const MarqueeWrapper = styled.div`
+  width: 100vw;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2;
+`;
 export default function Map({
   players,
   playerCharName,
@@ -130,6 +139,7 @@ export default function Map({
   gitHubId,
   setGitHubId,
   pullRequests,
+  broadcasts,
 }) {
   const { getUserData } = useUserState();
   const userId = getUserData().id;
@@ -415,6 +425,12 @@ export default function Map({
 
   return (
     <Wrapper>
+      {broadcasts.length>0 && (
+        <MarqueeWrapper>
+          <BroadcastMarquee broadcasts={broadcasts} />
+        </MarqueeWrapper>
+      )}
+
       {position && (
         <MapWrapper>
           <MapABC $top={`${position.top}px`} $left={`${position.left}px`}>

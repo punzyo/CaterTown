@@ -24,6 +24,7 @@ import { useGameSettings } from '../../../utils/zustand.js';
 import { useConditionalPullRequests } from '../../../utils/hooks/useConditionalPullRequests.js';
 import PullRequests from './PullRequests/index.jsx';
 import PlayerProfile from './PlayerProfile/index.jsx';
+import { useBroadcasts } from '../../../utils/hooks/useBroadcasts.js';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -182,6 +183,7 @@ export default function GamePage() {
   });
 
   const [isConnected, setIsConnected] = useState(false);
+  const broadcasts = useBroadcasts({ roomId });
 
   useEffect(() => {
     if (!players || !onlineStatus) return;
@@ -230,6 +232,7 @@ export default function GamePage() {
         {/* <RoomAudioRenderer muted={false}/> */}
         <TracksProvider></TracksProvider>
         <Map
+        broadcasts={broadcasts}
           players={players}
           playerCharName={playerCharName}
           setPlayerCharName={setPlayerCharName}
@@ -246,6 +249,7 @@ export default function GamePage() {
               {(localTracks) => <LocalTracks tracks={localTracks} />}
             </TracksManager>
             <PlayerProfile
+              
               roomId={roomId}
               userId={userId}
               image={onlineMembers[0]?.character}
