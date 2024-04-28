@@ -246,9 +246,12 @@ export default function GamePage() {
               {(localTracks) => <LocalTracks tracks={localTracks} />}
             </TracksManager>
             <PlayerProfile
+              roomId={roomId}
+              userId={userId}
               image={onlineMembers[0]?.character}
               playerCharName={playerCharName}
               gitHubId={gitHubId}
+              charName={playerCharName}
               permissionLevel={permissionLevel}
             />
             <ControlWrapper>

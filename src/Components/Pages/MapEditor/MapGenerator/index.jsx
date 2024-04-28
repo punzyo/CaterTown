@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { map2 } from '../../../Maps/map2';
+import { map2 } from '../../GamePage/Maps/map2';
 import { useState } from 'react';
 import { useFormInput } from '../../../../utils/hooks/useFormInput';
-import { mapIndex } from '../../../Maps/map1';
+import { mapIndex } from '../../GamePage/Maps/map1';
 
 // 這裡放置你的地圖資料和其他所需的 import
 

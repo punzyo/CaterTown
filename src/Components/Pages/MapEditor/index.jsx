@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { map1, mapIndex, map1Collision } from '../../Maps/map1.js';
+import { map1,mapIndex } from '../GamePage/Maps/map1';
 import { useFormInput } from '../../../utils/hooks/useFormInput.js';
 import { useState } from 'react';
 const wrapperWidth = '3080';

@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useFormInput } from '../../../../utils/hooks/useFormInput';
 import SimpleSlider from '../../../Silder';
-import { map2 } from '../../../Maps/map2';
+import { map2 } from '../../GamePage/Maps/map2'
 import { createRoom, addRoomToUser } from '../../../../firebase/firestore';
 import { catImages } from '@/assets/charNames';
 import CloseButton from '../../../Buttons/CloseButton';

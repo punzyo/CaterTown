@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useState, useEffect, useRef, useReducer, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { updatePlayerPosition } from '@/firebase/firestore';
-import { playerHeight,playerWidth } from './map1.js';
+import { playerHeight, playerWidth } from './map1.js';
 import { map2, map2Collision, map2Room } from './map2.js';
 import {
   catsXPositions,
@@ -273,10 +273,7 @@ export default function Map({
       setCurrentFrame(playerPosition.frame);
       const mapPosition = playerAbsoluteToMapPos(playerPosition);
       dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
-      setPlayerChar(playerData[0].character);
-      setPlayerCharName(playerData[0].charName);
-      setPermissionLevel(playerData[0].permissionLevel);
-      setGitHubId(playerData[0].gitHubId);
+
       setRoom(playerData[0].room);
     };
 
@@ -286,6 +283,14 @@ export default function Map({
     if (!players || !position) return;
     countNearbyPlayers(players);
   }, [players, position]);
+  useEffect(() => {
+    if (!players) return;
+    const playerData = players.filter((player) => player.userId === userId);
+    setPlayerChar(playerData[0].character);
+    setPlayerCharName(playerData[0].charName);
+    setPermissionLevel(playerData[0].permissionLevel);
+    setGitHubId(playerData[0].gitHubId);
+  }, [players]);
   useEffect(() => {
     if (!resetPosition) return;
     console.log('AA重來ㄌ');

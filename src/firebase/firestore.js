@@ -19,7 +19,7 @@ import { creatRtRoom } from './realtime';
 
 export const db = getFirestore(app);
 
-export async function updatePlayerPosition({ userId, userData, roomId,room }) {
+export async function updatePlayerPosition({ userId, userData, roomId, room }) {
   const roomDocRef = doc(db, 'rooms', roomId);
   console.log('my Room', room);
   try {
@@ -83,9 +83,9 @@ export async function createRoom({
           charName,
           character,
           position,
-          permissionLevel:"admin",
-          room:'',
-          gitHubId:''
+          permissionLevel: 'admin',
+          room: '',
+          gitHubId: '',
         },
       ],
       name: roomName,
@@ -104,7 +104,12 @@ export async function joinRoom({ roomId, user }) {
 
   try {
     await updateDoc(roomDocRef, {
-      users: arrayUnion({ ...user, permissionLevel:"student",room:'', gitHubId:'' }),
+      users: arrayUnion({
+        ...user,
+        permissionLevel: 'student',
+        room: '',
+        gitHubId: '',
+      }),
     });
     console.log('User added to room with ID:', roomId);
   } catch (error) {
@@ -321,26 +326,41 @@ export async function getUserFromFirestore(authID) {
     return null;
   }
 }
-export async function editPlayerGitHub({userId, gitHubId, roomId}){
-  const roomDocRef = doc(db, "rooms", roomId);
+export async function editPlayerGitHub({ userId, gitHubId, roomId }) {
+  const roomDocRef = doc(db, 'rooms', roomId);
   try {
     const roomSnap = await getDoc(roomDocRef);
     if (roomSnap.exists()) {
       let usersArray = roomSnap.data().users;
-      const userIndex = usersArray.findIndex(user => user.userId === userId);
+      const userIndex = usersArray.findIndex((user) => user.userId === userId);
       if (userIndex !== -1) {
         usersArray[userIndex].gitHubId = gitHubId;
         await updateDoc(roomDocRef, {
-          users: usersArray
+          users: usersArray,
         });
-        console.log("GitHub ID updated successfully!");
-      } else {
-        console.log("User not found!");
+        console.log('GitHub ID updated successfully!');
+        return true;
       }
-    } else {
-      console.log("Room not found!");
     }
+    return false;
   } catch (error) {
-    console.error("Error updating GitHub ID: ", error);
+    console.error('Error updating GitHub ID: ', error);
+    return false;
+  }
+}
+
+export async function sendBroadcast({ roomId, broadcastData }){
+  try {
+    const roomRef = doc(db, 'rooms', roomId);
+    const broadcastsRef = collection(roomRef, 'broadcasts');
+    const result = await addDoc(broadcastsRef, {
+      ...broadcastData,
+      publishTime: Timestamp.fromDate(new Date(broadcastData.publishTime)), 
+      expirationTime: Timestamp.fromDate(new Date(broadcastData.expirationTime)), 
+    });
+
+    console.log(`Broadcast added with ID: ${result.id}`);
+  } catch (error) {
+    console.error("Error adding broadcast:", error);
   }
 }

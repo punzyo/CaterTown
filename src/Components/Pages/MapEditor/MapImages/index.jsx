@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { mapIndex } from '../../../Maps/map1';
+import { mapIndex } from '../../GamePage/Maps/map1';
 
 const Wrapper = styled.div`
   width: 100vh;
