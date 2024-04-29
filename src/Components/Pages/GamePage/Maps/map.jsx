@@ -129,6 +129,9 @@ const MarqueeWrapper = styled.div`
   left: 0;
   top: 0;
   z-index: 2;
+  .rfm-marquee-container {
+    overflow: visible !important;
+  }
 `;
 export default function Map({
   players,
@@ -425,9 +428,13 @@ export default function Map({
 
   return (
     <Wrapper>
-      {broadcasts.length>0 && (
+      {broadcasts.length > 0 && (
         <MarqueeWrapper>
-          <BroadcastMarquee broadcasts={broadcasts} />
+          <BroadcastMarquee
+            broadcasts={broadcasts}
+            userId={userId}
+            roomId={roomId}
+          />
         </MarqueeWrapper>
       )}
 

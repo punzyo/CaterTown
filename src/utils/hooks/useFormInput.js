@@ -9,10 +9,14 @@ export function useFormInput(initialValue) {
   function clear() {
     setValue('');
   }
+  function reset() {
+    setValue(initialValue);
+  }
   const inputProps = {
     value: value,
     onChange: handleChange,
-    clear
+    clear,
+    reset
   };
 
   return inputProps;

@@ -265,6 +265,9 @@ const expirationTime = expirationTimeObj.toISOString();
     );
     const response = await sendBroadcast({roomId,broadcastData})
     console.log('發布玩',response);
+    broadCastTitleInput.clear()
+    broadCastContentInput.clear()
+    hourSelectedInput.reset()
   };
   return (
     <Wrapper
