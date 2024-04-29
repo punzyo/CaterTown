@@ -332,7 +332,7 @@ export default function Map({
           Math.abs(player.position.left - myPosition.left) <= gridRange;
         const yInRange =
           Math.abs(player.position.top - myPosition.top) <= gridRange;
-        return player.charName !== playerCharName && xInRange && yInRange;
+        return player.charName !== playerCharName && xInRange && yInRange && player.room === room;
       });
     } else {
       console.log('有房間');

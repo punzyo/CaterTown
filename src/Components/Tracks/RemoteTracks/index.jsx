@@ -143,10 +143,7 @@ export default function RemoteTracks({ tracks, nearbyPlayers }) {
         <TrackLoop tracks={tracks}>
           <TrackRefContext.Consumer>
             {(trackRef) =>
-              trackRef &&
-              (trackRef.participant.isCameraEnabled ||
-                trackRef.participant.isScreenShareEnabled ||
-                trackRef.participant.isMicrophoneEnabled) && (
+              trackRef && (
                 <>
                   <VideoContainer
                     hidePlaceholder={

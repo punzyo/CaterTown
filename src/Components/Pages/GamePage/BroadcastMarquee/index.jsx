@@ -99,7 +99,7 @@ export default function BroadcastMarquee({ broadcasts, userId, roomId }) {
           return (
             <Messages
               key={index}
-              style={{ display: 'inline-block', marginRight: '300px' }}
+              style={{ display: 'inline-block', padding: '0 20vw' }}
               $canedit={broadcast.userId === userId}
               onClick={() => {
                 if (broadcast.userId !== userId) return;
