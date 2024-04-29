@@ -25,6 +25,7 @@ import { useConditionalPullRequests } from '../../../utils/hooks/useConditionalP
 import PullRequests from './PullRequests/index.jsx';
 import PlayerProfile from './PlayerProfile/index.jsx';
 import { useBroadcasts } from '../../../utils/hooks/useBroadcasts.js';
+import Button from '../../Buttons/Button/index.jsx';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -44,7 +45,7 @@ const BottomBar = styled.div`
   bottom: 0;
   padding: 10px 40px;
   background-color: #202540;
-  border-top: 1px solid white;
+
   z-index: 10;
   cursor: pointer;
 `;
@@ -64,6 +65,7 @@ const SideBar = styled.div`
   top: 0;
   background-color: #202540;
   z-index: ${(props) => (props.$isFullScreen ? '5' : '10')};
+  border-bottom: 1px solid #3e477c;
   button {
     color: white;
   }
@@ -119,22 +121,12 @@ const ControlWrapper = styled.div`
 `;
 
 const JoinButton = styled.div`
-  border-radius: 10px;
-  font-size: 16px;
-  padding: 5px 10px;
   font-weight: 700;
   cursor: pointer;
   letter-spacing: 1px;
-  transition: background-color 200ms ease 0s, border-color 200ms ease 0s;
-
   height: 40px;
-  display: flex;
-  align-items: center;
-  background-color: #242b5f;
-  button {
-    background-color: inherit;
-    cursor: pointer;
-  }
+  border-radius: 5px;
+  min-width: 90px;
 `;
 const MemberIconWrapper = styled.div`
   position: relative;
@@ -147,7 +139,7 @@ export default function GamePage() {
   const liveKitUrl = import.meta.env.VITE_LIVEKIT_SERVER_URL;
   const { getUserData } = useUserState();
   const userId = getUserData().id;
-  const [showSidebar, setShowSideBar] = useState(true);
+
   const onlineStatus = useRoomStatus({ userId, roomId });
   const playersData = usePlayer({ userId, roomId });
   const [playerCharName, setPlayerCharName] = useState(null);
@@ -174,7 +166,7 @@ export default function GamePage() {
   const navigate = useNavigate();
   const [onlineMembers, setOnlineMembers] = useState([]);
   const [offlineMembers, setOfflineMembers] = useState([]);
-  const { isFullScreen } = useGameSettings();
+  const { isFullScreen, showSidebar, setShowSidebar } = useGameSettings();
   const pullRequests = useConditionalPullRequests({
     userId,
     roomId,
@@ -232,7 +224,7 @@ export default function GamePage() {
         {/* <RoomAudioRenderer muted={false}/> */}
         <TracksProvider></TracksProvider>
         <Map
-        broadcasts={broadcasts}
+          broadcasts={broadcasts}
           players={players}
           playerCharName={playerCharName}
           setPlayerCharName={setPlayerCharName}
@@ -249,7 +241,6 @@ export default function GamePage() {
               {(localTracks) => <LocalTracks tracks={localTracks} />}
             </TracksManager>
             <PlayerProfile
-              
               roomId={roomId}
               userId={userId}
               image={onlineMembers[0]?.character}
@@ -271,23 +262,20 @@ export default function GamePage() {
                   variation="minimal"
                 />
               )}
-              {!isConnected && (
-                <JoinButton>
-                  <button
-                    onClick={() =>
-                      getToken({ roomId, charName: playerCharName })
-                    }
-                  >
-                    多人通訊
-                  </button>
-                </JoinButton>
-              )}
+              <JoinButton>
+                <Button
+                  clickFunc={() =>
+                    getToken({ roomId, charName: playerCharName })
+                  }
+                  content={'多人通訊'}
+                />
+              </JoinButton>
             </ControlWrapper>
           </BottomLeft>
           <BottomLeft>
             <GroupIcon
               onClick={() => {
-                setShowSideBar((prevState) => !prevState);
+                setShowSidebar(!showSidebar);
               }}
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
@@ -324,7 +312,7 @@ export default function GamePage() {
             <InviteButton roomId={roomId} roomName={roomName} />
             <CloseButton
               clickFunc={() => {
-                setShowSideBar(false);
+                setShowSidebar(false);
               }}
             />
           </Title>

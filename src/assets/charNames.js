@@ -58,4 +58,4 @@ export const catsYPositions = {
   right: '-833px',
 };
 
-export const catsXPositions = ['-774px', '-832px', '-897px', '-963px'];
+export const catsXPositions = ['-770px', '-832px', '-897px', '-963px'];

@@ -48,11 +48,14 @@ const Player = styled.div`
     font-size: 12px;
     font-weight: bold;
     position: absolute;
+    left:9px;
     bottom: -26px;
     width: 40px;
     height: 40px;
     color: black;
     white-space: nowrap;
+    display: flex;
+    justify-content: center;
   }
 `;
 const OtherPlayer = styled.div`
@@ -72,11 +75,14 @@ const OtherPlayer = styled.div`
     font-size: 12px;
     font-weight: bold;
     position: absolute;
+    left:9px;
     bottom: -26px;
     width: 40px;
     height: 40px;
     color: black;
     white-space: nowrap;
+    display: flex;
+    justify-content: center;
   }
 `;
 
@@ -467,5 +473,5 @@ export default function Map({
         </MapWrapper>
       )}
     </Wrapper>
-  );
+  )
 }

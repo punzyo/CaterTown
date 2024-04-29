@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import FullscreenButton from '../../Buttons/FullscreenButton';
 import { ConnectionQualityIndicator } from '@livekit/components-react';
+import { useGameSettings } from '../../../utils/zustand';
 export const Wrapper = styled.div`
   position: ${(props) => (props.$isFullScreen ? 'fixed' : 'relative')};
   width: ${(props) =>
-    props.$isFullScreen ? 'calc(100vw - 300px) !important' : '100%'};
+    props.$isFullScreen ? props.$showSidebar?'calc(100vw - 300px) !important':'100vw !important' : '100%'};
   height: ${(props) =>
     props.$isFullScreen ? 'calc(100vh - 100px) !important' : '100px'};
   border: 1px solid ${(props) => (props.$isSpeaking ? 'blue' : 'black')};
@@ -12,6 +13,7 @@ export const Wrapper = styled.div`
   top: 0;
   border-radius: 5px;
   z-index: ${(props) => (props.$isFullScreen ? '15' : '5')};
+  transition:  width 0.3s ease-in-out;
   .lk-participant-media-video {
     width: 100%;
     border-radius: 5px;
@@ -68,10 +70,12 @@ export default function VedioContainer({
   clickFunc,
   hidePlaceholder,
 }) {
+  const { showSidebar } = useGameSettings();
   return (
     <Wrapper
       $isSpeaking={isSpeaking}
       $isFullScreen={isFullScreen}
+      $showSidebar={showSidebar}
     >
       <ConnectionQualityIndicator />
       {children}

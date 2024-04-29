@@ -50,8 +50,10 @@ export const usePlayerTracks = create((set) => ({
 }));
 
 export const useGameSettings = create((set) => ({
+  showSidebar: true,
   isFullScreen: false,
   resetPosition: false,
+  setShowSidebar: (showSidebar) => set({ showSidebar }),
   setIsFullScreen: (isFullScreen) => set({ isFullScreen }),
   setResetPosition: (resetPosition) => set({ resetPosition }),
 }));

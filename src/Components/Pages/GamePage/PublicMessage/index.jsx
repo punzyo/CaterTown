@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  bottom: ${(props) => (props.$minimizeMessages ? '-32px' : '0px')};
+  bottom: ${(props) => (props.$minimizeMessages ? '-32px' : '-0.5px')};
   right: 300px;
 `;
 const MessageWrapper = styled.div`
@@ -39,6 +39,8 @@ const MessageController = styled.div`
   border-bottom: 1px solid;
   border: 1px solid black;
   background-color: #202540;
+  display: flex;
+  align-items: center;
 `;
 const ChannelWrapper = styled.div`
   width: 250px;
@@ -51,7 +53,7 @@ const Channel = styled.div`
   height: 100%;
   text-align: center;
   border: 1px solid;
-  background-color: ${(props) => (props.$selected ? 'gray' : '')};
+  background-color: ${(props) => (props.$selected ? '#2c345c' : '')};
   cursor: pointer;
 `;
 const Messages = styled.div`
@@ -63,15 +65,28 @@ const Messages = styled.div`
 `;
 const CloseIcon = styled.div`
   position: absolute;
-  right: 30px;
-  top: 3px;
-  width: 20px;
-  height: 20px;
+  right: 0px;
+  width: 40px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover{
+      background-color: #2E355D;
+    }
   svg {
     fill: white;
+    width: 18px;
+    height: 18px;
   }
+  .square {
+    position: absolute;
+    top: 5px;
+    
+  }
+  cursor: pointer;
 `;
-const MessageInput = styled.div`
+const MessageInput = styled.form`
   position: absolute;
   bottom: 0px;
   width: 100%;
@@ -79,18 +94,23 @@ const MessageInput = styled.div`
   background-color: white;
   display: flex;
   align-items: center;
+  
   input {
+    border: none;
     width: 85%;
     height: 100%;
     padding: 5px 10px;
+    background-color: #4C4E5C;
+    outline: none;
   }
   button {
     width: 15%;
     height: 100%;
     padding: 5px 10px;
+    font-size: 12px;
+    font-weight:  bold;
     cursor: pointer;
-    border: 1px solid;
-    color: black !important;
+    color: white !important;
   }
 `;
 
@@ -125,18 +145,18 @@ export default function PublicMessage({
   const messageInput = useFormInput('');
   const messagesEndRef = useRef(null);
   const [unreadPublicMessages, setUnreadPublicMessages] = useState(0);
-  const messageInit=useRef(true)
+  const messageInit = useRef(true);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
-    if(publicMessages.length===0) return
-    if(messageInit.current){
+    if (publicMessages.length === 0) return;
+    if (messageInit.current) {
       setUnreadPublicMessages(0);
-      messageInit.current = false
-      return
+      messageInit.current = false;
+      return;
     }
     if (minimizeMessages || (!minimizeMessages && !isPublicChannel)) {
       console.log('HEHE', minimizeMessages, isPublicChannel);
@@ -153,7 +173,8 @@ export default function PublicMessage({
     }
   }, [minimizeMessages]);
 
-  const sendMessage = async () => {
+  const sendMessage = async (e) => {
+    e.preventDefault()
     if (!messageInput.value) return;
     if (isPublicChannel) {
       await sendPublicMessage({
@@ -232,10 +253,21 @@ export default function PublicMessage({
               setMinimizeMessages(!minimizeMessages);
             }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
-            </svg>
+            {minimizeMessages ? (
+              <svg className="square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="M384 80c8.8 0 16 7.2 16 16V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V96c0-8.8 7.2-16 16-16H384zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z" />
+              </svg>
+            ) : (
+              <svg
+                
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+              >
+                <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+              </svg>
+            )}
           </CloseIcon>
+          <></>
         </MessageController>
         <Messages $minimizeMessages={minimizeMessages}>
           {isPublicChannel &&
@@ -259,13 +291,13 @@ export default function PublicMessage({
         </Messages>
       </MessageWrapper>
       {!minimizeMessages && (
-        <MessageInput>
+        <MessageInput onSubmit={sendMessage}>
           <input
             type="text"
             value={messageInput.value}
             onChange={messageInput.onChange}
           />
-          <button onClick={sendMessage}>送出</button>
+          <button>送出</button>
         </MessageInput>
       )}
     </Wrapper>
