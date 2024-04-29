@@ -241,6 +241,7 @@ export default function GamePage() {
               {(localTracks) => <LocalTracks tracks={localTracks} />}
             </TracksManager>
             <PlayerProfile
+              players={players}
               roomId={roomId}
               userId={userId}
               image={onlineMembers[0]?.character}
@@ -346,6 +347,7 @@ export default function GamePage() {
                       image={player?.character}
                       isOnline={true}
                       unreadMessages={unreadMessages[player.userId]?.count}
+                      background={true}
                     />
                   </MemberIconWrapper>
                   <span>{player.charName}</span>
@@ -376,6 +378,7 @@ export default function GamePage() {
                       image={player?.character}
                       isOnline={false}
                       unreadMessages={unreadMessages[player.userId]?.count}
+                      background={true}
                     />
                   </MemberIconWrapper>
                   <span>{player.charName}</span>

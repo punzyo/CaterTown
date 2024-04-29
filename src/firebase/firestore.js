@@ -11,7 +11,7 @@ import {
   Timestamp,
   arrayUnion,
   increment,
-  deleteDoc
+  deleteDoc,
 } from 'firebase/firestore';
 import { creatRtRoom } from './realtime';
 
@@ -347,28 +347,62 @@ export async function editPlayerGitHub({ userId, gitHubId, roomId }) {
   }
 }
 
-export async function sendBroadcast({ roomId, broadcastData }){
+export async function sendBroadcast({ roomId, broadcastData }) {
   try {
     const roomRef = doc(db, 'rooms', roomId);
     const broadcastsRef = collection(roomRef, 'broadcasts');
     const result = await addDoc(broadcastsRef, {
       ...broadcastData,
-      publishTime: Timestamp.fromDate(new Date(broadcastData.publishTime)), 
-      expirationTime: Timestamp.fromDate(new Date(broadcastData.expirationTime)), 
+      publishTime: Timestamp.fromDate(new Date(broadcastData.publishTime)),
+      expirationTime: Timestamp.fromDate(
+        new Date(broadcastData.expirationTime)
+      ),
     });
 
     console.log(`Broadcast added with ID: ${result.id}`);
   } catch (error) {
-    console.error("Error adding broadcast:", error);
+    console.error('Error adding broadcast:', error);
   }
 }
 
-export async function deleteBroadcast({ roomId, docId }){
+export async function deleteBroadcast({ roomId, docId }) {
   try {
     const broadcastRef = doc(db, 'rooms', roomId, 'broadcasts', docId);
     await deleteDoc(broadcastRef);
     console.log('Broadcast deleted successfully');
   } catch (error) {
     console.error('Error deleting broadcast:', error);
+  }
+}
+export async function editPermissionLevel({
+  roomId,
+  userId,
+  newPermissionLevel,
+}) {
+  try {
+    const roomRef = doc(db, 'rooms', roomId);
+    const roomSnap = await getDoc(roomRef);
+
+    if (roomSnap.exists()) {
+      let users = roomSnap.data().users;
+      const userIndex = users.findIndex((user) => user.userId === userId);
+
+      if (userIndex !== -1) {
+        let user = users[userIndex];
+        user.permissionLevel = newPermissionLevel;
+        users[userIndex] = user;
+        await updateDoc(roomRef, {
+          users: users,
+        });
+
+        console.log('Permission level updated successfully');
+      } else {
+        console.log('User not found in room');
+      }
+    } else {
+      console.log('No such room exists!');
+    }
+  } catch (error) {
+    console.error('Error updating permission level:', error);
   }
 }

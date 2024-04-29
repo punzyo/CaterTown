@@ -9,6 +9,7 @@ import { editPlayerGitHub } from '../../../../firebase/firestore';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { sendBroadcast } from '../../../../firebase/firestore';
+import { editPermissionLevel } from '../../../../firebase/firestore';
 const Wrapper = styled.div`
   position: relative;
   width: 200px;
@@ -151,6 +152,7 @@ const PermissionWrapper = styled.div`
     border: 1px solid #3e477c;
   }
 `;
+
 const BroadcastWrapper = styled.div`
   position: absolute;
   left: -50%;
@@ -223,7 +225,62 @@ const BroadcastWrapper = styled.div`
     }
   }
 `;
+const ChangePermission = styled.div`
+  position: absolute;
+  left: 100%;
+  width: 270px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #282d4e;
+  border: 1px solid #3e477c;
+  border-radius: 5px;
+  > div {
+    span {
+      width: 8cap;
+      text-align: center;
+    }
+  }
+  .permissionSelect {
+    display: flex;
+    align-items: center;
+    width: 90px;
+    svg {
+      width: 16px;
+    }
+    .permission {
+      span {
+        width: 60px;
+        text-align: center;
+      }
+      position: absolute;
+      top: 105px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 75px;
+      height: 55px;
+      background-color: #3e477c;
+      border-radius: 4px;
+    }
+  }
+`;
+const MemberIconWrapper = styled.div`
+  width: 100%;
+  height: 50px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background-color: inherit;
+  div {
+    width: 50px;
+    height: 100%;
+  }
+`;
 export default function PlayerProfile({
+  players,
   roomId,
   userId,
   image,
@@ -253,7 +310,6 @@ export default function PlayerProfile({
     });
     if (isEditSucess) {
       gitHubId = gitHubIdInput.value;
-      gitHubIdInput.clear();
     }
   };
 
@@ -273,12 +329,14 @@ export default function PlayerProfile({
       expirationTime,
       content: broadCastContentInput.value,
     };
-    console.log('廣播', broadcastData);
-    const response = await sendBroadcast({ roomId, broadcastData });
-    console.log('發布玩', response);
+    await sendBroadcast({ roomId, broadcastData });
     broadCastTitleInput.clear();
     broadCastContentInput.clear();
     hourSelectedInput.reset();
+  };
+
+  const handlePermissionChange = async (playerId, newPermissionLevel) => {
+    await editPermissionLevel({ roomId, userId: playerId, newPermissionLevel });
   };
   return (
     <Wrapper
@@ -339,7 +397,7 @@ export default function PlayerProfile({
               </svg>
             )}
           </div>
-          <div className='permission'>
+          <div className="permission">
             <div>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
                 <path d="M337.8 5.4C327-1.8 313-1.8 302.2 5.4L166.3 96H48C21.5 96 0 117.5 0 144V464c0 26.5 21.5 48 48 48H256V416c0-35.3 28.7-64 64-64s64 28.7 64 64v96H592c26.5 0 48-21.5 48-48V144c0-26.5-21.5-48-48-48H473.7L337.8 5.4zM96 192h32c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H96c-8.8 0-16-7.2-16-16V208c0-8.8 7.2-16 16-16zm400 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H512c-8.8 0-16-7.2-16-16V208zM96 320h32c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H96c-8.8 0-16-7.2-16-16V336c0-8.8 7.2-16 16-16zm400 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H512c-8.8 0-16-7.2-16-16V336zM232 176a88 88 0 1 1 176 0 88 88 0 1 1 -176 0zm88-48c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H336V144c0-8.8-7.2-16-16-16z" />
@@ -433,6 +491,41 @@ export default function PlayerProfile({
                   <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H322.8c-3.1-8.8-3.7-18.4-1.4-27.8l15-60.1c2.8-11.3 8.6-21.5 16.8-29.7l40.3-40.3c-32.1-31-75.7-50.1-123.9-50.1H178.3zm435.5-68.3c-15.6-15.6-40.9-15.6-56.6 0l-29.4 29.4 71 71 29.4-29.4c15.6-15.6 15.6-40.9 0-56.6l-14.4-14.4zM375.9 417c-4.1 4.1-7 9.2-8.4 14.9l-15 60.1c-1.4 5.5 .2 11.2 4.2 15.2s9.7 5.6 15.2 4.2l60.1-15c5.6-1.4 10.8-4.3 14.9-8.4L576.1 358.7l-71-71L375.9 417z" />
                 </svg>
                 <span>更改權限等級</span>
+                <ChangePermission>
+                  {players &&
+                    players.map((player) => {
+                      return (
+                        <MemberIconWrapper key={player.userId}>
+                          <MemberIcon
+                            image={player.character}
+                            isOnline={null}
+                            background={true}
+                          />
+                          <span>{player.charName}</span>
+                          <div className="permissionSelect">
+                            <span>{player.permissionLevel}</span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 512 512"
+                            >
+                              <path d="M256 464a208 208 0 1 1 0-416 208 208 0 1 1 0 416zM256 0a256 256 0 1 0 0 512A256 256 0 1 0 256 0zM376.9 294.6c4.5-4.2 7.1-10.1 7.1-16.3c0-12.3-10-22.3-22.3-22.3H304V160c0-17.7-14.3-32-32-32l-32 0c-17.7 0-32 14.3-32 32v96H150.3C138 256 128 266 128 278.3c0 6.2 2.6 12.1 7.1 16.3l107.1 99.9c3.8 3.5 8.7 5.5 13.8 5.5s10.1-2 13.8-5.5l107.1-99.9z" />
+                            </svg>
+                            <div className="permission">
+                              {player.permissionLevel !== 'admin' && (
+                                <span>admin</span>
+                              )}
+                              {player.permissionLevel !== 'teacher' && (
+                                <span>teacher</span>
+                              )}
+                              {player.permissionLevel !== 'student' && (
+                                <span>student</span>
+                              )}
+                            </div>
+                          </div>
+                        </MemberIconWrapper>
+                      );
+                    })}
+                </ChangePermission>
               </div>
             </PermissionWrapper>
           </div>

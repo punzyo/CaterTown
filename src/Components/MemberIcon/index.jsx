@@ -5,8 +5,8 @@ const Wrapper = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: ${(props) => (props.$isOnline!==null ? 'white' : 'inherit')};
-  border: 1px solid  ${(props) => (props.$isOnline!==null ? '#545c8f' : 'inherit')};
+  background-color: ${(props) => (props.$background===true ? 'white' : 'inherit')};
+  border: 1px solid  ${(props) => (props.$background===true ? '#545c8f' : 'inherit')};
   border-radius: 50%;
   div:first-child {
     position: absolute;
@@ -29,9 +29,9 @@ const UnreadIcon = styled.div`
   align-items: center;
   justify-content: center;
 `;
-export default function MemberIcon({ image, isOnline, unreadMessages }) {
+export default function MemberIcon({ image, isOnline, unreadMessages,background }) {
   return (
-    <Wrapper $isOnline={isOnline}>
+    <Wrapper $isOnline={isOnline} $background={background}>
       <Cat image={image} />
       {isOnline !== null && <OnlineStatus isOnline={isOnline} />}
       {!!unreadMessages && <UnreadIcon>{unreadMessages}</UnreadIcon>}
