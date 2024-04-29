@@ -6,14 +6,12 @@ import {
   addDoc,
   getDocs,
   getDoc,
-  query,
-  where,
   updateDoc,
   collection,
-  onSnapshot,
   Timestamp,
   arrayUnion,
   increment,
+  deleteDoc
 } from 'firebase/firestore';
 import { creatRtRoom } from './realtime';
 
@@ -362,5 +360,15 @@ export async function sendBroadcast({ roomId, broadcastData }){
     console.log(`Broadcast added with ID: ${result.id}`);
   } catch (error) {
     console.error("Error adding broadcast:", error);
+  }
+}
+
+export async function deleteBroadcast({ roomId, docId }){
+  try {
+    const broadcastRef = doc(db, 'rooms', roomId, 'broadcasts', docId);
+    await deleteDoc(broadcastRef);
+    console.log('Broadcast deleted successfully');
+  } catch (error) {
+    console.error('Error deleting broadcast:', error);
   }
 }
