@@ -396,6 +396,7 @@ export async function editPermissionLevel({
         });
 
         console.log('Permission level updated successfully');
+        return true;
       } else {
         console.log('User not found in room');
       }
@@ -404,5 +405,6 @@ export async function editPermissionLevel({
     }
   } catch (error) {
     console.error('Error updating permission level:', error);
+    return false;
   }
 }
