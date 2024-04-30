@@ -34,7 +34,6 @@ const Header = styled.header`
     display: flex;
     align-items: center;
     gap: 50px;
-    width: 400px;
     height: 100%;
     span {
       color: #fff;
@@ -185,8 +184,8 @@ export default function HomePage() {
       <Header>
         <div className="left">
           <Logo>
-            <span>ChouChouZoo</span>
           </Logo>
+          <span>Cater town</span>
         </div>
         <input type="text" placeholder="id" ref={idInput} />
         <button onClick={changeUser}>換人</button>

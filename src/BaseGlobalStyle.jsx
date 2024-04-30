@@ -29,6 +29,8 @@ body {
   line-height: 2rem;
 }
 button {
+  cursor: pointer;
+  background-color:inherit;
   border: none;
   outline: none;
 }

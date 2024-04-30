@@ -1,8 +1,14 @@
 import styled from 'styled-components';
-const LogoWrapper = styled.div`
+const LogoWrapper = styled.button`
 display:flex;
 align-items:center;
-gap:10px;
+justify-content:center;
+width: 70px;
+height: 70px;
+border-radius: 10px;
+&:hover{
+  background-color: #3e477c;
+}
 img {
     width: 50px;
     height: 50px;
@@ -10,11 +16,10 @@ img {
     object-fit: cover;
   }
 `;
-export default function Logo({children}) {
+export default function Logo() {
   return (
     <LogoWrapper>
-      <a href="/"><img src="/images/cat_logo_64.png" alt="logo" /></a>
-      {children}
+      <img src="/images/cat_logo_64.png" alt="logo" />
     </LogoWrapper>
   );
 }

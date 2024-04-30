@@ -76,17 +76,34 @@ const Title = styled.div`
   margin-bottom: 30px;
 `;
 const LeaveRoom = styled.button`
-  width: 50px;
-  background-color: inherit;
-  color: white;
+   width: 70px;
+  height: 60px;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #333A64;
+  &:hover{
+    background-color: #dd293f;
+  }
+  svg {
+    width: 40px;
+    height: 40px;
+  }
   cursor: pointer;
 `;
 
 const GroupIcon = styled.button`
-  width: 50px;
-  background-color: inherit;
+  width: 70px;
+  height: 60px;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #333A64;
   cursor: pointer;
+  &:hover{
+    background-color: #3e477c;
+  }
   svg {
+    width: 40px;
+    height: 40px;
     fill: white;
   }
 `;
@@ -102,6 +119,11 @@ const MemberInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
+  border-radius: 5px;
+  &:hover{
+    background-color: #333A64;
+    cursor: pointer;
+  }
 `;
 
 const ControlWrapper = styled.div`
@@ -248,6 +270,7 @@ export default function GamePage() {
               setShowProfile={setShowProfile}
               players={players}
               roomId={roomId}
+              roomName={roomName}
               userId={userId}
               image={onlineMembers[0]?.character}
               playerCharName={playerCharName}

@@ -15,6 +15,9 @@ const ButtonStyle = styled.button`
     box-shadow: 0 1px #c1a23c;
     transform: translateY(3px);
   }
+  &:hover{
+    background-color:#E2C154;
+  }
 `;
 export default function Button({ clickFunc, content }) {
   return <ButtonStyle onClick={clickFunc}>{content}</ButtonStyle>;
