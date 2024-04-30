@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 const ButtonStyle = styled.button`
-  width: 100%;
   height: 100%;
-  border-radius: inherit;
+  border-radius: 5px;
   font-size: inherit;
   font-weight: bold;
-  padding: 5px 10px;
+  padding: 5px 15px;
   box-shadow: 0 4px #c1a23c;
   color: #5e4800;
   background-color: #ffd95e;

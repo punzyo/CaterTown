@@ -1,0 +1,184 @@
+import styled, { css } from 'styled-components';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Button from '../../Buttons/Button';
+import Logo from '../../Logo';
+
+const containerStyles = css`
+  border-radius: 10px;
+  font-size: 16px;
+  padding: 5px 10px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background-color 200ms ease 0s, border-color 200ms ease 0s;
+`;
+const Header = styled.header`
+  width: 100%;
+  height: 80px;
+  padding: 10px 30px;
+  background-color: #333a64;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .left {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    height: 100%;
+    span {
+      color: #fff;
+      font-size: 50px;
+      letter-spacing: 6px;
+    }
+  }
+  .right {
+    align-items: center;
+    display: flex;
+    gap: 20px;
+    width: 200px;
+    height: 100%;
+  }
+  input {
+    width: 50px;
+  }
+`;
+const Main = styled.main`
+  width: 100%;
+  min-height: calc(100% - 80px);
+  padding: 120px 40px 20px;
+  color: white;
+  letter-spacing: 1px;
+  background-color: #373e6c;
+  .top {
+    height: 450px;
+    display: flex;
+    .left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50%;
+      color: white;
+      align-items: center;
+    flex-direction: column;
+    align-items: center;
+      h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+    }
+    .right {
+      border: 1px solid black;
+      width: 50%;
+      border-radius: 10px;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+  .bottom{
+        width: 100%;
+        min-height: 200px;
+        display: grid;
+        margin: 80px 0;
+        gap:50px;
+        grid-template-columns: repeat(3, 1fr);
+        >div{
+            border-radius: 10px;
+            height:100%;
+            border-top: 1px solid #373e6C;
+            background-color: #282D52;
+            padding: 30px;
+            h2{
+                margin-bottom: 10px;
+            }
+        }
+    }
+`;
+
+const SignUp = styled.div`
+  ${containerStyles}
+  width: 100px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color: #4979BC;
+  color: #fff;
+  &:hover {
+    background-color: #558CDA;
+  }
+  button {
+    font-size: 16px;
+    font-weight: bold;
+    background-color: inherit;
+    color: #fff;
+  }
+`;
+const SignIn = styled.div`
+  width: 100px;
+  height: 45px;
+`;
+export default function LandingPage() {
+  const navigate = useNavigate();
+  return (
+    <>
+      <Header>
+        <div className="left">
+          <Logo></Logo>
+          <span>Cater town</span>
+        </div>
+        <div className="right">
+          <SignUp
+            onClick={() => {
+              navigate('/signup');
+            }}
+          >
+            <button>Sign up</button>
+          </SignUp>
+          <SignIn
+            onClick={() => {
+              navigate('/signin');
+            }}
+          >
+            <Button content="Sign in" />
+          </SignIn>
+        </div>
+      </Header>
+      <Main>
+        <div className="top">
+          <div className="left">
+           <div>
+           <h1>這裡會有一段幹話</h1>
+           </div>
+            <SignUp>
+                Sign up
+            </SignUp>
+          </div>
+          <div className="right">
+            <img src="/images/map2.png" alt="" />
+          </div>
+        </div>
+        <div className='bottom'>
+            <div>
+                <h2>讓學習團隊一起在線上相聚</h2>
+                <p>Cater town提供了一個溫暖的線上虛擬環境，不只有提供視音訊的服務，還有高達50種可愛貓咪可供選擇，讓我們不管身在何方，都能用自己最喜歡的樣貌，和夥伴們一起在線上學習、交流。</p>
+            </div>
+            <div>
+                <h2>獨立空間，各自討論不打擾</h2>
+                <p>有不同組別要分開討論怎麼辦?不用擔心，只要進入特定空間，就不會收到外面視音訊的打擾，只能接收相同空間的訊息，讓分組討論變得更有效率!</p>
+            </div>
+            <div>
+                <h2>追蹤PR，變得簡單又有趣</h2>
+                <p>藉由串接GitHub webhook，當追蹤的repository 收到pull requests時，對應貓咪的頭上就會跑出驚嘆號的通知，讓多人協同合作的同時享受更多的樂趣。</p>
+            </div>
+        </div>
+      </Main>
+    </>
+  );
+}

@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
+import LandingPage from './Components/Pages/LandingPage/index.jsx';
 import HomePage from './Components/Pages/HomePage';
 import GamePage from './Components/Pages/GamePage';
 import InvitePage from './Components/Pages/InvitePage';
@@ -17,7 +18,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Routes>
       <Route element={<CheckAuth />}>
         <Route path="/" element={<App />}>
-          <Route index element={<HomePage />} />
+          <Route index element={<LandingPage />} />
+          <Route path="home" element={<HomePage />} />
           <Route path="chouchouzoo/:roomId/:roomName" element={<GamePage />} />
           <Route path="invite/:roomId/:roomName" element={<InvitePage />} />
           <Route path="signup" element={<SignUpPage />} />

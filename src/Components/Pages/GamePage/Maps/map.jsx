@@ -104,7 +104,6 @@ const MapImage = styled.div.attrs((props) => ({
   },
 }))`
   position: absolute;
-  border: 1px solid rgba(0, 0, 0, 0.3);
   background-image: url(/images/map/map1_48x48.png);
 `;
 
