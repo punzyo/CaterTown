@@ -1,8 +1,6 @@
 import styled, { css } from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
 import Dialog from './Dialog';
-import { getUserDatabyId, getUserRoomsbyId } from '@/firebase/firestore';
-import { catsXPositions, catsYPositions } from '../../../assets/charNames';
 import { useUserRooms } from '../../../utils/hooks/useUserRooms';
 import { useNavigate } from 'react-router-dom';
 import { useUserState } from '../../../utils/zustand';
@@ -68,9 +66,8 @@ const Profile = styled.button`
     background-color: #545c8f;
   }
   .userimg {
-    width: 40px;
-    height: 40px;
-    border: 1px solid #fff;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     overflow: hidden;
     img {
@@ -167,7 +164,6 @@ export default function HomePage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const userId = user.id;
   const idInput = useRef(null);
-  const nameInput = useRef(null);
   const userRooms = useUserRooms(userId);
   const navigate = useNavigate();
   useEffect(() => {}, [dialogOpen]);
@@ -177,7 +173,7 @@ export default function HomePage() {
   };
   const closeDialog = () => setDialogOpen(false);
   const changeUser = () => {
-    setUser({ id: idInput.current.value, name: nameInput.current.value });
+    setUser({ id: idInput.current.value, name: ''.current.value });
   };
 
   return (
@@ -193,12 +189,11 @@ export default function HomePage() {
           </Logo>
         </div>
         <input type="text" placeholder="id" ref={idInput} />
-        <input type="text" placeholder="name" ref={nameInput} />
         <button onClick={changeUser}>換人</button>
         <div className="right">
           <Profile>
             <div className="userimg">
-              <img src="/images/profile.jpg" alt="" />
+              <img src="/images/cat-tabby.svg" alt="" />
             </div>
             <div>
               <span>{user.name}</span>

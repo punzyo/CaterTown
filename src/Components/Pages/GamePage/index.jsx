@@ -47,7 +47,6 @@ const BottomBar = styled.div`
   background-color: #202540;
 
   z-index: 10;
-  cursor: pointer;
 `;
 const BottomLeft = styled.div`
   display: flex;
@@ -176,7 +175,7 @@ export default function GamePage() {
 
   const [isConnected, setIsConnected] = useState(false);
   const broadcasts = useBroadcasts({ roomId });
-
+  const [showProfile, setShowProfile] = useState(false);
   useEffect(() => {
     if (!players || !onlineStatus) return;
     const online = [];
@@ -210,7 +209,11 @@ export default function GamePage() {
     setToken(token);
   };
   return (
-    <Wrapper>
+    <Wrapper
+      onClick={() => {
+        setShowProfile(false);
+      }}
+    >
       <LiveKitRoom
         video={false}
         audio={false}
@@ -241,6 +244,8 @@ export default function GamePage() {
               {(localTracks) => <LocalTracks tracks={localTracks} />}
             </TracksManager>
             <PlayerProfile
+              showProfile={showProfile}
+              setShowProfile={setShowProfile}
               players={players}
               roomId={roomId}
               userId={userId}

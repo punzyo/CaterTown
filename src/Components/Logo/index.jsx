@@ -13,7 +13,7 @@ img {
 export default function Logo({children}) {
   return (
     <LogoWrapper>
-      <a href="/"><img src="/images/logo.png" alt="logo" /></a>
+      <a href="/"><img src="/images/cat_logo_64.png" alt="logo" /></a>
       {children}
     </LogoWrapper>
   );
