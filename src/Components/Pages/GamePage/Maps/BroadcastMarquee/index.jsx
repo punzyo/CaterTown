@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import Marquee from 'react-fast-marquee';
 import { Timestamp } from 'firebase/firestore';
-import { deleteBroadcast } from '../../../../firebase/firestore';
+import { deleteBroadcast } from '../../../../../firebase/firestore';
 import { useState } from 'react';
-
+import Markdown from 'react-markdown';
 const StyledMarquee = styled(Marquee)`
   background-color: rgba(0 0, 0, 0.7);
   padding: 10px;
@@ -12,6 +12,7 @@ const StyledMarquee = styled(Marquee)`
 const Messages = styled.span`
   cursor: ${(props) =>
     props.$canedit ? `url(/images/trashIconO.png), pointer` : 'auto'};
+    white-space: nowrap;
 `;
 const Wrapper = styled.div`
   position: fixed;
@@ -93,13 +94,12 @@ export default function BroadcastMarquee({ broadcasts, userId, roomId }) {
             broadcast.publishTime.nanoseconds
           );
           const publishTime = fireTimestamp.toDate();
-          const formattedTime = `${publishTime.getFullYear()}-${
-            publishTime.getMonth() + 1
-          }-${publishTime.getDate()} ${publishTime.getHours()}:${publishTime.getMinutes()}`;
+          const formattedTime = `${(publishTime.getMonth() + 1).toString().padStart(2, '0')}-${publishTime.getDate().toString().padStart(2, '0')} ${publishTime.getHours().toString().padStart(2, '0')}:${publishTime.getMinutes().toString().padStart(2, '0')}`;
+          const markdownText = `${broadcast.charName}(${formattedTime}) : ${broadcast.content}`;
           return (
             <Messages
               key={index}
-              style={{ display: 'inline-block', padding: '0 20vw' }}
+              style={{ display: 'inline-block', paddingLeft: '80vw' }}
               $canedit={broadcast.userId === userId}
               onClick={() => {
                 if (broadcast.userId !== userId) return;
@@ -107,7 +107,7 @@ export default function BroadcastMarquee({ broadcasts, userId, roomId }) {
                 setDocId(broadcast.id);
               }}
             >
-              {`${broadcast.charName}(${formattedTime}): ${broadcast.content}`}
+              <Markdown>{markdownText}</Markdown>
             </Messages>
           );
         })}

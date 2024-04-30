@@ -14,8 +14,7 @@ import TracksManager from '../../../TracksManager/index.jsx';
 import RemoteTracks from '../../../Tracks/RemoteTracks/index.jsx';
 import PRMark from '../../../PRMark/index.jsx';
 import { useGameSettings } from '../../../../utils/zustand.js';
-import BroadcastMarquee from '../BroadcastMarquee/index.jsx';
-import Marquee from 'react-fast-marquee';
+import BroadcastMarquee from './BroadcastMarquee/index.jsx';
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -48,7 +47,7 @@ const Player = styled.div`
     font-size: 12px;
     font-weight: bold;
     position: absolute;
-    left:9px;
+    left: 9px;
     bottom: -26px;
     width: 40px;
     height: 40px;
@@ -75,7 +74,7 @@ const OtherPlayer = styled.div`
     font-size: 12px;
     font-weight: bold;
     position: absolute;
-    left:9px;
+    left: 9px;
     bottom: -26px;
     width: 40px;
     height: 40px;
@@ -338,7 +337,12 @@ export default function Map({
           Math.abs(player.position.left - myPosition.left) <= gridRange;
         const yInRange =
           Math.abs(player.position.top - myPosition.top) <= gridRange;
-        return player.charName !== playerCharName && xInRange && yInRange && player.room === room;
+        return (
+          player.charName !== playerCharName &&
+          xInRange &&
+          yInRange &&
+          player.room === room
+        );
       });
     } else {
       console.log('有房間');
@@ -473,5 +477,5 @@ export default function Map({
         </MapWrapper>
       )}
     </Wrapper>
-  )
+  );
 }

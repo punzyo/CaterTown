@@ -6,9 +6,8 @@ import GitHubLogo from '../../../GitHubLogo';
 import { useGameSettings } from '../../../../utils/zustand';
 import { useFormInput } from '../../../../utils/hooks/useFormInput';
 import { editPlayerGitHub } from '../../../../firebase/firestore';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { sendBroadcast } from '../../../../firebase/firestore';
+import BroadCast from './BroadCast';
 import ChangePermission from './ChangePermission';
 const Wrapper = styled.div`
   position: relative;
@@ -72,7 +71,7 @@ const ProfileWrapper = styled.div`
     .github:hover {
       background-color: ${(props) =>
         props.$editGitHubId ? 'inherit' : '#3e477c'};
-        .githubIcon {
+      .githubIcon {
         opacity: 1;
       }
     }
@@ -162,67 +161,6 @@ const BroadcastWrapper = styled.div`
   background-color: #282d4e;
   border: 1px solid #3e477c;
   border-radius: 5px;
-  > div {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    cursor: auto;
-  }
-  > div > div {
-    display: flex;
-    align-items: center;
-    label {
-      width: 80px;
-      display: flex;
-      align-items: center;
-    }
-  }
-  .title button {
-    background-color: inherit;
-    border-radius: 5px;
-    margin-left: auto;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    &:hover {
-      background-color: #3e477c;
-    }
-  }
-  select {
-    border-radius: 5px;
-    padding: 5px;
-    background-color: inherit;
-    border: 1px solid #3e477c;
-    outline: none;
-    option {
-      background-color: inherit; /* 繼承父元素的背景顏色 */
-      color: black; /* 文本顏色 */
-    }
-  }
-  .date {
-    > div {
-      input {
-        width: 180px;
-      }
-    }
-    input {
-      cursor: pointer;
-    }
-  }
-  .content {
-    align-items: start;
-    textarea {
-      flex-grow: 1;
-      height: 90px;
-      background-color: inherit;
-      border: 1px solid #3e477c;
-      border-radius: 5px;
-      resize: none;
-      outline: none;
-      padding: 5px;
-    }
-  }
 `;
 export default function PlayerProfile({
   players,
@@ -233,14 +171,11 @@ export default function PlayerProfile({
   gitHubId,
   permissionLevel,
 }) {
-  const [publishTime, setPublishTime] = useState(new Date());
   const { setResetPosition } = useGameSettings();
   const [showProfile, setShowProfile] = useState(false);
   const [editGitHubId, setEditGitHubId] = useState(false);
   const gitHubIdInput = useFormInput(gitHubId);
-  const broadCastTitleInput = useFormInput('');
-  const broadCastContentInput = useFormInput('');
-  const hourSelectedInput = useFormInput(1);
+  const [showBroadcast, setShowBroadcast] = useState(false);
 
   const handleGitHubSubmit = async (e) => {
     e.preventDefault();
@@ -259,30 +194,6 @@ export default function PlayerProfile({
     }
   };
 
-  const handleBroadcastClick = async () => {
-    const publishTimeObj = new Date(publishTime);
-const hoursToAdd = parseInt(hourSelectedInput.value, 10);
-
-const expirationTimeObj = new Date(publishTimeObj.getTime() + hoursToAdd * 60 * 60 * 1000);
-const expirationTime = expirationTimeObj.toISOString();
-    const broadcastData={
-      userId,
-      charName:playerCharName,
-      title:broadCastTitleInput.value,
-      publishTime,
-      expirationTime,
-      content:broadCastContentInput.value
-    }
-    console.log(
-      '廣播',
-      broadcastData
-    );
-    const response = await sendBroadcast({roomId,broadcastData})
-    console.log('發布玩',response);
-    broadCastTitleInput.clear()
-    broadCastContentInput.clear()
-    hourSelectedInput.reset()
-  };
   return (
     <Wrapper
       onClick={() => {
@@ -333,12 +244,16 @@ const expirationTime = expirationTimeObj.toISOString();
               <span>{gitHubId ? gitHubId : ''}</span>
             )}
             {!editGitHubId && (
-              <svg className='githubIcon' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <svg
+                className="githubIcon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+              >
                 <path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" />
               </svg>
             )}
           </div>
-          <div className='permission'>
+          <div className="permission">
             <div>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
                 <path d="M337.8 5.4C327-1.8 313-1.8 302.2 5.4L166.3 96H48C21.5 96 0 117.5 0 144V464c0 26.5 21.5 48 48 48H256V416c0-35.3 28.7-64 64-64s64 28.7 64 64v96H592c26.5 0 48-21.5 48-48V144c0-26.5-21.5-48-48-48H473.7L337.8 5.4zM96 192h32c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H96c-8.8 0-16-7.2-16-16V208c0-8.8 7.2-16 16-16zm400 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H512c-8.8 0-16-7.2-16-16V208zM96 320h32c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H96c-8.8 0-16-7.2-16-16V336c0-8.8 7.2-16 16-16zm400 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H512c-8.8 0-16-7.2-16-16V336zM232 176a88 88 0 1 1 176 0 88 88 0 1 1 -176 0zm88-48c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H336V144c0-8.8-7.2-16-16-16z" />
@@ -346,7 +261,11 @@ const expirationTime = expirationTimeObj.toISOString();
               <span>權限</span>
             </div>
             <span>{permissionLevel}</span>
-            <svg className='permissionIcon' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <svg
+              className="permissionIcon"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+            >
               <path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z" />
             </svg>
             <PermissionWrapper>
@@ -371,56 +290,11 @@ const expirationTime = expirationTimeObj.toISOString();
                 </svg>
                 <span>廣播通知</span>
                 <BroadcastWrapper>
-                  <div>
-                    <div className="title">
-                      <label htmlFor="title">標題</label>
-                      <input
-                        type="text"
-                        id="title"
-                        value={broadCastTitleInput.value}
-                        onChange={broadCastTitleInput.onChange}
-                      />
-                      <button onClick={handleBroadcastClick}>發佈廣播</button>
-                    </div>
-                    <div className="date">
-                      <label htmlFor="datepicker">發佈時間</label>
-                      <DatePicker
-                        selected={publishTime}
-                        onChange={(date) => setPublishTime(date)}
-                        showTimeSelect
-                        minDate={new Date()}
-                        timeFormat="HH:mm"
-                        timeIntervals={30}
-                        timeCaption="time" // 時間選擇部分的標題
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                        id="datepicker"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="hour-select">選擇時長：</label>
-                      <select
-                        id="hour-select"
-                        value={hourSelectedInput.value}
-                        onChange={hourSelectedInput.onChange}
-                      >
-                        {[1, 2, 3, 4, 5, 6].map((h) => (
-                          <option key={h} value={h}>
-                            {h} 小時
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="content">
-                      <label htmlFor="content">內容</label>
-                      <textarea
-                        id="content"
-                        cols="30"
-                        rows="10"
-                        value={broadCastContentInput.value}
-                        onChange={broadCastContentInput.onChange}
-                      ></textarea>
-                    </div>
-                  </div>
+                  <BroadCast
+                    roomId={roomId}
+                    userId={userId}
+                    playerCharName={playerCharName}
+                  />
                 </BroadcastWrapper>
               </div>
               <div>
@@ -428,7 +302,9 @@ const expirationTime = expirationTimeObj.toISOString();
                   <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H322.8c-3.1-8.8-3.7-18.4-1.4-27.8l15-60.1c2.8-11.3 8.6-21.5 16.8-29.7l40.3-40.3c-32.1-31-75.7-50.1-123.9-50.1H178.3zm435.5-68.3c-15.6-15.6-40.9-15.6-56.6 0l-29.4 29.4 71 71 29.4-29.4c15.6-15.6 15.6-40.9 0-56.6l-14.4-14.4zM375.9 417c-4.1 4.1-7 9.2-8.4 14.9l-15 60.1c-1.4 5.5 .2 11.2 4.2 15.2s9.7 5.6 15.2 4.2l60.1-15c5.6-1.4 10.8-4.3 14.9-8.4L576.1 358.7l-71-71L375.9 417z" />
                 </svg>
                 <span>更改權限等級</span>
-                {players && <ChangePermission players={players} roomId={roomId}/>}
+                {players && (
+                  <ChangePermission players={players} roomId={roomId} />
+                )}
               </div>
             </PermissionWrapper>
           </div>
