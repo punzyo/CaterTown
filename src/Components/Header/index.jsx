@@ -66,7 +66,7 @@ const Profile = styled.button`
 `;
 const SignOut = styled.div`
   ${containerStyles}
-  width: 60px;
+  min-width: 60px;
   height: 40px;
   display: flex;
   justify-content: center;

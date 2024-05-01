@@ -46,7 +46,7 @@ const DialogWrapper = styled.div`
   align-items: center;
   gap: 10px;
 `;
-const Title = styled.p`
+const Title = styled.div`
   display: flex;
   align-items: center;
   font-size: 24px;

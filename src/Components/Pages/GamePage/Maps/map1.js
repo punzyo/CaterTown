@@ -427,7 +427,7 @@ export const mapIndex = {
     width: 2,
     height: 2,
     x: 10,
-    y: -12.8,
+    y: -12.7,
     collision: true,
   },
   tree3: {
@@ -462,21 +462,21 @@ export const mapIndex = {
     width:2,
     height: 2,
     x: 8,
-    y: -12.8,
+    y: -12.7,
     collision: true,
   },
   tree8: {
     width: 2,
     height: 2,
     x: 6,
-    y: -12.8,
+    y: -12.7,
     collision: true,
   },
   tree9: {
     width: 2,
     height: 2,
     x: 4,
-    y: -12.8,
+    y: -12.7,
     collision: true,
   },
   redHouse1: {

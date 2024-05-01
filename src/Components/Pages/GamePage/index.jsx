@@ -313,7 +313,7 @@ export default function GamePage() {
             </GroupIcon>
             <LeaveRoom
               onClick={() => {
-                navigate('/');
+                navigate('/home');
               }}
             >
               <svg

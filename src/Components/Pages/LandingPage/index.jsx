@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../Buttons/Button';
 import Logo from '../../Logo';
@@ -35,7 +36,7 @@ const Header = styled.header`
     align-items: center;
     display: flex;
     gap: 20px;
-    width: 200px;
+    min-width: 200px;
     height: 100%;
   }
   input {
@@ -53,23 +54,20 @@ const Main = styled.main`
     height: 450px;
     display: flex;
     .left {
-      
-    
       width: 50%;
       color: white;
       animation: slideIn5 0.7s ease-out;
-     >div{
-      width: 80%;
-      height: 100%;
-      margin: 0 auto;
-      display: flex;
-      align-items: flex-start;
-      flex-direction: column;
-      justify-content: center;
-      gap:10px;
-     }
+      > div {
+        width: 80%;
+        height: 100%;
+        margin: 0 auto;
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+      }
       h1 {
-        
         font-size: 3.5rem;
         font-weight: 700;
         line-height: 1.2;
@@ -84,7 +82,6 @@ const Main = styled.main`
         width: 100%;
         height: 100%;
         object-fit: cover;
-        
       }
     }
 
@@ -134,13 +131,13 @@ const Main = styled.main`
         margin-right: 5px;
       }
     }
-    > div:first-of-type{
+    > div:first-of-type {
       animation: slideIn2 0.5s ease-out;
     }
-    > div:nth-of-type(2){
+    > div:nth-of-type(2) {
       animation: slideIn3 0.6s ease-out;
     }
-    > div:nth-of-type(3){
+    > div:nth-of-type(3) {
       animation: slideIn4 0.7s ease-out;
     }
     @keyframes slideIn2 {
@@ -178,7 +175,7 @@ const Main = styled.main`
 
 const SignUp = styled.div`
   ${containerStyles}
-  width: 100px;
+  width: 90px;
   height: 40px;
   display: flex;
   justify-content: center;
@@ -197,13 +194,18 @@ const SignUp = styled.div`
   }
 `;
 const SignIn = styled.div`
-  width: 100px;
-  height: 45px;
+  width: 90px;
+  height: 40px;
+  >button{
+    width: 100%;
+  }
 `;
 export default function LandingPage() {
   const { user } = useUserState();
   const navigate = useNavigate();
-  if(user) navigate('/home')
+  useEffect(() => {
+    if (user.id) navigate('/home');
+  }, [user.id]);
   return (
     <>
       <Header>
@@ -217,14 +219,14 @@ export default function LandingPage() {
               navigate('/signup');
             }}
           >
-            <button>Sign up</button>
+            <button>註冊</button>
           </SignUp>
           <SignIn
             onClick={() => {
               navigate('/signin');
             }}
           >
-            <Button content="Sign in" />
+            <Button content="登入" />
           </SignIn>
         </div>
       </Header>
@@ -233,7 +235,13 @@ export default function LandingPage() {
           <div className="left">
             <div>
               <h1>讓你的遠距學習，沒有距離</h1>
-              <SignUp>Sign up</SignUp>
+              <SignUp
+                onClick={() => {
+                  navigate('/signup');
+                }}
+              >
+                <button>註冊</button>
+              </SignUp>
             </div>
           </div>
           <div className="right">

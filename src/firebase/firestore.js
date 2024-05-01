@@ -12,8 +12,9 @@ import {
   arrayUnion,
   increment,
   deleteDoc,
+  arrayRemove,
 } from 'firebase/firestore';
-import { creatRtRoom } from './realtime';
+import { creatRtRoom,deleteRoomFromRT, removeUserFromRTRoom } from './realtime';
 
 export const db = getFirestore(app);
 
@@ -40,30 +41,6 @@ export async function updatePlayerPosition({ userId, userData, roomId, room }) {
     console.error('Error updating position: ', error);
   }
 }
-
-// export async function getOtherPlayersData(excludePlayerId) {
-//   const roomDocRef = doc(db, 'rooms', '001');
-
-//   try {
-//     const docSnap = await getDoc(roomDocRef);
-
-//     if (docSnap.exists()) {
-//       const roomData = docSnap.data();
-//       const users = roomData.users.filter(
-//         (user) => user.userId !== excludePlayerId
-//       );
-//       console.log('Other players data:', users);
-//       return users;
-//     } else {
-//       console.log('No such room exists!');
-//       return {};
-//     }
-//   } catch (error) {
-//     console.error('Error getting document:', error);
-//     return {};
-//   }
-// }
-
 export async function createRoom({
   userId,
   roomName,
@@ -182,19 +159,15 @@ export async function sendPublicMessage({ roomId, charName, message }) {
   const messagesRef = doc(db, `rooms/${roomId}/publicMessages/messages`);
 
   try {
-    // 获取当前的messages文档
     const messagesSnap = await getDoc(messagesRef);
 
-    // 构建新消息对象
     const newMessage = { charName, message, postTime: Timestamp.now() };
 
     if (messagesSnap.exists()) {
-      // 如果messages文档已存在，添加新消息到数组中
       await updateDoc(messagesRef, {
         messages: arrayUnion(newMessage),
       });
     } else {
-      // 如果messages文档不存在，首次创建文档并初始化messages数组
       await setDoc(messagesRef, {
         messages: [newMessage],
       });
@@ -213,13 +186,11 @@ export async function sendPrivateMessage({
   message,
 }) {
   try {
-    // 排序 userId 和 privateChannelId 以创建一致的 document ID
     const sortedIds = [userId, privateChannelId].sort();
-    const documentId = sortedIds.join(''); // 拼接成一个字符串，如 'user1user2'
+    const documentId = sortedIds.join('');
 
     const messageRef = doc(db, `rooms/${roomId}/users/${documentId}`);
 
-    // 获取当前消息文档的快照
     const docSnapshot = await getDoc(messageRef);
     const newMessage = {
       charName,
@@ -227,12 +198,10 @@ export async function sendPrivateMessage({
     };
 
     if (docSnapshot.exists()) {
-      // 如果文档已存在，读取现有消息列表并添加新消息
       let currentMessages = docSnapshot.data().messages || [];
       currentMessages.push(newMessage);
       await updateDoc(messageRef, { messages: currentMessages });
     } else {
-      // 如果文档不存在，首次创建这个文档并初始化消息列表
       await setDoc(messageRef, { messages: [newMessage] });
     }
   } catch (error) {
@@ -243,23 +212,18 @@ export async function sendPrivateMessage({
 
 export async function addUnreadMessage({ roomId, privateChannelId, userId }) {
   try {
-    // 定位到特定房间和频道的未读消息文档
     const unreadMsgRef = doc(
       db,
       `rooms/${roomId}/unReadMessages/${privateChannelId}`
     );
 
-    // 获取当前未读消息计数的快照
     const docSnapshot = await getDoc(unreadMsgRef);
 
-    // 检查文档是否存在，并更新或设置未读消息计数
     if (docSnapshot.exists()) {
-      // 更新指定用户的未读消息计数
       await updateDoc(unreadMsgRef, {
         [`messages.${userId}.count`]: increment(1),
       });
     } else {
-      // 如果未读消息文档不存在，首次为该用户创建未读消息计数
       await setDoc(unreadMsgRef, {
         messages: {
           [userId]: { count: 1 },
@@ -277,21 +241,16 @@ export async function resetUnreadMessage({ roomId, privateChannelId, userId }) {
   if (!privateChannelId) return;
   console.log('rest', roomId, privateChannelId, userId);
   try {
-    // 定位到特定房间和频道的未读消息文档
     const unreadMsgRef = doc(db, `rooms/${roomId}/unReadMessages/${userId}`);
 
-    // 获取当前未读消息计数的快照
     const docSnapshot = await getDoc(unreadMsgRef);
 
-    // 检查文档是否存在，并重置未读消息计数
     if (docSnapshot.exists()) {
-      // 更新指定用户的未读消息计数为0
       await updateDoc(unreadMsgRef, {
         [`messages.${privateChannelId}.count`]: 0,
       });
       console.log('Unread message count reset successfully');
     } else {
-      // 如果未读消息文档不存在，日志记录，实际操作可能不需要创建新记录
       console.log('No unread message record to reset');
     }
   } catch (error) {
@@ -416,17 +375,62 @@ export async function editPermissionLevel({
   }
 }
 
-export async function deleteRoom({ roomId, userId }) {
+export async function deleteRoomFromAllUsers(roomId) {
   const roomRef = doc(db, 'rooms', roomId);
+  console.log(roomId);
+  try {
+    await deleteRoomFromRT(roomId)
+    const roomSnap = await getDoc(roomRef);
+
+    if (roomSnap.exists()) {
+      const users = roomSnap.data().users;
+
+      for (const user of users) {
+        const userRoomRef = doc(db, 'users', user.userId, 'rooms', roomId);
+        await deleteDoc(userRoomRef);
+      }
+      
+      await deleteDoc(roomRef);
+      console.log('Room and all references deleted successfully');
+    } else {
+      console.log('Room does not exist');
+    }
+  } catch (error) {
+    console.error('Error in deleting room: ', error);
+  }
+}
+export async function checkUserRoom({ roomId, userId }) {
+  const userRoomRef = doc(db, 'users', userId, 'rooms', roomId);
+  try {
+    const userRoomSnap = await getDoc(userRoomRef);
+
+    if (userRoomSnap.exists()) return true;
+    return false;
+  } catch (error) {
+    console.error('Error : ', error);
+  }
+}
+
+export async function removeUserFromRoom({ roomId, userId }) {
   const userRoomRef = doc(db, 'users', userId, 'rooms', roomId);
 
+  const roomRef = doc(db, 'rooms', roomId);
+
   try {
+    await removeUserFromRTRoom({ roomId, userId });
     await deleteDoc(userRoomRef);
     console.log('User room reference deleted.');
 
-    await deleteDoc(roomRef);
-    console.log('Room deleted from rooms collection.');
+    const roomSnap = await getDoc(roomRef);
+    if (roomSnap.exists()) {
+      await updateDoc(roomRef, {
+        users: arrayRemove(userId),
+      });
+      console.log('User removed from room users array.');
+    } else {
+      console.log('Room does not exist.');
+    }
   } catch (error) {
-    console.error('Error deleting room: ', error);
+    console.error('Error removing user from room: ', error);
   }
 }
