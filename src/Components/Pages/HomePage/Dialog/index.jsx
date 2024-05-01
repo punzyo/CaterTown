@@ -51,7 +51,7 @@ const Title = styled.p`
   align-items: center;
   font-size: 24px;
   font-weight: bold;
-   > div:first-of-type {
+  > div:first-of-type {
     background-position: -260px 188px;
   }
 `;
@@ -101,11 +101,11 @@ function Dialog({ onClose, userId }) {
     setSelectedImageIndex(index);
   };
   const clickCreateRoom = async () => {
-    if(!roomNameInput.isValid){
-      alert('房間名稱不符規則')
+    if (!roomNameInput.isValid) {
+      alert('房間名稱不符規則');
     }
-    if(!charNameInput.isValid){
-      alert('角色名稱不符規則')
+    if (!charNameInput.isValid) {
+      alert('角色名稱不符規則');
     }
     const roomName = roomNameInput.value;
     const charName = charNameInput.value;
@@ -127,6 +127,7 @@ function Dialog({ onClose, userId }) {
       roomId,
       character,
       charName,
+      isCreater: true,
     });
     if (isUpdated) {
       clearInput();

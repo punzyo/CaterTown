@@ -1,84 +1,23 @@
-import styled, { css } from 'styled-components';
-import { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 import Dialog from './Dialog';
 import { useUserRooms } from '../../../utils/hooks/useUserRooms';
 import { useNavigate } from 'react-router-dom';
 import { useUserState } from '../../../utils/zustand';
 import Button from '../../Buttons/Button';
-import Logo from '../../Logo';
+import Header from '../../Header';
 import InviteButton from '../../Buttons/InviteButton';
 import SearchBar from '../../SearchBar';
 import Cat from '../../Cat';
-const containerStyles = css`
-  border-radius: 10px;
-  font-size: 16px;
-  padding: 5px 10px;
-  font-weight: 700;
-  cursor: pointer;
-  letter-spacing: 1px;
-  transition: background-color 200ms ease 0s, border-color 200ms ease 0s;
-`;
+import { deleteRoom } from '../../../firebase/firestore';
+
 const Wrapper = styled.main`
   width: 100%;
   height: 100vh;
 `;
-const Header = styled.header`
-  width: 100%;
-  height: 80px;
-  padding: 10px 20px;
-  background-color: #333a64;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  .left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    height: 100%;
-    span {
-      color: #fff;
-      font-size: 50px;
-      letter-spacing: 6px;
-    }
-  }
-  .right {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    height: 100%;
-    gap:5px;
-  }
-  input {
-    width: 50px;
-  }
-`;
-const Profile = styled.button`
-  ${containerStyles}
-  min-width: 150px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  background-color: inherit;
-  color: #fff;
-  &:hover {
-    background-color: #545c8f;
-  }
-  .userimg {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    overflow: hidden;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-`;
+
+
 const CreateSpace = styled.div`
-  ${containerStyles}
-  width: 150px;
   height: 50px;
 `;
 const SearchWrapper = styled.div`
@@ -112,8 +51,32 @@ const Room = styled.div`
   height: 400px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    >div{
+      position: relative;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 5px;
+     &:hover{
+       background-color: #333A64
+     }
+    }
+    svg {
+      width: 16px;
+      height: 16px;
+      fill: #fff;
+    }
+  }
+
+  .middle {
     height: 80%;
     background-image: url(/images/map2.png);
     background-size: cover;
@@ -138,77 +101,66 @@ const Room = styled.div`
     }
   }
 `;
-const SignOut = styled.div`
-  ${containerStyles}
-  width: 100px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  background-color: #4979bc;
-  color: #fff;
-  &:hover {
-    background-color: #558cda;
-  }
-  button {
-    font-size: 16px;
-    font-weight: bold;
-    background-color: inherit;
-    color: #fff;
+const DeleteDialog = styled.div`
+  position: absolute;
+  left: 0;
+  width: 160px;
+  height: 95px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #414b80;
+  font-weight: bold;
+  color: white;
+  > div {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    button {
+      width: 50px;
+      height: 30px;
+      border-radius: 5px;
+      color: inherit;
+      &:hover {
+        background-color: #5f6dbb;
+      }
+    }
   }
 `;
 
+
 export default function HomePage() {
-  const { user, setUser, resetUser } = useUserState();
+  const { user } = useUserState();
   const [dialogOpen, setDialogOpen] = useState(false);
   const userId = user.id;
-  const idInput = useRef(null);
   const userRooms = useUserRooms(userId);
+  const [showDeleteDialog, setShowDeleteDialog] = useState({show:false, id:''});
+
   const navigate = useNavigate();
-  if (!user) navigate('/');
+  useEffect(() => {
+    if (!user) navigate('/');
+  }, []);
   const openDialog = () => {
     console.log('open');
     setDialogOpen(true);
   };
   const closeDialog = () => setDialogOpen(false);
-  const changeUser = () => {
-    setUser({ id: idInput.current.value, name: ''.current.value });
-  };
 
+  const handleDeleteRoom = async (roomId) => {
+    await deleteRoom({ userId, roomId });
+  };
   return (
     <Wrapper
       onClick={() => {
         if (dialogOpen) closeDialog();
+        if(showDeleteDialog.show) setShowDeleteDialog({show:false,id:''});
       }}
     >
       <Header>
-        <div className="left">
-          <Logo></Logo>
-          <span>Cater town</span>
-        </div>
-        <input type="text" placeholder="id" ref={idInput} />
-        <button onClick={changeUser}>換人</button>
-        <div className="right">
-          <Profile>
-            <div className="userimg">
-              <img src="/images/cat-tabby.svg" alt="" />
-            </div>
-            <div>
-              <span>{user.name}</span>
-            </div>
-          </Profile>
-          <SignOut
-            onClick={() => {
-              navigate('/signup');
-            }}
-          >
-            <button onClick={resetUser}>Sign out</button>
-          </SignOut>
           <CreateSpace>
             <Button clickFunc={openDialog} content={'Create space'}></Button>
           </CreateSpace>
-        </div>
       </Header>
       <SearchWrapper>
         <div className="inputWrapper">
@@ -220,9 +172,48 @@ export default function HomePage() {
           {userRooms &&
             userRooms.map((room, index) => (
               <Room key={index}>
-                <span className="mapName">{room.roomName}</span>
+                <div className="top">
+                  <span className="mapName">{room.roomName}</span>
+                  {
+                    <div onClick={()=>{
+                      setShowDeleteDialog({show:true, id:room.id});
+                    }}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 448 512"
+                      >
+                        <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                      </svg>
+                      {showDeleteDialog.show && showDeleteDialog.id ===room.id  && (
+                        <DeleteDialog
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          <span>確定要刪除此房間?</span>
+                          <div>
+                            <button
+                              onClick={() => {
+                                handleDeleteRoom(room.id);
+                              }}
+                            >
+                              確定
+                            </button>
+                            <button
+                              onClick={() => {
+                                setShowDeleteDialog({show:false,id:''});
+                              }}
+                            >
+                              取消
+                            </button>
+                          </div>
+                        </DeleteDialog>
+                      )}
+                    </div>
+                  }
+                </div>
                 <div
-                  className="top"
+                  className="middle"
                   onClick={() => {
                     navigate(`/chouchouzoo/${room.id}/${room.roomName}`);
                   }}

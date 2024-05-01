@@ -97,7 +97,7 @@ export async function createRoom({
     console.error('Error adding document: ', e);
   }
 }
-export async function joinRoom({ roomId, user }) {
+export async function JoinRoom({ roomId, user }) {
   const roomDocRef = doc(db, 'rooms', roomId);
 
   try {
@@ -121,6 +121,7 @@ export async function addRoomToUser({
   roomId,
   character,
   charName,
+  isCreater,
 }) {
   const roomDocRef = doc(db, 'users', userId, 'rooms', roomId);
 
@@ -132,7 +133,7 @@ export async function addRoomToUser({
         character,
         charName,
         joinDate: Timestamp.now(),
-        permissionLevel: 'admin',
+        isCreater,
       },
       { merge: true }
     );
@@ -412,5 +413,20 @@ export async function editPermissionLevel({
   } catch (error) {
     console.error('Error updating permission level:', error);
     return false;
+  }
+}
+
+export async function deleteRoom({ roomId, userId }) {
+  const roomRef = doc(db, 'rooms', roomId);
+  const userRoomRef = doc(db, 'users', userId, 'rooms', roomId);
+
+  try {
+    await deleteDoc(userRoomRef);
+    console.log('User room reference deleted.');
+
+    await deleteDoc(roomRef);
+    console.log('Room deleted from rooms collection.');
+  } catch (error) {
+    console.error('Error deleting room: ', error);
   }
 }

@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { catImages } from '../../../assets/charNames.js';
 import { useUserState } from '../../../utils/zustand.js';
 import { useFormInput } from '../../../utils/hooks/useFormInput.js';
-import { addRoomToUser, joinRoom } from '../../../firebase/firestore.js';
+import { addRoomToUser, JoinRoom } from '../../../firebase/firestore.js';
 import Button from '../../Buttons/Button/index.jsx';
 import styled from 'styled-components';
 import SimpleSlider from '../../Silder/index.jsx';
+import Header from '../../Header/index.jsx';
 import { map2 } from '../GamePage/Maps/map2.js';
 const Wrapper = styled.main`
   width: 100%;
@@ -14,49 +15,7 @@ const Wrapper = styled.main`
   background-color: #282d4e;
   color: #fff;
 `;
-const Header = styled.header`
-  width: 100%;
-  height: 80px;
-  padding: 10px 30px;
-  background-color: #333a64;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  .left {
-    display: flex;
-    align-items: center;
-    gap: 50px;
-    width: 400px;
-    height: 100%;
-    img {
-      width: 50px;
-      height: 50px;
-      border-radius: 20%;
-      object-fit: cover;
-    }
-    span {
-      color: #fff;
-      font-size: 50px;
-      letter-spacing: 6px;
-    }
-  }
-  .right {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    width: 400px;
-    height: 100%;
-    .userImg {
-      width: 40px;
-      height: 40px;
-      img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-      }
-    }
-  }
-`;
+
 const MainWrapper = styled.div`
   width: 800px;
   height: 500px;
@@ -126,11 +85,11 @@ export default function InvitePage() {
   const handleSlideChange = (index) => {
     setSelectedImageIndex(index);
   };
-  const JoinRoom = async () => {
+  const handleJoinRoom = async () => {
     const userId = user.id;
     const charName = charNameInput.value;
     const character = catImages[selectedImageIndex];
-    await joinRoom({
+    await JoinRoom({
       roomId,
       user: {
         userId,
@@ -145,6 +104,7 @@ export default function InvitePage() {
       roomId,
       character,
       charName,
+      isCreater:false
     });
     if (joinedRoom) {
       charNameInput.clear();
@@ -153,20 +113,9 @@ export default function InvitePage() {
   };
   return (
     <Wrapper>
-      <Header>
-        <div className="left">
-          <img src="/images/logo.png" alt="logo" />
-          <span>ChouChouZoo</span>
-        </div>
-        <div className="right">
-          <div className="userImg">
-            <img src="/images/profile.jpg" alt="" />
-          </div>
-          <div>{user.name}</div>
-        </div>
-      </Header>
+      <Header/>
       <MainWrapper>
-        <Title>You have been invited to the room {roomName}!</Title>
+        <Title>您已被邀請至房間 {roomName}!</Title>
 
         <span>請選擇角色!</span>
         <GameSettings>
@@ -187,7 +136,7 @@ export default function InvitePage() {
           </div>
         </GameSettings>
         <JoinButton>
-          <Button clickFunc={JoinRoom} content={'加入房間'} />
+          <Button clickFunc={handleJoinRoom} content={'加入房間'} />
         </JoinButton>
       </MainWrapper>
     </Wrapper>
