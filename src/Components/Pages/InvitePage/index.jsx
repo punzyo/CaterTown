@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { catImages } from '../../../assets/charNames.js';
 import { useUserState } from '../../../utils/zustand.js';
-import { useFormInput } from '../../../utils/hooks/useFormInput.js';
+import useValidatedInput from '../../../utils/hooks/useValidatedInput.js';
 import { addRoomToUser, JoinRoom } from '../../../firebase/firestore.js';
 import Button from '../../Buttons/Button/index.jsx';
 import styled from 'styled-components';
@@ -17,12 +17,11 @@ const Wrapper = styled.main`
 `;
 
 const MainWrapper = styled.div`
-  width: 800px;
-  height: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 50px;
+  gap: 20px;
   margin: 0 auto;
 `;
 
@@ -35,16 +34,24 @@ const Title = styled.h1`
   margin-bottom: 40px;
 `;
 const GameSettings = styled.div`
-  width: 100%;
-  margin-top: 30px;
+  width: 500px;
+  padding: 20px 30px;
+  background-color: #333a64;
+  border-radius: 10px;
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  .settings {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 0 auto;
+  }
 `;
 const SilderWrapper = styled.div`
+  background-image: url('/images/floor.png');
   background-color: white;
   position: relative;
   border-radius: 10px;
-  border: 1px solid black;
   width: 320px;
   height: 180px;
 
@@ -68,24 +75,48 @@ const SilderWrapper = styled.div`
     }
   }
 `;
+const InputWrapper = styled.div`
+  width: 100%;
+  input {
+    outline: none;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    &:focus {
+      border: 1px solid
+        ${(props) =>
+          props.$value ? (props.$isValid ? 'green' : 'red') : '#1e84d8'};
+    }
+  }
+`;
 const JoinButton = styled.div`
-  width: 200px;
-  height: 50px;
+  > button {
+    width: 90px;
+  }
+  height: 40px;
+  font-size: 14px;
   border-radius: 10px;
   font-weight: bold;
-  margin-top: 30px;
+  margin: 30px auto 0;
 `;
 export default function InvitePage() {
   const navigate = useNavigate();
-  const charNameInput = useFormInput('');
+  const charNameInput = useValidatedInput('', /^[^*%]+$/, 15);
   const { user } = useUserState();
-  if(!user)navigate('/signin')
+  if (!user) navigate('/signin');
   const { roomId, roomName } = useParams();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const handleSlideChange = (index) => {
     setSelectedImageIndex(index);
   };
   const handleJoinRoom = async () => {
+    if (!charNameInput.isValid) {
+      alert('名稱不符合規定');
+      return;
+    }
     const userId = user.id;
     const charName = charNameInput.value;
     const character = catImages[selectedImageIndex];
@@ -104,7 +135,7 @@ export default function InvitePage() {
       roomId,
       character,
       charName,
-      isCreater:false
+      isCreater: false,
     });
     if (joinedRoom) {
       charNameInput.clear();
@@ -113,31 +144,35 @@ export default function InvitePage() {
   };
   return (
     <Wrapper>
-      <Header/>
+      <Header />
       <MainWrapper>
         <Title>您已被邀請至房間 {roomName}!</Title>
-
-        <span>請選擇角色!</span>
         <GameSettings>
-          <SilderWrapper>
-            <SimpleSlider onSlideChange={handleSlideChange} data={catImages} />
-          </SilderWrapper>
-          <div>
+          <div className="settings">
             <div>
-              <label htmlFor="name">角色名稱</label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value={charNameInput.value}
-                onChange={charNameInput.onChange}
-              />
+              <InputWrapper $isValid={charNameInput.isValid} $value={charNameInput.value}>
+                <label htmlFor="name">角色名稱</label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  value={charNameInput.value}
+                  onChange={charNameInput.onChange}
+                />
+              </InputWrapper>
             </div>
+            <span>請選擇貓咪</span>
+            <SilderWrapper>
+              <SimpleSlider
+                onSlideChange={handleSlideChange}
+                data={catImages}
+              />
+            </SilderWrapper>
           </div>
+          <JoinButton>
+            <Button clickFunc={handleJoinRoom} content={'加入房間'} />
+          </JoinButton>
         </GameSettings>
-        <JoinButton>
-          <Button clickFunc={handleJoinRoom} content={'加入房間'} />
-        </JoinButton>
       </MainWrapper>
     </Wrapper>
   );

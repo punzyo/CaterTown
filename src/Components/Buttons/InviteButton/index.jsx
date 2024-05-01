@@ -11,7 +11,7 @@ const Button = styled.button`
 `;
 export default function InviteButton({ roomId, roomName }) {
   const inviteFriends = () => {
-    const textToCopy = `${roomId}/${roomName}`;
+    const textToCopy = `${window.location.host}/invite/${roomId}/${roomName}`;
     navigator.clipboard
       .writeText(textToCopy)
       .then(() => {

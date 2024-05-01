@@ -53,15 +53,23 @@ const Main = styled.main`
     height: 450px;
     display: flex;
     .left {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      
+    
       width: 50%;
       color: white;
-      align-items: center;
+      animation: slideIn5 0.7s ease-out;
+     >div{
+      width: 80%;
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
       flex-direction: column;
-      align-items: center;
+      justify-content: center;
+      gap:10px;
+     }
       h1 {
+        
         font-size: 3.5rem;
         font-weight: 700;
         line-height: 1.2;
@@ -71,17 +79,28 @@ const Main = styled.main`
       width: 50%;
       border-radius: 10px;
       overflow: hidden;
+      animation: slideIn 0.7s ease-out;
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        animation: slideIn 0.8s ease-out;
+        
       }
     }
 
     @keyframes slideIn {
       from {
         transform: translateX(20%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    @keyframes slideIn5 {
+      from {
+        transform: translateX(-20%);
         opacity: 0;
       }
       to {
@@ -113,6 +132,45 @@ const Main = styled.main`
         height: 30px;
         padding-bottom: 2px;
         margin-right: 5px;
+      }
+    }
+    > div:first-of-type{
+      animation: slideIn2 0.5s ease-out;
+    }
+    > div:nth-of-type(2){
+      animation: slideIn3 0.6s ease-out;
+    }
+    > div:nth-of-type(3){
+      animation: slideIn4 0.7s ease-out;
+    }
+    @keyframes slideIn2 {
+      from {
+        transform: translateY(20%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    @keyframes slideIn3 {
+      from {
+        transform: translateY(30%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    @keyframes slideIn4 {
+      from {
+        transform: translateY(40%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
       }
     }
   }
@@ -174,9 +232,9 @@ export default function LandingPage() {
         <div className="top">
           <div className="left">
             <div>
-              <h1>這裡會有一段幹話</h1>
+              <h1>讓你的遠距學習，沒有距離</h1>
+              <SignUp>Sign up</SignUp>
             </div>
-            <SignUp>Sign up</SignUp>
           </div>
           <div className="right">
             <img src="/images/map2.png" alt="" />

@@ -48,13 +48,15 @@ const Player = styled.div`
     font-weight: bold;
     position: absolute;
     left: 9px;
-    bottom: -26px;
+    bottom: -5px;
     width: 40px;
-    height: 40px;
+    height: 16px;
     color: black;
     white-space: nowrap;
     display: flex;
     justify-content: center;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 5px;
   }
 `;
 const OtherPlayer = styled.div`
@@ -75,13 +77,15 @@ const OtherPlayer = styled.div`
     font-weight: bold;
     position: absolute;
     left: 9px;
-    bottom: -26px;
+    bottom: -5px;
     width: 40px;
-    height: 40px;
+    height: 16px;
     color: black;
     white-space: nowrap;
     display: flex;
     justify-content: center;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 5px;
   }
 `;
 
