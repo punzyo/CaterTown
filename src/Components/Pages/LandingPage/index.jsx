@@ -1,9 +1,8 @@
 import styled, { css } from 'styled-components';
-import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../Buttons/Button';
 import Logo from '../../Logo';
-
+import { useUserState } from '../../../utils/zustand';
 const containerStyles = css`
   border-radius: 10px;
   font-size: 16px;
@@ -60,8 +59,8 @@ const Main = styled.main`
       width: 50%;
       color: white;
       align-items: center;
-    flex-direction: column;
-    align-items: center;
+      flex-direction: column;
+      align-items: center;
       h1 {
         font-size: 3.5rem;
         font-weight: 700;
@@ -69,7 +68,6 @@ const Main = styled.main`
       }
     }
     .right {
-      border: 1px solid black;
       width: 50%;
       border-radius: 10px;
       overflow: hidden;
@@ -77,27 +75,47 @@ const Main = styled.main`
         width: 100%;
         height: 100%;
         object-fit: cover;
+        animation: slideIn 0.8s ease-out;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(20%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
       }
     }
   }
-  .bottom{
-        width: 100%;
-        min-height: 200px;
-        display: grid;
-        margin: 80px 0;
-        gap:50px;
-        grid-template-columns: repeat(3, 1fr);
-        >div{
-            border-radius: 10px;
-            height:100%;
-            border-top: 1px solid #373e6C;
-            background-color: #282D52;
-            padding: 30px;
-            h2{
-                margin-bottom: 10px;
-            }
-        }
+  .bottom {
+    width: 100%;
+    min-height: 200px;
+    display: grid;
+    margin: 80px 0;
+    gap: 50px;
+    grid-template-columns: repeat(3, 1fr);
+    > div {
+      border-radius: 10px;
+      height: 100%;
+      border-top: 1px solid #373e6c;
+      background-color: #282d52;
+      padding: 30px;
+      h2 {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+      }
+      img {
+        width: 30px;
+        height: 30px;
+        padding-bottom: 2px;
+        margin-right: 5px;
+      }
     }
+  }
 `;
 
 const SignUp = styled.div`
@@ -108,10 +126,10 @@ const SignUp = styled.div`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  background-color: #4979BC;
+  background-color: #4979bc;
   color: #fff;
   &:hover {
-    background-color: #558CDA;
+    background-color: #558cda;
   }
   button {
     font-size: 16px;
@@ -125,7 +143,9 @@ const SignIn = styled.div`
   height: 45px;
 `;
 export default function LandingPage() {
+  const { user } = useUserState();
   const navigate = useNavigate();
+  if(user) navigate('/home')
   return (
     <>
       <Header>
@@ -153,30 +173,45 @@ export default function LandingPage() {
       <Main>
         <div className="top">
           <div className="left">
-           <div>
-           <h1>這裡會有一段幹話</h1>
-           </div>
-            <SignUp>
-                Sign up
-            </SignUp>
+            <div>
+              <h1>這裡會有一段幹話</h1>
+            </div>
+            <SignUp>Sign up</SignUp>
           </div>
           <div className="right">
             <img src="/images/map2.png" alt="" />
           </div>
         </div>
-        <div className='bottom'>
-            <div>
-                <h2>讓學習團隊一起在線上相聚</h2>
-                <p>Cater town提供了一個溫暖的線上虛擬環境，不只有提供視音訊的服務，還有高達50種可愛貓咪可供選擇，讓我們不管身在何方，都能用自己最喜歡的樣貌，和夥伴們一起在線上學習、交流。</p>
-            </div>
-            <div>
-                <h2>獨立空間，各自討論不打擾</h2>
-                <p>有不同組別要分開討論怎麼辦?不用擔心，只要進入特定空間，就不會收到外面視音訊的打擾，只能接收相同空間的訊息，讓分組討論變得更有效率!</p>
-            </div>
-            <div>
-                <h2>追蹤PR，變得簡單又有趣</h2>
-                <p>藉由串接GitHub webhook，當追蹤的repository 收到pull requests時，對應貓咪的頭上就會跑出驚嘆號的通知，讓多人協同合作的同時享受更多的樂趣。</p>
-            </div>
+        <div className="bottom">
+          <div>
+            <h2>
+              <img src="/images/cat-orange.svg" alt="cat-orange" />
+              讓學習團隊一起在線上相聚
+            </h2>
+            <p>
+              Cater
+              town提供了一個溫暖的線上虛擬環境，不只有提供視音訊的服務，還有高達50種可愛貓咪可供選擇，讓我們不管身在何方，都能用自己最喜歡的樣貌，和夥伴們一起在線上學習、交流。
+            </p>
+          </div>
+          <div>
+            <h2>
+              <img src="/images/cat-calico.svg" alt="cat-orange" />
+              獨立空間，各自討論不打擾
+            </h2>
+            <p>
+              有不同組別要分開討論怎麼辦?不用擔心，只要進入特定空間，就不會收到外面視音訊的打擾，只能接收相同空間的訊息，讓分組討論變得更有效率!
+            </p>
+          </div>
+          <div>
+            <h2>
+              <img src="/images/cat-grey.svg" alt="cat-orange" />
+              追蹤PR，變得簡單又有趣
+            </h2>
+            <p>
+              藉由串接GitHub webhook，當追蹤的repository 收到pull
+              requests時，對應貓咪的頭上就會跑出驚嘆號的通知，讓多人協同合作的同時享受更多的樂趣。
+            </p>
+          </div>
         </div>
       </Main>
     </>

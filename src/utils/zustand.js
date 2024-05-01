@@ -2,23 +2,25 @@ import { create } from 'zustand';
 import { Track } from 'livekit-client';
 export const useUserState = create((set, get) => ({
   user: {
-    name: '班尼',
+    name: '',
     email: '',
-    id: 'benny',
+    id: '',
   },
   setUser: (userData) =>
     set((state) => ({
       ...state,
       user: { ...state.user, ...userData },
     })),
-  resetUser: () =>
-    set({
-      user: {
-        name: '',
-        email: '',
-        id: '',
-      },
-    }),
+    resetUser: () => {
+      localStorage.removeItem('ChouChouZooUser');
+      set({
+        user: {
+          name: '',
+          email: '',
+          id: '',
+        },
+      });
+    },
   getUserData: () => get().user,
 }));
 export const usePullRequests = create((set, get) => ({

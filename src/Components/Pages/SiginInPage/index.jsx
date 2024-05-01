@@ -5,6 +5,7 @@ import useValidatedInput from '../../../utils/hooks/useValidatedInput';
 import { signInToAuth } from '../../../firebase/auth';
 import { getUserFromFirestore } from '../../../firebase/firestore';
 import { useUserState } from '../../../utils/zustand';
+import { useEffect } from 'react';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -104,9 +105,12 @@ const SignUpButton = styled.button`
 export default function SignInPage() {
   const { user, setUser } = useUserState();
   const navigate = useNavigate();
-  if(user) navigate('/')
   const emailInput = useValidatedInput('', /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   const passwordInput = useValidatedInput('', /^.{6,}$/);
+
+  useEffect(() => {
+    if (user.id) navigate('/home');
+  }, [user]);
 
   const signIn = async ({ e, email, password }) => {
     e.preventDefault();
@@ -115,7 +119,7 @@ export default function SignInPage() {
       const userData = await getUserFromFirestore(user.uid);
       setUser(userData);
       localStorage.setItem('ChouChouZooUser', JSON.stringify(userData));
-      navigate('/')
+      navigate('/');
     } catch (error) {
       alert('登入失敗', error);
     }
@@ -143,7 +147,10 @@ export default function SignInPage() {
               });
             }}
           >
-            <InputWrapper $isValid={emailInput.isValid} $value={emailInput.value}>
+            <InputWrapper
+              $isValid={emailInput.isValid}
+              $value={emailInput.value}
+            >
               <label htmlFor="email">Email</label>
               <input
                 type="text"
@@ -152,7 +159,10 @@ export default function SignInPage() {
                 onChange={emailInput.onChange}
               />
             </InputWrapper>
-            <InputWrapper $isValid={passwordInput.isValid} $value={passwordInput.value}>
+            <InputWrapper
+              $isValid={passwordInput.isValid}
+              $value={passwordInput.value}
+            >
               <label htmlFor="password">Password</label>
               <input
                 type="password"

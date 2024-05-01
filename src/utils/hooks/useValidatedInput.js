@@ -1,11 +1,14 @@
 import { useState } from 'react';
 
-export default function useValidatedInput(initialValue, regex) {
+export default function useValidatedInput(initialValue, regex, maxLength) {
     const [value, setValue] = useState(initialValue);
     const [isValid, setIsValid] = useState(false);
   
     const handleChange = (e) => {
-      const newValue = e.target.value;
+      let newValue = e.target.value;
+      if (maxLength && newValue.length > maxLength) {
+        newValue = newValue.slice(0, maxLength);
+      }
       setValue(newValue);
       setIsValid(regex.test(newValue));
     };
@@ -20,4 +23,4 @@ export default function useValidatedInput(initialValue, regex) {
       isValid,
       clear
     };
-  }
+}

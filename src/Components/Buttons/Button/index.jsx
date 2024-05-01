@@ -4,7 +4,7 @@ const ButtonStyle = styled.button`
   border-radius: 5px;
   font-size: inherit;
   font-weight: bold;
-  padding: 5px 15px;
+  padding: 5px 10px;
   box-shadow: 0 4px #c1a23c;
   color: #5e4800;
   background-color: #ffd95e;

@@ -25,7 +25,7 @@ const Wrapper = styled.main`
 const Header = styled.header`
   width: 100%;
   height: 80px;
-  padding: 10px 30px;
+  padding: 10px 20px;
   background-color: #333a64;
   display: flex;
   justify-content: space-between;
@@ -33,7 +33,7 @@ const Header = styled.header`
   .left {
     display: flex;
     align-items: center;
-    gap: 50px;
+    gap: 10px;
     height: 100%;
     span {
       color: #fff;
@@ -45,8 +45,8 @@ const Header = styled.header`
     align-items: center;
     display: flex;
     justify-content: space-between;
-    width: 400px;
     height: 100%;
+    gap:5px;
   }
   input {
     width: 50px;
@@ -54,7 +54,7 @@ const Header = styled.header`
 `;
 const Profile = styled.button`
   ${containerStyles}
-  width: 150px;
+  min-width: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -115,7 +115,7 @@ const Room = styled.div`
   gap: 10px;
   .top {
     height: 80%;
-    background-image: url(/images/map1.png);
+    background-image: url(/images/map2.png);
     background-size: cover;
     background-position: center;
     border-radius: 10px;
@@ -138,7 +138,7 @@ const Room = styled.div`
     }
   }
 `;
-const SignIn = styled.div`
+const SignOut = styled.div`
   ${containerStyles}
   width: 100px;
   height: 40px;
@@ -146,26 +146,27 @@ const SignIn = styled.div`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  background-color:  #1c2147;
+  background-color: #4979bc;
   color: #fff;
   &:hover {
-    background-color: #545c8f;
+    background-color: #558cda;
   }
-  button{
-  font-size: 16px;
-font-weight: bold;
+  button {
+    font-size: 16px;
+    font-weight: bold;
     background-color: inherit;
     color: #fff;
   }
-`
+`;
+
 export default function HomePage() {
-  const { user, setUser } = useUserState();
+  const { user, setUser, resetUser } = useUserState();
   const [dialogOpen, setDialogOpen] = useState(false);
   const userId = user.id;
   const idInput = useRef(null);
   const userRooms = useUserRooms(userId);
   const navigate = useNavigate();
-  useEffect(() => {}, [dialogOpen]);
+  if (!user) navigate('/');
   const openDialog = () => {
     console.log('open');
     setDialogOpen(true);
@@ -183,8 +184,7 @@ export default function HomePage() {
     >
       <Header>
         <div className="left">
-          <Logo>
-          </Logo>
+          <Logo></Logo>
           <span>Cater town</span>
         </div>
         <input type="text" placeholder="id" ref={idInput} />
@@ -198,13 +198,13 @@ export default function HomePage() {
               <span>{user.name}</span>
             </div>
           </Profile>
-          <SignIn onClick={()=>{
-              navigate('/signup')
-            }}>
-            <button >
-              註冊
-            </button>
-          </SignIn>
+          <SignOut
+            onClick={() => {
+              navigate('/signup');
+            }}
+          >
+            <button onClick={resetUser}>Sign out</button>
+          </SignOut>
           <CreateSpace>
             <Button clickFunc={openDialog} content={'Create space'}></Button>
           </CreateSpace>

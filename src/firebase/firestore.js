@@ -127,7 +127,13 @@ export async function addRoomToUser({
   try {
     await setDoc(
       roomDocRef,
-      { roomName, character, charName, joinDate: Timestamp.now() },
+      {
+        roomName,
+        character,
+        charName,
+        joinDate: Timestamp.now(),
+        permissionLevel: 'admin',
+      },
       { merge: true }
     );
     console.log(

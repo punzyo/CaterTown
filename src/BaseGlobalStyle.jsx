@@ -34,6 +34,10 @@ button {
   border: none;
   outline: none;
 }
+input{
+  outline: none;
+  border: 1px solid black;
+}
 ul,
 ol {
   list-style: none;

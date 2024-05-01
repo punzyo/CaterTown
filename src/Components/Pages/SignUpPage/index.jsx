@@ -15,15 +15,13 @@ const Wrapper = styled.div`
   gap: 10px;
   background-image: url('/signInBg.png');
   background-size: cover;
- 
 `;
 const SignUpWrapper = styled.div`
   width: 360px;
-  height: 530px;
+  height: 450px;
   background-color: white;
   border-radius: 10px;
   padding: 10px 15px;
-
 `;
 const Top = styled.div`
   width: 100%;
@@ -115,18 +113,39 @@ const SignInButton = styled.button`
 `;
 export default function SignUpPage() {
   const navigate = useNavigate();
-  const name = useValidatedInput('', /^[A-Za-z' -]+$/);
+  const name = useValidatedInput('', /^[\u4e00-\u9fffA-Za-z0-9，。、\- ]/, 15);
   const email = useValidatedInput('', /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   const password = useValidatedInput('', /^.{6,}$/);
 
-  const signUp = async ({ e, name, email, password }) => {
+  const signUp = async (e) => {
     e.preventDefault();
-
-    const authID = await registerUserToAuth({ email, password });
-    if (authID) {
-      const isSaveSucess = await saveUserToFirestore({ authID, name, email });
-      alert(isSaveSucess === true ? '註冊大成功' : '註冊大失敗');
-      navigate('signin');
+    if (!name.isValid) {
+      alert('請確認名稱填寫正確');
+      return;
+    }
+    if (!email.isValid) {
+      alert('請確認信箱填寫正確');
+      return;
+    }
+    if (!password.isValid) {
+      alert('請設置六位以上的密碼');
+      return;
+    }
+    try {
+      const authID = await registerUserToAuth({
+        email: email.value,
+        password: password.value,
+      });
+        const isSaveSucess = await saveUserToFirestore({
+          authID,
+          name: name.value,
+          email: email.value,
+        });
+        alert(isSaveSucess ? '註冊大成功' : '註冊大失敗');
+        navigate('/signin');
+    } catch (error) {
+      console.error('註冊過程中發生錯誤:', error);
+      alert('註冊過程中發生錯誤');
     }
   };
   return (
@@ -138,20 +157,13 @@ export default function SignUpPage() {
           <Cat image="brown_8" />
         </Top>
         <Middle>
-          <p>Choose</p>
-          <p>ChouChou Zoo</p>
-          <p>No more</p>
-          <p>Monday blue</p>
+          <p>Cater town</p>
+          <p>Gather around</p>
         </Middle>
         <Bottom>
           <form
             onSubmit={(e) => {
-              signUp({
-                e,
-                name: name.value,
-                email: email.value,
-                password: password.value,
-              });
+              signUp(e);
             }}
           >
             <InputWrapper $isValid={name.isValid} $value={name.value}>
@@ -184,7 +196,13 @@ export default function SignUpPage() {
             </InputWrapper>
             <SignUpButton type="submit">Sign up</SignUpButton>
           </form>
-          <SignInButton onClick={()=>{    navigate('/signin');}}>Sign in</SignInButton>
+          <SignInButton
+            onClick={() => {
+              navigate('/signin');
+            }}
+          >
+            Sign in
+          </SignInButton>
         </Bottom>
       </SignUpWrapper>
     </Wrapper>
