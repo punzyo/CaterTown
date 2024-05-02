@@ -46,7 +46,7 @@ const BottomBar = styled.div`
   padding: 10px 40px;
   background-color: #202540;
 
-  z-index: 10;
+  z-index: 11;
 `;
 const BottomLeft = styled.div`
   display: flex;
@@ -76,12 +76,12 @@ const Title = styled.div`
   margin-bottom: 30px;
 `;
 const LeaveRoom = styled.button`
-   width: 70px;
+  width: 70px;
   height: 60px;
   border-radius: 10px;
   padding: 10px;
-  background-color: #333A64;
-  &:hover{
+  background-color: #333a64;
+  &:hover {
     background-color: #dd293f;
   }
   svg {
@@ -96,9 +96,9 @@ const GroupIcon = styled.button`
   height: 60px;
   border-radius: 10px;
   padding: 10px;
-  background-color: #333A64;
+  background-color: #333a64;
   cursor: pointer;
-  &:hover{
+  &:hover {
     background-color: #3e477c;
   }
   svg {
@@ -120,8 +120,8 @@ const MemberInfo = styled.div`
   align-items: center;
   gap: 20px;
   border-radius: 5px;
-  &:hover{
-    background-color: #333A64;
+  &:hover {
+    background-color: #333a64;
     cursor: pointer;
   }
 `;
@@ -158,8 +158,8 @@ export default function GamePage() {
   const { roomId, roomName } = useParams();
   const [token, setToken] = useState(null);
   const liveKitUrl = import.meta.env.VITE_LIVEKIT_SERVER_URL;
-  const { getUserData } = useUserState();
-  const userId = getUserData().id;
+  const { user, loginChecked } = useUserState();
+  const userId = user.id;
 
   const onlineStatus = useRoomStatus({ userId, roomId });
   const playersData = usePlayer({ userId, roomId });
@@ -211,10 +211,14 @@ export default function GamePage() {
         isOnline ? online.push(player) : offline.push(player);
       }
     });
-
     setOnlineMembers(online);
     setOfflineMembers(offline);
   }, [players, onlineStatus, userId]);
+
+  useEffect(() => {
+    if (loginChecked && !user.id) 
+    navigate('/');
+  }, [loginChecked,user.id]);
 
   const changeChannel = (playerId) => {
     setIsPublicChannel(false);

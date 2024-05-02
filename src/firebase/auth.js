@@ -5,7 +5,7 @@ import {
 } from 'firebase/auth';
 import { app } from './firebase';
 
-const auth = getAuth(app);
+export const auth = getAuth(app);
 
 export async function registerUserToAuth({ email, password }) {
   try {

@@ -87,6 +87,7 @@ const SignOut = styled.div`
 export default function Header({ children }) {
   const navigate = useNavigate();
   const { user, resetUser } = useUserState();
+
   return (
     <Wrapper>
       <div className="left">

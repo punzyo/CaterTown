@@ -146,9 +146,7 @@ export default function HomePage() {
   });
 
   const navigate = useNavigate();
-  useEffect(() => {
-    if (!user.id) navigate('/');
-  }, []);
+
   const openDialog = () => {
     console.log('open');
     setDialogOpen(true);

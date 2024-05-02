@@ -3,7 +3,7 @@ import MemberIcon from '../../../MemberIcon';
 import OnlineStatus from '../../../OnlineStatus';
 import { useState } from 'react';
 import GitHubLogo from '../../../GitHubLogo';
-import { useGameSettings } from '../../../../utils/zustand';
+import { useGameSettings, useUserState } from '../../../../utils/zustand';
 import { useFormInput } from '../../../../utils/hooks/useFormInput';
 import { editPlayerGitHub } from '../../../../firebase/firestore';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -49,7 +49,7 @@ const IconWrapper = styled.div`
 const ProfileWrapper = styled.div`
   position: absolute;
   width: 260px;
-  height: 300px;
+  height: 275px;
   bottom: 75px;
   left: 0;
   padding: 10px;
@@ -146,6 +146,25 @@ const ProfileWrapper = styled.div`
     background-color: #3e477c;
     margin: 5px auto;
   }
+  .bottom {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding-right: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    > button {
+      height: 100%;
+      padding:0px 15px;
+      border-radius: 5px;
+      &:hover {
+        background-color: #2e355d;
+        cursor: pointer;
+      }
+    }
+  }
 `;
 
 export default function PlayerProfile({
@@ -161,7 +180,7 @@ export default function PlayerProfile({
   setShowProfile,
 }) {
   const { setResetPosition } = useGameSettings();
-
+  const { resetUser } = useUserState();
   const [editGitHubId, setEditGitHubId] = useState(false);
   const gitHubIdInput = useFormInput(gitHubId);
   const [showDashBoard, setShowDashBoard] = useState(false);
@@ -268,14 +287,17 @@ export default function PlayerProfile({
                 <span>權限</span>
               </div>
               <span>{permissionLevel}</span>
-              <svg style={{ fill: permissionLevel === 'student' ? 'gray' : 'white' }}
+              <svg
+                style={{
+                  fill: permissionLevel === 'student' ? 'gray' : 'white',
+                }}
                 className="permissionIcon"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
               >
                 <path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z" />
               </svg>
-              {permissionLevel!=='student' &&showDashBoard && (
+              {permissionLevel !== 'student' && showDashBoard && (
                 <DashBoard
                   roomId={roomId}
                   roomName={roomName}
@@ -298,8 +320,9 @@ export default function PlayerProfile({
               </div>
             </div>
           </div>
-          <div className="hr">
-            <div className="bottom"></div>
+          <div className="hr"></div>
+          <div className="bottom">
+            <button onClick={resetUser}>登出</button>
           </div>
         </ProfileWrapper>
       )}
