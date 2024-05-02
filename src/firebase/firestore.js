@@ -412,6 +412,7 @@ export async function checkUserRoom({ roomId, userId }) {
 }
 
 export async function removeUserFromRoom({ roomId, userId }) {
+  console.log('退掉',roomId, userId);
   const userRoomRef = doc(db, 'users', userId, 'rooms', roomId);
 
   const roomRef = doc(db, 'rooms', roomId);
@@ -431,6 +432,6 @@ export async function removeUserFromRoom({ roomId, userId }) {
       console.log('Room does not exist.');
     }
   } catch (error) {
-    console.error('Error removing user from room: ', error);
+    console.error('Error removing user from room2: ', error);
   }
 }

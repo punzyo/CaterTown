@@ -19,7 +19,7 @@ export default function PRMark({ githubId, pullRequests }) {
     usePullRequests();
   const openPullRequests = pullRequests[githubId]?.prs.filter(
     (pr) => pr.state === 'open'
-  );
+  );console.log('open', pullRequests,githubId);
   return (
     <Wrapper
       onClick={() => {

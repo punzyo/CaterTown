@@ -47,9 +47,10 @@ const Player = styled.div`
     font-size: 12px;
     font-weight: bold;
     position: absolute;
-    left: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding:2px;
     bottom: -5px;
-    width: 40px;
     height: 16px;
     color: black;
     white-space: nowrap;
@@ -76,9 +77,10 @@ const OtherPlayer = styled.div`
     font-size: 12px;
     font-weight: bold;
     position: absolute;
-    left: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding:2px;
     bottom: -5px;
-    width: 40px;
     height: 16px;
     color: black;
     white-space: nowrap;
@@ -431,8 +433,8 @@ export default function Map({
             $character={player.character}
             $charName={player.charName}
           >
-            {permissionLevel === 'admin' && (
-              <PRMark githubId={player.githubId} pullRequests={pullRequests} />
+            {(permissionLevel === 'admin' || permissionLevel === 'teacher') && (
+              <PRMark githubId={player.gitHubId} pullRequests={pullRequests} />
             )}
           </OtherPlayer>
         )),

@@ -31,7 +31,7 @@ export async function deleteRoomFromRT(roomId) {
   }
 }
 
-export async function removeUserFromRTRoom(roomId, userId) {
+export async function removeUserFromRTRoom({roomId, userId}) {
   const userRef = ref(rtdb, `rooms/${roomId}/users/${userId}`);
 
   try {

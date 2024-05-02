@@ -6,12 +6,12 @@ export const useConditionalPullRequests = ({ userId, roomId, gitHubId, permissio
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    console.log('PRPR', userId, roomId, gitHubId, permissionLevel);
+   
     if (!roomId || !userId || !gitHubId || !permissionLevel) return;
     let unsubscribe;
-
+    console.log('PRPR', userId, roomId, gitHubId, permissionLevel);
     if (permissionLevel === 'admin' || permissionLevel === 'teacher') {
-    
+    console.log('能接全');
       const prCollectionRef = collection(db, 'rooms', roomId, 'pullRequests');
       unsubscribe = onSnapshot(
         prCollectionRef,

@@ -91,7 +91,7 @@ const MessageInput = styled.form`
   bottom: 0px;
   width: 100%;
   height: 30px;
-  background-color: white;
+  background-color: #eee;
   display: flex;
   align-items: center;
   
@@ -110,7 +110,7 @@ const MessageInput = styled.form`
     font-size: 12px;
     font-weight:  bold;
     cursor: pointer;
-    color: white !important;
+    color: black !important;
   }
 `;
 
