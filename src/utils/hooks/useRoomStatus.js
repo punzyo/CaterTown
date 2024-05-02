@@ -1,28 +1,33 @@
-import { useState, useEffect } from 'react';
-import { ref, set, onValue, getDatabase, onDisconnect } from 'firebase/database';
+import { useEffect, useState } from 'react';
+import { ref, onDisconnect, onValue, update, getDatabase } from 'firebase/database';
+import { useNavigate } from 'react-router-dom';
 
-export function useRoomStatus({userId, roomId}) {
-  const [onlineStatus, setOnlineStatus] = useState(null)
-  useEffect(() => {
+export function useRoomStatus({ userId, roomId }) {
+    const [onlineStatus, setOnlineStatus] = useState({});
+    const navigate = useNavigate();
     const db = getDatabase();
 
-    // 设置用户的在线状态和房间ID
-    const userStatusRef = ref(db, `rooms/${roomId}/users/${userId}`);
-    set(userStatusRef, { online: true });
+    useEffect(() => {
+        const userStatusRef = ref(db, `rooms/${roomId}/users/${userId}`);
 
-    // 设置断开连接时自动更新用户状态为离线
-    onDisconnect(userStatusRef).set({ online: false });
+        // 设置用户在线，并确保不覆盖其他数据
+        update(userStatusRef, { online: true });
+        onDisconnect(userStatusRef).update({ online: false });
 
-    // 监听特定房间内所有用户的状态
-    const roomUsersRef = ref(db, `rooms/${roomId}/users`);
-    const unsubscribe = onValue(roomUsersRef, snapshot => {
-      const users = snapshot.val() || {};
-      setOnlineStatus(users);  // 处理或显示房间内所有用户的状态信息
-    });
+        const roomUsersRef = ref(db, `rooms/${roomId}/users`);
+        const unsubscribe = onValue(roomUsersRef, snapshot => {
+            const users = snapshot.val() || {};
+            setOnlineStatus(users);
+        });
 
-    return () => {
-      unsubscribe();
-    };
-  }, [userId, roomId]);
-  return onlineStatus
+        // 组件卸载时设置用户离线
+        return () => {
+            unsubscribe();
+            update(userStatusRef, { online: false });  // 更新，而不是设置，以保持其他数据
+        };
+    }, [userId, roomId, db, navigate]);
+
+    return onlineStatus;
 }
+
+

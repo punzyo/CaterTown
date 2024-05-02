@@ -10,7 +10,6 @@ export const useUserRooms = (userId) => {
 
     const roomsCollectionRef = collection(db, 'users', userId, 'rooms');
 
-    // 设置 Firestore 实时监听
     const unsubscribe = onSnapshot(
       roomsCollectionRef,
       (querySnapshot) => {
@@ -25,11 +24,10 @@ export const useUserRooms = (userId) => {
       }
     );
 
-    // 返回清理函数，当组件卸载时取消订阅
     return () => {
       unsubscribe();
     };
-  }, [userId]); // 依赖数组包括 userId，当 userId 改变时重新订阅
+  }, [userId]);
 
   return userRooms;
 };
