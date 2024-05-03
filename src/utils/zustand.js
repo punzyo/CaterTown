@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { Track } from 'livekit-client';
 export const useUserState = create((set, get) => ({
-  loginChecked:false,
+  loginChecked: false,
   user: {
     name: '',
     email: '',
@@ -13,16 +13,16 @@ export const useUserState = create((set, get) => ({
       ...state,
       user: { ...state.user, ...userData },
     })),
-    resetUser: () => {
-      localStorage.removeItem('ChouChouZooUser');
-      set({
-        user: {
-          name: '',
-          email: '',
-          id: '',
-        },
-      });
-    },
+  resetUser: () => {
+    localStorage.removeItem('ChouChouZooUser');
+    set({
+      user: {
+        name: '',
+        email: '',
+        id: '',
+      },
+    });
+  },
   getUserData: () => get().user,
 }));
 export const usePullRequests = create((set, get) => ({
@@ -35,6 +35,7 @@ export const usePullRequests = create((set, get) => ({
     set({ pullRequests });
   },
   getplayerPullRequests: () => get().player,
+  setShowPullRequests: (showPullRequests) => set({ showPullRequests }),
   toggleShowPullRequests: (githubId) => {
     if (githubId === get().prGitHubId) {
       set((state) => ({ showPullRequests: !state.showPullRequests }));

@@ -26,6 +26,7 @@ import PullRequests from './PullRequests/index.jsx';
 import PlayerProfile from './PlayerProfile/index.jsx';
 import { useBroadcasts } from '../../../utils/hooks/useBroadcasts.js';
 import Button from '../../Buttons/Button/index.jsx';
+import { usePullRequests } from '../../../utils/zustand.js';
 const bottomBarGHeight = '100px';
 const Wrapper = styled.main`
   color: white;
@@ -188,17 +189,26 @@ export default function GamePage() {
   const [onlineMembers, setOnlineMembers] = useState([]);
   const [offlineMembers, setOfflineMembers] = useState([]);
   const { isFullScreen, showSidebar, setShowSidebar } = useGameSettings();
-  const pullRequests = useConditionalPullRequests({
+  const openPullRequests = useConditionalPullRequests({
     userId,
     roomId,
     gitHubId,
     permissionLevel,
   });
+  const { prGitHubId,setShowPullRequests, setPullRequests } = usePullRequests();
 
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const broadcasts = useBroadcasts({ roomId });
   const [showProfile, setShowProfile] = useState(false);
+
+  useEffect(() => {
+    setPullRequests(openPullRequests[prGitHubId]?.prs);
+    if(!openPullRequests[prGitHubId]){
+      setShowPullRequests(false)
+    }
+  }, [prGitHubId, openPullRequests]);
+
   useEffect(() => {
     if (!players || !onlineStatus) return;
     const online = [];
@@ -225,7 +235,7 @@ export default function GamePage() {
     setPrivateChannel(playerId);
   };
   const getToken = async ({ roomId, charName }) => {
-    if(isConnecting) return
+    if (isConnecting) return;
     setIsConnecting(true);
     const response = await fetch(
       `${liveKitUrl}/getToken?roomId=${encodeURIComponent(
@@ -269,7 +279,7 @@ export default function GamePage() {
           setPermissionLevel={setPermissionLevel}
           gitHubId={gitHubId}
           setGitHubId={setGitHubId}
-          pullRequests={pullRequests}
+          pullRequests={openPullRequests}
         />
         <BottomBar>
           <BottomLeft>
@@ -309,7 +319,7 @@ export default function GamePage() {
                     clickFunc={() =>
                       getToken({ roomId, charName: playerCharName })
                     }
-                    content={isConnecting?'Loading...':'多人通訊'}
+                    content={isConnecting ? 'Loading...' : '多人通訊'}
                   />
                 </JoinButton>
               )}

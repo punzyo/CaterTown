@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SimplePRContent from './SimplePRContent';
 import { usePullRequests } from '../../../../utils/zustand';
 import GitHubLogo from '../../../GitHubLogo';
@@ -56,7 +56,6 @@ const ShowMoreBtn = styled.button`
 export default function PullRequests() {
   const { showPullRequests, pullRequests } = usePullRequests();
   const [showMorePRs, setShowMorePRs] = useState(false);
-
   return (
     <>
       {showPullRequests && pullRequests && (
@@ -64,7 +63,7 @@ export default function PullRequests() {
           <SmallPRWrapper>
             <div className="title">
               <GitHubLogoWrapper>
-                <GitHubLogo/>
+                <GitHubLogo />
               </GitHubLogoWrapper>
               <h3>導師該看PR囉</h3>
             </div>
@@ -73,7 +72,9 @@ export default function PullRequests() {
                 if (showMorePRs == false && index >= 3) return;
                 return (
                   <SimplePRContent key={pr.id} pullRequests={pr} index={index}>
-                    <a href={pr.url} target="_blank">{pr.title}</a>
+                    <a href={pr.url} target="_blank">
+                      {pr.title}
+                    </a>
                   </SimplePRContent>
                 );
               })}

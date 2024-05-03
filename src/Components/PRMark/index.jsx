@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { usePullRequests } from '../../utils/zustand';
 const Wrapper = styled.div`
   position: absolute;
@@ -15,23 +15,21 @@ const Wrapper = styled.div`
   color: white;
 `;
 export default function PRMark({ githubId, pullRequests }) {
-  const { setPullRequests, toggleShowPullRequests } =
-    usePullRequests();
-  const openPullRequests = pullRequests[githubId]?.prs.filter(
-    (pr) => pr.state === 'open'
-  );console.log('open', pullRequests,githubId);
+  const { toggleShowPullRequests } = usePullRequests();
+  const openPullRequests = pullRequests[githubId]?.prs 
+
+  //show PRMArks if pr is opened
   return (
-    <Wrapper
-      onClick={() => {
-        toggleShowPullRequests(githubId);
-        setPullRequests(openPullRequests)
-      }}
-    >
+    <>
       {openPullRequests?.length > 0 && (
-        <>
+        <Wrapper
+          onClick={() => {
+            toggleShowPullRequests(githubId);
+          }}
+        >
           <img src="/PR_mark.webp" alt="exclamation mark" />
-        </>
+        </Wrapper>
       )}
-    </Wrapper>
+    </>
   );
 }

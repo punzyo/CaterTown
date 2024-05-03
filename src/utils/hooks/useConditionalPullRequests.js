@@ -6,19 +6,21 @@ export const useConditionalPullRequests = ({ userId, roomId, gitHubId, permissio
   const [data, setData] = useState([]);
 
   useEffect(() => {
-   
     if (!roomId || !userId || !gitHubId || !permissionLevel) return;
     let unsubscribe;
-    console.log('PRPR', userId, roomId, gitHubId, permissionLevel);
+
     if (permissionLevel === 'admin' || permissionLevel === 'teacher') {
-    console.log('能接全');
       const prCollectionRef = collection(db, 'rooms', roomId, 'pullRequests');
       unsubscribe = onSnapshot(
         prCollectionRef,
         (querySnapshot) => {
           let pullRequests = {};
           querySnapshot.docs.forEach((doc) => {
-            pullRequests[doc.id] = doc.data();
+            const prData = doc.data();
+            const openPRs = prData.prs ? prData.prs.filter(pr => pr.state === 'open') : [];
+            if (openPRs.length > 0) {  
+              pullRequests[doc.id] = { ...prData, prs: openPRs };
+            }
           });
           setData(pullRequests);
         },
@@ -27,13 +29,18 @@ export const useConditionalPullRequests = ({ userId, roomId, gitHubId, permissio
         }
       );
     } else {
-  
       const messageRef = doc(db, `rooms/${roomId}/pullRequests/${gitHubId}`);
       unsubscribe = onSnapshot(
         messageRef,
         (docSnapshot) => {
           if (docSnapshot.exists()) {
-            setData({ [docSnapshot.id]: docSnapshot.data() });
+            const prData = docSnapshot.data();
+            const openPRs = prData.prs ? prData.prs.filter(pr => pr.state === 'open') : [];
+            if (openPRs.length > 0) { 
+              setData({ [docSnapshot.id]: { ...prData, prs: openPRs } });
+            } else {
+              setData({});
+            }
           } else {
             setData({});
           }
@@ -44,9 +51,10 @@ export const useConditionalPullRequests = ({ userId, roomId, gitHubId, permissio
       );
     }
 
-   
     return () => {
-      unsubscribe();
+      if (unsubscribe) {
+        unsubscribe(); 
+      }
     };
   }, [userId, roomId, gitHubId, permissionLevel]); 
 

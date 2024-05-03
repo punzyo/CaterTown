@@ -28,7 +28,6 @@ const MapWrapper = styled.div`
   width: ${map2.width}px;
   height: ${map2.height}px;
   user-select: none;
-  /* margin:0 auto; */
 `;
 
 const Player = styled.div`
