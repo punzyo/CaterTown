@@ -362,7 +362,7 @@ export default function GamePage() {
           <PullRequests></PullRequests>
           <Title>
             {roomName}
-            <InviteButton roomId={roomId} roomName={roomName} />
+            <InviteButton link={`${window.location.origin}/invite/${roomId}/${roomName}`} message='邀請連結已複製!' />
             <CloseButton
               clickFunc={() => {
                 setShowSidebar(false);

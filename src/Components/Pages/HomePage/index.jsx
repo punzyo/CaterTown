@@ -170,7 +170,7 @@ export default function HomePage() {
         target: '.date',
         content: '查看加入日期',
         placement: 'top',
-      }
+      },
     ]);
     setJoyrideRun(true);
   };
@@ -187,7 +187,7 @@ export default function HomePage() {
   };
 
   const handleLeaveRoom = async (roomId) => {
-    await removeUserFromRoom({userId, roomId});
+    await removeUserFromRoom({ userId, roomId });
   };
   return (
     <Wrapper
@@ -195,20 +195,21 @@ export default function HomePage() {
         if (dialogOpen) closeDialog();
         if (showDeleteDialog.show) setShowDeleteDialog({ show: false, id: '' });
       }}
-    ><Joyride
-    continuous
-    run={joyrideRun}
-    steps={steps}
-    callback={handleJoyrideCallback}
-    styles={{
-      options: {
-        zIndex: 10000,
-      },
-    }}
-  />
+    >
+      <Joyride
+        continuous
+        run={joyrideRun}
+        steps={steps}
+        callback={handleJoyrideCallback}
+        styles={{
+          options: {
+            zIndex: 10000,
+          },
+        }}
+      />
       <Header>
-      <button onClick={startAdvancedTour}>開始新手教學</button>
-        <CreateSpace id='create_space'>
+        <button onClick={startAdvancedTour}>開始新手教學</button>
+        <CreateSpace id="create_space">
           <Button clickFunc={openDialog} content={'建立房間'}></Button>
         </CreateSpace>
       </Header>
@@ -224,46 +225,61 @@ export default function HomePage() {
               <Room key={index}>
                 <div className="top">
                   <span className="mapName">{room.roomName}</span>
-                  {(
-                   <div
-                   onClick={() => {
-                     setShowDeleteDialog({ show: true, id: room.id });
-                   }}
-                 >
-                   {room.isCreater ?<svg
-                     xmlns="http://www.w3.org/2000/svg"
-                     viewBox="0 0 448 512"
-                   >
-                     <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
-                   </svg>:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"/></svg>}
-                   {showDeleteDialog.show && showDeleteDialog.id === room.id && (
-                     <DeleteDialog
-                       onClick={(e) => {
-                         e.stopPropagation();
-                       }}
-                     >
-                       <span>{room.isCreater ? "確定要刪除此房間?" : "確定要退出此房間?"}</span>
-                       <div>
-                         <button
-                           onClick={() => {
-                             room.isCreater ? handleDeleteRoom(room.id) : handleLeaveRoom(room.id);
-                           }}
-                         >
-                           確定
-                         </button>
-                         <button
-                           onClick={() => {
-                             setShowDeleteDialog({ show: false, id: '' });
-                           }}
-                         >
-                           取消
-                         </button>
-                       </div>
-                     </DeleteDialog>
-                   )}
-                 </div>
-                 
-                  )}
+                  {
+                    <div
+                      onClick={() => {
+                        setShowDeleteDialog({ show: true, id: room.id });
+                      }}
+                    >
+                      {room.isCreater ? (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 448 512"
+                        >
+                          <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                        </svg>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 512 512"
+                        >
+                          <path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z" />
+                        </svg>
+                      )}
+                      {showDeleteDialog.show &&
+                        showDeleteDialog.id === room.id && (
+                          <DeleteDialog
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
+                          >
+                            <span>
+                              {room.isCreater
+                                ? '確定要刪除此房間?'
+                                : '確定要退出此房間?'}
+                            </span>
+                            <div>
+                              <button
+                                onClick={() => {
+                                  room.isCreater
+                                    ? handleDeleteRoom(room.id)
+                                    : handleLeaveRoom(room.id);
+                                }}
+                              >
+                                確定
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setShowDeleteDialog({ show: false, id: '' });
+                                }}
+                              >
+                                取消
+                              </button>
+                            </div>
+                          </DeleteDialog>
+                        )}
+                    </div>
+                  }
                 </div>
                 <div
                   className="middle"
@@ -283,7 +299,7 @@ export default function HomePage() {
                         .slice(0, 10)}
                     </span>
                     邀請朋友
-                    <InviteButton roomId={room.id} roomName={room.roomName} />
+                    <InviteButton link={`${window.location.origin}/invite/${room.id}/${room.roomName}`} message='邀請連結已複製!'/>
                   </div>
                 </div>
               </Room>
