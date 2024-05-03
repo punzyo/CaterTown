@@ -12,6 +12,16 @@ const Wrapper = styled.div`
   border-radius: 10px;
   background-color: #242b53;
   letter-spacing: 0.5px;
+  &:hover{
+    background-color:#313A71;
+    }
+    >a{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
 `;
 const DetailPRWrapper = styled.div`
   position: absolute;
@@ -75,19 +85,14 @@ const DetailPRBottom = styled.div`
       height: 8px;
     }
 
-    /* 设置滚动条轨道的样式 */
     &::-webkit-scrollbar-track {
       background: inherit;
     }
-
-    /* 设置滚动条滑块的样式 */
     &::-webkit-scrollbar-thumb {
       background: #888;
     }
-
-    /* 当鼠标悬停在滚动条上时，改变滑块的颜色 */
     &::-webkit-scrollbar-thumb:hover {
-      background: #222; /* 滑块悬停时的颜色 */
+      background: #222; 
     }
   }
 `;

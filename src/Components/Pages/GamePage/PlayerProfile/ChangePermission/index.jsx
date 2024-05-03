@@ -6,6 +6,9 @@ const Wrapper = styled.div`
   position: absolute;
   left: 100%;
   width: 270px;
+  height: 255px;
+  max-height: 255px;
+overflow: auto;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -13,6 +16,7 @@ const Wrapper = styled.div`
   background-color: #282d4e;
   border: 1px solid #3e477c;
   border-radius: 5px;
+  cursor: auto;
   > div {
     > span {
       width: 90px;
@@ -26,6 +30,7 @@ const Wrapper = styled.div`
     align-items: center;
     width: 90px;
     padding: 0 5px;
+    cursor: pointer;
     > span {
       width: 80px;
       text-align: center;
@@ -87,12 +92,13 @@ const EditMessage = styled.div`
 `;
 const MemberIconWrapper = styled.div`
   width: 100%;
-  height: 50px;
+  min-height: 50px;
   display: flex;
   gap: 10px;
   align-items: center;
   background-color: inherit;
   > div {
+    min-width: 50px;
     width: 50px;
     height: 100%;
   }
@@ -133,7 +139,9 @@ export default function ChangePermission({ players, roomId }) {
   };
 
   return (
-    <Wrapper>
+    <Wrapper onClick={(e)=>{
+e.stopPropagation();
+    }}>
       {players.map((player) => (
         <MemberIconWrapper key={player.userId}>
           <MemberIcon

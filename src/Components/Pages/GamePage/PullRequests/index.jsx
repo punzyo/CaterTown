@@ -66,7 +66,7 @@ export default function PullRequests() {
               <GitHubLogoWrapper>
                 <GitHubLogo/>
               </GitHubLogoWrapper>
-              <h3>別再P圖快看PR</h3>
+              <h3>導師該看PR囉</h3>
             </div>
             <SimplePRWrapper>
               {pullRequests.map((pr, index) => {

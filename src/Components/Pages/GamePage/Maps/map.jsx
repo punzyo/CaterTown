@@ -441,6 +441,8 @@ export default function Map({
     [players, userId, permissionLevel, pullRequests]
   );
 
+
+  
   return (
     <Wrapper>
       {broadcasts.length > 0 && (

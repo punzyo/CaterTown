@@ -8,7 +8,6 @@ import {
 } from '../../../../firebase/firestore';
 import { useState, useEffect, useRef } from 'react';
 
-const messageHeight = '350px';
 const Wrapper = styled.div`
   width: 350px;
   height: ${(props) => (props.$minimizeMessages ? '0px' : '300px')};
@@ -17,6 +16,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   bottom: ${(props) => (props.$minimizeMessages ? '-32px' : '-0.5px')};
   right: 300px;
+  ;
 `;
 const MessageWrapper = styled.div`
   width: 350px;
@@ -33,6 +33,7 @@ const Message = styled.div`
   padding: 0 10px;
 `;
 const MessageController = styled.div`
+
   position: relative;
   width: 100%;
   height: 30px;
@@ -43,7 +44,7 @@ const MessageController = styled.div`
   align-items: center;
 `;
 const ChannelWrapper = styled.div`
-  width: 250px;
+  width: calc(100% - 40px);
   height: 100%;
   display: flex;
 `;
@@ -51,9 +52,13 @@ const Channel = styled.div`
   position: relative;
   width: 50%;
   height: 100%;
-  text-align: center;
-  border: 1px solid;
-  background-color: ${(props) => (props.$selected ? '#2c345c' : '')};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${(props) => (props.$selected ? '#3D477C' : '')};
+  &:hover{
+    background-color: ${(props) => (props.$selected ? '' : '#4A5798')};
+  }
   cursor: pointer;
 `;
 const Messages = styled.div`

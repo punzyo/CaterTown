@@ -196,6 +196,7 @@ export default function GamePage() {
   });
 
   const [isConnected, setIsConnected] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const broadcasts = useBroadcasts({ roomId });
   const [showProfile, setShowProfile] = useState(false);
   useEffect(() => {
@@ -216,15 +217,16 @@ export default function GamePage() {
   }, [players, onlineStatus, userId]);
 
   useEffect(() => {
-    if (loginChecked && !user.id) 
-    navigate('/');
-  }, [loginChecked,user.id]);
+    if (loginChecked && !user.id) navigate('/');
+  }, [loginChecked, user.id]);
 
   const changeChannel = (playerId) => {
     setIsPublicChannel(false);
     setPrivateChannel(playerId);
   };
   const getToken = async ({ roomId, charName }) => {
+    if(isConnecting) return
+    setIsConnecting(true);
     const response = await fetch(
       `${liveKitUrl}/getToken?roomId=${encodeURIComponent(
         roomId
@@ -247,8 +249,14 @@ export default function GamePage() {
         serverUrl="wss://chouchouzoo-ffphmeoa.livekit.cloud"
         data-lk-theme="default"
         style={{ backgroundColor: 'inherit' }}
-        onConnected={() => setIsConnected(true)}
-        onDisconnected={() => setIsConnected(false)}
+        onConnected={() => {
+          setIsConnected(true);
+          setIsConnecting(false);
+        }}
+        onDisconnected={() => {
+          setIsConnected(false);
+          setIsConnecting(false);
+        }}
       >
         {/* <RoomAudioRenderer muted={false}/> */}
         <TracksProvider></TracksProvider>
@@ -295,14 +303,16 @@ export default function GamePage() {
                   variation="minimal"
                 />
               )}
-              <JoinButton>
-                <Button
-                  clickFunc={() =>
-                    getToken({ roomId, charName: playerCharName })
-                  }
-                  content={'多人通訊'}
-                />
-              </JoinButton>
+              {!isConnected && (
+                <JoinButton>
+                  <Button
+                    clickFunc={() =>
+                      getToken({ roomId, charName: playerCharName })
+                    }
+                    content={isConnecting?'Loading...':'多人通訊'}
+                  />
+                </JoinButton>
+              )}
             </ControlWrapper>
           </BottomLeft>
           <BottomLeft>

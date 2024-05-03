@@ -13,6 +13,7 @@ import {
   deleteRoomFromAllUsers,
   removeUserFromRoom,
 } from '../../../firebase/firestore';
+import Joyride, { STATUS } from 'react-joyride';
 
 const Wrapper = styled.main`
   width: 100%;
@@ -136,6 +137,8 @@ const DeleteDialog = styled.div`
 `;
 
 export default function HomePage() {
+  const [joyrideRun, setJoyrideRun] = useState(false);
+  const [steps, setSteps] = useState([]);
   const { user } = useUserState();
   const [dialogOpen, setDialogOpen] = useState(false);
   const userId = user.id;
@@ -144,7 +147,33 @@ export default function HomePage() {
     show: false,
     id: '',
   });
+  const handleJoyrideCallback = (data) => {
+    const { status } = data;
+    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
+      setJoyrideRun(false);
+    }
+  };
 
+  const startAdvancedTour = () => {
+    setSteps([
+      {
+        target: 'create_space',
+        content: '創建房間，開啟你的第一步!',
+        placement: 'bottom',
+      },
+      {
+        target: '#create_space',
+        content: '創建房間，開啟你的第一步!',
+        placement: 'bottom',
+      },
+      {
+        target: '.date',
+        content: '查看加入日期',
+        placement: 'top',
+      }
+    ]);
+    setJoyrideRun(true);
+  };
   const navigate = useNavigate();
 
   const openDialog = () => {
@@ -166,9 +195,20 @@ export default function HomePage() {
         if (dialogOpen) closeDialog();
         if (showDeleteDialog.show) setShowDeleteDialog({ show: false, id: '' });
       }}
-    >
+    ><Joyride
+    continuous
+    run={joyrideRun}
+    steps={steps}
+    callback={handleJoyrideCallback}
+    styles={{
+      options: {
+        zIndex: 10000,
+      },
+    }}
+  />
       <Header>
-        <CreateSpace>
+      <button onClick={startAdvancedTour}>開始新手教學</button>
+        <CreateSpace id='create_space'>
           <Button clickFunc={openDialog} content={'建立房間'}></Button>
         </CreateSpace>
       </Header>

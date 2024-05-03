@@ -208,6 +208,9 @@ export default function PlayerProfile({
     <Wrapper
       onClick={(e) => {
         setShowProfile(!showProfile);
+        setShowDashBoard(false)
+        setShowBroadcast(false)
+        setShowPermission(false)
         e.stopPropagation();
       }}
     >

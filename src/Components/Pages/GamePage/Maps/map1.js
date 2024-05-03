@@ -717,7 +717,7 @@ export const mapIndex = {
   },rock3:{
     width: 1,
     height: 2,
-    x: 15.96,
+    x: 16,
     y: -14,
     collision: true,
   },rock4:{
