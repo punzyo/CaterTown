@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import theme from '../../../theme';
+import { useState } from 'react';
 import Dialog from './Dialog';
 import { useUserRooms } from '../../../utils/hooks/useUserRooms';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +18,6 @@ import Joyride, { STATUS } from 'react-joyride';
 
 const Wrapper = styled.main`
   width: 100%;
-  height: 100vh;
 `;
 
 const CreateSpace = styled.div`
@@ -38,6 +38,7 @@ const SearchWrapper = styled.div`
   .inputWrapper {
     width: 200px;
   }
+
 `;
 const MainPage = styled.div`
   background-color: #282d4e;
@@ -52,6 +53,12 @@ const RoomWrapper = styled.div`
     padding: 0 5px;
     font-weight: 700;
     color: #fff;
+  }
+  ${theme.breakpoints.sm} {
+    font-size: 14px; 
+    gap:25px;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 10px 15px;
   }
 `;
 const Room = styled.div`
@@ -207,7 +214,7 @@ export default function HomePage() {
     }}
   />
       <Header>
-      <button onClick={startAdvancedTour}>開始新手教學</button>
+      {/* <button onClick={startAdvancedTour}>開始新手教學</button> */}
         <CreateSpace id='create_space'>
           <Button clickFunc={openDialog} content={'建立房間'}></Button>
         </CreateSpace>
