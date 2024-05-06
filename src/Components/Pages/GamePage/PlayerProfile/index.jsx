@@ -115,6 +115,7 @@ const ProfileWrapper = styled.div`
         display: flex;
         align-items: center;
         gap: 10px;
+        margin-right: 10px;
       }
       border-radius: 5px;
       > svg {
@@ -134,7 +135,7 @@ const ProfileWrapper = styled.div`
       outline: none;
       border-radius: 5px;
       background-color: inherit;
-      width: 120px;
+      width: 115px;
       &:focus {
         border: 1px solid #3e477c;
       }

@@ -23,12 +23,15 @@ const Wrpper = styled.div`
     background-color: inherit;
     border-radius: 5px;
     margin-left: auto;
-    padding: 5px;
+    padding: 5px 10px;
     display: flex;
     align-items: center;
     cursor: pointer;
+    background-color: #4979bc;
+    font-size: 14px;
+    color: #fff;
     &:hover {
-      background-color: #3e477c;
+      background-color: #558cda;
     }
   }
   select {
@@ -38,8 +41,8 @@ const Wrpper = styled.div`
     border: 1px solid #3e477c;
     outline: none;
     option {
-      background-color: inherit; 
-      color: black; 
+      background-color: inherit;
+      color: black;
     }
   }
   .date {
@@ -66,13 +69,19 @@ const Wrpper = styled.div`
     }
   }
 `;
-export default function BroadCast({ roomId, userId, playerCharName }) {
+export default function BroadCast({
+  roomId,
+  userId,
+  playerCharName,
+  setShowBroadcast,
+}) {
   const [publishTime, setPublishTime] = useState(new Date());
   const broadCastTitleInput = useFormInput('');
   const broadCastContentInput = useFormInput('');
   const hourSelectedInput = useFormInput(1);
 
   const handleBroadcastClick = async () => {
+    if(!broadCastTitleInput.value || !broadCastContentInput.value) return
     const publishTimeObj = new Date(publishTime);
     const hoursToAdd = parseInt(hourSelectedInput.value, 10);
 
@@ -94,6 +103,7 @@ export default function BroadCast({ roomId, userId, playerCharName }) {
     broadCastTitleInput.clear();
     broadCastContentInput.clear();
     hourSelectedInput.reset();
+    setShowBroadcast(false);
   };
   return (
     <Wrpper>

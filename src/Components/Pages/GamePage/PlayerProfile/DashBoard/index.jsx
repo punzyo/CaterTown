@@ -89,6 +89,7 @@ export default function DashBoard({
       <div
         onClick={() => {
           setShowBroadcast((prevState) => !prevState);
+          setShowPermission(false)
         }}
       >
         <svg
@@ -116,6 +117,7 @@ export default function DashBoard({
               roomId={roomId}
               userId={userId}
               playerCharName={playerCharName}
+              setShowBroadcast={setShowBroadcast}
             />
           </BroadcastWrapper>
         )}
@@ -123,6 +125,7 @@ export default function DashBoard({
       <div
         onClick={() => {
           setShowPermission((prevState) => !prevState);
+          setShowBroadcast(false)
         }}
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
