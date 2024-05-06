@@ -4,7 +4,7 @@ import ChangePermission from '../ChangePermission';
 import { useState, useRef } from 'react';
 const PermissionWrapper = styled.div`
   position: absolute;
-  left: 250px;
+  left:0px;
   bottom: 150px;
   width: 210px;
   height: 150px;

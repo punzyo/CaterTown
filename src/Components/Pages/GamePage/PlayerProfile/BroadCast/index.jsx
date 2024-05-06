@@ -38,8 +38,8 @@ const Wrpper = styled.div`
     border: 1px solid #3e477c;
     outline: none;
     option {
-      background-color: inherit; /* 繼承父元素的背景顏色 */
-      color: black; /* 文本顏色 */
+      background-color: inherit; 
+      color: black; 
     }
   }
   .date {

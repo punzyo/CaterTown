@@ -18,6 +18,7 @@ import Joyride, { STATUS } from 'react-joyride';
 
 const Wrapper = styled.main`
   width: 100%;
+  height: 100%;
 `;
 
 const CreateSpace = styled.div`
@@ -42,7 +43,7 @@ const SearchWrapper = styled.div`
 `;
 const MainPage = styled.div`
   background-color: #282d4e;
-  height: 100%;
+  min-height: 100%;
 `;
 const RoomWrapper = styled.div`
   display: grid;
@@ -117,7 +118,7 @@ const Room = styled.div`
 `;
 const DeleteDialog = styled.div`
   position: absolute;
-  left: 0;
+  right: 0;
   width: 160px;
   height: 95px;
   padding: 10px;
