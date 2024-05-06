@@ -1,15 +1,16 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 const LogoWrapper = styled.button`
-display:flex;
-align-items:center;
-justify-content:center;
-width: 70px;
-height: 70px;
-border-radius: 10px;
-&:hover{
-  background-color: #3e477c;
-}
-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  &:hover {
+    background-color: #3e477c;
+  }
+  img {
     width: 50px;
     height: 50px;
     border-radius: 20%;
@@ -17,8 +18,13 @@ img {
   }
 `;
 export default function Logo() {
+  const navigate = useNavigate();
   return (
-    <LogoWrapper>
+    <LogoWrapper
+      onClick={() => {
+        navigate('/');
+      }}
+    >
       <img src="/images/cat_logo_64.png" alt="logo" />
     </LogoWrapper>
   );

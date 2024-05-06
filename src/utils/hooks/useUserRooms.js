@@ -17,6 +17,8 @@ export const useUserRooms = (userId) => {
           id: doc.id,
           ...doc.data(),
         }));
+
+        rooms.sort((a, b) => b.joinDate - a.joinDate);
         setUserRooms(rooms);
       },
       (error) => {

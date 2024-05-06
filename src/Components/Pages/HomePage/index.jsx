@@ -126,6 +126,7 @@ const DeleteDialog = styled.div`
   background-color: #414b80;
   font-weight: bold;
   color: white;
+  text-align: center;
   > div {
     margin-top: 10px;
     display: flex;
