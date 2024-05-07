@@ -48,14 +48,14 @@ const Player = styled.div`
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    padding:2px;
+    padding: 2px;
     bottom: -5px;
     height: 16px;
     color: black;
     white-space: nowrap;
     display: flex;
     justify-content: center;
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
   }
 `;
@@ -78,14 +78,14 @@ const OtherPlayer = styled.div`
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    padding:2px;
+    padding: 2px;
     bottom: -5px;
     height: 16px;
     color: black;
     white-space: nowrap;
     display: flex;
     justify-content: center;
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
   }
 `;
@@ -166,7 +166,7 @@ export default function Map({
   const movingTimer = useRef(null);
   const keysPressed = useRef(false);
   const canMove = useRef(true);
-  const { resetPosition, setResetPosition } = useGameSettings();
+  const { resetPosition, setResetPosition, isFullScreen } = useGameSettings();
   const directionYPositions = catsYPositions;
   const framesXPositions = catsXPositions;
 
@@ -177,7 +177,8 @@ export default function Map({
       if (
         e.target.tagName === 'INPUT' ||
         e.target.tagName === 'TEXTAREA' ||
-        e.target.isContentEditable
+        e.target.isContentEditable ||
+        isFullScreen
       ) {
         return;
       }
@@ -212,15 +213,6 @@ export default function Map({
           return;
       }
       setDirection(keyDirection);
-      // console.log(keysPressed.current, direction, keyDirection);
-      //  if(direction!==keyDirection){
-      //   console.log('轉',direction, keyDirection);
-      //   clearTimeout(movingTimer.current)
-      //   movingTimer.current = setTimeout(() => {
-      //     handleKeyPress(e)
-      //   }, 150);
-
-      // }
       if (!canMove.current) return;
 
       console.log('要走囉');
@@ -315,20 +307,22 @@ export default function Map({
   }, [players]);
   useEffect(() => {
     if (!resetPosition) return;
-    console.log('AA重來ㄌ');
-    const newPosition = playerAbsoluteToMapPos(map2.startingPoint);
-    setDirection(map2.startingPoint.direction);
-    setCurrentFrame(map2.startingPoint.frame);
-    dispatchPosition({ type: 'SET_POSITION', payload: newPosition });
-    updatePlayerPosition({
-      userId,
-      userData: {
-        ...map2.startingPoint,
-      },
-      roomId,
-      room: '',
-    });
-    setResetPosition(false);
+    (async () => {
+      const newPosition = playerAbsoluteToMapPos(map2.startingPoint);
+      setDirection(map2.startingPoint.direction);
+      setCurrentFrame(map2.startingPoint.frame);
+      dispatchPosition({ type: 'SET_POSITION', payload: newPosition });
+      await updatePlayerPosition({
+        userId,
+        userData: {
+          ...map2.startingPoint,
+        },
+        roomId,
+        room: '',
+      });
+
+      setResetPosition(false);
+    })();
   }, [resetPosition]);
   const countNearbyPlayers = (players) => {
     const gridRange = 96;
@@ -370,7 +364,6 @@ export default function Map({
       map2.width / 2 - playerWidth / 2 - map2.border - position.left;
     const absoluteTop =
       map2.height / 2 - playerHeight / 2 - map2.border - position.top;
-    console.log(absoluteLeft, absoluteTop);
     return { left: absoluteLeft, top: absoluteTop };
   };
 
@@ -414,7 +407,7 @@ export default function Map({
           );
         })
       ),
-    [map2]
+    []
   );
 
   const playerElements = useMemo(
@@ -440,8 +433,6 @@ export default function Map({
     [players, userId, permissionLevel, pullRequests]
   );
 
-
-  
   return (
     <Wrapper>
       {broadcasts.length > 0 && (

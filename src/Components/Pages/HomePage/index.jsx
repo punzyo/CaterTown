@@ -3,19 +3,13 @@ import theme from '../../../theme';
 import { useState } from 'react';
 import Dialog from './Dialog';
 import { useUserRooms } from '../../../utils/hooks/useUserRooms';
-import { useNavigate } from 'react-router-dom';
 import { useUserState } from '../../../utils/zustand';
 import Button from '../../Buttons/Button';
 import Header from '../../Header';
-import InviteButton from '../../Buttons/InviteButton';
 import SearchBar from '../../SearchBar';
-import Cat from '../../Cat';
-import {
-  deleteRoomFromAllUsers,
-  removeUserFromRoom,
-} from '../../../firebase/firestore';
-import Joyride, { STATUS } from 'react-joyride';
-
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import Room from './Room';
 const Wrapper = styled.main`
   width: 100%;
   height: 100%;
@@ -39,7 +33,6 @@ const SearchWrapper = styled.div`
   .inputWrapper {
     width: 200px;
   }
-
 `;
 const MainPage = styled.div`
   background-color: #282d4e;
@@ -56,98 +49,14 @@ const RoomWrapper = styled.div`
     color: #fff;
   }
   ${theme.breakpoints.sm} {
-    font-size: 14px; 
-    gap:25px;
+    font-size: 14px;
+    gap: 25px;
     grid-template-columns: repeat(2, 1fr);
     padding: 10px 15px;
   }
 `;
-const Room = styled.div`
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  .top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    > div {
-      position: relative;
-      width: 35px;
-      height: 35px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      border-radius: 5px;
-      &:hover {
-        background-color: #333a64;
-      }
-    }
-    svg {
-      width: 16px;
-      height: 16px;
-      fill: #fff;
-    }
-  }
-
-  .middle {
-    height: 80%;
-    background-image: url(/images/map2.png);
-    background-size: cover;
-    background-position: center;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-  .bottom {
-    height: 20%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: #fff;
-    div {
-      display: flex;
-      align-items: center;
-    }
-    .right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-  }
-`;
-const DeleteDialog = styled.div`
-  position: absolute;
-  right: 0;
-  width: 160px;
-  height: 95px;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #414b80;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-  > div {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 25px;
-    button {
-      width: 50px;
-      height: 30px;
-      border-radius: 5px;
-      color: inherit;
-      &:hover {
-        background-color: #5f6dbb;
-      }
-    }
-  }
-`;
 
 export default function HomePage() {
-  const [joyrideRun, setJoyrideRun] = useState(false);
-  const [steps, setSteps] = useState([]);
   const { user } = useUserState();
   const [dialogOpen, setDialogOpen] = useState(false);
   const userId = user.id;
@@ -156,34 +65,6 @@ export default function HomePage() {
     show: false,
     id: '',
   });
-  const handleJoyrideCallback = (data) => {
-    const { status } = data;
-    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
-      setJoyrideRun(false);
-    }
-  };
-
-  const startAdvancedTour = () => {
-    setSteps([
-      {
-        target: 'create_space',
-        content: '創建房間，開啟你的第一步!',
-        placement: 'bottom',
-      },
-      {
-        target: '#create_space',
-        content: '創建房間，開啟你的第一步!',
-        placement: 'bottom',
-      },
-      {
-        target: '.date',
-        content: '查看加入日期',
-        placement: 'top',
-      },
-    ]);
-    setJoyrideRun(true);
-  };
-  const navigate = useNavigate();
 
   const openDialog = () => {
     console.log('open');
@@ -191,13 +72,6 @@ export default function HomePage() {
   };
   const closeDialog = () => setDialogOpen(false);
 
-  const handleDeleteRoom = async (roomId) => {
-    await deleteRoomFromAllUsers(roomId);
-  };
-
-  const handleLeaveRoom = async (roomId) => {
-    await removeUserFromRoom({ userId, roomId });
-  };
   return (
     <Wrapper
       onClick={() => {
@@ -205,20 +79,8 @@ export default function HomePage() {
         if (showDeleteDialog.show) setShowDeleteDialog({ show: false, id: '' });
       }}
     >
-      <Joyride
-        continuous
-        run={joyrideRun}
-        steps={steps}
-        callback={handleJoyrideCallback}
-        styles={{
-          options: {
-            zIndex: 10000,
-          },
-        }}
-      />
       <Header>
-      {/* <button onClick={startAdvancedTour}>開始新手教學</button> */}
-        <CreateSpace id='create_space'>
+        <CreateSpace id="create_space">
           <Button clickFunc={openDialog} content={'建立房間'}></Button>
         </CreateSpace>
       </Header>
@@ -230,88 +92,14 @@ export default function HomePage() {
       <MainPage>
         <RoomWrapper>
           {userRooms &&
-            userRooms.map((room, index) => (
-              <Room key={index}>
-                <div className="top">
-                  <span className="mapName">{room.roomName}</span>
-                  {
-                    <div
-                      onClick={() => {
-                        setShowDeleteDialog({ show: true, id: room.id });
-                      }}
-                    >
-                      {room.isCreater ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 448 512"
-                        >
-                          <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
-                        </svg>
-                      ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 512 512"
-                        >
-                          <path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z" />
-                        </svg>
-                      )}
-                      {showDeleteDialog.show &&
-                        showDeleteDialog.id === room.id && (
-                          <DeleteDialog
-                            onClick={(e) => {
-                              e.stopPropagation();
-                            }}
-                          >
-                            <span>
-                              {room.isCreater
-                                ? '確定要刪除此房間?'
-                                : '確定要退出此房間?'}
-                            </span>
-                            <div>
-                              <button
-                                onClick={() => {
-                                  room.isCreater
-                                    ? handleDeleteRoom(room.id)
-                                    : handleLeaveRoom(room.id);
-                                }}
-                              >
-                                確定
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setShowDeleteDialog({ show: false, id: '' });
-                                }}
-                              >
-                                取消
-                              </button>
-                            </div>
-                          </DeleteDialog>
-                        )}
-                    </div>
-                  }
-                </div>
-                <div
-                  className="middle"
-                  onClick={() => {
-                    navigate(`/chouchouzoo/${room.id}/${room.roomName}`);
-                  }}
-                ></div>
-                <div className="bottom">
-                  <div>
-                    <Cat image={room.character}></Cat>
-                    <span>{room.charName}</span>
-                  </div>
-                  <div className="right">
-                    <span className="date">
-                      {new Date(room.joinDate.toDate())
-                        .toISOString()
-                        .slice(0, 10)}
-                    </span>
-                    邀請朋友
-                    <InviteButton link={`${window.location.origin}/invite/${room.id}/${room.roomName}`} message='邀請連結已複製!'/>
-                  </div>
-                </div>
-              </Room>
+            userRooms.map((room) => (
+              <Room
+                key={room.id}
+                room={room}
+                userId={userId}
+                showDeleteDialog={showDeleteDialog}
+                setShowDeleteDialog={setShowDeleteDialog}
+              />
             ))}
         </RoomWrapper>
       </MainPage>
