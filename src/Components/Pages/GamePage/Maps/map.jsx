@@ -445,7 +445,7 @@ export default function Map({
         </MarqueeWrapper>
       )}
 
-      {position && (
+      {position ? (
         <MapWrapper>
           <MapABC $top={`${position.top}px`} $left={`${position.left}px`}>
             {mapElements}
@@ -472,7 +472,7 @@ export default function Map({
             </Player>
           )}
         </MapWrapper>
-      )}
+      ):<img src='/images/catLoading2.gif' style={{width:'50%', height:'50%', objectFit:'cover', marginRight:'300px'}}/>}
     </Wrapper>
   );
 }

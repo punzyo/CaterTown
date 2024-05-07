@@ -7,8 +7,7 @@ import { useUserState } from '../../../utils/zustand';
 import Button from '../../Buttons/Button';
 import Header from '../../Header';
 import SearchBar from '../../SearchBar';
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
+import RoomSkeleton from './RoomSkeleton';
 import Room from './Room';
 const Wrapper = styled.main`
   width: 100%;
@@ -91,72 +90,19 @@ export default function HomePage() {
       </SearchWrapper>
       <MainPage>
         <RoomWrapper>
-          {userRooms
-            ? userRooms.map((room) => (
-                <Room
-                  key={room.id}
-                  room={room}
-                  userId={userId}
-                  showDeleteDialog={showDeleteDialog}
-                  setShowDeleteDialog={setShowDeleteDialog}
-                />
-              ))
-            : Array.from({ length: 6 }, (_, index) => (
-              <div key={index}>
-                <div
-                  style={{ display: 'flex', justifyContent: 'space-between', padding:'0 5px'}}
-                >
-                  <Skeleton
-                    key={index}
-                    baseColor="#ddd"
-                    highlightColor="#f0f0f0"
-                    width={60}
-                    height={20}
-                  />
-                  <Skeleton
-                    key={index}
-                    baseColor="#ddd"
-                    highlightColor="#f0f0f0"
-                    width={20}
-                    height={20}
-                  />
-                </div>
-                <Skeleton
-                  key={index}
-                  baseColor="#ddd"
-                  highlightColor="#f0f0f0"
-                  height={284}
-                  borderRadius={10}
-                />
-                <div
-                  style={{ display: 'flex', justifyContent: 'space-between', alignItems:'center'}}
-                >
-                  <div  style={{ display: 'flex', alignItems:'center', gap:'10px'}}>
-                  <Skeleton
-                    key={index}
-                    baseColor="#ddd"
-                    highlightColor="#f0f0f0"
-                    width={50}
-                    height={50}
-                    borderRadius={10}
-                  /><Skeleton
-                  key={index}
-                  baseColor="#ddd"
-                  highlightColor="#f0f0f0"
-                  width={60}
-                  height={20}
-                />
-                  </div>
-                  <Skeleton
-                    key={index}
-                    baseColor="#ddd"
-                    highlightColor="#f0f0f0"
-                    width={200}
-                    height={20}
-                  />
-                </div>
-              </div>
-            ))}
+          {userRooms ? (
+            userRooms.map((room) => (
+              <Room
+                key={room.id}
+                room={room}
+                userId={userId}
+                showDeleteDialog={showDeleteDialog}
+                setShowDeleteDialog={setShowDeleteDialog}
+              />
+            ))
+          ) : (
+            <RoomSkeleton />
+          )}
         </RoomWrapper>
       </MainPage>
       {dialogOpen && <Dialog onClose={closeDialog} userId={userId} />}

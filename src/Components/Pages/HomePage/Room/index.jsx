@@ -61,6 +61,7 @@ const Wrapper = styled.div`
   }
 `;
 
+
 export default function Room({
   room,
   userId,
@@ -68,8 +69,6 @@ export default function Room({
   setShowDeleteDialog,
 }) {
   const navigate = useNavigate();
-
- 
 
   return (
     <Wrapper>
