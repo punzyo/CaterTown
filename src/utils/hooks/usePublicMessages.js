@@ -3,7 +3,7 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/firestore';
 
 export const usePublicMessages = (roomId) => {
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState();
   
     useEffect(() => {
       if (!roomId) return; 

@@ -16,7 +16,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   bottom: ${(props) => (props.$minimizeMessages ? '-32px' : '-0.5px')};
   right: 300px;
-  ;
 `;
 const MessageWrapper = styled.div`
   width: 350px;
@@ -33,7 +32,6 @@ const Message = styled.div`
   padding: 0 10px;
 `;
 const MessageController = styled.div`
-
   position: relative;
   width: 100%;
   height: 30px;
@@ -56,7 +54,7 @@ const Channel = styled.div`
   align-items: center;
   justify-content: center;
   background-color: ${(props) => (props.$selected ? '#3D477C' : '')};
-  &:hover{
+  &:hover {
     background-color: ${(props) => (props.$selected ? '' : '#4A5798')};
   }
   cursor: pointer;
@@ -72,13 +70,13 @@ const CloseIcon = styled.div`
   position: absolute;
   right: 0px;
   width: 40px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    &:hover{
-      background-color: #2E355D;
-    }
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: #2e355d;
+  }
   svg {
     fill: white;
     width: 18px;
@@ -87,7 +85,6 @@ const CloseIcon = styled.div`
   .square {
     position: absolute;
     top: 5px;
-    
   }
   cursor: pointer;
 `;
@@ -99,13 +96,13 @@ const MessageInput = styled.form`
   background-color: #eee;
   display: flex;
   align-items: center;
-  
+
   input {
     border: none;
     width: 85%;
     height: 100%;
     padding: 5px 10px;
-    background-color: #4C4E5C;
+    background-color: #4c4e5c;
     outline: none;
   }
   button {
@@ -113,7 +110,7 @@ const MessageInput = styled.form`
     height: 100%;
     padding: 5px 10px;
     font-size: 12px;
-    font-weight:  bold;
+    font-weight: bold;
     cursor: pointer;
     color: black !important;
   }
@@ -157,7 +154,9 @@ export default function PublicMessage({
   };
 
   useEffect(() => {
-    if (publicMessages.length === 0) return;
+    if (!publicMessages) {
+      return;
+    }
     if (messageInit.current) {
       setUnreadPublicMessages(0);
       messageInit.current = false;
@@ -179,7 +178,7 @@ export default function PublicMessage({
   }, [minimizeMessages]);
 
   const sendMessage = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!messageInput.value) return;
     if (isPublicChannel) {
       await sendPublicMessage({
@@ -259,15 +258,15 @@ export default function PublicMessage({
             }}
           >
             {minimizeMessages ? (
-              <svg className="square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path d="M384 80c8.8 0 16 7.2 16 16V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V96c0-8.8 7.2-16 16-16H384zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z" />
-              </svg>
-            ) : (
               <svg
-                
+                className="square"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 448 512"
               >
+                <path d="M384 80c8.8 0 16 7.2 16 16V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V96c0-8.8 7.2-16 16-16H384zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                 <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
               </svg>
             )}

@@ -95,7 +95,6 @@ const CreateRoom = styled.div`
 function Dialog({ onClose, userId }) {
   const roomNameInput = useValidatedInput('', /^[^*%]+$/, 15);
   const charNameInput = useValidatedInput('', /^[^*%]+$/, 15);
-  // const mapInput = useRef();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const handleSlideChange = (index) => {
     setSelectedImageIndex(index);
@@ -109,7 +108,6 @@ function Dialog({ onClose, userId }) {
     }
     const roomName = roomNameInput.value;
     const charName = charNameInput.value;
-    // const map = mapInput.current.value;
     const map = 'map2';
     const character = catImages[selectedImageIndex];
 

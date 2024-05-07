@@ -1,18 +1,15 @@
 import styled from 'styled-components';
 import {
-  CarouselLayout,
-  ParticipantTile,
   VideoTrack,
   TrackLoop,
   TrackRefContext,
-  AudioVisualizer,
-  AudioTrack,
 } from '@livekit/components-react';
 import React, { useRef, useState, useEffect } from 'react';
 import AudioManager from '../../TracksManager/AudioTracks';
 import VideoContainer from '../VedioContainer';
 import { useGameSettings } from '../../../utils/zustand';
 import MemberIcon from '../../MemberIcon';
+import UserIcon from '../../Icons/UserIcon';
 const Wrapper = styled.div`
   position: relative;
   top: -230px;

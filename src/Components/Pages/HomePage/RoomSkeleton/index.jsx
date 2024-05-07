@@ -12,14 +12,12 @@ export default function RoomSkeleton() {
             }}
           >
             <Skeleton
-              key={index}
               baseColor="#ddd"
               highlightColor="#f0f0f0"
               width={60}
               height={20}
             />
             <Skeleton
-              key={index}
               baseColor="#ddd"
               highlightColor="#f0f0f0"
               width={20}
@@ -27,7 +25,6 @@ export default function RoomSkeleton() {
             />
           </div>
           <Skeleton
-            key={index}
             baseColor="#ddd"
             highlightColor="#f0f0f0"
             height={284}
@@ -48,7 +45,6 @@ export default function RoomSkeleton() {
               }}
             >
               <Skeleton
-                key={index}
                 baseColor="#ddd"
                 highlightColor="#f0f0f0"
                 width={50}
@@ -56,7 +52,6 @@ export default function RoomSkeleton() {
                 borderRadius={10}
               />
               <Skeleton
-                key={index}
                 baseColor="#ddd"
                 highlightColor="#f0f0f0"
                 width={60}
@@ -64,7 +59,6 @@ export default function RoomSkeleton() {
               />
             </div>
             <Skeleton
-              key={index}
               baseColor="#ddd"
               highlightColor="#f0f0f0"
               width={200}

@@ -66,7 +66,6 @@ export default function HomePage() {
   });
 
   const openDialog = () => {
-    console.log('open');
     setDialogOpen(true);
   };
   const closeDialog = () => setDialogOpen(false);
@@ -90,7 +89,9 @@ export default function HomePage() {
       </SearchWrapper>
       <MainPage>
         <RoomWrapper>
-          {userRooms ? (
+          {loading ? (
+            <RoomSkeleton />
+          ) : (
             userRooms.map((room) => (
               <Room
                 key={room.id}
@@ -100,8 +101,6 @@ export default function HomePage() {
                 setShowDeleteDialog={setShowDeleteDialog}
               />
             ))
-          ) : (
-            <RoomSkeleton />
           )}
         </RoomWrapper>
       </MainPage>
