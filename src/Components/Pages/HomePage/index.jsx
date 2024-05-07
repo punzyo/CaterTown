@@ -60,7 +60,7 @@ export default function HomePage() {
   const { user } = useUserState();
   const [dialogOpen, setDialogOpen] = useState(false);
   const userId = user.id;
-  const userRooms = useUserRooms(userId);
+  const { userRooms, loading } = useUserRooms(userId);
   const [showDeleteDialog, setShowDeleteDialog] = useState({
     show: false,
     id: '',
@@ -91,15 +91,71 @@ export default function HomePage() {
       </SearchWrapper>
       <MainPage>
         <RoomWrapper>
-          {userRooms &&
-            userRooms.map((room) => (
-              <Room
-                key={room.id}
-                room={room}
-                userId={userId}
-                showDeleteDialog={showDeleteDialog}
-                setShowDeleteDialog={setShowDeleteDialog}
-              />
+          {userRooms
+            ? userRooms.map((room) => (
+                <Room
+                  key={room.id}
+                  room={room}
+                  userId={userId}
+                  showDeleteDialog={showDeleteDialog}
+                  setShowDeleteDialog={setShowDeleteDialog}
+                />
+              ))
+            : Array.from({ length: 6 }, (_, index) => (
+              <div key={index}>
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between', padding:'0 5px'}}
+                >
+                  <Skeleton
+                    key={index}
+                    baseColor="#ddd"
+                    highlightColor="#f0f0f0"
+                    width={60}
+                    height={20}
+                  />
+                  <Skeleton
+                    key={index}
+                    baseColor="#ddd"
+                    highlightColor="#f0f0f0"
+                    width={20}
+                    height={20}
+                  />
+                </div>
+                <Skeleton
+                  key={index}
+                  baseColor="#ddd"
+                  highlightColor="#f0f0f0"
+                  height={284}
+                  borderRadius={10}
+                />
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between', alignItems:'center'}}
+                >
+                  <div  style={{ display: 'flex', alignItems:'center', gap:'10px'}}>
+                  <Skeleton
+                    key={index}
+                    baseColor="#ddd"
+                    highlightColor="#f0f0f0"
+                    width={50}
+                    height={50}
+                    borderRadius={10}
+                  /><Skeleton
+                  key={index}
+                  baseColor="#ddd"
+                  highlightColor="#f0f0f0"
+                  width={60}
+                  height={20}
+                />
+                  </div>
+                  <Skeleton
+                    key={index}
+                    baseColor="#ddd"
+                    highlightColor="#f0f0f0"
+                    width={200}
+                    height={20}
+                  />
+                </div>
+              </div>
             ))}
         </RoomWrapper>
       </MainPage>

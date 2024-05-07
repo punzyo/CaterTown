@@ -1,14 +1,11 @@
 import styled from 'styled-components';
 import InviteButton from '../../../Buttons/InviteButton';
-import {
-  removeUserFromRoom,
-  deleteRoomFromAllUsers,
-} from '../../../../firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import Cat from '../../../Cat';
 import TrashCanIcon from '../../../Icons/TrashCanIcon';
 import LeaveRoomIcon from '../../../Icons/LeaveRoomIcon';
 import DeleteDialog from './DeleteDialog';
+
 const Wrapper = styled.div`
   height: 400px;
   display: flex;
@@ -71,6 +68,8 @@ export default function Room({
   setShowDeleteDialog,
 }) {
   const navigate = useNavigate();
+
+ 
 
   return (
     <Wrapper>

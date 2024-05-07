@@ -3,11 +3,12 @@ import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/firestore';
 
 export const useUserRooms = (userId) => {
-  const [userRooms, setUserRooms] = useState([]);
+  const [userRooms, setUserRooms] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!userId) return undefined;
-
+    setLoading(true);
     const roomsCollectionRef = collection(db, 'users', userId, 'rooms');
 
     const unsubscribe = onSnapshot(
@@ -20,6 +21,7 @@ export const useUserRooms = (userId) => {
 
         rooms.sort((a, b) => b.joinDate - a.joinDate);
         setUserRooms(rooms);
+        setLoading(false);
       },
       (error) => {
         console.error('Error getting user rooms:', error);
@@ -31,5 +33,5 @@ export const useUserRooms = (userId) => {
     };
   }, [userId]);
 
-  return userRooms;
+  return {userRooms,loading};
 };
