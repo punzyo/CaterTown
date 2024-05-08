@@ -5,6 +5,7 @@ import Cat from '../../../Cat';
 import TrashCanIcon from '../../../Icons/TrashCanIcon';
 import LeaveRoomIcon from '../../../Icons/LeaveRoomIcon';
 import DeleteDialog from './DeleteDialog';
+import { useOnlineUserCount } from '../../../../utils/hooks/useOnlineUserCount';
 
 const Wrapper = styled.div`
   height: 400px;
@@ -36,12 +37,36 @@ const Wrapper = styled.div`
   }
 
   .middle {
+    position: relative;
     height: 80%;
     background-image: url(/images/map2.png);
     background-size: cover;
     background-position: center;
     border-radius: 10px;
     cursor: pointer;
+    .onlineMembers{
+      display: flex;
+      justify-content: flex-end;
+      position: absolute;
+      padding: 0 10px;
+      left:10px;
+      top: 10px;
+      width:55px;
+      border-radius: 20px;
+      background-color: rgba(0, 0, 0,0.7);
+      color: #fff;
+      font-weight: bold;
+      &::before{
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 9px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #11b111;
+      }
+    }
   }
   .bottom {
     height: 20%;
@@ -69,7 +94,8 @@ export default function Room({
   setShowDeleteDialog,
 }) {
   const navigate = useNavigate();
-
+  const onlineMembers= useOnlineUserCount(room.id)
+  console.log(onlineMembers,'2321');
   return (
     <Wrapper>
       <div className="top">
@@ -96,7 +122,11 @@ export default function Room({
         onClick={() => {
           navigate(`/chouchouzoo/${room.id}/${room.roomName}`);
         }}
-      ></div>
+      >
+        <div className="onlineMembers">
+          {onlineMembers}
+        </div>
+      </div>
       <div className="bottom">
         <div>
           <Cat image={room.character}></Cat>

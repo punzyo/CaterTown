@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { ref, onDisconnect, onValue, update } from 'firebase/database';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { rtdb } from '../../firebase/realtime';
 
 export function useRoomStatus({ userId, roomId }) {
     const [onlineStatus, setOnlineStatus] = useState({});
-    const navigate = useNavigate();
-
+    const location = useLocation();
     useEffect(() => {
         const userStatusRef = ref(rtdb, `rooms/${roomId}/users/${userId}`);
 
@@ -20,10 +19,11 @@ export function useRoomStatus({ userId, roomId }) {
         });
 
         return () => {
+            console.log('路由切');
             unsubscribe();
             update(userStatusRef, { online: false });  
         };
-    }, [userId, roomId, rtdb, navigate]);
+    }, [userId, roomId, rtdb, location.pathname]);
 
     return onlineStatus;
 }

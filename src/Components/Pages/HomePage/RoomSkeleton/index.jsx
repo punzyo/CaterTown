@@ -14,15 +14,15 @@ export default function RoomSkeleton() {
             <Skeleton
               baseColor="#ddd"
               highlightColor="#f0f0f0"
-              width={60}
+              width={0}
               height={20}
             />
-            <Skeleton
+            {/* <Skeleton
               baseColor="#ddd"
               highlightColor="#f0f0f0"
               width={20}
               height={20}
-            />
+            /> */}
           </div>
           <Skeleton
             baseColor="#ddd"
@@ -30,7 +30,7 @@ export default function RoomSkeleton() {
             height={284}
             borderRadius={10}
           />
-          <div
+          {/* <div
             style={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -64,7 +64,7 @@ export default function RoomSkeleton() {
               width={200}
               height={20}
             />
-          </div>
+          </div> */}
         </div>
       ))
   )
