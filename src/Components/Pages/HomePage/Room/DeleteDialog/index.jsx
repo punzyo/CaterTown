@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   font-weight: bold;
   color: white;
   text-align: center;
+  z-index: 1;
   > div {
     margin-top: 10px;
     display: flex;

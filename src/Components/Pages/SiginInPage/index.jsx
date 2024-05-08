@@ -6,7 +6,7 @@ import { signInToAuth } from '../../../firebase/auth';
 import { getUserFromFirestore } from '../../../firebase/firestore';
 import { useUserState } from '../../../utils/zustand';
 import { useEffect } from 'react';
-
+import Logo from '../../Logo';
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -17,6 +17,14 @@ const Wrapper = styled.div`
   gap: 10px;
   background-image: url('/signInBg.png');
   background-size: cover;
+  > button {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+  }
 `;
 const SignInWrapper = styled.div`
   width: 360px;
@@ -128,6 +136,7 @@ export default function SignInPage() {
   };
   return (
     <Wrapper>
+      <Logo />
       <SignInWrapper>
         <Top>
           <Cat image="gold_0" />

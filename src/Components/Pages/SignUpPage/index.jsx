@@ -4,7 +4,7 @@ import Cat from '../../Cat';
 import useValidatedInput from '../../../utils/hooks/useValidatedInput';
 import { registerUserToAuth } from '../../../firebase/auth';
 import { saveUserToFirestore } from '../../../firebase/firestore';
-
+import Logo from '../../Logo';
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -15,6 +15,14 @@ const Wrapper = styled.div`
   gap: 10px;
   background-image: url('/signInBg.png');
   background-size: cover;
+  >button{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    &:hover{
+      background-color: rgba(255, 255, 255,.5);
+    }
+  }
 `;
 const SignUpWrapper = styled.div`
   width: 360px;
@@ -150,6 +158,7 @@ export default function SignUpPage() {
   };
   return (
     <Wrapper>
+      <Logo/>
       <SignUpWrapper>
         <Top>
           <Cat image="brown_8" />

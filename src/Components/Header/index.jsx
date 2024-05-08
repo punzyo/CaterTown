@@ -107,9 +107,10 @@ export default function Header({ children }) {
         <SignOut
           onClick={() => {
             navigate('/signup');
+            resetUser()
           }}
         >
-          <button onClick={resetUser}>登出</button>
+          <button>登出</button>
         </SignOut>
         {children}
       </div>

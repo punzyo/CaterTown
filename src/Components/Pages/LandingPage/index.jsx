@@ -6,7 +6,7 @@ import Button from '../../Buttons/Button';
 import Logo from '../../Logo';
 import { useUserState } from '../../../utils/zustand';
 const containerStyles = css`
-  border-radius: 10px;
+  border-radius: 5px;
   font-size: 16px;
   padding: 5px 10px;
   font-weight: 700;

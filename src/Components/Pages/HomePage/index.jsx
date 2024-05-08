@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import theme from '../../../theme';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Dialog from './Dialog';
 import { useUserRooms } from '../../../utils/hooks/useUserRooms';
 import { useUserState } from '../../../utils/zustand';
@@ -9,6 +9,7 @@ import Header from '../../Header';
 import SearchBar from '../../SearchBar';
 import RoomSkeleton from './RoomSkeleton';
 import Room from './Room';
+import { useNavigate } from 'react-router-dom';
 const Wrapper = styled.main`
   width: 100%;
   height: 100%;
@@ -56,7 +57,8 @@ const RoomWrapper = styled.div`
 `;
 
 export default function HomePage() {
-  const { user } = useUserState();
+  const navigate = useNavigate();
+  const { user, loginChecked } = useUserState();
   const [dialogOpen, setDialogOpen] = useState(false);
   const userId = user.id;
   const { userRooms, loading } = useUserRooms(userId);
@@ -64,7 +66,9 @@ export default function HomePage() {
     show: false,
     id: '',
   });
-
+  useEffect(() => {
+    if (loginChecked && !user.id) navigate('/');
+  }, [loginChecked, user.id]);
   const openDialog = () => {
     setDialogOpen(true);
   };
