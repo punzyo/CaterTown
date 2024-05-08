@@ -162,7 +162,8 @@ export default function InvitePage() {
     }
   };
   return (
-    <Wrapper>
+   <>
+   {userId && <Wrapper>
       <Header />
       <MainWrapper>
         <Title>您已被邀請至房間 {roomName}!</Title>
@@ -196,6 +197,7 @@ export default function InvitePage() {
           </JoinButton>
         </GameSettings>
       </MainWrapper>
-    </Wrapper>
+    </Wrapper>}
+   </>
   );
 }
