@@ -3,7 +3,11 @@ import { useState, useEffect } from 'react';
 import { catImages } from '../../../assets/charNames.js';
 import { useUserState } from '../../../utils/zustand.js';
 import useValidatedInput from '../../../utils/hooks/useValidatedInput.js';
-import { addRoomToUser, JoinRoom, checkUserRoom } from '../../../firebase/firestore.js';
+import {
+  addRoomToUser,
+  JoinRoom,
+  checkUserRoom,
+} from '../../../firebase/firestore.js';
 import Button from '../../Buttons/Button/index.jsx';
 import styled from 'styled-components';
 import SimpleSlider from '../../Silder/index.jsx';
@@ -105,21 +109,24 @@ const JoinButton = styled.div`
 export default function InvitePage() {
   const navigate = useNavigate();
   const charNameInput = useValidatedInput('', /^[^*%]+$/, 15);
-  const { user } = useUserState();
-  const userId = user.id
-  if (!user) navigate('/signin');
+  const { user, loginChecked } = useUserState();
+
+  const userId = user.id;
   const { roomId, roomName } = useParams();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-useEffect(() => {
-  if(!roomId || !userId) return
-  (async()=>{
-    const isInRoom = await checkUserRoom({roomId, userId})
-    if(isInRoom){
-      navigate(`/chouchouzoo/${roomId}/${roomName}`)
-    }
-  })()
-},[roomId, userId])
+  useEffect(() => {
+    if (loginChecked && !user.id) navigate('/');
+  }, [loginChecked, user.id]);
+  useEffect(() => {
+    if (!roomId || !userId) return;
+    (async () => {
+      const isInRoom = await checkUserRoom({ roomId, userId });
+      if (isInRoom) {
+        navigate(`/chouchouzoo/${roomId}/${roomName}`);
+      }
+    })();
+  }, [roomId, userId]);
 
   const handleSlideChange = (index) => {
     setSelectedImageIndex(index);
@@ -162,7 +169,10 @@ useEffect(() => {
         <GameSettings>
           <div className="settings">
             <div>
-              <InputWrapper $isValid={charNameInput.isValid} $value={charNameInput.value}>
+              <InputWrapper
+                $isValid={charNameInput.isValid}
+                $value={charNameInput.value}
+              >
                 <label htmlFor="name">角色名稱</label>
                 <input
                   type="text"

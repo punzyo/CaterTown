@@ -23,6 +23,7 @@ const Wrapper = styled.div`
   background-color: #202540;
   z-index: ${(props) => (props.$isFullScreen ? '5' : '10')};
   border-bottom: 1px solid #3e477c;
+
   button {
     color: white;
   }
@@ -34,10 +35,13 @@ const Title = styled.div`
   margin-bottom: 30px;
 `;
 const MemberWrapper = styled.div`
+  height: calc(100% - 120px);
+  padding-bottom: 10px;
   margin-top: 30px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  overflow-y: auto;
 `;
 const MemberInfo = styled.div`
   width: 100%;
