@@ -2730,17 +2730,10 @@ export const map2 = {
         left: 18,
         top: 19,
       },
-      {
-        left: 18,
-        top: 20,
-      },
+
       {
         left: 14,
         top: 19,
-      },
-      {
-        left: 14,
-        top: 20,
       },
     ],
     waterFloor4: [
@@ -2751,6 +2744,16 @@ export const map2 = {
       {
         left: 14,
         top: 21,
+      },
+    ],
+    waterFloor6: [
+      {
+        left: 14,
+        top: 20,
+      },
+      {
+        left: 18,
+        top: 20,
       },
     ],
     water12: [

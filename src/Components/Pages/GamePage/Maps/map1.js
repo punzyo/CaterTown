@@ -400,8 +400,8 @@ export const mapIndex = {
   },waterFloor3: {
     width: 2,
     height: 1,
-    x: 9,
-    y: -4.9,
+    x: 7,
+    y: -6,
     collision: false,
   },waterFloor4: {
     width: 2,
@@ -414,6 +414,13 @@ export const mapIndex = {
     height: 2,
     x: 5.9,
     y: -3.5,
+    collision: false,
+  },
+  waterFloor6: {
+    width: 2,
+    height: 1,
+    x: 9,
+    y: -5,
     collision: false,
   },
   tree1: {
