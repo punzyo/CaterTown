@@ -239,6 +239,7 @@ export default function Map({
       }
       //player can move
       let enterRoom = map2Room[`${playerGrid.x},${playerGrid.y}`];
+      console.log(enterRoom, '採到的房間4', room);
       if (enterRoom === undefined) enterRoom = room;
       setRoom(enterRoom);
 
@@ -279,6 +280,7 @@ export default function Map({
   useEffect(() => {
     //initializate player position
     if (position || !players) return;
+    console.log('我不該看到你喔');
     const updatePosition = async () => {
       console.log(players, userId);
       const playerData = players.filter((player) => player.userId === userId);
@@ -312,6 +314,7 @@ export default function Map({
       setDirection(map2.startingPoint.direction);
       setCurrentFrame(map2.startingPoint.frame);
       dispatchPosition({ type: 'SET_POSITION', payload: newPosition });
+      setRoom('');
       await updatePlayerPosition({
         userId,
         userData: {
@@ -472,7 +475,17 @@ export default function Map({
             </Player>
           )}
         </MapWrapper>
-      ):<img src='/images/catLoading2.gif' style={{width:'50%', height:'50%', objectFit:'cover', marginRight:'300px'}}/>}
+      ) : (
+        <img
+          src="/images/catLoading2.gif"
+          style={{
+            width: '50%',
+            height: '50%',
+            objectFit: 'cover',
+            marginRight: '300px',
+          }}
+        />
+      )}
     </Wrapper>
   );
 }
