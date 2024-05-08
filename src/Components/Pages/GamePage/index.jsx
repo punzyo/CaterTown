@@ -48,6 +48,12 @@ const BottomContent = styled.div`
   gap: 15px;
   align-items: center;
 `;
+const BottomRight = styled.div`
+  display: flex;
+  position: relative;
+  gap: 15px;
+  align-items: center;
+`;
 
 const ExirRoom = styled.button`
   width: 70px;
@@ -66,7 +72,10 @@ const ExirRoom = styled.button`
 `;
 
 const Group = styled.button`
-  width: 70px;
+position: relative;
+display: flex;
+align-items: center;
+gap: 10px;
   height: 60px;
   border-radius: 10px;
   padding: 10px;
@@ -79,6 +88,18 @@ const Group = styled.button`
     width: 40px;
     height: 40px;
     fill: white;
+  }
+  .onlineCount{
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    >div:first-of-type{
+      width: 12px;
+      height: 12px;
+      background-color: green;
+      border-radius: 50%;
+    }
   }
 `;
 
@@ -258,13 +279,17 @@ export default function GamePage() {
               )}
             </ControlWrapper>
           </BottomContent>
-          <BottomContent>
+          <BottomRight>
             <Group
               onClick={() => {
                 setShowSidebar(!showSidebar);
               }}
             >
               <GroupIcon />
+              <div className='onlineCount'>
+                <div></div>
+                <span>{onlineMembers.length}</span>
+              </div>
             </Group>
             <ExirRoom
               onClick={() => {
@@ -273,7 +298,7 @@ export default function GamePage() {
             >
               <ExitRoomIcon />
             </ExirRoom>
-          </BottomContent>
+          </BottomRight>
         </BottomBar>
         <Sidebar
           userId={userId}
