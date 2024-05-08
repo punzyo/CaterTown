@@ -7,6 +7,7 @@ import {
   addRoomToUser,
   JoinRoom,
   checkUserRoom,
+  initPlayerPosition,
 } from '../../../firebase/firestore.js';
 import Button from '../../Buttons/Button/index.jsx';
 import styled from 'styled-components';
@@ -145,9 +146,9 @@ export default function InvitePage() {
         userId,
         charName,
         character,
-        position: map2.startingPoint,
       },
     });
+    await initPlayerPosition({ userId, roomId, position: map2.startingPoint });
     const joinedRoom = await addRoomToUser({
       userId,
       roomName,
@@ -162,42 +163,44 @@ export default function InvitePage() {
     }
   };
   return (
-   <>
-   {userId && <Wrapper>
-      <Header />
-      <MainWrapper>
-        <Title>您已被邀請至房間 {roomName}!</Title>
-        <GameSettings>
-          <div className="settings">
-            <div>
-              <InputWrapper
-                $isValid={charNameInput.isValid}
-                $value={charNameInput.value}
-              >
-                <label htmlFor="name">角色名稱</label>
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  value={charNameInput.value}
-                  onChange={charNameInput.onChange}
-                />
-              </InputWrapper>
-            </div>
-            <span>請選擇貓咪</span>
-            <SilderWrapper>
-              <SimpleSlider
-                onSlideChange={handleSlideChange}
-                data={catImages}
-              />
-            </SilderWrapper>
-          </div>
-          <JoinButton>
-            <Button clickFunc={handleJoinRoom} content={'加入房間'} />
-          </JoinButton>
-        </GameSettings>
-      </MainWrapper>
-    </Wrapper>}
-   </>
+    <>
+      {userId && (
+        <Wrapper>
+          <Header />
+          <MainWrapper>
+            <Title>您已被邀請至房間 {roomName}!</Title>
+            <GameSettings>
+              <div className="settings">
+                <div>
+                  <InputWrapper
+                    $isValid={charNameInput.isValid}
+                    $value={charNameInput.value}
+                  >
+                    <label htmlFor="name">角色名稱</label>
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      value={charNameInput.value}
+                      onChange={charNameInput.onChange}
+                    />
+                  </InputWrapper>
+                </div>
+                <span>請選擇貓咪</span>
+                <SilderWrapper>
+                  <SimpleSlider
+                    onSlideChange={handleSlideChange}
+                    data={catImages}
+                  />
+                </SilderWrapper>
+              </div>
+              <JoinButton>
+                <Button clickFunc={handleJoinRoom} content={'加入房間'} />
+              </JoinButton>
+            </GameSettings>
+          </MainWrapper>
+        </Wrapper>
+      )}
+    </>
   );
 }

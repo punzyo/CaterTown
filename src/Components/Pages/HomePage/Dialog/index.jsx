@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import useValidatedInput from '../../../../utils/hooks/useValidatedInput';
 import SimpleSlider from '../../../Silder';
 import { map2 } from '../../GamePage/Maps/map2';
-import { createRoom, addRoomToUser } from '../../../../firebase/firestore';
+import { createRoom, addRoomToUser,initPlayerPosition } from '../../../../firebase/firestore';
 import { catImages } from '@/assets/charNames';
 import CloseButton from '../../../Buttons/CloseButton';
 import Cat from '../../../Cat';
@@ -116,9 +116,9 @@ function Dialog({ onClose, userId }) {
       roomName,
       charName,
       character,
-      startingPoint: map2.startingPoint,
       map,
     });
+    await initPlayerPosition({roomId, userId, position:map2.startingPoint})
     const isUpdated = await addRoomToUser({
       userId,
       roomName,

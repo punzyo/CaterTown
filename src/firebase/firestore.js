@@ -14,29 +14,29 @@ import {
   deleteDoc,
   arrayRemove,
 } from 'firebase/firestore';
-import { creatRtRoom,deleteRoomFromRT, removeUserFromRTRoom } from './realtime';
+import {
+  creatRtRoom,
+  deleteRoomFromRT,
+  removeUserFromRTRoom,
+} from './realtime';
 
 export const db = getFirestore(app);
 
 export async function updatePlayerPosition({ userId, userData, roomId, room }) {
-  const roomDocRef = doc(db, 'rooms', roomId);
-  console.log('my Room', room);
+  const userPositionRef = doc(db, `rooms/${roomId}/positions`, userId);
+
   try {
-    const roomSnap = await getDoc(roomDocRef);
-    let usersArray = roomSnap.data().users;
-    const userIndex = usersArray.findIndex((user) => user.userId === userId);
-    if (userIndex !== -1) {
-      usersArray[userIndex].position = {
+    await updateDoc(userPositionRef, {
+      position: {
         top: userData.top,
         left: userData.left,
         direction: userData.direction,
         frame: userData.frame,
-      };
-      usersArray[userIndex].room = room;
-    }
-    await updateDoc(roomDocRef, {
-      users: usersArray,
+      },
+      room,
     });
+
+    console.log('Position updated successfully!');
   } catch (error) {
     console.error('Error updating position: ', error);
   }
@@ -47,9 +47,7 @@ export async function createRoom({
   charName,
   character,
   map,
-  startingPoint: position,
 }) {
-  console.log(userId, roomName, charName, character, position, map);
   try {
     const roomDocRef = await addDoc(collection(db, 'rooms'), {
       users: [
@@ -57,9 +55,8 @@ export async function createRoom({
           userId,
           charName,
           character,
-          position,
+
           permissionLevel: 'admin',
-          room: '',
           gitHubId: '',
         },
       ],
@@ -70,6 +67,23 @@ export async function createRoom({
     console.log('Document written with ID: ', roomDocRef.id);
     creatRtRoom(roomDocRef.id);
     return roomDocRef.id;
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+}
+export async function initPlayerPosition({ userId, roomId, position, }) {
+  const positionDocRef = doc(
+    collection(db, `rooms/${roomId}/positions`),
+    userId
+  );
+
+  try {
+    await setDoc(positionDocRef, {
+      position: position,
+      room: '',
+    });
+
+    console.log('Document successfully written!');
   } catch (e) {
     console.error('Error adding document: ', e);
   }
@@ -379,7 +393,7 @@ export async function deleteRoomFromAllUsers(roomId) {
   const roomRef = doc(db, 'rooms', roomId);
   console.log(roomId);
   try {
-    await deleteRoomFromRT(roomId)
+    await deleteRoomFromRT(roomId);
     const roomSnap = await getDoc(roomRef);
 
     if (roomSnap.exists()) {
@@ -389,7 +403,7 @@ export async function deleteRoomFromAllUsers(roomId) {
         const userRoomRef = doc(db, 'users', user.userId, 'rooms', roomId);
         await deleteDoc(userRoomRef);
       }
-      
+
       await deleteDoc(roomRef);
       console.log('Room and all references deleted successfully');
     } else {
@@ -412,7 +426,7 @@ export async function checkUserRoom({ roomId, userId }) {
 }
 
 export async function removeUserFromRoom({ roomId, userId }) {
-  console.log('退掉',roomId, userId);
+  console.log('退掉', roomId, userId);
   const userRoomRef = doc(db, 'users', userId, 'rooms', roomId);
 
   const roomRef = doc(db, 'rooms', roomId);
