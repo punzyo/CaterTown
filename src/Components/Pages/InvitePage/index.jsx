@@ -7,7 +7,7 @@ import {
   addRoomToUser,
   JoinRoom,
   checkUserRoom,
-  initPlayerPosition,
+  initPlayerData,
 } from '../../../firebase/firestore.js';
 import Button from '../../Buttons/Button/index.jsx';
 import styled from 'styled-components';
@@ -148,7 +148,13 @@ export default function InvitePage() {
         character,
       },
     });
-    await initPlayerPosition({ userId, roomId, position: map2.startingPoint });
+    await initPlayerData({
+      userId,
+      roomId,
+      position: map2.startingPoint,
+      charName,
+      character,
+    });
     const joinedRoom = await addRoomToUser({
       userId,
       roomName,

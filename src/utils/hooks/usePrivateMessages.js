@@ -13,7 +13,7 @@ export const usePrivateMessages = ({ userId, roomId, privateChannelId }) => {
     const sortedIds = [userId, privateChannelId].sort();
     const documentId = sortedIds.join(''); 
 
-    const messageRef = doc(db, `rooms/${roomId}/users/${documentId}`);
+    const messageRef = doc(db, `rooms/${roomId}/privateMessages/${documentId}`);
 
     const unsubscribe = onSnapshot(messageRef, (docSnapshot) => {
       if (docSnapshot.exists()) {

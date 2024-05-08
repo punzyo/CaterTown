@@ -2,7 +2,7 @@ import { mapIndex } from './map1.js';
 import styled from 'styled-components';
 import { useState, useEffect, useRef, useReducer, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { updatePlayerPosition } from '@/firebase/firestore';
+import { updatePlayerPosition } from '../../../../firebase/firestore.js';
 import { playerHeight, playerWidth } from './map1.js';
 import { map2, map2Collision, map2Room } from './map2.js';
 import {
@@ -156,7 +156,6 @@ export default function Map({
   const { getUserData } = useUserState();
   const userId = getUserData().id;
   const { roomId } = useParams();
-
   const [position, dispatchPosition] = useReducer(positionReducer, null);
   const [currentFrame, setCurrentFrame] = useState(null);
   const [direction, setDirection] = useState();

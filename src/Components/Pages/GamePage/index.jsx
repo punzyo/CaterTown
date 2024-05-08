@@ -135,9 +135,8 @@ export default function GamePage() {
   const userId = user.id;
 
   const onlineStatus = useRoomStatus({ userId, roomId });
-  const playersData = usePlayer({ userId, roomId });
+  const players = usePlayer( roomId );
   const [playerCharName, setPlayerCharName] = useState(null);
-  const players = playersData.users;
 
   const [gitHubId, setGitHubId] = useState(null);
   const [permissionLevel, setPermissionLevel] = useState(null);

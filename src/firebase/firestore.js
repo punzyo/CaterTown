@@ -23,7 +23,7 @@ import {
 export const db = getFirestore(app);
 
 export async function updatePlayerPosition({ userId, userData, roomId, room }) {
-  const userPositionRef = doc(db, `rooms/${roomId}/positions`, userId);
+  const userPositionRef = doc(db, `rooms/${roomId}/users`, userId);
 
   try {
     await updateDoc(userPositionRef, {
@@ -41,25 +41,9 @@ export async function updatePlayerPosition({ userId, userData, roomId, room }) {
     console.error('Error updating position: ', error);
   }
 }
-export async function createRoom({
-  userId,
-  roomName,
-  charName,
-  character,
-  map,
-}) {
+export async function createRoom({ roomName, map }) {
   try {
     const roomDocRef = await addDoc(collection(db, 'rooms'), {
-      users: [
-        {
-          userId,
-          charName,
-          character,
-
-          permissionLevel: 'admin',
-          gitHubId: '',
-        },
-      ],
       name: roomName,
       createDate: Timestamp.now(),
       map,
@@ -71,16 +55,27 @@ export async function createRoom({
     console.error('Error adding document: ', e);
   }
 }
-export async function initPlayerPosition({ userId, roomId, position, }) {
-  const positionDocRef = doc(
-    collection(db, `rooms/${roomId}/positions`),
+export async function initPlayerData({
+  userId,
+  roomId,
+  position,
+  charName,
+  character,
+}) {
+  const userDocRef = doc(
+    collection(db, `rooms/${roomId}/users`),
     userId
   );
 
   try {
-    await setDoc(positionDocRef, {
-      position: position,
+    await setDoc(userDocRef, {
+      position,
       room: '',
+      permissionLevel: 'admin',
+      gitHubId: '',
+      charName,
+      character,
+      userId,
     });
 
     console.log('Document successfully written!');
@@ -203,7 +198,7 @@ export async function sendPrivateMessage({
     const sortedIds = [userId, privateChannelId].sort();
     const documentId = sortedIds.join('');
 
-    const messageRef = doc(db, `rooms/${roomId}/users/${documentId}`);
+    const messageRef = doc(db, `rooms/${roomId}/privateMessages/${documentId}`);
 
     const docSnapshot = await getDoc(messageRef);
     const newMessage = {
@@ -391,26 +386,23 @@ export async function editPermissionLevel({
 
 export async function deleteRoomFromAllUsers(roomId) {
   const roomRef = doc(db, 'rooms', roomId);
-  console.log(roomId);
+  console.log('Deleting Room:', roomId);
+
   try {
-    await deleteRoomFromRT(roomId);
-    const roomSnap = await getDoc(roomRef);
+    const usersInRoomRef = collection(db, `rooms/${roomId}/users`);
+    const usersSnapshot = await getDocs(usersInRoomRef);
 
-    if (roomSnap.exists()) {
-      const users = roomSnap.data().users;
-
-      for (const user of users) {
-        const userRoomRef = doc(db, 'users', user.userId, 'rooms', roomId);
-        await deleteDoc(userRoomRef);
-      }
-
-      await deleteDoc(roomRef);
-      console.log('Room and all references deleted successfully');
-    } else {
-      console.log('Room does not exist');
+    for (const userDoc of usersSnapshot.docs) {
+      const userId = userDoc.id;  
+      const userRoomRef = doc(db, 'users', userId, 'rooms', roomId);
+      await deleteDoc(userRoomRef);
+      console.log(`Deleted room reference for user ${userId}`);
     }
+
+    await deleteDoc(roomRef);
+    console.log('Room and all user room references deleted successfully');
   } catch (error) {
-    console.error('Error in deleting room: ', error);
+    console.error('Error in deleting room and user room references:', error);
   }
 }
 export async function checkUserRoom({ roomId, userId }) {
