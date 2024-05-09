@@ -80,7 +80,7 @@ export default function InviteButton({ link, message }) {
   };
 
   return (
-    <Wrapper onClick={inviteFriends}>
+    <Wrapper onClick={inviteFriends} id="inviteButton">
       <Button ref={buttonRef} className="inviteIcon" >
         {showMessage && (
           <Message x={mousePosition.x} y={mousePosition.y}>

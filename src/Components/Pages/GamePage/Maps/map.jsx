@@ -171,7 +171,7 @@ export default function Map({
 
   useEffect(() => {
     if (!userId) return;
-
+    console.log('aa');
     const handleKeyPress = async (e) => {
       if (
         e.target.tagName === 'INPUT' ||
@@ -274,7 +274,7 @@ export default function Map({
       window.removeEventListener('keydown', handleKeyPress);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [position]);
+  }, [position, isFullScreen]);
 
   useEffect(() => {
     //initializate player position

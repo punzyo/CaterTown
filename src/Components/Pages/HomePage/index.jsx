@@ -10,6 +10,10 @@ import SearchBar from '../../SearchBar';
 import RoomSkeleton from './RoomSkeleton';
 import Room from './Room';
 import { useNavigate } from 'react-router-dom';
+import TutirialIcon from '../../Icons/TutorialIcon';
+import { driver } from 'driver.js';
+import 'driver.js/dist/driver.css';
+
 const Wrapper = styled.main`
   width: 100%;
   height: 100%;
@@ -55,6 +59,27 @@ const RoomWrapper = styled.div`
     padding: 10px 15px;
   }
 `;
+const TutorialButton = styled.button`
+  height: 40px;
+  border-radius: 5px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  font-size: 16px;
+  gap:5px;
+  font-weight: bold;
+  cursor: pointer;
+  &:hover {
+    background-color: #464F89;
+  }
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+  }
+`;
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -66,6 +91,38 @@ export default function HomePage() {
     show: false,
     id: '',
   });
+
+  const handleTutorialClick = () =>{
+    const driverObj = driver({
+      showProgress: true,
+      prevBtnText: '返回',
+      nextBtnText: '繼續',
+      doneBtnText: '完成',
+
+      steps: [
+        {
+          element: '#create_space',
+          popover: { title: '創建房間', description: '點擊這裡以創建房間' },
+        },
+        {
+          element: '#roomActionTrigger',
+          popover: {
+            title: '刪除/退出房間',
+            description: '點擊此按鈕刪除/退出房間(依據您是否為房間創建者)',
+          },
+        },
+        {
+          element: '#inviteButton',
+          popover: {
+            title: '獲得邀請網址',
+            description: '點擊此按鈕獲取邀請連結，讓您的朋友加入您的房間',
+          },
+        },
+      ],
+    });
+
+    driverObj.drive();
+  }
   useEffect(() => {
     if (loginChecked && !user.id) navigate('/');
   }, [loginChecked, user.id]);
@@ -85,6 +142,10 @@ export default function HomePage() {
         <CreateSpace id="create_space">
           <Button clickFunc={openDialog} content={'建立房間'}></Button>
         </CreateSpace>
+        <TutorialButton onClick={handleTutorialClick}>
+          教學
+          <TutirialIcon />
+        </TutorialButton>
       </Header>
       <SearchWrapper>
         <div className="inputWrapper">

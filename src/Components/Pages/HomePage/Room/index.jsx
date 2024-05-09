@@ -95,13 +95,13 @@ export default function Room({
 }) {
   const navigate = useNavigate();
   const onlineMembers= useOnlineUserCount(room.id)
-  console.log(onlineMembers,'2321');
   return (
     <Wrapper>
       <div className="top">
         <span className="mapName">{room.roomName}</span>
         {
           <div
+          id="roomActionTrigger"
             onClick={() => {
               setShowDeleteDialog({ show: true, id: room.id });
             }}
