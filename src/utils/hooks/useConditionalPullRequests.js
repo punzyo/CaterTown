@@ -9,7 +9,7 @@ export const useConditionalPullRequests = ({ userId, roomId, gitHubId, permissio
     if (!roomId || !userId || !gitHubId || !permissionLevel) return;
     let unsubscribe;
 
-    if (permissionLevel === 'admin' || permissionLevel === 'teacher') {
+    if (permissionLevel !=='student') {
       const prCollectionRef = collection(db, 'rooms', roomId, 'pullRequests');
       unsubscribe = onSnapshot(
         prCollectionRef,

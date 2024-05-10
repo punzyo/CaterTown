@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useFormInput } from '../../../../../utils/hooks/useFormInput';
 import { sendBroadcast } from '../../../../../firebase/firestore';
 import DatePicker from 'react-datepicker';
-
+import { Timestamp } from 'firebase/firestore';
 const Wrpper = styled.div`
   display: flex;
   flex-direction: column;
@@ -59,7 +59,7 @@ const Wrpper = styled.div`
     align-items: start;
     textarea {
       flex-grow: 1;
-      height: 90px;
+      height: 145px;
       background-color: inherit;
       border: 1px solid #3e477c;
       border-radius: 5px;
@@ -82,13 +82,13 @@ export default function BroadCast({
 
   const handleBroadcastClick = async () => {
     if(!broadCastTitleInput.value || !broadCastContentInput.value) return
-    const publishTimeObj = new Date(publishTime);
+    const publishTimeObj = Timestamp.now();
+    const currentDate = publishTimeObj.toDate();
     const hoursToAdd = parseInt(hourSelectedInput.value, 10);
+    const expirationTimeObj = new Date(currentDate.getTime() + hoursToAdd * 3600 * 1000);
 
-    const expirationTimeObj = new Date(
-      publishTimeObj.getTime() + hoursToAdd * 60 * 60 * 1000
-    );
     const expirationTime = expirationTimeObj.toISOString();
+    
     const broadcastData = {
       userId,
       charName: playerCharName,
@@ -96,6 +96,7 @@ export default function BroadCast({
       publishTime,
       expirationTime,
       content: broadCastContentInput.value,
+      
     };
     console.log('廣播', broadcastData);
     const response = await sendBroadcast({ roomId, broadcastData });
@@ -117,7 +118,7 @@ export default function BroadCast({
         />
         <button onClick={handleBroadcastClick}>發佈廣播</button>
       </div>
-      <div className="date">
+      {/* <div className="date">
         <label htmlFor="datepicker">發佈時間</label>
         <DatePicker
           selected={publishTime}
@@ -130,7 +131,7 @@ export default function BroadCast({
           dateFormat="MMMM d, yyyy h:mm aa"
           id="datepicker"
         />
-      </div>
+      </div> */}
       <div>
         <label htmlFor="hour-select">選擇時長：</label>
         <select

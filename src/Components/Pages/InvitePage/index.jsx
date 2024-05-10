@@ -5,7 +5,6 @@ import { useUserState } from '../../../utils/zustand.js';
 import useValidatedInput from '../../../utils/hooks/useValidatedInput.js';
 import {
   addRoomToUser,
-  JoinRoom,
   checkUserRoom,
   initPlayerData,
 } from '../../../firebase/firestore.js';
@@ -140,20 +139,13 @@ export default function InvitePage() {
     const userId = user.id;
     const charName = charNameInput.value;
     const character = catImages[selectedImageIndex];
-    await JoinRoom({
-      roomId,
-      user: {
-        userId,
-        charName,
-        character,
-      },
-    });
     await initPlayerData({
       userId,
       roomId,
       position: map2.startingPoint,
       charName,
       character,
+      permissionLevel:'student'
     });
     const joinedRoom = await addRoomToUser({
       userId,

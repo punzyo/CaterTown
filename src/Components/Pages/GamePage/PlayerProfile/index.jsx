@@ -9,6 +9,7 @@ import { editPlayerGitHub } from '../../../../firebase/firestore';
 import 'react-datepicker/dist/react-datepicker.css';
 import DashBoard from './DashBoard';
 import Tutorial from './Tutorial';
+import TutirialIcon from '../../../Icons/TutorialIcon';
 const Wrapper = styled.div`
   position: relative;
   min-width: 160px;
@@ -143,7 +144,7 @@ const ProfileWrapper = styled.div`
     }
   }
   .hr {
-    width: 90%;
+    width: 95%;
     height: 1px;
     background-color: #3e477c;
     margin: 5px auto;
@@ -152,19 +153,31 @@ const ProfileWrapper = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     align-items: center;
     padding-right: 20px;
     font-size: 20px;
     font-weight: bold;
     > button {
       height: 100%;
-      padding:0px 15px;
+      padding: 0px 5px;
       border-radius: 5px;
+      display: flex;
+      align-items: center;
+      
+      gap: 5px;
       &:hover {
         background-color: #2e355d;
         cursor: pointer;
       }
+    }
+    svg{
+      width: 16px;
+      height: 16px;
+      fill: white;
+    }
+    .tutorial{
+      font-size: 16px;
     }
   }
 `;
@@ -188,6 +201,7 @@ export default function PlayerProfile({
   const [showDashBoard, setShowDashBoard] = useState(false);
   const [showBroadcast, setShowBroadcast] = useState(false);
   const [showPermission, setShowPermission] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const handleGitHubSubmit = async (e) => {
     e.preventDefault();
@@ -210,13 +224,13 @@ export default function PlayerProfile({
     <Wrapper
       onClick={(e) => {
         setShowProfile(!showProfile);
-        setShowDashBoard(false)
-        setShowBroadcast(false)
-        setShowPermission(false)
+        setShowDashBoard(false);
+        setShowBroadcast(false);
+        setShowPermission(false);
         e.stopPropagation();
       }}
     >
-      <Tutorial/>
+      {showTutorial && <Tutorial />}
       <IconWrapper>
         <MemberIcon image={image} isOnline={null} unreadMessages={0} />
       </IconWrapper>
@@ -314,6 +328,7 @@ export default function PlayerProfile({
                   setShowBroadcast={setShowBroadcast}
                   showPermission={showPermission}
                   setShowPermission={setShowPermission}
+                  permissionLevel={permissionLevel}
                 />
               )}
             </div>
@@ -328,6 +343,13 @@ export default function PlayerProfile({
           </div>
           <div className="hr"></div>
           <div className="bottom">
+            <button className='tutorial'
+              onClick={() => {
+                setShowTutorial(!showTutorial);
+              }}
+            >
+              <TutirialIcon /> 教學
+            </button>
             <button onClick={resetUser}>登出</button>
           </div>
         </ProfileWrapper>

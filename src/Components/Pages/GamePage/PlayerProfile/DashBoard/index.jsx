@@ -1,18 +1,18 @@
 import styled from 'styled-components';
 import BroadCast from '../BroadCast';
 import ChangePermission from '../ChangePermission';
-import { useState, useRef } from 'react';
+import { useState, } from 'react';
 const PermissionWrapper = styled.div`
   position: absolute;
-  left:0px;
-  bottom: 150px;
-  width: 210px;
+  left:10px;
+  bottom: 160px;
+  width: 238px;
   height: 150px;
   padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: #282d4e;
+  background-color: #444c75;
   border: 1px solid #3e477c;
   border-radius: 5px;
   > div {
@@ -24,7 +24,7 @@ const PermissionWrapper = styled.div`
     gap: 5px;
     border-radius: 5px;
     &:hover {
-      background-color: #3e477c;
+      background-color: #29336b;
       cursor: pointer;
     }
     span{
@@ -53,6 +53,7 @@ export default function DashBoard({
   setShowPermission,
   showBroadcast,
   setShowBroadcast,
+  permissionLevel
 }) {
   const [showScuessMessage, setSshowScuessMessage] = useState(false);
   const getWebhookLink = () => {
@@ -134,6 +135,8 @@ export default function DashBoard({
         <span>更改權限等級</span>
         {players && showPermission && (
           <ChangePermission
+          userId={userId}
+          permissionLevel={permissionLevel}
             players={players}
             roomId={roomId}
             onclick={(e) => {

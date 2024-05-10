@@ -61,6 +61,7 @@ export async function initPlayerData({
   position,
   charName,
   character,
+  permissionLevel
 }) {
   const userDocRef = doc(
     collection(db, `rooms/${roomId}/users`),
@@ -71,7 +72,7 @@ export async function initPlayerData({
     await setDoc(userDocRef, {
       position,
       room: '',
-      permissionLevel: 'admin',
+      permissionLevel,
       gitHubId: '',
       charName,
       character,
@@ -83,24 +84,7 @@ export async function initPlayerData({
     console.error('Error adding document: ', e);
   }
 }
-export async function JoinRoom({ roomId, user }) {
-  const roomDocRef = doc(db, 'rooms', roomId);
 
-  try {
-    await updateDoc(roomDocRef, {
-      users: arrayUnion({
-        ...user,
-        permissionLevel: 'student',
-        room: '',
-        gitHubId: '',
-      }),
-    });
-    console.log('User added to room with ID:', roomId);
-  } catch (error) {
-    console.error('Error joining room:', error);
-    throw error;
-  }
-}
 export async function addRoomToUser({
   userId,
   roomName,
@@ -300,20 +284,18 @@ export async function getUserFromFirestore(authID) {
   }
 }
 export async function editPlayerGitHub({ userId, gitHubId, roomId }) {
-  const roomDocRef = doc(db, 'rooms', roomId);
+  const userDocRef = doc(db, 'rooms', roomId, 'users', userId);
+
   try {
-    const roomSnap = await getDoc(roomDocRef);
-    if (roomSnap.exists()) {
-      let usersArray = roomSnap.data().users;
-      const userIndex = usersArray.findIndex((user) => user.userId === userId);
-      if (userIndex !== -1) {
-        usersArray[userIndex].gitHubId = gitHubId;
-        await updateDoc(roomDocRef, {
-          users: usersArray,
-        });
-        console.log('GitHub ID updated successfully!');
-        return true;
-      }
+    const userSnap = await getDoc(userDocRef);
+    if (userSnap.exists()) {
+      await updateDoc(userDocRef, {
+        gitHubId: gitHubId,
+      });
+      console.log('GitHub ID updated successfully!');
+      return true;
+    } else {
+      console.log('User not found.');
     }
     return false;
   } catch (error) {
@@ -328,7 +310,6 @@ export async function sendBroadcast({ roomId, broadcastData }) {
     const broadcastsRef = collection(roomRef, 'broadcasts');
     const result = await addDoc(broadcastsRef, {
       ...broadcastData,
-      publishTime: Timestamp.fromDate(new Date(broadcastData.publishTime)),
       expirationTime: Timestamp.fromDate(
         new Date(broadcastData.expirationTime)
       ),
@@ -355,28 +336,21 @@ export async function editPermissionLevel({
   newPermissionLevel,
 }) {
   try {
-    const roomRef = doc(db, 'rooms', roomId);
-    const roomSnap = await getDoc(roomRef);
 
-    if (roomSnap.exists()) {
-      let users = roomSnap.data().users;
-      const userIndex = users.findIndex((user) => user.userId === userId);
+    const userDocRef = doc(db, `rooms/${roomId}/users`, userId);
 
-      if (userIndex !== -1) {
-        let user = users[userIndex];
-        user.permissionLevel = newPermissionLevel;
-        users[userIndex] = user;
-        await updateDoc(roomRef, {
-          users: users,
-        });
+    const userSnap = await getDoc(userDocRef);
 
-        console.log('Permission level updated successfully');
-        return true;
-      } else {
-        console.log('User not found in room');
-      }
+    if (userSnap.exists()) {
+      await updateDoc(userDocRef, {
+        permissionLevel: newPermissionLevel
+      });
+
+      console.log('Permission level updated successfully');
+      return true;
     } else {
-      console.log('No such room exists!');
+      console.log('User not found in this room');
+      return false;
     }
   } catch (error) {
     console.error('Error updating permission level:', error);
