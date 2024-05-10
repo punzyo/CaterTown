@@ -8,6 +8,7 @@ import { useFormInput } from '../../../../utils/hooks/useFormInput';
 import { editPlayerGitHub } from '../../../../firebase/firestore';
 import 'react-datepicker/dist/react-datepicker.css';
 import DashBoard from './DashBoard';
+import Tutorial from './Tutorial';
 const Wrapper = styled.div`
   position: relative;
   min-width: 160px;
@@ -215,6 +216,7 @@ export default function PlayerProfile({
         e.stopPropagation();
       }}
     >
+      <Tutorial/>
       <IconWrapper>
         <MemberIcon image={image} isOnline={null} unreadMessages={0} />
       </IconWrapper>

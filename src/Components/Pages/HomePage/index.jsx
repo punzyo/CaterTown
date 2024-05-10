@@ -68,11 +68,11 @@ const TutorialButton = styled.button`
   align-items: center;
   padding: 5px 10px;
   font-size: 16px;
-  gap:5px;
+  gap: 5px;
   font-weight: bold;
   cursor: pointer;
   &:hover {
-    background-color: #464F89;
+    background-color: #464f89;
   }
   svg {
     width: 20px;
@@ -92,14 +92,17 @@ export default function HomePage() {
     id: '',
   });
 
-  const handleTutorialClick = () =>{
-    const driverObj = driver({
-      showProgress: true,
-      prevBtnText: '返回',
-      nextBtnText: '繼續',
-      doneBtnText: '完成',
-
-      steps: [
+  const handleTutorialClick = () => {
+    let steps;
+    if (userRooms.length === 0) {
+      steps = [
+        {
+          element: '#create_space',
+          popover: { title: '開始你的第一步!', description: '點擊這裡以創建房間' },
+        },
+      ];
+    } else if (userRooms.length > 0) {
+      steps = [
         {
           element: '#create_space',
           popover: { title: '創建房間', description: '點擊這裡以創建房間' },
@@ -118,11 +121,18 @@ export default function HomePage() {
             description: '點擊此按鈕獲取邀請連結，讓您的朋友加入您的房間',
           },
         },
-      ],
+      ];
+    }
+    const driverObj = driver({
+      showProgress: true,
+      prevBtnText: '返回',
+      nextBtnText: '繼續',
+      doneBtnText: '完成',
+      steps,
     });
 
     driverObj.drive();
-  }
+  };
   useEffect(() => {
     if (loginChecked && !user.id) navigate('/');
   }, [loginChecked, user.id]);

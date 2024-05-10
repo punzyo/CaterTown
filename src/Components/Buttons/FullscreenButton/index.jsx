@@ -3,7 +3,7 @@ const Wrapper = styled.button`
   position: absolute;
   right: 5px;
   bottom: 5px;
-  opacity: 0.1;
+  opacity: 0.2;
   background-color: inherit;
   color: white;
   border: none;
