@@ -7,7 +7,6 @@ const PermissionWrapper = styled.div`
   left:10px;
   bottom: 160px;
   width: 238px;
-  height: 150px;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -35,7 +34,7 @@ const PermissionWrapper = styled.div`
 const BroadcastWrapper = styled.div`
   position: absolute;
   left: -50%;
-  bottom: 142px;
+  bottom: 110px;
   width: 500px;
   height: 250px;
   padding: 10px;
@@ -123,7 +122,7 @@ export default function DashBoard({
           </BroadcastWrapper>
         )}
       </div>
-      <div
+      {(permissionLevel =='creater' || permissionLevel =='admin') && <div
         onClick={() => {
           setShowPermission((prevState) => !prevState);
           setShowBroadcast(false)
@@ -144,7 +143,7 @@ export default function DashBoard({
             }}
           />
         )}
-      </div>
+      </div>}
     </PermissionWrapper>
   );
 }

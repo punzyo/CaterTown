@@ -16,11 +16,14 @@ const Mask = styled.div`
   flex-direction: column;
   cursor: auto;
 `;
-const Wrapper = styled.div`
+  const Wrapper = styled.div`
+  border-top:1px solid rgba(0, 0, 0,0.4);
+  position: relative;
   cursor: auto;
-  width: 500px;
+  width: 520px;
   height: 500px;
   background-color: #faf4e1;
+  border-radius: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,15 +31,64 @@ const Wrapper = styled.div`
 
   .slick-slider {
     width: 80%;
-    height: 300px;
-    background-color: white;
+    height: 90%;
     color: black;
+    h2{
+      font-size: 36px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
   }
-  img, video {
+
+  img,
+  video {
     width: 100%;
     border-radius: 20px;
+    margin: 20px 0;
+  }
+  .slick-prev:before,
+  .slick-next:before {
+    color: black;
+  }
+  .slick-next,
+  .slick-prev {
+    transform: scale(1.5);
+  }
+  .slick-next {
+    right: -35px;
+  }
+  .slick-prev {
+    left: -35px;
   }
 `;
+const CategoryWrapper = styled.div`
+  position: absolute;
+  display: flex;
+  top: -30px;
+  
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 97%;
+  height: 30px;
+  z-index: -1;
+`;
+const Category = styled.div`
+  left: 0;
+  width: 33.3%;
+  border-radius: 20px;
+  height: 30px;
+  background-color: #faf4e1;
+  border: .1em solid rgba(0,0,0,.4);
+  border-bottom: none;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 .15em white inset;
+  transform:  perspective(.5em) rotateX(5deg);
+  transform-origin: bottom;
+`;
+const Title = styled.h2`
+width: 100%;
+padding: 0 20px;
+`
 export default function Tutorial() {
   const settings = {
     dots: false,
@@ -52,11 +104,16 @@ export default function Tutorial() {
       }}
     >
       <Wrapper>
+        <CategoryWrapper>
+          <Category />
+          <Category />
+          <Category />
+        </CategoryWrapper>
         <Slider {...settings}>
           <div key={0}>
-            <h3>角色移動</h3>
-            <video src="/images/tutorial/01.mp4" autoPlay loop></video>
-            
+            <Title>角色移動</Title>
+            <video src="/images/tutorial/01.mp4" autoPlay></video>
+
             <p>
               可以透過WASD，或是方向鍵的上、下、左、右對角色進行移動，碰到障礙物或是地圖邊界時則會停下。
             </p>
@@ -101,8 +158,6 @@ export default function Tutorial() {
             </p>
           </div>
 
-
-
           <div key={8}>
             <h3>視/音訊距離</h3>
             <p>
@@ -136,10 +191,6 @@ export default function Tutorial() {
             <p>可以點擊圖標右側的按鈕選擇視音訊的輸入源</p>
           </div>
 
-
-
-
-
           <div key={15}>
             <h3>發布廣播</h3>
             <p>
@@ -166,7 +217,7 @@ export default function Tutorial() {
               webhook後即設置成功。
             </p>
           </div>
-        
+
           <div key={20}>
             <h3>更改權限</h3>
             <p>

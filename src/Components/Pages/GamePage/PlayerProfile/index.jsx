@@ -55,7 +55,7 @@ const ProfileWrapper = styled.div`
   bottom: 75px;
   left: 0;
   padding: 10px;
-  background-color: #282d4e;
+  background-color: #272d52;
   border-radius: 5px;
   border: 1px solid #3e477c;
   display: flex;
