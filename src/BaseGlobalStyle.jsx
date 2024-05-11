@@ -12,6 +12,7 @@ const BaseGlobalStyle = createGlobalStyle`/*
   padding:0;
   box-sizing: border-box;
   font-family:"DM Sans", sans-serif;
+  letter-spacing: 0.2px;
 }
 :root {
   height: 100%;

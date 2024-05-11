@@ -32,7 +32,7 @@ input {
 }
 `;
 
-export default function SearchBar() {
+export default function SearchBar({onChange, placeholder}) {
   return (
     <InputWrapper>
       <div className="icon">
@@ -51,7 +51,7 @@ export default function SearchBar() {
           />
         </svg>
       </div>
-      <input type="text" placeholder="Search" />
+      <input type="text" placeholder={placeholder} onChange={onChange}/>
     </InputWrapper>
   );
 }

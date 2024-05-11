@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import MemberIcon from "../../../../MemberIcon";
-import { resetUnreadMessage } from "../../../../../firebase/firestore";
+import styled from 'styled-components';
+import MemberIcon from '../../../../MemberIcon';
+import { resetUnreadMessage } from '../../../../../firebase/firestore';
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
@@ -11,6 +11,7 @@ const Wrapper = styled.div`
     background-color: #333a64;
     cursor: pointer;
   }
+
 `;
 const MemberIconWrapper = styled.div`
   position: relative;
@@ -18,51 +19,49 @@ const MemberIconWrapper = styled.div`
   height: 50px;
 `;
 export default function MemberInfo({
-    member,
-    roomId,
-    userId,
-    isOnline,
-    changeChannel,
-    privateChannel,
-    unreadMessages,
-    setPrivateCharName,
-    setMinimizeMessages,
-  }) {
-    const resetUnreadMessageHandler = async (playerId) => {
-        await resetUnreadMessage({
-          roomId,
-          userId,
-          privateChannelId: playerId,
-        });
-        await resetUnreadMessage({
-          roomId,
-          userId,
-          privateChannelId: privateChannel,
-        });
-      };
-    async function handleClick() {
-      if (member.userId === userId) {
-        return;
-      }
-      changeChannel(member.userId);
-      setPrivateCharName(member.charName);
-      setMinimizeMessages(false);
-      await resetUnreadMessageHandler(member.userId);
+  member,
+  roomId,
+  userId,
+  isOnline,
+  changeChannel,
+  privateChannel,
+  unreadMessages,
+  setPrivateCharName,
+  setMinimizeMessages,
+}) {
+  const resetUnreadMessageHandler = async (playerId) => {
+    await resetUnreadMessage({
+      roomId,
+      userId,
+      privateChannelId: playerId,
+    });
+    await resetUnreadMessage({
+      roomId,
+      userId,
+      privateChannelId: privateChannel,
+    });
+  };
+  async function handleClick() {
+    if (member.userId === userId) {
+      return;
     }
-  
-    // 渲染组件
-    return (
-      <Wrapper onClick={handleClick}>
-        <MemberIconWrapper>
-          <MemberIcon
-            image={member.character}
-            isOnline={isOnline}
-            unreadMessages={unreadMessages[member.userId]?.count}
-            background={true}
-          />
-        </MemberIconWrapper>
-        <span>{member.charName}</span>
-      </Wrapper>
-    );
+    changeChannel(member.userId);
+    setPrivateCharName(member.charName);
+    setMinimizeMessages(false);
+    await resetUnreadMessageHandler(member.userId);
   }
-  
+
+  return (
+    <Wrapper onClick={handleClick}>
+      <MemberIconWrapper>
+        <MemberIcon
+          image={member.character}
+          isOnline={isOnline}
+          unreadMessages={unreadMessages[member.userId]?.count}
+          background={true}
+        />
+      </MemberIconWrapper>
+      <span>{member.charName}</span>
+    </Wrapper>
+  );
+}

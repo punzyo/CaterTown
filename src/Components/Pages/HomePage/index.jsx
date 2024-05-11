@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import theme from '../../../theme';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Dialog from './Dialog';
 import { useUserRooms } from '../../../utils/hooks/useUserRooms';
 import { useUserState } from '../../../utils/zustand';
@@ -91,7 +91,14 @@ export default function HomePage() {
     show: false,
     id: '',
   });
+  const [searchTerm, setSearchTerm] = useState('')
 
+  const filteredRooms = useMemo(() => {
+    if (!searchTerm) return userRooms;  
+    return userRooms.filter(room => 
+      room.roomName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [userRooms, searchTerm]);
   const handleTutorialClick = () => {
     let steps;
     if (userRooms.length === 0) {
@@ -159,7 +166,7 @@ export default function HomePage() {
       </Header>
       <SearchWrapper>
         <div className="inputWrapper">
-          <SearchBar />
+          <SearchBar onChange={(e) => setSearchTerm(e.target.value)} placeholder='搜尋房間名稱'/>
         </div>
       </SearchWrapper>
       <MainPage>
@@ -167,7 +174,7 @@ export default function HomePage() {
           {loading ? (
             <RoomSkeleton />
           ) : (
-            userRooms.map((room) => (
+            filteredRooms.map((room) => (
               <Room
                 key={room.id}
                 room={room}

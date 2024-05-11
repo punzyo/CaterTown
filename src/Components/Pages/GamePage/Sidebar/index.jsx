@@ -6,7 +6,7 @@ import { useGameSettings } from '../../../../utils/zustand';
 import MemberInfo from './MemberInfo';
 import PublicMessage from '../PublicMessage';
 import SearchBar from '../../../SearchBar';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { usePrivateMessages } from '../../../../utils/hooks/usePrivateMessages';
 import { useUnreadMessages } from '../../../../utils/hooks/useUnreadMessages';
 import { usePublicMessages } from '../../../../utils/hooks/usePublicMessages';
@@ -58,6 +58,7 @@ export default function Sidebar({
   const publicMessages = usePublicMessages(roomId);
   const [isPublicChannel, setIsPublicChannel] = useState(true);
   const [privateCharName, setPrivateCharName] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const privateMessages = usePrivateMessages({
     userId,
     roomId,
@@ -74,7 +75,21 @@ export default function Sidebar({
     setIsPublicChannel(false);
     setPrivateChannel(playerId);
   };
+  const filteredOnlineMembers = useMemo(() => {
+    return searchTerm
+      ? onlineMembers.filter((member) =>
+          member.charName.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : onlineMembers;
+  }, [onlineMembers, searchTerm]);
 
+  const filteredOfflineMembers = useMemo(() => {
+    return searchTerm
+      ? offlineMembers.filter((member) =>
+          member.charName.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : offlineMembers;
+  }, [offlineMembers, searchTerm]);
   return (
     <Wrapper $isOpen={showSidebar} $isFullScreen={isFullScreen}>
       <PullRequests></PullRequests>
@@ -90,11 +105,11 @@ export default function Sidebar({
           }}
         />
       </Title>
-      <SearchBar />
+      <SearchBar onChange={(e) => setSearchTerm(e.target.value)} placeholder='搜尋成員'/>
       {players && userId && onlineStatus && (
         <MemberWrapper>
-          <span>Online Members</span>
-          {onlineMembers.map((player) => (
+          <span>上線中 - {filteredOnlineMembers.length}</span>
+          {filteredOnlineMembers.map((player) => (
             <MemberInfo
               key={player.userId}
               member={player}
@@ -108,8 +123,8 @@ export default function Sidebar({
               unreadMessages={unreadMessages}
             />
           ))}
-          <span>Offline Members</span>
-          {offlineMembers.map((player) => (
+          <span>離線中 - {filteredOfflineMembers.length}</span>
+          {filteredOfflineMembers.map((player) => (
             <MemberInfo
               key={player.userId}
               member={player}
