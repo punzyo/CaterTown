@@ -2,13 +2,14 @@ import styled from 'styled-components';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useState } from 'react';
 const Mask = styled.div`
   position: fixed;
-  top: -150px;
+  top: -140px;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.1);
   z-index: 10;
   display: flex;
   justify-content: center;
@@ -16,14 +17,13 @@ const Mask = styled.div`
   flex-direction: column;
   cursor: auto;
 `;
-  const Wrapper = styled.div`
-  border-top:1px solid rgba(0, 0, 0,0.4);
+const Wrapper = styled.div`
   position: relative;
   cursor: auto;
   width: 520px;
   height: 500px;
   background-color: #faf4e1;
-  border-radius: 15px;
+  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,7 +33,7 @@ const Mask = styled.div`
     width: 80%;
     height: 90%;
     color: black;
-    h2{
+    h2 {
       font-size: 36px;
       text-align: center;
       margin-bottom: 30px;
@@ -65,31 +65,43 @@ const CategoryWrapper = styled.div`
   position: absolute;
   display: flex;
   top: -30px;
-  
   left: 50%;
   transform: translate(-50%, 0);
   width: 97%;
   height: 30px;
   z-index: -1;
+  margin-left: 10px;
 `;
-const Category = styled.div`
-  left: 0;
+const Category = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 5px;
+  color: black;
   width: 33.3%;
   border-radius: 20px;
   height: 30px;
-  background-color: #faf4e1;
-  border: .1em solid rgba(0,0,0,.4);
+  background-color: ${(props) => (props.$isSelected ? '#f1d67e' : '#eee3bf')};
+  border: ${(props) => (props.$isSelected ? '1px' : '1px')} solid
+    rgba(0, 0, 0, 0.4);
+
   border-bottom: none;
-  border-radius: 20px 20px 0 0;
-  box-shadow: 0 .15em white inset;
-  transform:  perspective(.5em) rotateX(5deg);
-  transform-origin: bottom;
+  border-radius: 15px 15px 0 0;
+  z-index: ${(props) => (props.$isSelected ? '5' : props.$last ? '-1' : '0')};
+  margin-left: -5px;
+  &:hover {
+    background-color: ${(props) => (props.$isSelected ? '' : '#edda9c')};
+  }
 `;
 const Title = styled.h2`
-width: 100%;
-padding: 0 20px;
-`
+  width: 100%;
+  padding: 0 20px;
+`;
 export default function Tutorial() {
+  const BASIC = 'basic';
+  const COMMUNICATION = 'communication';
+  const PERMISSION = 'permission';
+  const [category, setCategory] = useState(BASIC);
   const settings = {
     dots: false,
     infinite: false,
@@ -105,37 +117,59 @@ export default function Tutorial() {
     >
       <Wrapper>
         <CategoryWrapper>
-          <Category />
-          <Category />
-          <Category />
+          <Category
+            $isSelected={category === BASIC}
+            onClick={() => {
+              setCategory(BASIC);
+            }}
+          >
+            基本教學
+          </Category>
+          <Category
+            $isSelected={category === COMMUNICATION}
+            onClick={() => {
+              setCategory(COMMUNICATION);
+            }}
+          >
+            多人通訊
+          </Category>
+          <Category
+            $isSelected={category === PERMISSION}
+            onClick={() => {
+              setCategory(PERMISSION);
+            }}
+            $last={true}
+          >
+            權限功能
+          </Category>
         </CategoryWrapper>
         <Slider {...settings}>
           <div key={0}>
             <Title>角色移動</Title>
-            <video src="/images/tutorial/01.mp4" autoPlay></video>
-
+            <video src="/tutorial/01.mp4"></video>
             <p>
               可以透過WASD，或是方向鍵的上、下、左、右對角色進行移動，碰到障礙物或是地圖邊界時則會停下。
             </p>
           </div>
           <div key={1}>
-            <h3>獲取邀請連結</h3>
+            <Title>獲取邀請連結</Title>
+            <img src="/tutorial" alt="" />
             <p>點擊上方的圖示可以獲得此房間的邀請連結</p>
           </div>
           <div key={2}>
-            <h3>控制側邊欄</h3>
+            <Title>控制側邊欄</Title>
             <p>點擊下方欄的圖示以隱藏/顯示側邊欄</p>
           </div>
           <div key={4}>
-            <h3>離開房間</h3>
+            <Title>離開房間</Title>
             <p>點擊右下角圖示即可離開房間</p>
           </div>
           <div key={5}>
-            <h3>加入多人通訊</h3>
+            <Title>加入多人通訊</Title>
             <p>按下多人通訊的按鈕，連線成功後即可以進行多人視/音訊連線</p>
           </div>
           <div key={6}>
-            <h3>打開個人面板</h3>
+            <Title>打開個人面板</Title>
             <p>
               點擊個人圖示，即可打開個人面板，在這裡可以輸入您的GitHub
               ID，這將影響到您的PR功能，
@@ -144,13 +178,13 @@ export default function Tutorial() {
             </p>
           </div>
           <div key={7}>
-            <h3>傳遞文字訊息</h3>
+            <Title>傳遞文字訊息</Title>
             <p>
               可以透過全體頻道向所有人發送訊息，或是點擊他人頭像進行一對一的聊天
             </p>
           </div>
           <div key={19}>
-            <h3>Pull request系統</h3>
+            <Title>Pull request系統</Title>
             <p>
               當設置好 repository webhook後，若您的角色open/reopen一則pull
               request，頭上將會冒出驚嘆號通知，自己或是權限為teacher以上的角色都會看到，
@@ -159,56 +193,56 @@ export default function Tutorial() {
           </div>
 
           <div key={8}>
-            <h3>視/音訊距離</h3>
+            <Title>視/音訊距離</Title>
             <p>
               當進入多人通訊後，只要角色彼此在兩格內的距離，就能看到對方的通訊畫面
             </p>
           </div>
           <div key={9}>
-            <h3>房間系統</h3>
+            <Title>房間系統</Title>
             <p>
               島上共有四個獨立的空間，房間內的角色只能接收同個空間的視/音訊，無視距離
             </p>
           </div>
           <div key={10}>
-            <h3>螢幕分享</h3>
+            <Title>螢幕分享</Title>
             <p>點擊下方螢幕圖示可以對畫面進行分享</p>
           </div>
           <div key={11}>
-            <h3>通訊裝置選擇</h3>
+            <Title>通訊裝置選擇</Title>
             <p>可以點擊圖標右側的按鈕選擇視音訊的輸入源</p>
           </div>
           <div key={12}>
-            <h3>全螢幕，音量控制</h3>
+            <Title>全螢幕，音量控制</Title>
             <p>點擊視訊畫面右下角可以進行全螢幕，左下角則是音量控制</p>
           </div>
           <div key={13}>
-            <h3>退出多人通訊</h3>
+            <Title>退出多人通訊</Title>
             <p>點擊右方的按鈕將會離開多人通訊，將不會發送/接收通訊內容</p>
           </div>
           <div key={14}>
-            <h3>通訊裝置選擇</h3>
+            <Title>通訊裝置選擇</Title>
             <p>可以點擊圖標右側的按鈕選擇視音訊的輸入源</p>
           </div>
 
           <div key={15}>
-            <h3>發布廣播</h3>
+            <Title>發布廣播</Title>
             <p>
               選擇廣播標題、時長、和內容後，點擊發佈廣播即可在畫面上方看到廣播內容。註:廣播內容接受Markdown語法
             </p>
           </div>
           <div key={16}>
-            <h3>刪除廣播</h3>
+            <Title>刪除廣播</Title>
             <p>若您是發佈廣播者，對廣播內容點擊左鍵，即可刪除此通知</p>
           </div>
           <div key={17}>
-            <h3>獲取GitHub webhook link</h3>
+            <Title>獲取GitHub webhook link</Title>
             <p>
               點擊此按鈕即可獲得webhook link連結，可在欲追蹤的repostory進行設置
             </p>
           </div>
           <div key={18}>
-            <h3>設置 repository webhook</h3>
+            <Title>設置 repository webhook</Title>
             <p>
               到GitHub repository的settings，選擇左邊的webhooks後，點選Add
               webhook按鈕， 在裡面的Payload URL 貼上連結，並將Content
@@ -219,7 +253,7 @@ export default function Tutorial() {
           </div>
 
           <div key={20}>
-            <h3>更改權限</h3>
+            <Title>更改權限</Title>
             <p>
               只有房間創始者可以將成員權限提升到admin，以及降階admin的成員，admin成員可以將teacher降階為student，teacher最多只能將student提升為teacher。
             </p>
