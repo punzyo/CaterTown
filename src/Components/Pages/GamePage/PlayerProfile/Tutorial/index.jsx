@@ -21,18 +21,24 @@ const Wrapper = styled.div`
   position: relative;
   cursor: auto;
   width: 520px;
-  height: 500px;
+  height: 450px;
   background-color: #faf4e1;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+.slick-slide{
+ >div{
+  height: 420px;
 
+ }  
+}
   .slick-slider {
     width: 80%;
     height: 90%;
     color: black;
+    .slick-slide>div{padding: 0 10px;}
     h2 {
       font-size: 36px;
       text-align: center;
@@ -43,8 +49,10 @@ const Wrapper = styled.div`
   img,
   video {
     width: 100%;
+    height: 230px;
     border-radius: 20px;
-    margin: 20px 0;
+    margin-bottom: 20px;
+    object-fit: contain;
   }
   .slick-prev:before,
   .slick-next:before {
@@ -146,43 +154,42 @@ export default function Tutorial() {
         <Slider {...settings}>
           <div key={0}>
             <Title>角色移動</Title>
-            <video src="/tutorial/01.mp4"></video>
+            <video src="/tutorial/basic/01.mp4"></video>
             <p>
               可以透過WASD，或是方向鍵的上、下、左、右對角色進行移動，碰到障礙物或是地圖邊界時則會停下。
             </p>
           </div>
           <div key={1}>
             <Title>獲取邀請連結</Title>
-            <img src="/tutorial" alt="" />
+            <img src="/tutorial/basic/basic_02.png" alt="" />
             <p>點擊上方的圖示可以獲得此房間的邀請連結</p>
           </div>
           <div key={2}>
             <Title>控制側邊欄</Title>
+            <img src="/tutorial/basic/basic_03.png" alt="" />
             <p>點擊下方欄的圖示以隱藏/顯示側邊欄</p>
           </div>
           <div key={4}>
             <Title>離開房間</Title>
+            <img src="/tutorial/basic/basic_04.png" alt="" />
             <p>點擊右下角圖示即可離開房間</p>
           </div>
+          
           <div key={5}>
-            <Title>加入多人通訊</Title>
-            <p>按下多人通訊的按鈕，連線成功後即可以進行多人視/音訊連線</p>
-          </div>
-          <div key={6}>
             <Title>打開個人面板</Title>
+            <img src="/tutorial/basic/basic_05.png" alt="" />
             <p>
-              點擊個人圖示，即可打開個人面板，在這裡可以輸入您的GitHub
-              ID，這將影響到您的PR功能，
-              如果權限為teacher或是admin，可以使用權限相關的系統，
-              點擊回到起點會回到最初在島上的位置
+              這裡可以輸入您的GitHub，如果權限為teacher以上，可以使用權限相關的系統。
             </p>
           </div>
-          <div key={7}>
+          <div key={6}>
             <Title>傳遞文字訊息</Title>
+            <img src="/tutorial/basic/basic_06.png" alt="" />
             <p>
               可以透過全體頻道向所有人發送訊息，或是點擊他人頭像進行一對一的聊天
             </p>
           </div>
+          
           <div key={19}>
             <Title>Pull request系統</Title>
             <p>
@@ -191,7 +198,10 @@ export default function Tutorial() {
               點擊後會看到PR標題，可藉由點選PR標題前往該PR頁面。
             </p>
           </div>
-
+          <div key={50}>
+            <Title>加入多人通訊</Title>
+            <p>按下多人通訊的按鈕，連線成功後即可以進行多人視/音訊連線</p>
+          </div>
           <div key={8}>
             <Title>視/音訊距離</Title>
             <p>
