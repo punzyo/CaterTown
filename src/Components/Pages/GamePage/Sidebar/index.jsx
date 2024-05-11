@@ -3,15 +3,13 @@ import PullRequests from '../PullRequests';
 import InviteButton from '../../../Buttons/InviteButton';
 import CloseButton from '../../../Buttons/CloseButton';
 import { useGameSettings } from '../../../../utils/zustand';
-import MemberIcon from '../../../MemberIcon';
+import MemberInfo from './MemberInfo';
 import PublicMessage from '../PublicMessage';
 import SearchBar from '../../../SearchBar';
 import { useState } from 'react';
 import { usePrivateMessages } from '../../../../utils/hooks/usePrivateMessages';
 import { useUnreadMessages } from '../../../../utils/hooks/useUnreadMessages';
 import { usePublicMessages } from '../../../../utils/hooks/usePublicMessages';
-import { resetUnreadMessage } from '../../../../firebase/firestore';
-
 const Wrapper = styled.div`
   width: 300px;
   height: calc(100% - 100px);
@@ -31,7 +29,7 @@ const Wrapper = styled.div`
 const Title = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
   margin-bottom: 30px;
 `;
 const MemberWrapper = styled.div`
@@ -43,22 +41,7 @@ const MemberWrapper = styled.div`
   gap: 10px;
   overflow-y: auto;
 `;
-const MemberInfo = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  border-radius: 5px;
-  &:hover {
-    background-color: #333a64;
-    cursor: pointer;
-  }
-`;
-const MemberIconWrapper = styled.div`
-  position: relative;
-  width: 50px;
-  height: 50px;
-`;
+
 export default function Sidebar({
   userId,
   roomId,
@@ -91,6 +74,7 @@ export default function Sidebar({
     setIsPublicChannel(false);
     setPrivateChannel(playerId);
   };
+
   return (
     <Wrapper $isOpen={showSidebar} $isFullScreen={isFullScreen}>
       <PullRequests></PullRequests>
@@ -113,65 +97,31 @@ export default function Sidebar({
           {onlineMembers.map((player) => (
             <MemberInfo
               key={player.userId}
-              onClick={async () => {
-                if (player.userId === userId) return;
-
-                changeChannel(player.userId);
-                setPrivateCharName(player.charName);
-                setMinimizeMessages(false);
-                await resetUnreadMessage({
-                  roomId,
-                  userId,
-                  privateChannelId: player.userId,
-                });
-                await resetUnreadMessage({
-                  roomId,
-                  userId,
-                  privateChannelId: privateChannel,
-                });
-              }}
-            >
-              <MemberIconWrapper>
-                <MemberIcon
-                  image={player?.character}
-                  isOnline={true}
-                  unreadMessages={unreadMessages[player.userId]?.count}
-                  background={true}
-                />
-              </MemberIconWrapper>
-              <span>{player.charName}</span>
-            </MemberInfo>
+              member={player}
+              userId={userId}
+              isOnline={true}
+              changeChannel={changeChannel}
+              roomId={roomId}
+              setPrivateCharName={setPrivateCharName}
+              setMinimizeMessages={setMinimizeMessages}
+              privateChannel={privateChannel}
+              unreadMessages={unreadMessages}
+            />
           ))}
           <span>Offline Members</span>
           {offlineMembers.map((player) => (
             <MemberInfo
               key={player.userId}
-              onClick={async () => {
-                changeChannel(player.userId);
-                setPrivateCharName(player.charName);
-                setMinimizeMessages(false);
-                await resetUnreadMessage({
-                  roomId,
-                  userId,
-                  privateChannelId: player.userId,
-                });
-                await resetUnreadMessage({
-                  roomId,
-                  userId,
-                  privateChannelId: privateChannel,
-                });
-              }}
-            >
-              <MemberIconWrapper>
-                <MemberIcon
-                  image={player?.character}
-                  isOnline={false}
-                  unreadMessages={unreadMessages[player.userId]?.count}
-                  background={true}
-                />
-              </MemberIconWrapper>
-              <span>{player.charName}</span>
-            </MemberInfo>
+              member={player}
+              userId={userId}
+              isOnline={false}
+              changeChannel={changeChannel}
+              roomId={roomId}
+              setPrivateCharName={setPrivateCharName}
+              setMinimizeMessages={setMinimizeMessages}
+              privateChannel={privateChannel}
+              unreadMessages={unreadMessages}
+            />
           ))}
         </MemberWrapper>
       )}

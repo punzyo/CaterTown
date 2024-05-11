@@ -227,6 +227,7 @@ export default function PublicMessage({
               <Channel
                 $selected={!isPublicChannel}
                 onClick={() => {
+                  if(!isPublicChannel) return
                   setIsPublicChannel(false);
                   if (minimizeMessages) setMinimizeMessages(false);
                   resetUnreadMessage({

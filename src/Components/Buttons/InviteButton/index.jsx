@@ -2,8 +2,8 @@ import { useState, useRef } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -15,9 +15,10 @@ const Wrapper = styled.div`
 `;
 const Button = styled.button`
   position: relative;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   svg {
+    
     fill: white;
   }
 `;
