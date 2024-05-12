@@ -183,9 +183,6 @@ export default function GamePage() {
     setOfflineMembers(offline);
   }, [players, onlineStatus, userId]);
 
-  useEffect(() => {
-    if (loginChecked && !user.id) navigate('/');
-  }, [loginChecked, user.id]);
 
   const getToken = async ({ roomId, charName }) => {
     if (isConnecting) return;

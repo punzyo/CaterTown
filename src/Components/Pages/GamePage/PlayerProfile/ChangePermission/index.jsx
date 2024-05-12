@@ -5,7 +5,6 @@ import { editPermissionLevel } from '../../../../../firebase/firestore';
 const Wrapper = styled.div`
   position: absolute;
   left: 100%;
-  width: 270px;
   height: 255px;
   max-height: 255px;
   overflow: auto;
@@ -19,7 +18,10 @@ const Wrapper = styled.div`
   cursor: auto;
   > div {
     > span {
-      width: 90px;
+      width: 120px;
+      white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
       text-align: center;
     }
   }
@@ -28,11 +30,13 @@ const Wrapper = styled.div`
     height: 70%;
     display: flex;
     align-items: center;
-    width: 90px;
+    width: 95px;
+    gap:5px;
     padding: 0 5px;
     cursor: pointer;
     > span {
       width: 80px;
+
       text-align: center;
     }
     &:hover {
@@ -41,6 +45,7 @@ const Wrapper = styled.div`
     border-radius: 4px;
     > svg {
       width: 16px;
+      height: 16px;
     }
     .permission {
       span {
@@ -92,6 +97,7 @@ const EditMessage = styled.div`
 `;
 const MemberIconWrapper = styled.div`
   width: 100%;
+  height: 50px;
   min-height: 50px;
   display: flex;
   gap: 10px;

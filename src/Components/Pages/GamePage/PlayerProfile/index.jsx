@@ -230,7 +230,7 @@ export default function PlayerProfile({
         e.stopPropagation();
       }}
     >
-      {showTutorial && <Tutorial />}
+      {showTutorial && <Tutorial setShowTutorial={setShowTutorial}/>}
       <IconWrapper>
         <MemberIcon image={image} isOnline={null} unreadMessages={0} />
       </IconWrapper>

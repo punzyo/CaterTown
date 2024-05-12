@@ -140,9 +140,6 @@ export default function HomePage() {
 
     driverObj.drive();
   };
-  useEffect(() => {
-    if (loginChecked && !user.id) navigate('/');
-  }, [loginChecked, user.id]);
   const openDialog = () => {
     setDialogOpen(true);
   };

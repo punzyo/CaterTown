@@ -7,6 +7,9 @@ import Markdown from 'react-markdown';
 const StyledMarquee = styled(Marquee)`
   background-color: rgba(0 0, 0, 0.7);
   padding: 10px;
+  a{
+    text-decoration: underline;
+  }
 `;
 
 const Messages = styled.span`

@@ -109,15 +109,13 @@ const JoinButton = styled.div`
 export default function InvitePage() {
   const navigate = useNavigate();
   const charNameInput = useValidatedInput('', /^[^*%]+$/, 15);
-  const { user, loginChecked } = useUserState();
+  const { user } = useUserState();
 
   const userId = user.id;
   const { roomId, roomName } = useParams();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [roomChecked, setRoomChecked] = useState(false)
 
-  useEffect(() => {
-    if (loginChecked && !user.id) navigate('/');
-  }, [loginChecked, user.id]);
   useEffect(() => {
     if (!roomId || !userId) return;
     (async () => {
@@ -125,6 +123,7 @@ export default function InvitePage() {
       if (isInRoom) {
         navigate(`/chouchouzoo/${roomId}/${roomName}`);
       }
+      setRoomChecked(true)
     })();
   }, [roomId, userId]);
 
@@ -162,7 +161,7 @@ export default function InvitePage() {
   };
   return (
     <>
-      {userId && (
+      {roomChecked && (
         <Wrapper>
           <Header />
           <MainWrapper>

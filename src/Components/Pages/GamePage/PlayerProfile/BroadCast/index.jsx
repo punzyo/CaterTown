@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useFormInput } from '../../../../../utils/hooks/useFormInput';
 import { sendBroadcast } from '../../../../../firebase/firestore';
-import DatePicker from 'react-datepicker';
 import { Timestamp } from 'firebase/firestore';
 const Wrpper = styled.div`
   display: flex;
@@ -59,7 +58,7 @@ const Wrpper = styled.div`
     align-items: start;
     textarea {
       flex-grow: 1;
-      height: 145px;
+height: 145px;
       background-color: inherit;
       border: 1px solid #3e477c;
       border-radius: 5px;
@@ -118,22 +117,8 @@ export default function BroadCast({
         />
         <button onClick={handleBroadcastClick}>發佈廣播</button>
       </div>
-      {/* <div className="date">
-        <label htmlFor="datepicker">發佈時間</label>
-        <DatePicker
-          selected={publishTime}
-          onChange={(date) => setPublishTime(date)}
-          showTimeSelect
-          minDate={new Date()}
-          timeFormat="HH:mm"
-          timeIntervals={30}
-          timeCaption="time"
-          dateFormat="MMMM d, yyyy h:mm aa"
-          id="datepicker"
-        />
-      </div> */}
       <div>
-        <label htmlFor="hour-select">選擇時長：</label>
+        <label htmlFor="hour-select">持續時間</label>
         <select
           id="hour-select"
           value={hourSelectedInput.value}
