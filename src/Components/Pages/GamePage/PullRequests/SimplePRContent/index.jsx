@@ -12,20 +12,20 @@ const Wrapper = styled.div`
   border-radius: 10px;
   background-color: #242b53;
   letter-spacing: 0.5px;
-  &:hover{
-    background-color:#313A71;
-    }
-    >a{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-    }
+  &:hover {
+    background-color: #313a71;
+  }
+  > a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
 `;
 const DetailPRWrapper = styled.div`
   position: absolute;
-  top:-50px;
+  top: -50px;
   right: 160px;
   width: 300px;
   z-index: 500;
@@ -62,7 +62,7 @@ const DetailPRBottom = styled.div`
   flex-grow: 1;
   flex-direction: column;
   align-items: center;
-  a{
+  a {
     text-decoration: underline;
   }
   > div {
@@ -95,7 +95,7 @@ const DetailPRBottom = styled.div`
       background: #888;
     }
     &::-webkit-scrollbar-thumb:hover {
-      background: #222; 
+      background: #222;
     }
   }
 `;
@@ -124,7 +124,15 @@ export default function SimplePRContent({ pullRequests, children }) {
                 <span>Description:</span>
               </div>
               <div className="description">
-                <Markdown>{pullRequests.description}</Markdown>
+                <Markdown
+                  components={{
+                    a: ({ ...props }) => (
+                      <a {...props} target="_blank" rel="noopener noreferrer" />
+                    ),
+                  }}
+                >
+                  {pullRequests.description}
+                </Markdown>
               </div>
             </DetailPRBottom>
           </DetailPR>

@@ -7,7 +7,7 @@ import Markdown from 'react-markdown';
 const StyledMarquee = styled(Marquee)`
   background-color: rgba(0 0, 0, 0.7);
   padding: 10px;
-  a{
+  a {
     text-decoration: underline;
   }
 `;
@@ -15,7 +15,7 @@ const StyledMarquee = styled(Marquee)`
 const Messages = styled.span`
   cursor: ${(props) =>
     props.$canedit ? `url(/images/trashIconO.png), pointer` : 'auto'};
-    white-space: nowrap;
+  white-space: nowrap;
 `;
 const Wrapper = styled.div`
   position: fixed;
@@ -83,6 +83,7 @@ export default function BroadcastMarquee({ broadcasts, userId, roomId }) {
       </Wrapper>
     );
   };
+
   return (
     <>
       <StyledMarquee
@@ -97,7 +98,18 @@ export default function BroadcastMarquee({ broadcasts, userId, roomId }) {
             broadcast.publishTime.nanoseconds
           );
           const publishTime = fireTimestamp.toDate();
-          const formattedTime = `${(publishTime.getMonth() + 1).toString().padStart(2, '0')}-${publishTime.getDate().toString().padStart(2, '0')} ${publishTime.getHours().toString().padStart(2, '0')}:${publishTime.getMinutes().toString().padStart(2, '0')}`;
+          const formattedTime = `${(publishTime.getMonth() + 1)
+            .toString()
+            .padStart(2, '0')}-${publishTime
+            .getDate()
+            .toString()
+            .padStart(2, '0')} ${publishTime
+            .getHours()
+            .toString()
+            .padStart(2, '0')}:${publishTime
+            .getMinutes()
+            .toString()
+            .padStart(2, '0')}`;
           const markdownText = `${broadcast.charName}(${formattedTime}) : ${broadcast.content}`;
           return (
             <Messages
@@ -110,7 +122,15 @@ export default function BroadcastMarquee({ broadcasts, userId, roomId }) {
                 setDocId(broadcast.id);
               }}
             >
-              <Markdown>{markdownText}</Markdown>
+              <Markdown
+                components={{
+                  a: ({ ...props }) => (
+                    <a {...props} target="_blank" rel="noopener noreferrer" />
+                  ),
+                }}
+              >
+                {markdownText}
+              </Markdown>
             </Messages>
           );
         })}
