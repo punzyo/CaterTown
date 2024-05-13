@@ -1,11 +1,15 @@
 import styled from 'styled-components';
 import MemberIcon from '../../../MemberIcon';
 import OnlineStatus from '../../../OnlineStatus';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import GitHubLogo from '../../../GitHubLogo';
 import { useGameSettings, useUserState } from '../../../../utils/zustand';
 import { useFormInput } from '../../../../utils/hooks/useFormInput';
-import { editPlayerGitHub } from '../../../../firebase/firestore';
+import {
+  getUserDatabyId,
+  editPlayerGitHub,
+  updateTutorialState,
+} from '../../../../firebase/firestore';
 import DashBoard from './DashBoard';
 import Tutorial from './Tutorial';
 import TutirialIcon from '../../../Icons/TutorialIcon';
@@ -163,19 +167,19 @@ const ProfileWrapper = styled.div`
       border-radius: 5px;
       display: flex;
       align-items: center;
-      
+
       gap: 5px;
       &:hover {
         background-color: #2e355d;
         cursor: pointer;
       }
     }
-    svg{
+    svg {
       width: 16px;
       height: 16px;
       fill: white;
     }
-    .tutorial{
+    .tutorial {
       font-size: 16px;
     }
   }
@@ -201,6 +205,17 @@ export default function PlayerProfile({
   const [showBroadcast, setShowBroadcast] = useState(false);
   const [showPermission, setShowPermission] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+
+  useEffect(() => {
+    if (!userId) return;
+    (async () => {
+      const data = await getUserDatabyId(userId);
+      if (!data.hasViewedGamePageTutorial) {
+        setShowTutorial(true);
+        updateTutorialState(userId, 'hasViewedGamePageTutorial');
+      }
+    })();
+  }, [userId]);
 
   const handleGitHubSubmit = async (e) => {
     e.preventDefault();
@@ -229,7 +244,7 @@ export default function PlayerProfile({
         e.stopPropagation();
       }}
     >
-      {showTutorial && <Tutorial setShowTutorial={setShowTutorial}/>}
+      {showTutorial && <Tutorial setShowTutorial={setShowTutorial} />}
       <IconWrapper>
         <MemberIcon image={image} isOnline={null} unreadMessages={0} />
       </IconWrapper>
@@ -342,7 +357,8 @@ export default function PlayerProfile({
           </div>
           <div className="hr"></div>
           <div className="bottom">
-            <button className='tutorial'
+            <button
+              className="tutorial"
               onClick={() => {
                 setShowTutorial(!showTutorial);
               }}

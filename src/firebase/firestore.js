@@ -125,7 +125,7 @@ export async function getUserDatabyId(userId) {
   try {
     const docSnap = await getDoc(userDocRef);
     const data = docSnap.data();
-    console.log(data);
+    return data
   } catch (error) {
     console.error(error);
   }
@@ -270,7 +270,6 @@ export async function saveUserToFirestore({ authID, name, email }) {
 }
 
 export async function getUserFromFirestore(authID) {
-  console.log(authID);
   try {
     const userRef = doc(db, 'users', authID);
     const docSnapshot = await getDoc(userRef);
@@ -376,6 +375,7 @@ export async function deleteRoomFromAllUsers(roomId) {
     }
 
     await deleteDoc(roomRef);
+    await deleteRoomFromRT(roomId)
     console.log('Room and all user room references deleted successfully');
   } catch (error) {
     console.error('Error in deleting room and user room references:', error);
@@ -434,5 +434,20 @@ export async function isNameAvailable({ roomId, charName }) {
   } catch (error) {
     console.error('Error checking character name: ', error);
     throw new Error('Error while checking for character name.');
+  }
+}
+
+
+export async function updateTutorialState(userId, tutorialName) {
+  const db = getFirestore();  
+  const userRef = doc(db, "users", userId);  
+
+  try {
+    await updateDoc(userRef, {
+      [tutorialName]: true
+    });
+    console.log("Tutorial updated successfully");
+  } catch (error) {
+    console.error("Error updating tutorial:", error);
   }
 }

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import theme from '../../../theme';
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Dialog from './Dialog';
 import { useUserRooms } from '../../../utils/hooks/useUserRooms';
 import { useUserState } from '../../../utils/zustand';
@@ -12,7 +12,10 @@ import Room from './Room';
 import TutirialIcon from '../../Icons/TutorialIcon';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
-
+import {
+  getUserDatabyId,
+  updateTutorialState,
+} from '../../../firebase/firestore';
 const Wrapper = styled.main`
   width: 100%;
   height: 100%;
@@ -59,7 +62,7 @@ const RoomWrapper = styled.div`
   }
 `;
 const TutorialButton = styled.button`
-width: 80px;
+  width: 80px;
   height: 40px;
   border-radius: 5px;
   color: #fff;
@@ -90,29 +93,62 @@ export default function HomePage() {
     show: false,
     id: '',
   });
-  const [searchTerm, setSearchTerm] = useState('')
-
+  const [searchTerm, setSearchTerm] = useState('');
+  const [userData, setUserData] = useState();
   const filteredRooms = useMemo(() => {
-    if (!searchTerm) return userRooms;  
-    return userRooms.filter(room => 
+    if (!searchTerm) return userRooms;
+    return userRooms.filter((room) =>
       room.roomName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [userRooms, searchTerm]);
-  const handleTutorialClick = () => {
+  useEffect(() => {
+    if (!userId) return;
+    (async () => {
+      const data = await getUserDatabyId(userId);
+      setUserData(data);
+    })();
+  }, [userId]);
+
+  useEffect(() => {
+    if (!userId || !userData) return;
+    if (userData && !userData.hasViewedHomePageTutorial1) {
+      console.log('nononoo111');
+      runTutorial();
+      updateTutorialState(userId, 'hasViewedHomePageTutorial1');
+      setUserData({
+        ...userData,
+        hasViewedHomePageTutorial1: true,
+      });
+      return;
+    }
+    if (
+      userData &&
+      !userData.hasViewedHomePageTutorial2 &&
+      userRooms.length > 0
+    ) {
+      runTutorial();
+      updateTutorialState(userId, 'hasViewedHomePageTutorial2');
+      setUserData({
+        ...userData,
+        hasViewedHomePageTutorial2: true,
+      });
+    }
+  }, [userData, userRooms, userId]);
+
+  const runTutorial = () => {
     let steps;
     if (userRooms.length === 0) {
       steps = [
         {
           element: '#create_space',
-          popover: { title: '開始你的第一步!', description: '點擊這裡以創建房間' },
+          popover: {
+            title: '開始你的第一步!',
+            description: '點擊這裡以創建房間',
+          },
         },
       ];
     } else if (userRooms.length > 0) {
       steps = [
-        {
-          element: '#create_space',
-          popover: { title: '創建房間', description: '點擊這裡以創建房間' },
-        },
         {
           element: '#roomActionTrigger',
           popover: {
@@ -139,6 +175,9 @@ export default function HomePage() {
 
     driverObj.drive();
   };
+  const handleTutorialClick = () => {
+    runTutorial();
+  };
   const openDialog = () => {
     setDialogOpen(true);
   };
@@ -162,7 +201,10 @@ export default function HomePage() {
       </Header>
       <SearchWrapper>
         <div className="inputWrapper">
-          <SearchBar onChange={(e) => setSearchTerm(e.target.value)} placeholder='搜尋房間名稱'/>
+          <SearchBar
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="搜尋房間名稱"
+          />
         </div>
       </SearchWrapper>
       <MainPage>

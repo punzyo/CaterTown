@@ -26,6 +26,7 @@ export async function deleteRoomFromRT(roomId) {
   const roomRef = ref(rtdb, `rooms/${roomId}`);
   try {
     await remove(roomRef);
+    console.log('remove room for RT');
   } catch (error) {
     console.error("Error removing user from room:", error);
   }

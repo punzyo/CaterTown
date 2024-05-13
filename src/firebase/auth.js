@@ -41,9 +41,6 @@ export async function signInToAuth(email, password) {
 const handleAuthError = (error) => {
   let errorMessage = ''
       switch (error.code){
-        case 'auth/invalid-email':
-          errorMessage = '無效的電子郵件地址'
-          break
         case 'auth/email-already-in-use':
           errorMessage = '該電子郵件地址已被使用'
           break
