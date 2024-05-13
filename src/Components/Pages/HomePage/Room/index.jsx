@@ -12,6 +12,15 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
+  animation: fadeIn 0.5s ease-out;
+  @keyframes fadeIn {
+      from {
+        opacity: 0.3;
+      }
+      to {
+        opacity: 1;
+      }
+    }
   .top {
     display: flex;
     align-items: center;
@@ -136,7 +145,6 @@ export default function Room({
           <span className="date">
             {new Date(room.joinDate.toDate()).toISOString().slice(0, 10)}
           </span>
-          邀請朋友
           <InviteButton
             link={`${window.location.origin}/invite/${room.id}/${room.roomName}`}
             message="邀請連結已複製!"

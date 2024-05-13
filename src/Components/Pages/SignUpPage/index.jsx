@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Cat from '../../Cat';
 import useValidatedInput from '../../../utils/hooks/useValidatedInput';
 import { registerUserToAuth } from '../../../firebase/auth';
-import { saveUserToFirestore } from '../../../firebase/firestore';
+import { resetUnreadMessage, saveUserToFirestore } from '../../../firebase/firestore';
 import Logo from '../../Logo';
 const Wrapper = styled.div`
   width: 100%;
@@ -19,17 +19,13 @@ const Wrapper = styled.div`
     position: absolute;
     left: 10px;
     top: 10px;
-    &:hover{
-      background-color: rgba(255, 255, 255,.5);
-    }
   }
 `;
 const SignUpWrapper = styled.div`
   width: 360px;
-  height: 450px;
   background-color: white;
   border-radius: 10px;
-  padding: 10px 15px;
+  padding: 10px 25px;
 `;
 const Top = styled.div`
   width: 100%;
@@ -61,7 +57,6 @@ const Middle = styled.div`
     font-optical-sizing: auto;
   }
   > p:nth-of-type(even) {
-    padding-right: 20px;
     justify-content: flex-end;
   }
 `;
@@ -144,12 +139,13 @@ export default function SignUpPage() {
         email: email.value,
         password: password.value,
       });
+      if(!authID) return
         const isSaveSucess = await saveUserToFirestore({
           authID,
           name: name.value,
           email: email.value,
         });
-        alert(isSaveSucess ? '註冊大成功' : '註冊大失敗');
+        if(!isSaveSucess) return
         navigate('/signin');
     } catch (error) {
       console.error('註冊過程中發生錯誤:', error);

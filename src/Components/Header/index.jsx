@@ -40,7 +40,7 @@ const Wrapper = styled.header`
     width: 50px;
   }
 `;
-const Profile = styled.button`
+const Profile = styled.div`
   ${containerStyles}
   min-width: 100px;
   display: flex;
@@ -49,9 +49,8 @@ const Profile = styled.button`
   gap: 10px;
   background-color: inherit;
   color: #fff;
-  &:hover {
-    background-color: #545c8f;
-  }
+  cursor: auto;
+  
   .userimg {
     width: 36px;
     height: 36px;

@@ -7,9 +7,6 @@ const LogoWrapper = styled.button`
   width: 70px;
   height: 70px;
   border-radius: 10px;
-  &:hover {
-    background-color: #3e477c;
-  }
   img {
     width: 50px;
     height: 50px;
@@ -22,7 +19,7 @@ export default function Logo() {
   return (
     <LogoWrapper
       onClick={() => {
-        navigate('/');
+        navigate('/home');
       }}
     >
       <img src="/images/cat_logo_64.png" alt="logo" />

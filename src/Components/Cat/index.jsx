@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { catsXPositions, catsYPositions } from '../../assets/charNames';
+import { catsYPositions } from '../../assets/charNames';
 const Wrapper = styled.div`
   width: 60px;
   height: 60px;

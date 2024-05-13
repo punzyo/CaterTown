@@ -1,6 +1,8 @@
 import { app } from './firebase';
 import {
   getFirestore,
+  query,
+  where,
   doc,
   setDoc,
   addDoc,
@@ -61,12 +63,9 @@ export async function initPlayerData({
   position,
   charName,
   character,
-  permissionLevel
+  permissionLevel,
 }) {
-  const userDocRef = doc(
-    collection(db, `rooms/${roomId}/users`),
-    userId
-  );
+  const userDocRef = doc(collection(db, `rooms/${roomId}/users`), userId);
 
   try {
     await setDoc(userDocRef, {
@@ -259,9 +258,13 @@ export async function saveUserToFirestore({ authID, name, email }) {
     await setDoc(userRef, {
       name,
       email,
+      hasViewedHomePageTutorial1: false,
+      hasViewedHomePageTutorial2: false,
+      hasViewedGamePageTutorial: false,
     });
     return true;
   } catch (error) {
+    alert('發生錯誤: ' + error.message);
     return false;
   }
 }
@@ -336,14 +339,13 @@ export async function editPermissionLevel({
   newPermissionLevel,
 }) {
   try {
-
     const userDocRef = doc(db, `rooms/${roomId}/users`, userId);
 
     const userSnap = await getDoc(userDocRef);
 
     if (userSnap.exists()) {
       await updateDoc(userDocRef, {
-        permissionLevel: newPermissionLevel
+        permissionLevel: newPermissionLevel,
       });
 
       console.log('Permission level updated successfully');
@@ -367,7 +369,7 @@ export async function deleteRoomFromAllUsers(roomId) {
     const usersSnapshot = await getDocs(usersInRoomRef);
 
     for (const userDoc of usersSnapshot.docs) {
-      const userId = userDoc.id;  
+      const userId = userDoc.id;
       const userRoomRef = doc(db, 'users', userId, 'rooms', roomId);
       await deleteDoc(userRoomRef);
       console.log(`Deleted room reference for user ${userId}`);
@@ -413,5 +415,24 @@ export async function removeUserFromRoom({ roomId, userId }) {
     }
   } catch (error) {
     console.error('Error removing user from room2: ', error);
+  }
+}
+
+export async function isNameAvailable({ roomId, charName }) {
+  try {
+    const usersRef = collection(db, 'rooms', roomId, 'users');
+    const charQuery = query(usersRef, where('charName', '==', charName));
+    const querySnapshot = await getDocs(charQuery);
+
+    if (querySnapshot.empty) {
+      console.log('No matching documents.');
+      return true;
+    } else {
+      console.log('Found matching documents.');
+      return false;
+    }
+  } catch (error) {
+    console.error('Error checking character name: ', error);
+    throw new Error('Error while checking for character name.');
   }
 }

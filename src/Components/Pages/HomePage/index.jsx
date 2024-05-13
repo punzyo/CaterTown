@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import theme from '../../../theme';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Dialog from './Dialog';
 import { useUserRooms } from '../../../utils/hooks/useUserRooms';
 import { useUserState } from '../../../utils/zustand';
@@ -9,7 +9,6 @@ import Header from '../../Header';
 import SearchBar from '../../SearchBar';
 import RoomSkeleton from './RoomSkeleton';
 import Room from './Room';
-import { useNavigate } from 'react-router-dom';
 import TutirialIcon from '../../Icons/TutorialIcon';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
@@ -60,6 +59,7 @@ const RoomWrapper = styled.div`
   }
 `;
 const TutorialButton = styled.button`
+width: 80px;
   height: 40px;
   border-radius: 5px;
   color: #fff;

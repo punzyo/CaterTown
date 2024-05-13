@@ -21,17 +21,13 @@ const Wrapper = styled.div`
     position: absolute;
     left: 10px;
     top: 10px;
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.5);
-    }
   }
 `;
 const SignInWrapper = styled.div`
   width: 360px;
-  height: 340px;
   background-color: white;
   border-radius: 10px;
-  padding: 10px 15px;
+  padding: 10px 25px;
 `;
 const Top = styled.div`
   width: 100%;
@@ -120,17 +116,22 @@ export default function SignInPage() {
     if (user.id) navigate('/home');
   }, [user]);
 
-  const signIn = async ({ e, email, password }) => {
+  const signIn = async (e) => {
     e.preventDefault();
-    try {
-      const user = await signInToAuth(email, password);
-      const userData = await getUserFromFirestore(user.uid);
-      setUser(userData);
-      localStorage.setItem('ChouChouZooUser', JSON.stringify(userData));
-      navigate('/');
-    } catch (error) {
-      alert('登入失敗', error);
+    if(!emailInput.isValid){
+      alert('請輸入正確的電子郵件')
+      return
     }
+    if(!passwordInput.isValid){
+      alert('請輸入密碼')
+      return
+    }
+    const user = await signInToAuth(emailInput.value, passwordInput.value);
+    if(!user) return
+    const userData = await getUserFromFirestore(user.uid);
+    setUser(userData);
+    localStorage.setItem('ChouChouZooUser', JSON.stringify(userData));
+    navigate('/');
     emailInput.clear();
     passwordInput.clear();
   };
@@ -149,11 +150,7 @@ export default function SignInPage() {
         <Bottom>
           <form
             onSubmit={(e) => {
-              signIn({
-                e,
-                email: emailInput.value,
-                password: passwordInput.value,
-              });
+              signIn(e);
             }}
           >
             <InputWrapper

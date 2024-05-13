@@ -7,6 +7,7 @@ import {
   addRoomToUser,
   checkUserRoom,
   initPlayerData,
+  isNameAvailable
 } from '../../../firebase/firestore.js';
 import Button from '../../Buttons/Button/index.jsx';
 import styled from 'styled-components';
@@ -138,6 +139,11 @@ export default function InvitePage() {
     const userId = user.id;
     const charName = charNameInput.value;
     const character = catImages[selectedImageIndex];
+    const canUseName = await isNameAvailable({roomId, charName})
+    if(!canUseName){
+      alert('此名稱已被使用!')
+      return
+    } 
     await initPlayerData({
       userId,
       roomId,
