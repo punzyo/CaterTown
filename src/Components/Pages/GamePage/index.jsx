@@ -131,7 +131,7 @@ export default function GamePage() {
   const { roomId, roomName } = useParams();
   const [token, setToken] = useState(null);
   const liveKitUrl = import.meta.env.VITE_LIVEKIT_SERVER_URL;
-  const { user, loginChecked } = useUserState();
+  const { user } = useUserState();
   const userId = user.id;
 
   const onlineStatus = useRoomStatus({ userId, roomId });
@@ -206,7 +206,7 @@ export default function GamePage() {
         video={false}
         audio={false}
         token={token}
-        serverUrl="wss://chouchouzoo-ffphmeoa.livekit.cloud"
+        serverUrl={import.meta.env.VITE_LIVEKIT_CLOUD_URL}
         data-lk-theme="default"
         style={{ backgroundColor: 'inherit' }}
         onConnected={() => {

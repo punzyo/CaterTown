@@ -1,13 +1,11 @@
 import { create } from 'zustand';
 import { Track } from 'livekit-client';
 export const useUserState = create((set, get) => ({
-  loginChecked: false,
   user: {
     name: '',
     email: '',
     id: '',
   },
-  setLoginChecked: (loginChecked) => set({ loginChecked }),
   setUser: (userData) =>
     set((state) => ({
       ...state,

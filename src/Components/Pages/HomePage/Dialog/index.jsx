@@ -6,7 +6,7 @@ import { map2 } from '../../GamePage/Maps/map2';
 import {
   createRoom,
   addRoomToUser,
-  initPlayerData
+  initPlayerData,
 } from '../../../../firebase/firestore';
 import { catImages } from '@/assets/charNames';
 import CloseButton from '../../../Buttons/CloseButton';
@@ -128,7 +128,7 @@ function Dialog({ onClose, userId }) {
       position: map2.startingPoint,
       charName,
       character,
-      permissionLevel:'creater'
+      permissionLevel: 'creater',
     });
     const isUpdated = await addRoomToUser({
       userId,

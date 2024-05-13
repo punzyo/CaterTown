@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SimplePRContent from './SimplePRContent';
 import { usePullRequests } from '../../../../utils/zustand';
 import GitHubLogo from '../../../GitHubLogo';

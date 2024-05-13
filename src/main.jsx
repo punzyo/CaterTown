@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/" element={<App />}>
           <Route index element={<LandingPage />} />
           <Route path="home" element={<HomePage />} />
-          <Route path="chouchouzoo/:roomId/:roomName" element={<GamePage />} />
+          <Route path="catertown/:roomId/:roomName" element={<GamePage />} />
           <Route path="invite/:roomId/:roomName" element={<InvitePage />} />
           <Route path="signup" element={<SignUpPage />} />
           <Route path="signin" element={<SignInPage />} />

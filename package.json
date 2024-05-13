@@ -1,5 +1,5 @@
 {
-  "name": "chouchouzoo",
+  "name": "catertown",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,10 +16,8 @@
     "firebase": "^10.10.0",
     "livekit-client": "^2.1.0",
     "react": "^18.2.0",
-    "react-datepicker": "^6.9.0",
     "react-dom": "^18.2.0",
     "react-fast-marquee": "^1.6.4",
-    "react-joyride": "^2.8.1",
     "react-loading-skeleton": "^3.4.0",
     "react-markdown": "^9.0.1",
     "react-router-dom": "^6.22.3",

@@ -120,7 +120,7 @@ export default function Room({
       <div
         className="middle"
         onClick={() => {
-          navigate(`/chouchouzoo/${room.id}/${room.roomName}`);
+          navigate(`/catertown/${room.id}/${room.roomName}`);
         }}
       >
         <div className="onlineMembers">

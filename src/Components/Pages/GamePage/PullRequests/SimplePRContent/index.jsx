@@ -62,6 +62,9 @@ const DetailPRBottom = styled.div`
   flex-grow: 1;
   flex-direction: column;
   align-items: center;
+  a{
+    text-decoration: underline;
+  }
   > div {
     width: 100%;
   }

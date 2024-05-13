@@ -121,7 +121,7 @@ export default function InvitePage() {
     (async () => {
       const isInRoom = await checkUserRoom({ roomId, userId });
       if (isInRoom) {
-        navigate(`/chouchouzoo/${roomId}/${roomName}`);
+        navigate(`/catertown/${roomId}/${roomName}`);
       }
       setRoomChecked(true)
     })();
@@ -156,7 +156,7 @@ export default function InvitePage() {
     });
     if (joinedRoom) {
       charNameInput.clear();
-      navigate(`/chouchouzoo/${roomId}/${roomName}`);
+      navigate(`/catertown/${roomId}/${roomName}`);
     }
   };
   return (

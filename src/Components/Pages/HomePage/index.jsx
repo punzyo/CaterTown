@@ -82,8 +82,7 @@ const TutorialButton = styled.button`
 `;
 
 export default function HomePage() {
-  const navigate = useNavigate();
-  const { user, loginChecked } = useUserState();
+  const { user } = useUserState();
   const [dialogOpen, setDialogOpen] = useState(false);
   const userId = user.id;
   const { userRooms, loading } = useUserRooms(userId);

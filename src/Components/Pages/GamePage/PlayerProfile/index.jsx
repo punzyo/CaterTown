@@ -6,7 +6,6 @@ import GitHubLogo from '../../../GitHubLogo';
 import { useGameSettings, useUserState } from '../../../../utils/zustand';
 import { useFormInput } from '../../../../utils/hooks/useFormInput';
 import { editPlayerGitHub } from '../../../../firebase/firestore';
-import 'react-datepicker/dist/react-datepicker.css';
 import DashBoard from './DashBoard';
 import Tutorial from './Tutorial';
 import TutirialIcon from '../../../Icons/TutorialIcon';
@@ -50,7 +49,7 @@ const IconWrapper = styled.div`
 `;
 const ProfileWrapper = styled.div`
   position: absolute;
-  width: 260px;
+  width: 270px;
   height: 275px;
   bottom: 75px;
   left: 0;
