@@ -253,7 +253,7 @@ export default function LandingPage() {
         <div className="top">
           <div className="left">
             <div>
-              <h1>讓你的遠距學習，沒有距離</h1>
+              <h1>讓你的團隊協作,，沒有距離</h1>
               <SignUp
                 onClick={() => {
                   navigate('/signup');
@@ -271,11 +271,11 @@ export default function LandingPage() {
           <div>
             <h2>
               <img src="/images/cat-orange.svg" alt="cat-orange" />
-              讓學習團隊一起在線上相聚
+              讓協作團隊一起在線上相聚
             </h2>
             <p>
               Cater
-              town提供了一個溫暖的線上虛擬環境，不只有提供視音訊的服務，還有高達50種可愛貓咪可供選擇，讓我們不管身在何方，都能用自己最喜歡的樣貌，和夥伴們一起在線上學習、交流。
+              town提供了一個溫暖的線上虛擬環境，不只有提供視音訊的服務，還有高達50種可愛貓咪可供選擇，讓我們不管身在何方，都能用自己最喜歡的樣貌，和夥伴們一起在線上交流。
             </p>
           </div>
           <div>
@@ -284,7 +284,7 @@ export default function LandingPage() {
               獨立空間，各自討論不打擾
             </h2>
             <p>
-              有不同組別要分開討論怎麼辦?不用擔心，只要進入特定空間，就不會收到外面視音訊的打擾，只能接收相同空間的訊息，讓分組討論變得更有效率!
+              需要分組討論怎麼辦?不用擔心，只要進入特定空間，就不會收到外面視音訊的打擾，只能接收相同空間的訊息，讓分工作業討論變得更有效率!
             </p>
           </div>
           <div>
@@ -294,7 +294,7 @@ export default function LandingPage() {
             </h2>
             <p>
               藉由串接GitHub webhook，當追蹤的repository 收到pull
-              requests時，對應貓咪的頭上就會跑出驚嘆號的通知，讓多人協同合作的同時享受更多的樂趣。
+              requests時，對應貓咪的頭上就會跑出驚嘆號的通知，讓多人協作的同時享受更多的樂趣。
             </p>
           </div>
         </div>
