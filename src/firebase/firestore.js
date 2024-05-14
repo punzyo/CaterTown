@@ -125,7 +125,7 @@ export async function getUserDatabyId(userId) {
   try {
     const docSnap = await getDoc(userDocRef);
     const data = docSnap.data();
-    return data
+    return data;
   } catch (error) {
     console.error(error);
   }
@@ -366,7 +366,6 @@ export async function deleteRoomFromAllUsers(roomId) {
   try {
     const usersInRoomRef = collection(db, `rooms/${roomId}/users`);
     const usersSnapshot = await getDocs(usersInRoomRef);
-
     for (const userDoc of usersSnapshot.docs) {
       const userId = userDoc.id;
       const userRoomRef = doc(db, 'users', userId, 'rooms', roomId);
@@ -374,11 +373,19 @@ export async function deleteRoomFromAllUsers(roomId) {
       console.log(`Deleted room reference for user ${userId}`);
     }
 
+    const subcollections = ['publicMessages', 'pullRequests', 'unReadMessages', 'users'];
+    for (const subcollection of subcollections) {
+      const subRef = collection(db, `rooms/${roomId}/${subcollection}`);
+      const subSnapshot = await getDocs(subRef);
+      for (const subDoc of subSnapshot.docs) {
+        await deleteDoc(doc(db, `rooms/${roomId}/${subcollection}`, subDoc.id));
+      }
+    }
     await deleteDoc(roomRef);
-    await deleteRoomFromRT(roomId)
-    console.log('Room and all user room references deleted successfully');
+    await deleteRoomFromRT(roomId);
+    console.log('Room and all associated data deleted successfully');
   } catch (error) {
-    console.error('Error in deleting room and user room references:', error);
+    console.error('Error in deleting room and associated data:', error);
   }
 }
 export async function checkUserRoom({ roomId, userId }) {
@@ -437,17 +444,16 @@ export async function isNameAvailable({ roomId, charName }) {
   }
 }
 
-
 export async function updateTutorialState(userId, tutorialName) {
-  const db = getFirestore();  
-  const userRef = doc(db, "users", userId);  
+  const db = getFirestore();
+  const userRef = doc(db, 'users', userId);
 
   try {
     await updateDoc(userRef, {
-      [tutorialName]: true
+      [tutorialName]: true,
     });
-    console.log("Tutorial updated successfully");
+    console.log('Tutorial updated successfully');
   } catch (error) {
-    console.error("Error updating tutorial:", error);
+    console.error('Error updating tutorial:', error);
   }
 }
