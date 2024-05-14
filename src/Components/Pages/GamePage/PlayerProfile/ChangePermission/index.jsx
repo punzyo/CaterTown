@@ -186,7 +186,7 @@ export default function ChangePermission({
               </svg>
               {showSettings[player.userId] && (
                 <div className="permission">
-                  {permissionLevel === 'creater' &&
+                  {permissionLevel === 'creator' &&
                     renderPermissionOptions(player, player.permissionLevel, [
                       'admin',
                       'manager',

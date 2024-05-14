@@ -40,7 +40,7 @@ const BottomBar = styled.div`
   padding: 10px 25px;
   background-color: #202540;
 
-  z-index: 11;
+  z-index: 13;
 `;
 const BottomContent = styled.div`
   display: flex;

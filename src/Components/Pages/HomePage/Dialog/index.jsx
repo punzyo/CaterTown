@@ -128,7 +128,7 @@ function Dialog({ onClose, userId }) {
       position: map2.startingPoint,
       charName,
       character,
-      permissionLevel: 'creater',
+      permissionLevel: 'creator',
     });
     const isUpdated = await addRoomToUser({
       userId,
