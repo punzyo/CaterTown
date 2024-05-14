@@ -253,7 +253,7 @@ export default function LandingPage() {
         <div className="top">
           <div className="left">
             <div>
-              <h1>讓你的團隊協作,，沒有距離</h1>
+              <h1>讓你的團隊協作，沒有距離</h1>
               <SignUp
                 onClick={() => {
                   navigate('/signup');
@@ -280,7 +280,7 @@ export default function LandingPage() {
           </div>
           <div>
             <h2>
-              <img src="/images/cat-calico.svg" alt="cat-orange" />
+              <img src="/images/cat-calico.svg" alt="cat-calico" />
               獨立空間，各自討論不打擾
             </h2>
             <p>
@@ -289,7 +289,7 @@ export default function LandingPage() {
           </div>
           <div>
             <h2>
-              <img src="/images/cat-grey.svg" alt="cat-orange" />
+              <img src="/images/cat-grey.svg" alt="cat-grey" />
               追蹤PR，變得簡單又有趣
             </h2>
             <p>

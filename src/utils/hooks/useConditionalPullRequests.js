@@ -2,14 +2,19 @@ import { useEffect, useState } from 'react';
 import { collection, doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/firestore';
 
-export const useConditionalPullRequests = ({ userId, roomId, gitHubId, permissionLevel }) => {
+export const useConditionalPullRequests = ({
+  userId,
+  roomId,
+  gitHubId,
+  permissionLevel,
+}) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     if (!roomId || !userId || !gitHubId || !permissionLevel) return;
     let unsubscribe;
 
-    if (permissionLevel !=='student') {
+    if (permissionLevel !== 'member') {
       const prCollectionRef = collection(db, 'rooms', roomId, 'pullRequests');
       unsubscribe = onSnapshot(
         prCollectionRef,
@@ -17,8 +22,10 @@ export const useConditionalPullRequests = ({ userId, roomId, gitHubId, permissio
           let pullRequests = {};
           querySnapshot.docs.forEach((doc) => {
             const prData = doc.data();
-            const openPRs = prData.prs ? prData.prs.filter(pr => pr.state === 'open') : [];
-            if (openPRs.length > 0) {  
+            const openPRs = prData.prs
+              ? prData.prs.filter((pr) => pr.state === 'open')
+              : [];
+            if (openPRs.length > 0) {
               pullRequests[doc.id] = { ...prData, prs: openPRs };
             }
           });
@@ -35,8 +42,10 @@ export const useConditionalPullRequests = ({ userId, roomId, gitHubId, permissio
         (docSnapshot) => {
           if (docSnapshot.exists()) {
             const prData = docSnapshot.data();
-            const openPRs = prData.prs ? prData.prs.filter(pr => pr.state === 'open') : [];
-            if (openPRs.length > 0) { 
+            const openPRs = prData.prs
+              ? prData.prs.filter((pr) => pr.state === 'open')
+              : [];
+            if (openPRs.length > 0) {
               setData({ [docSnapshot.id]: { ...prData, prs: openPRs } });
             } else {
               setData({});
@@ -46,17 +55,17 @@ export const useConditionalPullRequests = ({ userId, roomId, gitHubId, permissio
           }
         },
         (error) => {
-          console.error("Error while fetching the message:", error);
+          console.error('Error while fetching the message:', error);
         }
       );
     }
 
     return () => {
       if (unsubscribe) {
-        unsubscribe(); 
+        unsubscribe();
       }
     };
-  }, [userId, roomId, gitHubId, permissionLevel]); 
+  }, [userId, roomId, gitHubId, permissionLevel]);
 
   return data;
 };

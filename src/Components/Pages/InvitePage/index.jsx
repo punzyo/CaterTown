@@ -7,7 +7,7 @@ import {
   addRoomToUser,
   checkUserRoom,
   initPlayerData,
-  isNameAvailable
+  isNameAvailable,
 } from '../../../firebase/firestore.js';
 import Button from '../../Buttons/Button/index.jsx';
 import styled from 'styled-components';
@@ -115,7 +115,7 @@ export default function InvitePage() {
   const userId = user.id;
   const { roomId, roomName } = useParams();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [roomChecked, setRoomChecked] = useState(false)
+  const [roomChecked, setRoomChecked] = useState(false);
 
   useEffect(() => {
     if (!roomId || !userId) return;
@@ -124,7 +124,7 @@ export default function InvitePage() {
       if (isInRoom) {
         navigate(`/catertown/${roomId}/${roomName}`);
       }
-      setRoomChecked(true)
+      setRoomChecked(true);
     })();
   }, [roomId, userId]);
 
@@ -139,18 +139,18 @@ export default function InvitePage() {
     const userId = user.id;
     const charName = charNameInput.value;
     const character = catImages[selectedImageIndex];
-    const canUseName = await isNameAvailable({roomId, charName})
-    if(!canUseName){
-      alert('此名稱已被使用!')
-      return
-    } 
+    const canUseName = await isNameAvailable({ roomId, charName });
+    if (!canUseName) {
+      alert('此名稱已被使用!');
+      return;
+    }
     await initPlayerData({
       userId,
       roomId,
       position: map2.startingPoint,
       charName,
       character,
-      permissionLevel:'student'
+      permissionLevel: 'member',
     });
     const joinedRoom = await addRoomToUser({
       userId,

@@ -19,9 +19,9 @@ const Wrapper = styled.div`
   > div {
     > span {
       width: 90px;
-      white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       text-align: center;
     }
   }
@@ -31,6 +31,7 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     width: 95px;
+    padding-right: 5px;
     cursor: pointer;
     > span {
       width: 80px;
@@ -188,13 +189,13 @@ export default function ChangePermission({
                   {permissionLevel === 'creater' &&
                     renderPermissionOptions(player, player.permissionLevel, [
                       'admin',
-                      'teacher',
-                      'student',
+                      'manager',
+                      'member',
                     ])}
                   {permissionLevel === 'admin' &&
                     renderPermissionOptions(player, player.permissionLevel, [
-                      'teacher',
-                      'student',
+                      'manager',
+                      'member',
                     ])}
                 </div>
               )}

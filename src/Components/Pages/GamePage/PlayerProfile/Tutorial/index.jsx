@@ -49,7 +49,7 @@ const Wrapper = styled.div`
   }
 
   img,
-  video {
+  gif {
     width: 100%;
     height: 230px;
     border-radius: 20px;
@@ -153,8 +153,8 @@ export default function Tutorial({setShowTutorial}) {
           {currentContent.map((item, index) => (
             <div key={index}>
               <Title>{item.title}</Title>
-              {item.mediaType === 'video' ? (
-                <video src={`/tutorial/${category}/${category}_${index}.mp4`} autoPlay loop />
+              {item.mediaType === 'gif' ? (
+                <img src={`/tutorial/${category}/${category}_${index}.gif`} />
               ) : (
                 <img
                   src={`/tutorial/${category}/${category}_${index}.png`}

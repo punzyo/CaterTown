@@ -427,7 +427,7 @@ export default function Map({
             $character={player.character}
             $charName={player.charName}
           >
-            {(permissionLevel !=='student') && (
+            {permissionLevel !== 'member' && (
               <PRMark githubId={player.gitHubId} pullRequests={pullRequests} />
             )}
           </OtherPlayer>
