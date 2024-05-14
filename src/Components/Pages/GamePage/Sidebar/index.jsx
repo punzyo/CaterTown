@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   padding: 15px;
   top: 0;
   background-color: #202540;
-  z-index: ${(props) => (props.$isFullScreen ? '5' : '10')};
+  z-index: ${(props) => (props.$isFullScreen ? '5' : '12')};
   border-bottom: 1px solid #3e477c;
 
   button {

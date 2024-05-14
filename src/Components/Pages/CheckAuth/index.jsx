@@ -10,7 +10,7 @@ const CheckAuth = () => {
   useEffect(() => {
     console.log('我來驗證');
     const user = JSON.parse(localStorage.getItem('ChouChouZooUser'));
-
+    console.log('現在user', user);
     if (user) {
       setUser(user);
       if (location.pathname === '/' || location.pathname === '/signin' || location.pathname === '/signup') {
@@ -21,7 +21,7 @@ const CheckAuth = () => {
         navigate('/');
       }
     }
-  }, [user.id]);
+  }, [user.id,location.pathname]);
 
   return <Outlet />;
 };

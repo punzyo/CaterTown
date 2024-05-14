@@ -21,7 +21,7 @@ const Wrapper = styled.div`
   border: 1px solid black;
   display: flex;
   align-items: center;
-  padding-right: 10px;
+  padding-right: 15px;
   > span {
     white-space: nowrap;
   }

@@ -37,7 +37,7 @@ const BottomBar = styled.div`
   justify-content: space-between;
   position: fixed;
   bottom: 0;
-  padding: 10px 40px;
+  padding: 10px 25px;
   background-color: #202540;
 
   z-index: 11;

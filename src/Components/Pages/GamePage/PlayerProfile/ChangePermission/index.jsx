@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { editPermissionLevel } from '../../../../../firebase/firestore';
 const Wrapper = styled.div`
   position: absolute;
-  left: 100%;
+  left: 90%;
   height: 255px;
   max-height: 255px;
   overflow: auto;
@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   cursor: auto;
   > div {
     > span {
-      width: 120px;
+      width: 90px;
       white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis;
@@ -31,12 +31,9 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     width: 95px;
-    gap:5px;
-    padding: 0 5px;
     cursor: pointer;
     > span {
       width: 80px;
-
       text-align: center;
     }
     &:hover {

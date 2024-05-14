@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';import Logo from '../Logo';
 import { useNavigate } from 'react-router-dom';
 import { useUserState } from '../../utils/zustand';
+import theme from '../../theme';
 const containerStyles = css`
   border-radius: 10px;
   font-size: 16px;
@@ -13,7 +14,7 @@ const containerStyles = css`
 const Wrapper = styled.header`
   width: 100%;
   height: 80px;
-  padding: 10px 20px;
+  padding: 10px 15px;
   background-color: #333a64;
   display: flex;
   justify-content: space-between;
@@ -27,6 +28,10 @@ const Wrapper = styled.header`
       color: #fff;
       font-size: 50px;
       letter-spacing: 6px;
+      ${theme.breakpoints.sm} {
+        font-size: 36px;
+        letter-spacing: 4px;
+      }
     }
   }
   .right {
