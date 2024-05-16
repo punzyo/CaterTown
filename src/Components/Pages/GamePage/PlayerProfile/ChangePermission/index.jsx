@@ -149,7 +149,7 @@ export default function ChangePermission({
   const renderPermissionOptions = (player, currentLevel, levels) => {
     return levels.map(
       (p) =>
-        currentLevel !== p && (
+        currentLevel !== p && currentLevel!=='creator' && (
           <span key={p} onClick={() => handlePermissionClick(player.userId, p)}>
             {p}
           </span>
