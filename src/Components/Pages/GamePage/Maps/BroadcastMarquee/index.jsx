@@ -14,7 +14,7 @@ const StyledMarquee = styled(Marquee)`
 
 const Messages = styled.span`
   cursor: ${(props) =>
-    props.$canedit ? `url(/images/trashIconO.png), pointer` : 'auto'};
+    props.$canEdit ? `url(/images/trashIconO.png), pointer` : 'auto'};
   white-space: nowrap;
 `;
 const Wrapper = styled.div`
@@ -110,12 +110,12 @@ export default function BroadcastMarquee({ broadcasts, userId, roomId }) {
             .getMinutes()
             .toString()
             .padStart(2, '0')}`;
-          const markdownText = `${broadcast.charName}(${formattedTime}) : ${broadcast.content}`;
+          const markdownText = `${broadcast.title}(${broadcast.charName},${formattedTime}) : ${broadcast.content}`;
           return (
             <Messages
               key={index}
               style={{ display: 'inline-block', paddingLeft: '80vw' }}
-              $canedit={broadcast.userId === userId}
+              $canEdit={broadcast.userId === userId}
               onClick={() => {
                 if (broadcast.userId !== userId) return;
                 setShowDialog(true);

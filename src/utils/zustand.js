@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { Track } from 'livekit-client';
 export const useUserState = create((set, get) => ({
   user: {
     name: '',
@@ -32,7 +31,6 @@ export const usePullRequests = create((set, get) => ({
   setPullRequests: (pullRequests) => {
     set({ pullRequests });
   },
-  getplayerPullRequests: () => get().player,
   setShowPullRequests: (showPullRequests) => set({ showPullRequests }),
   toggleShowPullRequests: (githubId) => {
     if (githubId === get().prGitHubId) {
@@ -49,7 +47,7 @@ export const usePlayerTracks = create((set) => ({
   localTracks: [],
   remoteTracks: [],
   nearbyPlayers: [],
-  setNearbyPlayers: (players) => set({ nearbyPlayers: players }),
+  setNearbyPlayers: (nearbyPlayers) => set({ nearbyPlayers}),
 }));
 
 export const useGameSettings = create((set) => ({

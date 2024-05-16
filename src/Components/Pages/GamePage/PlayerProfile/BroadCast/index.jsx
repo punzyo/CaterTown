@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+
 import { useFormInput } from '../../../../../utils/hooks/useFormInput';
 import { sendBroadcast } from '../../../../../firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
-const Wrpper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -74,7 +74,6 @@ export default function BroadCast({
   playerCharName,
   setShowBroadcast,
 }) {
-  const [publishTime, setPublishTime] = useState(new Date());
   const broadCastTitleInput = useFormInput('');
   const broadCastContentInput = useFormInput('');
   const hourSelectedInput = useFormInput(1);
@@ -92,7 +91,7 @@ export default function BroadCast({
       userId,
       charName: playerCharName,
       title: broadCastTitleInput.value,
-      publishTime,
+      publishTime:publishTimeObj,
       expirationTime,
       content: broadCastContentInput.value,
       
@@ -106,7 +105,7 @@ export default function BroadCast({
     setShowBroadcast(false);
   };
   return (
-    <Wrpper>
+    <Wrapper>
       <div className="title">
         <label htmlFor="title">標題</label>
         <input
@@ -141,6 +140,6 @@ export default function BroadCast({
           onChange={broadCastContentInput.onChange}
         ></textarea>
       </div>
-    </Wrpper>
+    </Wrapper>
   );
 }
