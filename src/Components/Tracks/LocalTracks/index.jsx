@@ -5,7 +5,7 @@ import {
   VideoTrack,
   TrackRefContext,
 } from '@livekit/components-react';
-import VideoContainer from '../VedioContainer';
+import VideoContainer from '../VideoContainer';
 import { useGameSettings, usePlayerTracks } from '../../../utils/zustand';
 import { Track } from 'livekit-client';
 useGameSettings;
@@ -49,10 +49,10 @@ export default function LocalTracks() {
           {(trackRef) =>
             trackRef && (
               <VideoContainer
-              hidePlaceholder={
-                trackRef.participant.isCameraEnabled ||
-                trackRef.participant.isScreenShareEnabled
-              }
+                hidePlaceholder={
+                  trackRef.participant.isCameraEnabled ||
+                  trackRef.participant.isScreenShareEnabled
+                }
                 isSpeaking={trackRef.participant.isSpeaking}
                 isFullScreen={fullScreenTrack === trackRef.participant.identity}
                 clickFunc={() => {

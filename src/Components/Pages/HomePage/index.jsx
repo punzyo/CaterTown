@@ -9,7 +9,7 @@ import Header from '../../Header';
 import SearchBar from '../../SearchBar';
 import RoomSkeleton from './RoomSkeleton';
 import Room from './Room';
-import TutirialIcon from '../../Icons/TutorialIcon';
+import TutirialIcon from '../../Icons/TutirialIcon';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import {
@@ -112,7 +112,6 @@ export default function HomePage() {
   useEffect(() => {
     if (!userId || !userData) return;
     if (userData && !userData.hasViewedHomePageTutorial1) {
-
       runTutorial();
       updateTutorialState(userId, 'hasViewedHomePageTutorial1');
       setUserData({

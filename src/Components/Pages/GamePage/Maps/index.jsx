@@ -1,10 +1,15 @@
-import { mapIndex } from './map1.js';
 import styled from 'styled-components';
 import { useState, useEffect, useRef, useReducer, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { updatePlayerPosition } from '../../../../firebase/firestore.js';
-import { playerHeight, playerWidth } from './map1.js';
-import { map2, map2Collision, map2Room } from './map2.js';
+import {
+  mapIndex,
+  playerHeight,
+  playerWidth,
+  map2,
+  map2Collision,
+  map2Room,
+} from './map2.js';
 import {
   catsXPositions,
   catsYPositions,
@@ -152,8 +157,8 @@ export default function Map({
   pullRequests,
   broadcasts,
 }) {
-  const { getUserData } = useUserState();
-  const userId = getUserData().id;
+  const { user } = useUserState();
+  const userId = user.id;
   const { roomId } = useParams();
   const [position, dispatchPosition] = useReducer(positionReducer, null);
   const [currentFrame, setCurrentFrame] = useState(null);
@@ -321,7 +326,6 @@ export default function Map({
     const myPosition = playerPosToAbsolute(position);
     let nearbyPlayers;
     if (!room) {
-
       nearbyPlayers = players.filter((player) => {
         const xInRange =
           Math.abs(player.position.left - myPosition.left) <= gridRange;
@@ -335,7 +339,6 @@ export default function Map({
         );
       });
     } else {
-
       nearbyPlayers = players.filter((player) => {
         return player.charName !== playerCharName && player.room === room;
       });

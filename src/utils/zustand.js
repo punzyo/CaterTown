@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-export const useUserState = create((set, get) => ({
+export const useUserState = create((set) => ({
   user: {
     name: '',
     email: '',
@@ -19,8 +19,7 @@ export const useUserState = create((set, get) => ({
         id: '',
       },
     });
-  },
-  getUserData: () => get().user,
+  }
 }));
 export const usePullRequests = create((set, get) => ({
   showPullRequests: false,

@@ -415,7 +415,6 @@ export async function isNameAvailable({ roomId, charName }) {
 }
 
 export async function updateTutorialState(userId, tutorialName) {
-  const db = getFirestore();
   const userRef = doc(db, 'users', userId);
 
   try {

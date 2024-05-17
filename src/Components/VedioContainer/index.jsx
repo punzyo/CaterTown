@@ -1,12 +1,16 @@
 import styled from 'styled-components';
-import FullscreenButton from '../../Buttons/FullscreenButton';
+import FullscreenButton from '../Buttons/FullscreenButton';
 import { ConnectionQualityIndicator } from '@livekit/components-react';
-import { useGameSettings } from '../../../utils/zustand';
-import UserIcon from '../../Icons/UserIcon';
+import { useGameSettings } from '../../utils/zustand';
+import UserIcon from '../Icons/UserIcon';
 export const Wrapper = styled.div`
   position: ${(props) => (props.$isFullScreen ? 'fixed' : 'relative')};
   width: ${(props) =>
-    props.$isFullScreen ? props.$showSidebar?'calc(100vw - 300px) !important':'100vw !important' : '100%'};
+    props.$isFullScreen
+      ? props.$showSidebar
+        ? 'calc(100vw - 300px) !important'
+        : '100vw !important'
+      : '100%'};
   height: ${(props) =>
     props.$isFullScreen ? 'calc(100vh - 100px) !important' : '100px'};
   border: 1px solid ${(props) => (props.$isSpeaking ? 'blue' : 'black')};
@@ -14,7 +18,7 @@ export const Wrapper = styled.div`
   top: 0;
   border-radius: 5px;
   z-index: ${(props) => (props.$isFullScreen ? '15' : '5')};
-  transition:  width 0.3s ease-in-out;
+  transition: width 0.3s ease-in-out;
   .lk-participant-media-video {
     width: 100%;
     border-radius: 5px;
@@ -64,7 +68,7 @@ const Placeholder = styled.div`
     fill: #555;
   }
 `;
-export default function VedioContainer({
+export default function VideoContainer({
   isSpeaking,
   isFullScreen,
   children,
@@ -83,7 +87,7 @@ export default function VedioContainer({
       <FullscreenButton isFullScreen={isFullScreen} clickFunc={clickFunc} />
       {!hidePlaceholder && (
         <Placeholder>
-          <UserIcon/>
+          <UserIcon />
         </Placeholder>
       )}
     </Wrapper>

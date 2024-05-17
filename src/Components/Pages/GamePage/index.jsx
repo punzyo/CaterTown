@@ -15,8 +15,8 @@ import PlayerProfile from './PlayerProfile/index.jsx';
 import { useBroadcasts } from '@/utils/hooks/useBroadcasts.js';
 import Button from '@/Components/Buttons/Button/index.jsx';
 import { usePullRequests } from '@/utils/zustand.js';
-import ExitRoomIcon from '@/Components/Icons/ExitRoomIcon/index.jsx';
-import GroupIcon from '@/Components/Icons/GroupIcon/index.jsx';
+import ExitRoomIcon from '@/Components/Icons/ExitRoomIcon.jsx';
+import GroupIcon from '@/Components/Icons/GroupIcon.jsx';
 import Sidebar from './Sidebar/index.jsx';
 
 const Wrapper = styled.main`
@@ -53,7 +53,7 @@ const BottomRight = styled.div`
   align-items: center;
 `;
 
-const ExirRoom = styled.button`
+const ExitRoom = styled.button`
   width: 70px;
   height: 60px;
   border-radius: 10px;
@@ -279,13 +279,13 @@ export default function GamePage() {
                 <span>{onlineMembers.length}</span>
               </div>
             </Group>
-            <ExirRoom
+            <ExitRoom
               onClick={() => {
                 navigate('/home');
               }}
             >
               <ExitRoomIcon />
-            </ExirRoom>
+            </ExitRoom>
           </BottomRight>
         </BottomBar>
         <Sidebar

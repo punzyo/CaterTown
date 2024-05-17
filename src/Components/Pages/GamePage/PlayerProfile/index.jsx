@@ -12,7 +12,7 @@ import {
 } from '../../../../firebase/firestore';
 import DashBoard from './DashBoard';
 import Tutorial from './Tutorial';
-import TutirialIcon from '../../../Icons/TutorialIcon';
+import TutirialIcon from '../../../Icons/TutirialIcon';
 const Wrapper = styled.div`
   position: relative;
   min-width: 160px;

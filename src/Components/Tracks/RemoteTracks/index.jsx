@@ -6,7 +6,7 @@ import {
 } from '@livekit/components-react';
 import React, { useRef, useState, useEffect } from 'react';
 import AudioManager from '../AudioTracks';
-import VideoContainer from '../VedioContainer';
+import VideoContainer from '../../VedioContainer';
 import { useGameSettings } from '../../../utils/zustand';
 import MemberIcon from '../../MemberIcon';
 import { usePlayerTracks } from '../../../utils/zustand';
@@ -121,22 +121,27 @@ const MemberIconWrapper = styled.div`
     background-position: -785px -75px;
   }
 `;
-export default function RemoteTracks({  nearbyPlayers }) {
+export default function RemoteTracks({ nearbyPlayers }) {
   const { allTracks } = usePlayerTracks();
-  const objTracks  = allTracks?.reduce((acc, track) => {
+  const objTracks = allTracks?.reduce((acc, track) => {
     const participantIdentity = track.participant.identity;
-    const isLocalCheck =!track.participant.isLocal && nearbyPlayers.some(player => player.charName === participantIdentity);
-    
+    const isLocalCheck =
+      !track.participant.isLocal &&
+      nearbyPlayers.some((player) => player.charName === participantIdentity);
+
     if (isLocalCheck) {
       if (track.source === Track.Source.ScreenShare && track.publication) {
         acc[participantIdentity] = track;
-      } else if (track.source === Track.Source.Camera && !acc[participantIdentity]) {
+      } else if (
+        track.source === Track.Source.Camera &&
+        !acc[participantIdentity]
+      ) {
         acc[participantIdentity] = track;
       }
     }
     return acc;
   }, {});
-  const tracks = Object.values(objTracks)
+  const tracks = Object.values(objTracks);
   const { isFullScreen, setIsFullScreen } = useGameSettings();
   const [fullScreenTrack, setFullScreenTrack] = useState('');
   const refs = useRef({});
@@ -192,7 +197,6 @@ export default function RemoteTracks({  nearbyPlayers }) {
                         audioVolume[trackRef.participant.identity] * 100
                       }
                       onChange={(e) => {
-
                         setAudioVolume((prevAudioVolume) => {
                           return {
                             ...prevAudioVolume,
