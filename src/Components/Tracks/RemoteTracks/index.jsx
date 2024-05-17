@@ -5,10 +5,12 @@ import {
   TrackRefContext,
 } from '@livekit/components-react';
 import React, { useRef, useState, useEffect } from 'react';
-import AudioManager from '../../TracksManager/AudioTracks';
+import AudioManager from '../AudioTracks';
 import VideoContainer from '../VedioContainer';
 import { useGameSettings } from '../../../utils/zustand';
 import MemberIcon from '../../MemberIcon';
+import { usePlayerTracks } from '../../../utils/zustand';
+import { Track } from 'livekit-client';
 const Wrapper = styled.div`
   position: relative;
   top: -230px;
@@ -112,14 +114,31 @@ const MemberIconWrapper = styled.div`
   top: 0;
   left: 50%;
   transform: translate(-50%, -50%);
-  >div>div{
-    width:25px;
-    height:25px;
-    transform:scale(0.8);
+  > div > div {
+    width: 25px;
+    height: 25px;
+    transform: scale(0.8);
     background-position: -785px -75px;
   }
 `;
-export default function RemoteTracks({ tracks, nearbyPlayers }) {
+export default function RemoteTracks({  nearbyPlayers }) {
+  const { allTracks } = usePlayerTracks();
+  const objTracks  = allTracks?.reduce((acc, track) => {
+    const participantIdentity = track.participant.identity;
+    const isLocalCheck =!track.participant.isLocal && nearbyPlayers.some(player => player.charName === participantIdentity);
+    
+    if (isLocalCheck) {
+      if (track.source === Track.Source.ScreenShare && track.publication) {
+        acc[participantIdentity] = track;
+      } else if (track.source === Track.Source.Camera && !acc[participantIdentity]) {
+        acc[participantIdentity] = track;
+      }
+    }
+    return acc;
+  }, {});
+  const tracks = Object.values(objTracks)
+  console.log('全部的',allTracks);
+  console.log('整理完畢的remote',tracks);
   const { isFullScreen, setIsFullScreen } = useGameSettings();
   const [fullScreenTrack, setFullScreenTrack] = useState('');
   const refs = useRef({});
@@ -191,17 +210,20 @@ export default function RemoteTracks({ tracks, nearbyPlayers }) {
                         });
                       }}
                     />
-                    {!isFullScreen && <MemberIconWrapper>
-                      <MemberIcon
-                        image={
-                          nearbyPlayers.find(
-                            (player) =>
-                              player.charName === trackRef.participant.identity
-                          )?.character
-                        }
-                        isOnline={null}
-                      />
-                    </MemberIconWrapper>}
+                    {!isFullScreen && (
+                      <MemberIconWrapper>
+                        <MemberIcon
+                          image={
+                            nearbyPlayers.find(
+                              (player) =>
+                                player.charName ===
+                                trackRef.participant.identity
+                            )?.character
+                          }
+                          isOnline={null}
+                        />
+                      </MemberIconWrapper>
+                    )}
                     <span className="name">
                       {trackRef.participant.identity}
                     </span>

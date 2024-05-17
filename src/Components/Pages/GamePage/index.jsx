@@ -1,14 +1,12 @@
 import Map from './Maps/index.jsx';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import Logo from '@/Components/Logo/index.jsx';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useRoomStatus } from '@/utils/hooks/useRoomStatus.js';
 import { useUserState } from '@/utils/zustand.js';
 import { usePlayer } from '@/utils/hooks/useOherPlayer.js';
 import '@livekit/components-styles';
 import { ControlBar, LiveKitRoom } from '@livekit/components-react';
-import TracksManager from '@/Components/TracksManager/index.jsx';
 import LocalTracks from '@/Components/Tracks/LocalTracks/index.jsx';
 import TracksProvider from '@/Components/Tracks/TracksProvider/index.jsx';
 import { useGameSettings } from '@/utils/zustand.js';
@@ -72,10 +70,10 @@ const ExirRoom = styled.button`
 `;
 
 const Group = styled.button`
-position: relative;
-display: flex;
-align-items: center;
-gap: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   height: 60px;
   border-radius: 10px;
   padding: 10px;
@@ -89,12 +87,12 @@ gap: 10px;
     height: 40px;
     fill: white;
   }
-  .onlineCount{
+  .onlineCount {
     position: relative;
     display: flex;
     align-items: center;
     gap: 10px;
-    >div:first-of-type{
+    > div:first-of-type {
       width: 12px;
       height: 12px;
       background-color: green;
@@ -135,7 +133,7 @@ export default function GamePage() {
   const userId = user.id;
 
   const onlineStatus = useRoomStatus({ userId, roomId });
-  const players = usePlayer( roomId );
+  const players = usePlayer(roomId);
   const [playerCharName, setPlayerCharName] = useState(null);
 
   const [gitHubId, setGitHubId] = useState(null);
@@ -182,7 +180,6 @@ export default function GamePage() {
     setOnlineMembers(online);
     setOfflineMembers(offline);
   }, [players, onlineStatus, userId]);
-
 
   const getToken = async ({ roomId, charName }) => {
     if (isConnecting) return;
@@ -233,10 +230,7 @@ export default function GamePage() {
         />
         <BottomBar>
           <BottomContent>
-            <Logo />
-            <TracksManager isLocal={true}>
-              {(localTracks) => <LocalTracks tracks={localTracks} />}
-            </TracksManager>
+            <LocalTracks />
             <PlayerProfile
               showProfile={showProfile}
               setShowProfile={setShowProfile}
@@ -282,7 +276,7 @@ export default function GamePage() {
               }}
             >
               <GroupIcon />
-              <div className='onlineCount'>
+              <div className="onlineCount">
                 <div></div>
                 <span>{onlineMembers.length}</span>
               </div>

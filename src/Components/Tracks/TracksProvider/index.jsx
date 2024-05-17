@@ -1,24 +1,26 @@
 import { Track } from 'livekit-client';
 import { useTracks } from '@livekit/components-react';
 import { usePlayerTracks } from '../../../utils/zustand';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
-const TracksProvider = ({children}) => {
+const TracksProvider = () => {
   const { setTracks } = usePlayerTracks();
-  const allTracks = useTracks(
-    [
+  const tracks = useMemo(
+    () => [
       { source: Track.Source.Camera, withPlaceholder: true },
       { source: Track.Source.ScreenShare, withPlaceholder: true },
       { source: Track.Source.Microphone, withPlaceholder: true },
     ],
-    { onlySubscribed: false }
+    []
   );
-//setTracks(allTracks); GG here
+  const allTracks = useTracks(tracks, { onlySubscribed: false });
+  //; GG here
 
-useEffect(() => {
 
-  
-},[])
+  useEffect(() => {
+     console.log('provider設置', allTracks);
+    setTracks(allTracks);
+  }, [allTracks]);
   return <></>;
 };
 

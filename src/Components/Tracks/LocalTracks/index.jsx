@@ -6,7 +6,8 @@ import {
   TrackRefContext,
 } from '@livekit/components-react';
 import VideoContainer from '../VedioContainer';
-import { useGameSettings } from '../../../utils/zustand';
+import { useGameSettings, usePlayerTracks } from '../../../utils/zustand';
+import { Track } from 'livekit-client';
 useGameSettings;
 const TracksWrapper = styled.div`
   display: flex;
@@ -21,9 +22,26 @@ const TracksWrapper = styled.div`
   }
 `;
 
-export default function LocalTracks({ tracks }) {
+export default function LocalTracks() {
+  const { allTracks } = usePlayerTracks();
+  const objTracks = allTracks?.reduce((acc, track) => {
+    const participantIdentity = track.participant.identity;
+    if (track.participant.isLocal) {
+      if (track.source === Track.Source.ScreenShare && track.publication) {
+        acc[participantIdentity] = track;
+      } else if (
+        track.source === Track.Source.Camera &&
+        !acc[participantIdentity]
+      ) {
+        acc[participantIdentity] = track;
+      }
+    }
+    return acc;
+  }, {});
+  const tracks = Object.values(objTracks);
   const { setIsFullScreen } = useGameSettings();
   const [fullScreenTrack, setFullScreenTrack] = useState(null);
+
   return (
     <TracksWrapper>
       <TrackLoop tracks={tracks}>

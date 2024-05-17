@@ -44,10 +44,12 @@ export const usePullRequests = create((set, get) => ({
   },
 }));
 export const usePlayerTracks = create((set) => ({
+  allTracks: [],
   localTracks: [],
   remoteTracks: [],
   nearbyPlayers: [],
-  setNearbyPlayers: (nearbyPlayers) => set({ nearbyPlayers}),
+  setTracks: (allTracks) => set({ allTracks }),
+  setNearbyPlayers: (nearbyPlayers) => set({ nearbyPlayers }),
 }));
 
 export const useGameSettings = create((set) => ({

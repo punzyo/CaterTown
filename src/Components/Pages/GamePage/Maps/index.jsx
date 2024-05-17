@@ -10,7 +10,6 @@ import {
   catsYPositions,
 } from '../../../../assets/charNames.js';
 import { useUserState } from '../../../../utils/zustand.js';
-import TracksManager from '../../../TracksManager/index.jsx';
 import RemoteTracks from '../../../Tracks/RemoteTracks/index.jsx';
 import PRMark from '../../../PRMark/index.jsx';
 import { useGameSettings } from '../../../../utils/zustand.js';
@@ -462,14 +461,7 @@ export default function Map({
               $charName={playerCharName}
               $character={`${playerChar}`}
             >
-              <TracksManager isLocal={false} nearbyPlayers={nearbyPlayers}>
-                {(remoteTracks) => (
-                  <RemoteTracks
-                    tracks={remoteTracks}
-                    nearbyPlayers={nearbyPlayers}
-                  />
-                )}
-              </TracksManager>
+              <RemoteTracks nearbyPlayers={nearbyPlayers} />
               {<PRMark githubId={gitHubId} pullRequests={pullRequests} />}
             </Player>
           )}
