@@ -19,7 +19,6 @@ export function useRoomStatus({ userId, roomId }) {
         });
 
         return () => {
-            console.log('路由切');
             unsubscribe();
             update(userStatusRef, { online: false });  
         };

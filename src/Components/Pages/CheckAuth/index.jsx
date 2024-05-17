@@ -8,12 +8,14 @@ const CheckAuth = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log('我來驗證');
-    const user = JSON.parse(localStorage.getItem('ChouChouZooUser'));
-    console.log('現在user', user);
+    const user = JSON.parse(localStorage.getItem('CaterTownUser'));
     if (user) {
       setUser(user);
-      if (location.pathname === '/' || location.pathname === '/signin' || location.pathname === '/signup') {
+      if (
+        location.pathname === '/' ||
+        location.pathname === '/signin' ||
+        location.pathname === '/signup'
+      ) {
         navigate('/home');
       }
     } else {
@@ -21,7 +23,7 @@ const CheckAuth = () => {
         navigate('/');
       }
     }
-  }, [user.id,location.pathname]);
+  }, [user.id, location.pathname]);
 
   return <Outlet />;
 };

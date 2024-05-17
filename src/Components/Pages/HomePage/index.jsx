@@ -112,7 +112,7 @@ export default function HomePage() {
   useEffect(() => {
     if (!userId || !userData) return;
     if (userData && !userData.hasViewedHomePageTutorial1) {
-      console.log('nononoo111');
+
       runTutorial();
       updateTutorialState(userId, 'hasViewedHomePageTutorial1');
       setUserData({

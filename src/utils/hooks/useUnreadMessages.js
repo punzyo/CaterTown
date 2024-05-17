@@ -20,7 +20,7 @@ export function useUnreadMessages({
     const unsubscribe = onSnapshot(
       messageRef,
       (docSnapshot) => {
-        console.log('321',minimizeMessages);
+
         if (docSnapshot.exists()) {
           const data = docSnapshot.data();
 

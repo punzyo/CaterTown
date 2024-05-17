@@ -137,8 +137,6 @@ export default function RemoteTracks({  nearbyPlayers }) {
     return acc;
   }, {});
   const tracks = Object.values(objTracks)
-  console.log('全部的',allTracks);
-  console.log('整理完畢的remote',tracks);
   const { isFullScreen, setIsFullScreen } = useGameSettings();
   const [fullScreenTrack, setFullScreenTrack] = useState('');
   const refs = useRef({});
@@ -179,7 +177,6 @@ export default function RemoteTracks({  nearbyPlayers }) {
                       }
                     }}
                   >
-                    {console.log('3333333333333333', trackRef)}
                     <VideoTrack
                       trackRef={trackRef}
                       ref={refs.current[trackRef.participant.identity]}
@@ -195,11 +192,7 @@ export default function RemoteTracks({  nearbyPlayers }) {
                         audioVolume[trackRef.participant.identity] * 100
                       }
                       onChange={(e) => {
-                        console.log(
-                          trackRef.participant.identity,
-                          'WWW',
-                          audioVolume[trackRef.participant.identity]
-                        );
+
                         setAudioVolume((prevAudioVolume) => {
                           return {
                             ...prevAudioVolume,

@@ -18,7 +18,7 @@ const TracksProvider = () => {
 
 
   useEffect(() => {
-     console.log('provider設置', allTracks);
+
     setTracks(allTracks);
   }, [allTracks]);
   return <></>;

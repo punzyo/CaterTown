@@ -170,7 +170,6 @@ export default function Map({
 
   useEffect(() => {
     if (!userId) return;
-    console.log('aa');
     const handleKeyPress = async (e) => {
       if (
         e.target.tagName === 'INPUT' ||
@@ -213,7 +212,6 @@ export default function Map({
       setDirection(keyDirection);
       if (!canMove.current) return;
 
-      console.log('要走囉');
       const absolutePosition = playerPosToAbsolute({
         top: position.top + move.top,
         left: position.left + move.left,
@@ -222,9 +220,7 @@ export default function Map({
         x: Math.round(absolutePosition.left / map2.unit),
         y: Math.round(absolutePosition.top / map2.unit),
       };
-      console.log(playerGrid, '你的位置');
       if (map2Collision[`${playerGrid.x},${playerGrid.y}`]) {
-        console.log('撞到東西');
         return;
       } else if (
         playerGrid.x < 0 ||
@@ -232,16 +228,13 @@ export default function Map({
         playerGrid.x >= map2.unitWidth ||
         playerGrid.y >= map2.unitHeight
       ) {
-        console.log('超出地圖邊界');
         return;
       }
       //player can move
       let enterRoom = map2Room[`${playerGrid.x},${playerGrid.y}`];
-      console.log(enterRoom, '採到的房間4', room);
       if (enterRoom === undefined) enterRoom = room;
       setRoom(enterRoom);
 
-      console.log(enterRoom, 'room');
       canMove.current = false;
       keysPressed.current = true;
       const nextframe = (currentFrame + 1) % framesXPositions.length;
@@ -278,9 +271,7 @@ export default function Map({
   useEffect(() => {
     //initializate player position
     if (position || !players) return;
-    console.log('我不該看到你喔');
     const updatePosition = async () => {
-      console.log(players, userId);
       const playerData = players.filter((player) => player.userId === userId);
       const playerPosition = playerData[0].position;
       setDirection(playerPosition.direction);
@@ -330,7 +321,7 @@ export default function Map({
     const myPosition = playerPosToAbsolute(position);
     let nearbyPlayers;
     if (!room) {
-      console.log('沒房間');
+
       nearbyPlayers = players.filter((player) => {
         const xInRange =
           Math.abs(player.position.left - myPosition.left) <= gridRange;
@@ -344,7 +335,7 @@ export default function Map({
         );
       });
     } else {
-      console.log('有房間');
+
       nearbyPlayers = players.filter((player) => {
         return player.charName !== playerCharName && player.room === room;
       });

@@ -168,7 +168,6 @@ export default function GamePage() {
     if (!players || !onlineStatus) return;
     const online = [];
     const offline = [];
-    console.log(players);
     players.forEach((player) => {
       const isOnline = onlineStatus[player.userId]?.online || false;
       if (player.userId === userId) {
@@ -190,7 +189,6 @@ export default function GamePage() {
       )}&charName=${charName}`
     );
     const token = await response.text();
-    console.log(token);
     setToken(token);
   };
   return (

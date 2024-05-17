@@ -118,19 +118,19 @@ export default function SignInPage() {
 
   const signIn = async (e) => {
     e.preventDefault();
-    if(!emailInput.isValid){
-      alert('請輸入正確的電子郵件')
-      return
+    if (!emailInput.isValid) {
+      alert('請輸入正確的電子郵件');
+      return;
     }
-    if(!passwordInput.isValid){
-      alert('請輸入密碼')
-      return
+    if (!passwordInput.isValid) {
+      alert('請輸入密碼');
+      return;
     }
     const user = await signInToAuth(emailInput.value, passwordInput.value);
-    if(!user) return
+    if (!user) return;
     const userData = await getUserFromFirestore(user.uid);
     setUser(userData);
-    localStorage.setItem('ChouChouZooUser', JSON.stringify(userData));
+    localStorage.setItem('CaterTownUser', JSON.stringify(userData));
     navigate('/');
     emailInput.clear();
     passwordInput.clear();

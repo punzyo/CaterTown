@@ -22,7 +22,5 @@ export const usePlayer = (roomId ) => {
     });
     return () => unsubscribe();
   }, [roomId]);
-
-  console.log('新方法的玩家們',players);
   return players;
 };

@@ -11,7 +11,7 @@ export const useUserState = create((set, get) => ({
       user: { ...state.user, ...userData },
     })),
   resetUser: () => {
-    localStorage.removeItem('ChouChouZooUser');
+    localStorage.removeItem('CaterTownUser');
     set({
       user: {
         name: '',
@@ -45,11 +45,7 @@ export const usePullRequests = create((set, get) => ({
 }));
 export const usePlayerTracks = create((set) => ({
   allTracks: [],
-  localTracks: [],
-  remoteTracks: [],
-  nearbyPlayers: [],
   setTracks: (allTracks) => set({ allTracks }),
-  setNearbyPlayers: (nearbyPlayers) => set({ nearbyPlayers }),
 }));
 
 export const useGameSettings = create((set) => ({

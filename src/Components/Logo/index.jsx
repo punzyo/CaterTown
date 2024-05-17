@@ -23,7 +23,6 @@ export default function Logo() {
       onClick={() => {
         if(user.id)
         {
-          console.log('321');
           navigate('/home');
         }
         else

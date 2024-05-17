@@ -17,7 +17,7 @@ import {
   arrayRemove,
 } from 'firebase/firestore';
 import {
-  creatRtRoom,
+  createRtRoom,
   deleteRoomFromRT,
   removeUserFromRTRoom,
 } from './realtime';
@@ -37,8 +37,6 @@ export async function updatePlayerPosition({ userId, userData, roomId, room }) {
       },
       room,
     });
-
-    console.log('Position updated successfully!');
   } catch (error) {
     console.error('Error updating position: ', error);
   }
@@ -50,8 +48,7 @@ export async function createRoom({ roomName, map }) {
       createDate: Timestamp.now(),
       map,
     });
-    console.log('Document written with ID: ', roomDocRef.id);
-    creatRtRoom(roomDocRef.id);
+    createRtRoom(roomDocRef.id);
     return roomDocRef.id;
   } catch (e) {
     console.error('Error adding document: ', e);
@@ -77,8 +74,6 @@ export async function initPlayerData({
       character,
       userId,
     });
-
-    console.log('Document successfully written!');
   } catch (e) {
     console.error('Error adding document: ', e);
   }
@@ -105,10 +100,6 @@ export async function addRoomToUser({
         isCreater,
       },
       { merge: true }
-    );
-    console.log(
-      "Room with character info set in user's collection with Room ID:",
-      roomId
     );
     return true;
   } catch (error) {
@@ -164,7 +155,6 @@ export async function sendPublicMessage({ roomId, charName, message }) {
         messages: [newMessage],
       });
     }
-    console.log('Message added successfully');
   } catch (error) {
     console.error('Error adding message: ', error);
   }
@@ -222,7 +212,6 @@ export async function addUnreadMessage({ roomId, privateChannelId, userId }) {
         },
       });
     }
-    console.log('+++');
   } catch (error) {
     console.error('Failed to add unread message count:', error);
     throw new Error('Failed to update unread message count');
@@ -231,7 +220,6 @@ export async function addUnreadMessage({ roomId, privateChannelId, userId }) {
 
 export async function resetUnreadMessage({ roomId, privateChannelId, userId }) {
   if (!privateChannelId) return;
-  console.log('rest', roomId, privateChannelId, userId);
   try {
     const unreadMsgRef = doc(db, `rooms/${roomId}/unReadMessages/${userId}`);
 
@@ -241,9 +229,6 @@ export async function resetUnreadMessage({ roomId, privateChannelId, userId }) {
       await updateDoc(unreadMsgRef, {
         [`messages.${privateChannelId}.count`]: 0,
       });
-      console.log('Unread message count reset successfully');
-    } else {
-      console.log('No unread message record to reset');
     }
   } catch (error) {
     console.error('Failed to reset unread message count:', error);
@@ -252,7 +237,6 @@ export async function resetUnreadMessage({ roomId, privateChannelId, userId }) {
 }
 
 export async function saveUserToFirestore({ authID, name, email }) {
-  console.log(authID, name);
   try {
     const userRef = doc(db, 'users', authID);
     await setDoc(userRef, {
@@ -277,7 +261,6 @@ export async function getUserFromFirestore(authID) {
       const userData = docSnapshot.data();
       return { id: authID, ...userData };
     } else {
-      console.log('No such document!');
       return null;
     }
   } catch (error) {
@@ -294,10 +277,7 @@ export async function editPlayerGitHub({ userId, gitHubId, roomId }) {
       await updateDoc(userDocRef, {
         gitHubId: gitHubId,
       });
-      console.log('GitHub ID updated successfully!');
       return true;
-    } else {
-      console.log('User not found.');
     }
     return false;
   } catch (error) {
@@ -310,14 +290,12 @@ export async function sendBroadcast({ roomId, broadcastData }) {
   try {
     const roomRef = doc(db, 'rooms', roomId);
     const broadcastsRef = collection(roomRef, 'broadcasts');
-    const result = await addDoc(broadcastsRef, {
+    addDoc(broadcastsRef, {
       ...broadcastData,
       expirationTime: Timestamp.fromDate(
         new Date(broadcastData.expirationTime)
       ),
     });
-
-    console.log(`Broadcast added with ID: ${result.id}`);
   } catch (error) {
     console.error('Error adding broadcast:', error);
   }
@@ -327,7 +305,6 @@ export async function deleteBroadcast({ roomId, docId }) {
   try {
     const broadcastRef = doc(db, 'rooms', roomId, 'broadcasts', docId);
     await deleteDoc(broadcastRef);
-    console.log('Broadcast deleted successfully');
   } catch (error) {
     console.error('Error deleting broadcast:', error);
   }
@@ -347,10 +324,8 @@ export async function editPermissionLevel({
         permissionLevel: newPermissionLevel,
       });
 
-      console.log('Permission level updated successfully');
       return true;
     } else {
-      console.log('User not found in this room');
       return false;
     }
   } catch (error) {
@@ -361,7 +336,6 @@ export async function editPermissionLevel({
 
 export async function deleteRoomFromAllUsers(roomId) {
   const roomRef = doc(db, 'rooms', roomId);
-  console.log('Deleting Room:', roomId);
 
   try {
     const usersInRoomRef = collection(db, `rooms/${roomId}/users`);
@@ -370,10 +344,14 @@ export async function deleteRoomFromAllUsers(roomId) {
       const userId = userDoc.id;
       const userRoomRef = doc(db, 'users', userId, 'rooms', roomId);
       await deleteDoc(userRoomRef);
-      console.log(`Deleted room reference for user ${userId}`);
     }
 
-    const subcollections = ['publicMessages', 'pullRequests', 'unReadMessages', 'users'];
+    const subcollections = [
+      'publicMessages',
+      'pullRequests',
+      'unReadMessages',
+      'users',
+    ];
     for (const subcollection of subcollections) {
       const subRef = collection(db, `rooms/${roomId}/${subcollection}`);
       const subSnapshot = await getDocs(subRef);
@@ -383,7 +361,6 @@ export async function deleteRoomFromAllUsers(roomId) {
     }
     await deleteDoc(roomRef);
     await deleteRoomFromRT(roomId);
-    console.log('Room and all associated data deleted successfully');
   } catch (error) {
     console.error('Error in deleting room and associated data:', error);
   }
@@ -401,7 +378,6 @@ export async function checkUserRoom({ roomId, userId }) {
 }
 
 export async function removeUserFromRoom({ roomId, userId }) {
-  console.log('退掉', roomId, userId);
   const userRoomRef = doc(db, 'users', userId, 'rooms', roomId);
 
   const roomRef = doc(db, 'rooms', roomId);
@@ -409,16 +385,12 @@ export async function removeUserFromRoom({ roomId, userId }) {
   try {
     await removeUserFromRTRoom({ roomId, userId });
     await deleteDoc(userRoomRef);
-    console.log('User room reference deleted.');
 
     const roomSnap = await getDoc(roomRef);
     if (roomSnap.exists()) {
       await updateDoc(roomRef, {
         users: arrayRemove(userId),
       });
-      console.log('User removed from room users array.');
-    } else {
-      console.log('Room does not exist.');
     }
   } catch (error) {
     console.error('Error removing user from room2: ', error);
@@ -432,10 +404,8 @@ export async function isNameAvailable({ roomId, charName }) {
     const querySnapshot = await getDocs(charQuery);
 
     if (querySnapshot.empty) {
-      console.log('No matching documents.');
       return true;
     } else {
-      console.log('Found matching documents.');
       return false;
     }
   } catch (error) {
@@ -452,7 +422,6 @@ export async function updateTutorialState(userId, tutorialName) {
     await updateDoc(userRef, {
       [tutorialName]: true,
     });
-    console.log('Tutorial updated successfully');
   } catch (error) {
     console.error('Error updating tutorial:', error);
   }

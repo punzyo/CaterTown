@@ -9,6 +9,5 @@ const Wrapper = styled.div`
 `;
 
 export default function Cat({ image }) {
-  console.log('meow', image);
   return <Wrapper $image={`${image}`}/>;
 }

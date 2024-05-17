@@ -96,9 +96,8 @@ export default function BroadCast({
       content: broadCastContentInput.value,
       
     };
-    console.log('廣播', broadcastData);
     const response = await sendBroadcast({ roomId, broadcastData });
-    console.log('發布玩', response);
+
     broadCastTitleInput.clear();
     broadCastContentInput.clear();
     hourSelectedInput.reset();

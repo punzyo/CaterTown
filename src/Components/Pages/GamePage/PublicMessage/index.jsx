@@ -163,7 +163,6 @@ export default function PublicMessage({
       return;
     }
     if (minimizeMessages || (!minimizeMessages && !isPublicChannel)) {
-      console.log('HEHE', minimizeMessages, isPublicChannel);
       setUnreadPublicMessages((prevState) => prevState + 1);
     }
   }, [publicMessages]);
@@ -291,7 +290,6 @@ export default function PublicMessage({
                 <span>{message.message}</span>
               </Message>
             ))}
-          {privateMessages && console.log(privateMessages.message)}
           <div ref={messagesEndRef} />
         </Messages>
       </MessageWrapper>
