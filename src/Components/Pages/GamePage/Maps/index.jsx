@@ -201,7 +201,7 @@ export default function Map({
   }, [handleKeyPress]);
 
   useEffect(() => {
-    //initializate player position
+    //initialize player position
     if (position || !players) return;
     const updatePosition = async () => {
       const playerData = players.filter((player) => player.userId === userId);

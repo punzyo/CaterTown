@@ -9,7 +9,7 @@ export const mapIndex = {
     y: 0,
     collision: false,
   },
-  waterpool: {
+  waterPool: {
     width: 3,
     height: 3,
     x: 8,
@@ -121,14 +121,16 @@ export const mapIndex = {
     y: -1,
     collision: true,
   },
-  floor16: {//long green
+  floor16: {
+    //long green
     width: 1,
     height: 3,
     x: 15,
     y: -1,
     collision: false,
   },
-  floor17: {//long green
+  floor17: {
+    //long green
     width: 3,
     height: 1,
     x: 16,
@@ -141,152 +143,176 @@ export const mapIndex = {
     x: 16,
     y: -2,
     collision: false,
-  },floor19: {
+  },
+  floor19: {
     width: 1,
     height: 1,
     x: 14,
     y: -2,
     collision: false,
-  },floor20: {
+  },
+  floor20: {
     width: 3,
     height: 1,
     x: 3,
     y: -6,
     collision: false,
-  },floor21: {
+  },
+  floor21: {
     width: 1,
     height: 3,
     x: 3,
     y: -3,
     collision: false,
-  },floor22: {
+  },
+  floor22: {
     width: 1,
     height: 4,
     x: 2,
     y: -2,
     collision: false,
-  },floor23: {
+  },
+  floor23: {
     width: 1,
     height: 4,
     x: 1,
     y: -2,
     collision: false,
-  },floor24: {
+  },
+  floor24: {
     width: 1,
     height: 1,
     x: 3,
     y: -6,
     collision: true,
-  },floor25: {
+  },
+  floor25: {
     width: 1,
     height: 1,
     x: 2,
     y: -6,
     collision: true,
-  },floor26: {
+  },
+  floor26: {
     width: 1,
     height: 1,
     x: 1,
     y: -6,
     collision: true,
-  },floor27: {
+  },
+  floor27: {
     width: 1,
     height: 1,
     x: 14,
     y: -1,
     collision: false,
-  },floor28: {
+  },
+  floor28: {
     width: 1,
     height: 1,
     x: 16,
     y: -1,
     collision: false,
-  },floor29: {
+  },
+  floor29: {
     width: 1,
     height: 1,
     x: 11,
     y: -1,
     collision: false,
   },
-  water:{
+  water: {
     width: 1,
     height: 1,
     x: 10,
     y: -5,
     collision: true,
-  },water2:{
+  },
+  water2: {
     width: 1,
     height: 1,
     x: 15,
     y: -6,
     collision: true,
-  },water3:{
+  },
+  water3: {
     width: 1,
     height: 1,
     x: 16,
     y: -5,
     collision: true,
-  },water4:{
+  },
+  water4: {
     width: 1,
     height: 2,
     x: 11,
     y: -4,
     collision: true,
-  },water5:{
+  },
+  water5: {
     width: 1,
     height: 1,
     x: 18,
     y: -2,
     collision: true,
-  },water6:{
+  },
+  water6: {
     width: 1,
     height: 1,
     x: 17,
     y: -2,
     collision: true,
-  },water7:{
+  },
+  water7: {
     width: 1,
     height: 1,
     x: 17,
     y: -1,
     collision: true,
-  },water8:{
+  },
+  water8: {
     width: 1,
     height: 1,
     x: 18,
     y: -1,
     collision: true,
-  },water9:{
+  },
+  water9: {
     width: 1,
     height: 1,
     x: 16,
     y: -6,
     collision: true,
-  },water10:{
+  },
+  water10: {
     width: 1,
     height: 1,
     x: 11,
     y: -6,
     collision: true,
-  },water11:{
+  },
+  water11: {
     width: 1,
     height: 1,
     x: 11,
     y: -5,
     collision: true,
-  },water12:{
+  },
+  water12: {
     width: 1,
     height: 1,
     x: 14,
     y: -4,
     collision: true,
-  },water13:{
+  },
+  water13: {
     width: 1,
     height: 1,
     x: 11,
     y: -4,
     collision: true,
-  },water14:{
+  },
+  water14: {
     width: 1,
     height: 1,
     x: 16,
@@ -300,68 +326,77 @@ export const mapIndex = {
     y: -4,
     collision: true,
   },
-  rockFloor1:{
+  rockFloor1: {
     width: 1,
     height: 4,
     x: 0,
     y: -7,
     collision: true,
   },
-  rockFloor2:{
+  rockFloor2: {
     width: 4,
     height: 1,
     x: -1,
     y: -7,
     collision: true,
-  },rockFloor3:{
+  },
+  rockFloor3: {
     width: 1,
     height: 3,
     x: -5,
     y: -8,
     collision: true,
-  },rockFloor4:{
+  },
+  rockFloor4: {
     width: 1,
     height: 1,
     x: -4,
     y: -10,
     collision: true,
-  },rockFloor5:{
+  },
+  rockFloor5: {
     width: 1,
     height: 1,
     x: -1,
     y: -10,
     collision: true,
-  },rockFloor6:{
+  },
+  rockFloor6: {
     width: 2,
     height: 1,
     x: -2,
     y: -10,
     collision: false,
-  },rockFloor7:{
+  },
+  rockFloor7: {
     width: 4,
     height: 2,
     x: -1,
     y: -8,
     collision: false,
-  },rockFloor8:{
+  },
+  rockFloor8: {
     width: 1,
     height: 2,
     x: 0,
     y: -8,
     collision: true,
-  },rockFloor9:{
+  },
+  rockFloor9: {
     width: 1,
     height: 3,
     x: -5,
     y: -8,
     collision: true,
-  },rockFloor10:{
+  },
+  rockFloor10: {
     width: 1,
     height: 1,
     x: -5,
     y: -7,
     collision: true,
-  },rockFloor11:{
+  },
+  rockFloor11: {
     width: 1,
     height: 1,
     x: 0,
@@ -371,22 +406,25 @@ export const mapIndex = {
   rockFloor12: {
     width: 1,
     height: 2,
-    x:-5,
+    x: -5,
     y: -8,
     collision: true,
-  },rockFloor13: {
+  },
+  rockFloor13: {
     width: 1,
     height: 1,
-    x:-5,
+    x: -5,
     y: -10,
     collision: true,
-  },rockFloor14: {
+  },
+  rockFloor14: {
     width: 1,
     height: 1,
-    x:0,
+    x: 0,
     y: -10,
     collision: true,
-  },waterFloor1: {
+  },
+  waterFloor1: {
     width: 2,
     height: 2,
     x: 9,
@@ -399,19 +437,22 @@ export const mapIndex = {
     x: 7,
     y: -3.5,
     collision: false,
-  },waterFloor3: {
+  },
+  waterFloor3: {
     width: 2,
     height: 1,
     x: 7,
     y: -6,
     collision: false,
-  },waterFloor4: {
+  },
+  waterFloor4: {
     width: 2,
     height: 1,
     x: 9,
     y: -6,
     collision: false,
-  },waterFloor5: {
+  },
+  waterFloor5: {
     width: 1,
     height: 2,
     x: 5.9,
@@ -468,7 +509,7 @@ export const mapIndex = {
     collision: true,
   },
   tree7: {
-    width:2,
+    width: 2,
     height: 2,
     x: 8,
     y: -12.7,
@@ -641,157 +682,171 @@ export const mapIndex = {
     x: 15,
     y: -18,
     collision: true,
-  },garden11: {
+  },
+  garden11: {
     width: 2,
     height: 1,
     x: 13,
     y: -19,
     collision: true,
-  },garden12: {
+  },
+  garden12: {
     width: 2,
     height: 1,
     x: 15,
     y: -19,
     collision: true,
-  },garden13: {
+  },
+  garden13: {
     width: 2,
     height: 1,
     x: 15,
     y: -20,
     collision: true,
   },
-  billboard1:{
+  billboard1: {
     width: 1,
     height: 2,
     x: 12,
     y: -13,
     collision: true,
   },
-  billboard2:{
+  billboard2: {
     width: 1,
     height: 1,
     x: 11,
     y: -13,
     collision: true,
   },
-  billboard3:{
+  billboard3: {
     width: 1,
     height: 1,
     x: 11,
     y: -14,
     collision: true,
   },
-  billboard4:{
+  billboard4: {
     width: 1,
     height: 1,
     x: 11,
     y: -15,
     collision: true,
-  },fence1:{
+  },
+  fence1: {
     width: 1,
     height: 1,
     x: 13,
     y: -15,
     collision: true,
-  },fence2:{//|
+  },
+  fence2: {
+    //|
     width: 1,
     height: 1,
     x: 13,
     y: -16,
     collision: true,
-  },fence3:{
+  },
+  fence3: {
     width: 1,
     height: 1,
     x: 13,
     y: -17,
     collision: true,
-  },fence4:{//-
+  },
+  fence4: {
+    //-
     width: 1,
     height: 1,
     x: 14,
     y: -15,
     collision: true,
-  },rock1:{
+  },
+  rock1: {
     width: 2,
     height: 2,
     x: 17.1,
     y: -18.2,
     collision: true,
-  },rock2:{
+  },
+  rock2: {
     width: 1,
     height: 1,
     x: 17,
     y: -15,
     collision: true,
-  },rock3:{
+  },
+  rock3: {
     width: 1,
     height: 2,
     x: 16,
     y: -14,
     collision: true,
-  },rock4:{
+  },
+  rock4: {
     width: 2,
     height: 2,
     x: 19,
     y: -13,
     collision: true,
-  },flower1:{
+  },
+  flower1: {
     width: 1,
     height: 2,
     x: 17,
     y: -13,
     collision: false,
-  },flower2:{
+  },
+  flower2: {
     width: 2,
     height: 3,
     x: 2,
     y: -23,
     collision: false,
   },
-  mushroom1:{
+  mushroom1: {
     width: 2,
     height: 1,
     x: 2,
     y: -26.5,
     collision: false,
   },
-  mushroom2:{
+  mushroom2: {
     width: 2,
     height: 1,
     x: 2,
     y: -26.5,
     collision: false,
   },
-  mushroom3:{
+  mushroom3: {
     width: 2,
     height: 1,
     x: 2,
     y: -30.5,
     collision: false,
   },
-  fruit1:{
+  fruit1: {
     width: 2,
     height: 2,
     x: 4,
     y: -21,
     collision: false,
   },
-  fruit2:{
+  fruit2: {
     width: 2,
     height: 2,
     x: 2,
     y: -21,
     collision: false,
   },
-  fruit3:{
+  fruit3: {
     width: 2,
     height: 2,
     x: 4,
     y: -23,
     collision: false,
-  }
+  },
 };
-
 
 export const map2 = {
   unit: 48,
@@ -3997,7 +4052,7 @@ export const map2 = {
         top: 0,
       },
     ],
-    waterpool: [
+    waterPool: [
       {
         left: 11,
         top: 12,

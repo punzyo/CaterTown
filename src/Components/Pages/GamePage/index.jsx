@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useRoomStatus } from '@/utils/hooks/useRoomStatus.js';
 import { useUserState } from '@/utils/zustand.js';
-import { usePlayer } from '@/utils/hooks/useOherPlayer.js';
+import { usePlayer } from '@/utils/hooks/usePlayer.js';
 import '@livekit/components-styles';
 import { ControlBar, LiveKitRoom } from '@livekit/components-react';
 import LocalTracks from '@/Components/Tracks/LocalTracks/index.jsx';

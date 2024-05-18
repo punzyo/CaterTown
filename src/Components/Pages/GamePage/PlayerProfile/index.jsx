@@ -222,12 +222,12 @@ export default function PlayerProfile({
     setEditGitHubId(false);
     if (gitHubIdInput.value === gitHubId || gitHubIdInput.value === '') return;
     const newGitHubId = gitHubIdInput.value;
-    const isEditSucess = await editPlayerGitHub({
+    const isEditSuccess = await editPlayerGitHub({
       userId,
       roomId,
       gitHubId: newGitHubId,
     });
-    if (isEditSucess) {
+    if (isEditSuccess) {
       gitHubId = gitHubIdInput.value;
       gitHubIdInput.clear();
     }

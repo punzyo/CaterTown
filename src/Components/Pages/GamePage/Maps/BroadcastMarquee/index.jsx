@@ -64,6 +64,10 @@ export default function BroadcastMarquee({ broadcasts, userId, roomId }) {
   };
 
   const Dialog = ({ docId, setShowDialog }) => {
+    const handleCancelClick= (e)=>{
+      e.stopPropagation();
+      setShowDialog(false);
+    }
     return (
       <Wrapper>
         <div>
@@ -71,10 +75,7 @@ export default function BroadcastMarquee({ broadcasts, userId, roomId }) {
           <div>
             <button onClick={() => handleBroadcastDelete(docId)}>確認</button>
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowDialog(false);
-              }}
+              onClick={handleCancelClick}
             >
               取消
             </button>
