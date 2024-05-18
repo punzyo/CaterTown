@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import MemberIcon from '../../../../MemberIcon';
-import { resetUnreadMessage } from '../../../../../firebase/firestore';
+import MemberIcon from '@/Components/MemberIcon';
+import { resetUnreadMessage } from '@/utils/firebase/firestore';
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
@@ -11,7 +11,6 @@ const Wrapper = styled.div`
     background-color: #333a64;
     cursor: pointer;
   }
-
 `;
 const MemberIconWrapper = styled.div`
   position: relative;

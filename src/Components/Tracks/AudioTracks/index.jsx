@@ -1,5 +1,5 @@
 import { AudioTrack } from '@livekit/components-react';
-import { useAudioTracks } from '../../../utils/hooks/useFilteredTracks';
+import { useAudioTracks } from '@/utils/hooks/useFilteredTracks';
 
 export default function AudioManager({ isLocal, nearbyPlayers, audioVolume }) {
   const audioTracks = useAudioTracks(isLocal, nearbyPlayers);

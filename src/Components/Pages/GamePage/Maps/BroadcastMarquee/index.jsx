@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Marquee from 'react-fast-marquee';
 import { Timestamp } from 'firebase/firestore';
-import { deleteBroadcast } from '../../../../../firebase/firestore';
+import { deleteBroadcast } from '@/utils/firebase/firestore';
 import { useState } from 'react';
 import Markdown from 'react-markdown';
 const StyledMarquee = styled(Marquee)`

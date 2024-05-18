@@ -1,21 +1,21 @@
 import styled from 'styled-components';
-import theme from '../../../theme';
+import theme from '@/theme';
 import { useState, useEffect, useMemo } from 'react';
 import Dialog from './Dialog';
-import { useUserRooms } from '../../../utils/hooks/useUserRooms';
-import { useUserState } from '../../../utils/zustand';
-import Button from '../../Buttons/Button';
-import Header from '../../Header';
-import SearchBar from '../../SearchBar';
+import { useUserRooms } from '@/utils/hooks/useUserRooms';
+import { useUserState } from '@/utils/zustand';
+import Button from '@/Components/Buttons/Button';
+import Header from '@/Components/Header';
+import SearchBar from '@/Components/SearchBar';
 import RoomSkeleton from './RoomSkeleton';
 import Room from './Room';
-import TutorialIcon from '../../Icons/TutorialIcon';
+import TutorialIcon from '@/Components/Icons/TutorialIcon';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import {
   getUserDataById,
   updateTutorialState,
-} from '../../../firebase/firestore';
+} from '@/utils/firebase/firestore';
 const Wrapper = styled.main`
   width: 100%;
   height: 100%;

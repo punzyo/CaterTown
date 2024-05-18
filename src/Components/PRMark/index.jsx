@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { usePullRequests } from '../../utils/zustand';
+import { usePullRequests } from '@/utils/zustand';
 const Wrapper = styled.div`
   position: absolute;
   z-index: 15;

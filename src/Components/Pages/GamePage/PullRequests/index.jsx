@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import SimplePRContent from './SimplePRContent';
-import { usePullRequests } from '../../../../utils/zustand';
-import GitHubLogo from '../../../GitHubLogo';
-import ArrowDownIcon from '../../../Icons/ArrowDownIcon';
-import ArrowUpIcon from '../../../Icons/ArrowUpIcon';
+import { usePullRequests } from '@/utils/zustand';
+import GitHubIcon from '@/Components/Icons/GitHubIcon';
+import ArrowDownIcon from '@/Components/Icons/ArrowDownIcon';
+import ArrowUpIcon from '@/Components/Icons/ArrowUpIcon';
 const PRWRapper = styled.div`
   position: absolute;
   top: 0px;
@@ -65,7 +65,7 @@ export default function PullRequests() {
           <SmallPRWrapper>
             <div className="title">
               <GitHubLogoWrapper>
-                <GitHubLogo />
+                <GitHubIcon />
               </GitHubLogoWrapper>
               <h3>待審中的PR</h3>
             </div>

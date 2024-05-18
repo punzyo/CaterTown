@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import BroadCast from '../BroadCast';
 import ChangePermission from '../ChangePermission';
 import { useState } from 'react';
-import GitHubIcon from '../../../../Icons/GitHubIcon';
-import BroadcastIcon from '../../../../Icons/BroadcastIcon';
-import ChangePermissionIcon from '../../../../Icons/ChangePermissionIcon';
+import LinkIcon from '@/Components/Icons/LinkIcon';
+import BroadcastIcon from '@/Components/Icons/BroadcastIcon';
+import ChangePermissionIcon from '@/Components/Icons/ChangePermissionIcon';
 const PermissionWrapper = styled.div`
   position: absolute;
   left: 10px;
@@ -88,7 +88,7 @@ export default function DashBoard({
       }}
     >
       <div onClick={getWebhookLink}>
-        <GitHubIcon />
+        <LinkIcon />
         <span>
           {showSuccessMessage ? '複製連結成功!' : 'GitHub webhook link'}
         </span>

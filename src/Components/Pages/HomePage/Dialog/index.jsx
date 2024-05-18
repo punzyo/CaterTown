@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import useValidatedInput from '../../../../utils/hooks/useValidatedInput';
-import SimpleSlider from '../../../Silder';
+import useValidatedInput from '@/utils/hooks/useValidatedInput';
+import SimpleSlider from '@/Components/Silder';
 import { map2 } from '../../GamePage/Maps/map2';
 import {
   createRoom,
   addRoomToUser,
   initPlayerData,
-} from '../../../../firebase/firestore';
-import { catImages } from '../../../../assets/charNames';
-import CloseButton from '../../../Buttons/CloseButton';
-import Cat from '../../../Cat';
+} from '@/utils/firebase/firestore';
+import { catImages } from '@/assets/charNames';
+import CloseButton from '@/Components/Buttons/CloseButton';
+import Cat from '@/Components/Cat';
 const SliderWrapper = styled.div`
   width: 100%;
   display: flex;

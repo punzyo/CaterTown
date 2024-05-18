@@ -5,9 +5,9 @@ import {
   VideoTrack,
   TrackRefContext,
 } from '@livekit/components-react';
-import VideoContainer from '../../VideoContainer';
-import { useGameSettings } from '../../../utils/zustand';
-import { useLocalTracks } from '../../../utils/hooks/useFilteredTracks';
+import VideoContainer from '@/Components/VideoContainer';
+import { useGameSettings } from '@/utils/zustand';
+import { useLocalTracks } from '@/utils/hooks/useFilteredTracks';
 useGameSettings;
 const TracksWrapper = styled.div`
   display: flex;

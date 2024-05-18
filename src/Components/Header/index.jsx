@@ -1,8 +1,9 @@
 import styled, { css } from 'styled-components';
-import Logo from '../Logo';
+import Logo from '@/Components/Logo';
 import { useNavigate } from 'react-router-dom';
-import { useUserState } from '../../utils/zustand';
-import theme from '../../theme';
+import { useUserState } from '@/utils/zustand';
+import theme from '@/theme';
+import { TabbyCat } from '../Icons/CatIcons';
 const containerStyles = css`
   border-radius: 10px;
   font-size: 16px;
@@ -57,12 +58,12 @@ const Profile = styled.div`
   color: #fff;
   cursor: auto;
 
-  .userimg {
+  .userImg {
     width: 36px;
     height: 36px;
     border-radius: 50%;
     overflow: hidden;
-    img {
+    svg {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -92,7 +93,10 @@ const SignOut = styled.div`
 export default function Header({ children }) {
   const navigate = useNavigate();
   const { user, resetUser } = useUserState();
-
+  const handleSignOut = () => {
+    resetUser();
+    navigate('/signUp');
+  };
   return (
     <Wrapper>
       <div className="left">
@@ -102,19 +106,14 @@ export default function Header({ children }) {
 
       <div className="right">
         <Profile>
-          <div className="userimg">
-            <img src="/images/cat-tabby.svg" alt="" />
+          <div className="userImg">
+            <TabbyCat />
           </div>
           <div>
             <span>{user.name}</span>
           </div>
         </Profile>
-        <SignOut
-          onClick={() => {
-            navigate('/signUp');
-            resetUser();
-          }}
-        >
+        <SignOut onClick={handleSignOut}>
           <button>登出</button>
         </SignOut>
         {children}

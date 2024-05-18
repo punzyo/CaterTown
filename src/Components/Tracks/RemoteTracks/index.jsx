@@ -6,10 +6,10 @@ import {
 } from '@livekit/components-react';
 import React, { useRef, useState, useEffect } from 'react';
 import AudioManager from '../AudioTracks';
-import VideoContainer from '../../VideoContainer';
-import { useGameSettings } from '../../../utils/zustand';
-import MemberIcon from '../../MemberIcon';
-import { useRemoteTracks } from '../../../utils/hooks/useFilteredTracks';
+import VideoContainer from '@/Components/VideoContainer';
+import { useGameSettings } from '@/utils/zustand';
+import MemberIcon from '@/Components/MemberIcon';
+import { useRemoteTracks } from '@/utils/hooks/useFilteredTracks';
 const Wrapper = styled.div`
   position: relative;
   top: -230px;

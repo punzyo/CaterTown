@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import MemberIcon from '../../../../MemberIcon';
+import MemberIcon from '@/Components/MemberIcon';
 import { useState, useEffect } from 'react';
-import { editPermissionLevel } from '../../../../../firebase/firestore';
+import { editPermissionLevel } from '@/utils/firebase/firestore';
 const Wrapper = styled.div`
   position: absolute;
   left: 90%;
@@ -149,7 +149,8 @@ export default function ChangePermission({
   const renderPermissionOptions = (player, currentLevel, levels) => {
     return levels.map(
       (p) =>
-        currentLevel !== p && currentLevel!=='creator' && (
+        currentLevel !== p &&
+        currentLevel !== 'creator' && (
           <span key={p} onClick={() => handlePermissionClick(player.userId, p)}>
             {p}
           </span>

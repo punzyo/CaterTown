@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import FullscreenButton from '../Buttons/FullscreenButton';
 import { ConnectionQualityIndicator } from '@livekit/components-react';
-import { useGameSettings } from '../../utils/zustand';
+import { useGameSettings } from '@/utils/zustand';
 import UserIcon from '../Icons/UserIcon';
 export const Wrapper = styled.div`
   position: ${(props) => (props.$isFullScreen ? 'fixed' : 'relative')};

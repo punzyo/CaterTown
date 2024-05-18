@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { collection, query, onSnapshot } from 'firebase/firestore';
-import { db } from '../../firebase/firestore';
+import { db } from '@/utils/firebase/firestore';
 
-export const usePlayer = (roomId ) => {
+export const usePlayer = (roomId) => {
   const [players, setPlayers] = useState();
 
   useEffect(() => {
@@ -13,7 +13,6 @@ export const usePlayer = (roomId ) => {
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const playersData = [];
       querySnapshot.forEach((doc) => {
-
         playersData.push({
           ...doc.data(),
         });

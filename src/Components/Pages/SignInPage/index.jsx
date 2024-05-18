@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import Cat from '../../Cat';
-import useValidatedInput from '../../../utils/hooks/useValidatedInput';
-import { signInToAuth } from '../../../firebase/auth';
-import { getUserFromFirestore } from '../../../firebase/firestore';
-import { useUserState } from '../../../utils/zustand';
-import { useEffect } from 'react';
-import Logo from '../../Logo';
+import Cat from '@/Components/Cat';
+import useValidatedInput from '@/utils/hooks/useValidatedInput';
+import { signInToAuth } from '@/utils/firebase/auth';
+import { getUserFromFirestore } from '@/utils/firebase/firestore';
+import { useUserState } from '@/utils/zustand';
+import Logo from '@/Components/Logo';
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;

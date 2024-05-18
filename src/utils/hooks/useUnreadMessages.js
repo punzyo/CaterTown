@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../../firebase/firestore';
-import { resetUnreadMessage } from '../../firebase/firestore';
+import { db } from '@/utils/firebase/firestore';
+import { resetUnreadMessage } from '@/utils/firebase/firestore';
 
 export function useUnreadMessages({
   userId,
@@ -20,13 +20,12 @@ export function useUnreadMessages({
     const unsubscribe = onSnapshot(
       messageRef,
       (docSnapshot) => {
-
         if (docSnapshot.exists()) {
           const data = docSnapshot.data();
 
           const privateChannelCount =
             data?.messages[privateChannelId]?.count || 0;
-    
+
           if (
             !minimizeMessages &&
             !isPublicChannel &&
@@ -46,7 +45,7 @@ export function useUnreadMessages({
     );
 
     return () => unsubscribe();
-  }, [userId, roomId, privateChannelId, isPublicChannel,minimizeMessages]);
+  }, [userId, roomId, privateChannelId, isPublicChannel, minimizeMessages]);
 
   return messages;
 }

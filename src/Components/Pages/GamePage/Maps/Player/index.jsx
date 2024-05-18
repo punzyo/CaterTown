@@ -1,10 +1,7 @@
 import styled from 'styled-components';
-import PRMark from '../../../../PRMark';
+import PRMark from '@/Components/PRMark';
 import { playerWidth, playerHeight } from '../map2';
-import {
-  catsXPositions,
-  catsYPositions,
-} from '../../../../../assets/charNames';
+import { catsXPositions, catsYPositions } from '@/assets/charNames';
 const Wrapper = styled.div`
   position: absolute;
   width: ${playerWidth}px;
@@ -53,7 +50,7 @@ export default function Player({
   permissionLevel,
   githubId,
   pullRequests,
-children,
+  children,
 }) {
   const characterImage = `/images/animals/${character}.png`;
   const backgroundPosition = `${catsXPositions[frame]} ${catsYPositions[direction]}`;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { collection, doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../../firebase/firestore';
+import { db } from '@/utils/firebase/firestore';
 
 export const useConditionalPullRequests = ({
   userId,

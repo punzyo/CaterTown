@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
-import theme from '../../../theme';
+import theme from '@/theme';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../Buttons/Button';
-import Logo from '../../Logo';
+import Button from '@/Components/Buttons/Button';
+import Logo from '@/Components/Logo';
 import InfoCard from './InfoCard';
-import { CalicoCat, GreyCat, OrangeCat } from '../../Icons/CatIcons';
+import { CalicoCat, GreyCat, OrangeCat } from '@/Components/Icons/CatIcons';
 const containerStyles = css`
   border-radius: 5px;
   font-size: 16px;

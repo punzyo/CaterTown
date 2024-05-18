@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ref, onValue } from 'firebase/database';
-import { rtdb } from '../../firebase/realtime';
+import { rtdb } from '@/utils/firebase/realtime';
 import { useLocation } from 'react-router-dom';
 
 export function useOnlineUserCount(roomId) {

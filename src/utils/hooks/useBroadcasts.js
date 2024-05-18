@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { doc, collection, onSnapshot } from 'firebase/firestore';
-import { db } from '../../firebase/firestore';
+import { db } from '@/utils/firebase/firestore';
 
 export const useBroadcasts = ({ roomId }) => {
   const [broadcasts, setBroadcasts] = useState([]);
 
   useEffect(() => {
-    if (!roomId) return; 
+    if (!roomId) return;
     const roomRef = doc(db, 'rooms', roomId);
     const broadcastsRef = collection(roomRef, 'broadcasts');
     const unsubscribe = onSnapshot(broadcastsRef, (querySnapshot) => {
@@ -14,13 +14,13 @@ export const useBroadcasts = ({ roomId }) => {
       const filteredBroadcasts = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        const publishTime = new Date(data.publishTime.seconds * 1000); 
-        const expirationTime = new Date(data.expirationTime.seconds * 1000) 
-        if (publishTime <= now && (!expirationTime || expirationTime > now)) { 
-          filteredBroadcasts.push({...data, id: doc.id}); 
+        const publishTime = new Date(data.publishTime.seconds * 1000);
+        const expirationTime = new Date(data.expirationTime.seconds * 1000);
+        if (publishTime <= now && (!expirationTime || expirationTime > now)) {
+          filteredBroadcasts.push({ ...data, id: doc.id });
         }
       });
-      setBroadcasts(filteredBroadcasts); 
+      setBroadcasts(filteredBroadcasts);
     });
 
     return () => unsubscribe();

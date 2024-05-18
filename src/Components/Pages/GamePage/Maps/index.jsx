@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState, useEffect, useRef, useReducer, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { updatePlayerPosition } from '../../../../firebase/firestore.js';
+import { updatePlayerPosition } from '@/utils/firebase/firestore.js';
 import {
   mapIndex,
   playerHeight,
@@ -10,13 +10,10 @@ import {
   map2Collision,
   map2Room,
 } from './map2.js';
-import {
-  catsXPositions,
-  catsYPositions,
-} from '../../../../assets/charNames.js';
-import { useUserState } from '../../../../utils/zustand.js';
-import RemoteTracks from '../../../Tracks/RemoteTracks/index.jsx';
-import { useGameSettings } from '../../../../utils/zustand.js';
+import { catsXPositions } from '@/assets/charNames.js';
+import { useUserState } from '@/utils/zustand.js';
+import RemoteTracks from '@/Components/Tracks/RemoteTracks/index.jsx';
+import { useGameSettings } from '@/utils/zustand.js';
 import BroadcastMarquee from './BroadcastMarquee/index.jsx';
 import Player from './Player/index.jsx';
 const Wrapper = styled.div`

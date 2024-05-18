@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import InviteButton from '../../../Buttons/InviteButton';
+import InviteButton from '@/Components/Buttons/InviteButton';
 import { useNavigate } from 'react-router-dom';
-import Cat from '../../../Cat';
-import TrashCanIcon from '../../../Icons/TrashCanIcon';
-import LeaveRoomIcon from '../../../Icons/LeaveRoomIcon';
+import Cat from '@/Components/Cat';
+import TrashCanIcon from '@/Components/Icons/TrashCanIcon';
+import LeaveRoomIcon from '@/Components/Icons/LeaveRoomIcon';
 import DeleteDialog from './DeleteDialog';
-import { useOnlineUserCount } from '../../../../utils/hooks/useOnlineUserCount';
+import { useOnlineUserCount } from '@/utils/hooks/useOnlineUserCount';
 
 const Wrapper = styled.div`
   height: 400px;

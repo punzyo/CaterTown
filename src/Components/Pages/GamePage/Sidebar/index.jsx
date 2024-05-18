@@ -1,15 +1,15 @@
 import styled from 'styled-components';
 import PullRequests from '../PullRequests';
-import InviteButton from '../../../Buttons/InviteButton';
-import CloseButton from '../../../Buttons/CloseButton';
-import { useGameSettings } from '../../../../utils/zustand';
+import InviteButton from '@/Components/Buttons/InviteButton';
+import CloseButton from '@/Components/Buttons/CloseButton';
+import { useGameSettings } from '@/utils/zustand';
 import MemberInfo from './MemberInfo';
 import PublicMessage from '../PublicMessage';
-import SearchBar from '../../../SearchBar';
+import SearchBar from '@/Components/SearchBar';
 import { useState, useMemo } from 'react';
-import { usePrivateMessages } from '../../../../utils/hooks/usePrivateMessages';
-import { useUnreadMessages } from '../../../../utils/hooks/useUnreadMessages';
-import { usePublicMessages } from '../../../../utils/hooks/usePublicMessages';
+import { usePrivateMessages } from '@/utils/hooks/usePrivateMessages';
+import { useUnreadMessages } from '@/utils/hooks/useUnreadMessages';
+import { usePublicMessages } from '@/utils/hooks/usePublicMessages';
 const Wrapper = styled.div`
   width: 300px;
   height: calc(100% - 100px);
@@ -105,7 +105,10 @@ export default function Sidebar({
           }}
         />
       </Title>
-      <SearchBar onChange={(e) => setSearchTerm(e.target.value)} placeholder='搜尋成員'/>
+      <SearchBar
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="搜尋成員"
+      />
       {players && userId && onlineStatus && (
         <MemberWrapper>
           <span>上線中 - {filteredOnlineMembers.length}</span>

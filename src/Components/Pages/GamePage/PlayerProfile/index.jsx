@@ -1,18 +1,18 @@
 import styled from 'styled-components';
-import MemberIcon from '../../../MemberIcon';
-import OnlineStatus from '../../../OnlineStatus';
+import MemberIcon from '@/Components/MemberIcon';
+import OnlineStatus from '@/Components/OnlineStatus';
 import { useState, useEffect } from 'react';
-import GitHubLogo from '../../../GitHubLogo';
-import { useGameSettings, useUserState } from '../../../../utils/zustand';
-import { useFormInput } from '../../../../utils/hooks/useFormInput';
+import GitHubIcon from '@/Components/Icons/GitHubIcon';
+import { useGameSettings, useUserState } from '@/utils/zustand';
+import { useFormInput } from '@/utils/hooks/useFormInput';
 import {
   getUserDataById,
   editPlayerGitHub,
   updateTutorialState,
-} from '../../../../firebase/firestore';
+} from '@/utils/firebase/firestore';
 import DashBoard from './DashBoard';
 import Tutorial from './Tutorial';
-import TutorialIcon from '../../../Icons/TutorialIcon';
+import TutorialIcon from '@/Components/Icons/TutorialIcon';
 const Wrapper = styled.div`
   position: relative;
   min-width: 160px;
@@ -277,7 +277,7 @@ export default function PlayerProfile({
               }}
             >
               <div>
-                <GitHubLogo />
+                <GitHubIcon />
                 <span>GitHub ID</span>
               </div>
               {editGitHubId ? (

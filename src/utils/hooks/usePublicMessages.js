@@ -1,30 +1,31 @@
 import { useEffect, useState } from 'react';
-import { doc, onSnapshot } from 'firebase/firestore'; 
-import { db } from '../../firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '@/utils/firebase/firestore';
 
 export const usePublicMessages = (roomId) => {
-    const [messages, setMessages] = useState();
-  
-    useEffect(() => {
-      if (!roomId) return; 
-  
+  const [messages, setMessages] = useState();
 
-      const messagesRef = doc(db, `rooms/${roomId}/publicMessages/messages`);
-  
+  useEffect(() => {
+    if (!roomId) return;
 
-      const unsubscribe = onSnapshot(messagesRef, (docSnapshot) => {
+    const messagesRef = doc(db, `rooms/${roomId}/publicMessages/messages`);
+
+    const unsubscribe = onSnapshot(
+      messagesRef,
+      (docSnapshot) => {
         if (docSnapshot.exists()) {
-          setMessages(docSnapshot.data().messages || []); 
+          setMessages(docSnapshot.data().messages || []);
         } else {
-          setMessages([]); 
+          setMessages([]);
         }
-      }, err => {
-        console.error("Error while fetching the messages:", err);
-      });
-  
- 
-      return () => unsubscribe();
-    }, [roomId]);  
-  
-    return messages;
-  };
+      },
+      (err) => {
+        console.error('Error while fetching the messages:', err);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [roomId]);
+
+  return messages;
+};

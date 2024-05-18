@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {
   deleteRoomFromAllUsers,
   removeUserFromRoom,
-} from '../../../../../firebase/firestore';
+} from '@/utils/firebase/firestore';
 const Wrapper = styled.div`
   position: absolute;
   right: 0;

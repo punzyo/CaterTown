@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { useFormInput } from '../../../../../utils/hooks/useFormInput';
-import { sendBroadcast } from '../../../../../firebase/firestore';
+import { useFormInput } from '@/utils/hooks/useFormInput';
+import { sendBroadcast } from '@/utils/firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 const Wrapper = styled.div`
   display: flex;
@@ -58,7 +58,7 @@ const Wrapper = styled.div`
     align-items: start;
     textarea {
       flex-grow: 1;
-height: 145px;
+      height: 145px;
       background-color: inherit;
       border: 1px solid #3e477c;
       border-radius: 5px;
@@ -79,22 +79,23 @@ export default function BroadCast({
   const hourSelectedInput = useFormInput(1);
 
   const handleBroadcastClick = async () => {
-    if(!broadCastTitleInput.value || !broadCastContentInput.value) return
+    if (!broadCastTitleInput.value || !broadCastContentInput.value) return;
     const publishTimeObj = Timestamp.now();
     const currentDate = publishTimeObj.toDate();
     const hoursToAdd = parseInt(hourSelectedInput.value, 10);
-    const expirationTimeObj = new Date(currentDate.getTime() + hoursToAdd * 3600 * 1000);
+    const expirationTimeObj = new Date(
+      currentDate.getTime() + hoursToAdd * 3600 * 1000
+    );
 
     const expirationTime = expirationTimeObj.toISOString();
-    
+
     const broadcastData = {
       userId,
       charName: playerCharName,
       title: broadCastTitleInput.value,
-      publishTime:publishTimeObj,
+      publishTime: publishTimeObj,
       expirationTime,
       content: broadCastContentInput.value,
-      
     };
     const response = await sendBroadcast({ roomId, broadcastData });
 

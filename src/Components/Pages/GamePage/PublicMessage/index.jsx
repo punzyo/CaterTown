@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import { useFormInput } from '../../../../utils/hooks/useFormInput';
+import { useFormInput } from '@/utils/hooks/useFormInput';
 import {
   sendPublicMessage,
   sendPrivateMessage,
   addUnreadMessage,
   resetUnreadMessage,
-} from '../../../../firebase/firestore';
+} from '@/utils/firebase/firestore';
 import { useState, useEffect, useRef } from 'react';
-import MaximizeIcon from '../../../Icons/MaximizeIcon';
-import MinimizeIcon from '../../../Icons/MinimizeIcon';
+import MaximizeIcon from '@/Components/Icons/MaximizeIcon';
+import MinimizeIcon from '@/Components/Icons/MinimizeIcon';
 const Wrapper = styled.div`
   width: 350px;
   height: ${(props) => (props.$minimizeMessages ? '0px' : '300px')};

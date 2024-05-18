@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useUserState } from '../../utils/zustand';
+import { useUserState } from '@/utils/zustand';
 const LogoWrapper = styled.button`
   display: flex;
   align-items: center;
@@ -21,12 +21,9 @@ export default function Logo() {
   return (
     <LogoWrapper
       onClick={() => {
-        if(user.id)
-        {
+        if (user.id) {
           navigate('/home');
-        }
-        else
-        navigate('/')
+        } else navigate('/');
       }}
     >
       <img src="/images/cat_logo_64.png" alt="logo" />

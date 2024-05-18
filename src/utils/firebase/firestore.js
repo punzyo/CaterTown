@@ -16,11 +16,7 @@ import {
   deleteDoc,
   arrayRemove,
 } from 'firebase/firestore';
-import {
-  createRtRoom,
-  deleteRoomFromRT,
-  removeUserFromRTRoom,
-} from './realtime';
+import { deleteRealTimeData, setRealTimeData } from './realtime';
 
 export const db = getFirestore(app);
 
@@ -48,7 +44,10 @@ export async function createRoom({ roomName, map }) {
       createDate: Timestamp.now(),
       map,
     });
-    createRtRoom(roomDocRef.id);
+    setRealTimeData(`rooms/${roomDocRef.id}`, {
+      created: new Date().toISOString(),
+      users: {},
+    });
     return roomDocRef.id;
   } catch (e) {
     console.error('Error adding document: ', e);
@@ -119,22 +118,6 @@ export async function getUserDataById(userId) {
     return data;
   } catch (error) {
     console.error(error);
-  }
-}
-
-export async function getUserRoomsbyId(userId) {
-  const roomsCollectionRef = collection(db, 'users', userId, 'rooms');
-
-  try {
-    const querySnapshot = await getDocs(roomsCollectionRef);
-    const rooms = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    return rooms;
-  } catch (error) {
-    console.error('Error getting user rooms:', error);
-    throw new Error('Failed to fetch user rooms.');
   }
 }
 
@@ -352,15 +335,15 @@ export async function deleteRoomFromAllUsers(roomId) {
       'unReadMessages',
       'users',
     ];
-    for (const subcollection of subcollections) {
-      const subRef = collection(db, `rooms/${roomId}/${subcollection}`);
+    for (const subCollection of subcollections) {
+      const subRef = collection(db, `rooms/${roomId}/${subCollection}`);
       const subSnapshot = await getDocs(subRef);
       for (const subDoc of subSnapshot.docs) {
-        await deleteDoc(doc(db, `rooms/${roomId}/${subcollection}`, subDoc.id));
+        await deleteDoc(doc(db, `rooms/${roomId}/${subCollection}`, subDoc.id));
       }
     }
     await deleteDoc(roomRef);
-    await deleteRoomFromRT(roomId);
+    await deleteRealTimeData(`rooms/${roomId}`, roomId);
   } catch (error) {
     console.error('Error in deleting room and associated data:', error);
   }
@@ -383,7 +366,7 @@ export async function removeUserFromRoom({ roomId, userId }) {
   const roomRef = doc(db, 'rooms', roomId);
 
   try {
-    await removeUserFromRTRoom({ roomId, userId });
+    await deleteRealTimeData(`rooms/${roomId}/users/${userId}`);
     await deleteDoc(userRoomRef);
 
     const roomSnap = await getDoc(roomRef);
