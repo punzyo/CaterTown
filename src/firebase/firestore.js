@@ -111,7 +111,7 @@ export async function addRoomToUser({
   }
 }
 
-export async function getUserDatabyId(userId) {
+export async function getUserDataById(userId) {
   const userDocRef = doc(db, 'users', userId);
   try {
     const docSnap = await getDoc(userDocRef);

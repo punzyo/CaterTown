@@ -191,6 +191,10 @@ export default function GamePage() {
     const token = await response.text();
     setToken(token);
   };
+  const handleConnected = (isConnected) => {
+    setIsConnected(isConnected);
+    setIsConnecting(false);
+  };
   return (
     <Wrapper
       onClick={() => {
@@ -205,15 +209,12 @@ export default function GamePage() {
         data-lk-theme="default"
         style={{ backgroundColor: 'inherit' }}
         onConnected={() => {
-          setIsConnected(true);
-          setIsConnecting(false);
+          handleConnected(true);
         }}
         onDisconnected={() => {
-          setIsConnected(false);
-          setIsConnecting(false);
+          handleConnected(false);
         }}
       >
-        {/* <RoomAudioRenderer muted={false}/> */}
         <TracksProvider></TracksProvider>
         <Map
           broadcasts={broadcasts}

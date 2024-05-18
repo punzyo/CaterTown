@@ -34,7 +34,7 @@ const MapWrapper = styled.div`
   user-select: none;
 `;
 
-const MapABC = styled.div`
+const MapBorder = styled.div`
   position: relative;
   top: ${(props) => props.$top};
   left: ${(props) => props.$left};
@@ -110,7 +110,6 @@ export default function Map({
   const keysPressed = useRef(false);
   const canMove = useRef(true);
   const { resetPosition, setResetPosition, isFullScreen } = useGameSettings();
-
 
   useEffect(() => {
     if (!userId) return;
@@ -345,44 +344,56 @@ export default function Map({
   );
 
   const playerElements = useMemo(
-    () => players
-      ?.filter(player => player.userId !== userId)
-      .map(player => (
-        <Player
-          key={player.userId}
-          character={player.character}
-          charName={player.charName}
-          left={player.position.left}
-          top={player.position.top}
-          frame={player.position.frame}
-          direction={player.position.direction}
-          isCurrentPlayer={false}
-          permissionLevel={permissionLevel}
-          githubId={player.gitHubId}
-          pullRequests={pullRequests}
-        />
-      )),
+    () =>
+      players
+        ?.filter((player) => player.userId !== userId)
+        .map((player) => (
+          <Player
+            key={player.userId}
+            character={player.character}
+            charName={player.charName}
+            left={player.position.left}
+            top={player.position.top}
+            frame={player.position.frame}
+            direction={player.position.direction}
+            isCurrentPlayer={false}
+            permissionLevel={permissionLevel}
+            githubId={player.gitHubId}
+            pullRequests={pullRequests}
+          />
+        )),
     [players, userId, permissionLevel, pullRequests]
   );
 
-  const currentPlayerElement = useMemo(() => (
-    position && playerChar && (
-      <Player
-        character={playerChar}
-        charName={playerCharName}
-        left={position.left}
-        top={position.top}
-        frame={currentFrame}
-        direction={direction}
-        isCurrentPlayer={true}
-        permissionLevel={permissionLevel}
-        githubId={gitHubId}
-        pullRequests={pullRequests}
-      >
-        <RemoteTracks nearbyPlayers={nearbyPlayers} />
-      </Player>
-    )),
-    [position, playerChar, currentFrame, direction, nearbyPlayers, gitHubId, pullRequests, permissionLevel]
+  const currentPlayerElement = useMemo(
+    () =>
+      position &&
+      playerChar && (
+        <Player
+          character={playerChar}
+          charName={playerCharName}
+          left={position.left}
+          top={position.top}
+          frame={currentFrame}
+          direction={direction}
+          isCurrentPlayer={true}
+          permissionLevel={permissionLevel}
+          githubId={gitHubId}
+          pullRequests={pullRequests}
+        >
+          <RemoteTracks nearbyPlayers={nearbyPlayers} />
+        </Player>
+      ),
+    [
+      position,
+      playerChar,
+      currentFrame,
+      direction,
+      nearbyPlayers,
+      gitHubId,
+      pullRequests,
+      permissionLevel,
+    ]
   );
   return (
     <Wrapper>
@@ -398,10 +409,10 @@ export default function Map({
 
       {position ? (
         <MapWrapper>
-          <MapABC $top={`${position.top}px`} $left={`${position.left}px`}>
+          <MapBorder $top={`${position.top}px`} $left={`${position.left}px`}>
             {mapElements}
             {playerElements}
-          </MapABC>
+          </MapBorder>
 
           {position && playerChar && currentPlayerElement}
         </MapWrapper>

@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
 import theme from '../../../theme';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../Buttons/Button';
 import Logo from '../../Logo';
-import { useUserState } from '../../../utils/zustand';
+import InfoCard from './InfoCard';
+import { CalicoCat, GreyCat, OrangeCat } from '../../Icons/CatIcons';
 const containerStyles = css`
   border-radius: 5px;
   font-size: 16px;
@@ -143,7 +143,7 @@ const Main = styled.main`
         display: flex;
         align-items: center;
       }
-      img {
+      svg {
         width: 30px;
         height: 30px;
         padding-bottom: 2px;
@@ -256,35 +256,21 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="bottom">
-          <div>
-            <h2>
-              <img src="/images/cat-orange.svg" alt="cat-orange" />
-              讓協作團隊一起在線上相聚
-            </h2>
-            <p>
-              Cater
-              town提供了一個溫暖的線上虛擬環境，不只有提供視音訊的服務，還有高達50種可愛貓咪可供選擇，讓我們不管身在何方，都能用自己最喜歡的樣貌，和夥伴們一起在線上交流。
-            </p>
-          </div>
-          <div>
-            <h2>
-              <img src="/images/cat-calico.svg" alt="cat-calico" />
-              獨立空間，各自討論不打擾
-            </h2>
-            <p>
-              需要分組討論怎麼辦?不用擔心，只要進入特定空間，就不會收到外面視音訊的打擾，只能接收相同空間的訊息，讓分工作業討論變得更有效率!
-            </p>
-          </div>
-          <div>
-            <h2>
-              <img src="/images/cat-grey.svg" alt="cat-grey" />
-              追蹤PR，變得簡單又有趣
-            </h2>
-            <p>
-              藉由串接GitHub webhook，當追蹤的repository 收到pull
-              requests時，對應貓咪的頭上就會跑出驚嘆號的通知，讓多人協作的同時享受更多的樂趣。
-            </p>
-          </div>
+          <InfoCard
+            IconComponent={OrangeCat}
+            title="讓協作團隊一起在線上相聚"
+            description="Cater town提供了一個溫暖的線上虛擬環境，不只有提供視音訊的服務，還有高達50種可愛貓咪可供選擇，讓我們不管身在何方，都能用自己最喜歡的樣貌，和夥伴們一起在線上交流。"
+          />
+          <InfoCard
+            IconComponent={CalicoCat}
+            title="獨立空間，各自討論不打擾"
+            description="需要分組討論怎麼辦?不用擔心，只要進入特定空間，就不會收到外面視音訊的打擾，只能接收相同空間的訊息，讓分組討論變得更有效率!"
+          />
+          <InfoCard
+            IconComponent={GreyCat}
+            title="追蹤PR，變得簡單又有趣"
+            description="藉由串接GitHub webhook，當追蹤的repository 收到pull requests時，對應貓咪的頭上就會跑出驚嘆號的通知，讓多人協作的同時享受更多的樂趣。"
+          />
         </div>
       </Main>
     </>

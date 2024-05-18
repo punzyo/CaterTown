@@ -9,11 +9,11 @@ import Header from '../../Header';
 import SearchBar from '../../SearchBar';
 import RoomSkeleton from './RoomSkeleton';
 import Room from './Room';
-import TutirialIcon from '../../Icons/TutirialIcon';
+import TutorialIcon from '../../Icons/TutorialIcon';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import {
-  getUserDatabyId,
+  getUserDataById,
   updateTutorialState,
 } from '../../../firebase/firestore';
 const Wrapper = styled.main`
@@ -104,13 +104,13 @@ export default function HomePage() {
   useEffect(() => {
     if (!userId) return;
     (async () => {
-      const data = await getUserDatabyId(userId);
+      const data = await getUserDataById(userId);
       setUserData(data);
     })();
   }, [userId]);
 
   useEffect(() => {
-    if (!userId || !userData) return;
+    if (!userData) return;
     if (userData && !userData.hasViewedHomePageTutorial1) {
       runTutorial();
       updateTutorialState(userId, 'hasViewedHomePageTutorial1');
@@ -195,7 +195,7 @@ export default function HomePage() {
         </CreateSpace>
         <TutorialButton onClick={handleTutorialClick}>
           教學
-          <TutirialIcon />
+          <TutorialIcon />
         </TutorialButton>
       </Header>
       <SearchWrapper>

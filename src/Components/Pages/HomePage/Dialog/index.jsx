@@ -8,7 +8,7 @@ import {
   addRoomToUser,
   initPlayerData,
 } from '../../../../firebase/firestore';
-import { catImages } from '@/assets/charNames';
+import { catImages } from '../../../../assets/charNames';
 import CloseButton from '../../../Buttons/CloseButton';
 import Cat from '../../../Cat';
 const SliderWrapper = styled.div`

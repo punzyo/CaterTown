@@ -3,10 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Cat from '../../Cat';
 import useValidatedInput from '../../../utils/hooks/useValidatedInput';
 import { registerUserToAuth } from '../../../firebase/auth';
-import {
-  resetUnreadMessage,
-  saveUserToFirestore,
-} from '../../../firebase/firestore';
+import { saveUserToFirestore } from '../../../firebase/firestore';
 import Logo from '../../Logo';
 const Wrapper = styled.div`
   width: 100%;
@@ -123,7 +120,7 @@ export default function SignUpPage() {
   const email = useValidatedInput('', /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   const password = useValidatedInput('', /^.{6,}$/);
 
-  const signUp = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     if (!name.isValid) {
       alert('請確認名稱填寫正確');
@@ -143,17 +140,21 @@ export default function SignUpPage() {
         password: password.value,
       });
       if (!authID) return;
-      const isSaveSucess = await saveUserToFirestore({
+      const isSaveSuccess = await saveUserToFirestore({
         authID,
         name: name.value,
         email: email.value,
       });
-      if (!isSaveSucess) return;
+      if (!isSaveSuccess) return;
       navigate('/signIn');
     } catch (error) {
       console.error('註冊過程中發生錯誤:', error);
       alert('註冊過程中發生錯誤');
     }
+  };
+
+  const handleSignInClick = () => {
+    navigate('/signIn');
   };
   return (
     <Wrapper>
@@ -171,7 +172,7 @@ export default function SignUpPage() {
         <Bottom>
           <form
             onSubmit={(e) => {
-              signUp(e);
+              handleSignUp(e);
             }}
           >
             <InputWrapper $isValid={name.isValid} $value={name.value}>
@@ -204,13 +205,7 @@ export default function SignUpPage() {
             </InputWrapper>
             <SignUpButton type="submit">Sign up</SignUpButton>
           </form>
-          <SignInButton
-            onClick={() => {
-              navigate('/signIn');
-            }}
-          >
-            Sign in
-          </SignInButton>
+          <SignInButton onClick={handleSignInClick}>Sign in</SignInButton>
         </Bottom>
       </SignUpWrapper>
     </Wrapper>

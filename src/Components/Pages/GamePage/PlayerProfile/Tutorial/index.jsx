@@ -154,7 +154,7 @@ export default function Tutorial({setShowTutorial}) {
             <div key={index}>
               <Title>{item.title}</Title>
               {item.mediaType === 'gif' ? (
-                <img src={`/tutorial/${category}/${category}_${index}.gif`} />
+                <img src={`/tutorial/${category}/${category}_${index}.gif`} alt={item.title} />
               ) : (
                 <img
                   src={`/tutorial/${category}/${category}_${index}.png`}

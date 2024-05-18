@@ -9,5 +9,5 @@ const Wrapper = styled.div`
 `;
 
 export default function Cat({ image }) {
-  return <Wrapper $image={`${image}`}/>;
+  return <Wrapper $image={`${image}`} />;
 }

@@ -107,16 +107,12 @@ const SignUpButton = styled.button`
   cursor: pointer;
 `;
 export default function SignInPage() {
-  const { user, setUser } = useUserState();
+  const { setUser } = useUserState();
   const navigate = useNavigate();
   const emailInput = useValidatedInput('', /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   const passwordInput = useValidatedInput('', /^.{6,}$/);
 
-  useEffect(() => {
-    if (user.id) navigate('/home');
-  }, [user]);
-
-  const signIn = async (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
     if (!emailInput.isValid) {
       alert('請輸入正確的電子郵件');
@@ -127,13 +123,14 @@ export default function SignInPage() {
       return;
     }
     const user = await signInToAuth(emailInput.value, passwordInput.value);
-    if (!user) return;
     const userData = await getUserFromFirestore(user.uid);
     setUser(userData);
-    localStorage.setItem('CaterTownUser', JSON.stringify(userData));
     navigate('/');
     emailInput.clear();
     passwordInput.clear();
+  };
+  const handleSignUpClick = () => {
+    navigate('/signUp');
   };
   return (
     <Wrapper>
@@ -150,7 +147,7 @@ export default function SignInPage() {
         <Bottom>
           <form
             onSubmit={(e) => {
-              signIn(e);
+              handleSignIn(e);
             }}
           >
             <InputWrapper
@@ -179,13 +176,7 @@ export default function SignInPage() {
             </InputWrapper>
             <SignInUpButton type="submit">Sign in</SignInUpButton>
           </form>
-          <SignUpButton
-            onClick={() => {
-              navigate('/signUp');
-            }}
-          >
-            Sign up
-          </SignUpButton>
+          <SignUpButton onClick={handleSignUpClick}>Sign up</SignUpButton>
         </Bottom>
       </SignInWrapper>
     </Wrapper>

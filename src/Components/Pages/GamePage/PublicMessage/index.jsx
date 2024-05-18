@@ -7,7 +7,8 @@ import {
   resetUnreadMessage,
 } from '../../../../firebase/firestore';
 import { useState, useEffect, useRef } from 'react';
-
+import MaximizeIcon from '../../../Icons/MaximizeIcon';
+import MinimizeIcon from '../../../Icons/MinimizeIcon';
 const Wrapper = styled.div`
   width: 350px;
   height: ${(props) => (props.$minimizeMessages ? '0px' : '300px')};
@@ -135,7 +136,6 @@ export default function PublicMessage({
   roomId,
   publicMessages,
   privateChannel,
-  setPrivateChannel,
   isPublicChannel,
   setIsPublicChannel,
   privateMessages,
@@ -201,7 +201,35 @@ export default function PublicMessage({
     }
     messageInput.clear();
   };
+  const handleChannelClick = () => {
+    if (!isPublicChannel) return;
+    setIsPublicChannel(false);
+    if (minimizeMessages) setMinimizeMessages(false);
+    resetUnreadMessage({
+      roomId,
+      userId,
+      privateChannelId: privateChannel,
+    });
+  };
+  const handleIconClick = async () => {
+    if (!minimizeMessages && privateChannel) {
+      await resetUnreadMessage({
+        roomId,
+        privateChannelId: privateChannel,
+        userId,
+      });
+    }
+  };
+  const renderMessages = (messages) => {
+    if (!messages || !Array.isArray(messages)) return null;
 
+    return messages.map((message, index) => (
+      <Message key={index}>
+        <span>{message.charName} : </span>
+        <span>{message.message}</span>
+      </Message>
+    ));
+  };
   return (
     <Wrapper $minimizeMessages={minimizeMessages}>
       <MessageWrapper>
@@ -225,16 +253,7 @@ export default function PublicMessage({
             {privateChannel && (
               <Channel
                 $selected={!isPublicChannel}
-                onClick={() => {
-                  if(!isPublicChannel) return
-                  setIsPublicChannel(false);
-                  if (minimizeMessages) setMinimizeMessages(false);
-                  resetUnreadMessage({
-                    roomId,
-                    userId,
-                    privateChannelId: privateChannel,
-                  });
-                }}
+                onClick={handleChannelClick}
               >
                 {privateCharName}
                 {unreadMessages[privateChannel]?.count > 0 && (
@@ -245,51 +264,15 @@ export default function PublicMessage({
               </Channel>
             )}
           </ChannelWrapper>
-          <CloseIcon
-            onClick={async () => {
-              if (!minimizeMessages && privateChannel) {
-                await resetUnreadMessage({
-                  roomId,
-                  privateChannelId: privateChannel,
-                  userId,
-                });
-              }
-              setMinimizeMessages(!minimizeMessages);
-            }}
-          >
-            {minimizeMessages ? (
-              <svg
-                className="square"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-              >
-                <path d="M384 80c8.8 0 16 7.2 16 16V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V96c0-8.8 7.2-16 16-16H384zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z" />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
-              </svg>
-            )}
+          <CloseIcon onClick={handleIconClick}>
+            {minimizeMessages ? <MaximizeIcon /> : <MinimizeIcon />}
           </CloseIcon>
           <></>
         </MessageController>
         <Messages $minimizeMessages={minimizeMessages}>
-          {isPublicChannel &&
-            publicMessages &&
-            publicMessages.map((message, index) => (
-              <Message key={index}>
-                <span>{message.charName} : </span>
-                <span>{message.message}</span>
-              </Message>
-            ))}
-          {!isPublicChannel &&
-            privateMessages &&
-            privateMessages.map((message, index) => (
-              <Message key={index}>
-                <span>{message.charName} : </span>
-                <span>{message.message}</span>
-              </Message>
-            ))}
+          {isPublicChannel
+            ? renderMessages(publicMessages)
+            : renderMessages(privateMessages)}
           <div ref={messagesEndRef} />
         </Messages>
       </MessageWrapper>

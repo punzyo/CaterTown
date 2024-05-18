@@ -6,13 +6,13 @@ import GitHubLogo from '../../../GitHubLogo';
 import { useGameSettings, useUserState } from '../../../../utils/zustand';
 import { useFormInput } from '../../../../utils/hooks/useFormInput';
 import {
-  getUserDatabyId,
+  getUserDataById,
   editPlayerGitHub,
   updateTutorialState,
 } from '../../../../firebase/firestore';
 import DashBoard from './DashBoard';
 import Tutorial from './Tutorial';
-import TutirialIcon from '../../../Icons/TutirialIcon';
+import TutorialIcon from '../../../Icons/TutorialIcon';
 const Wrapper = styled.div`
   position: relative;
   min-width: 160px;
@@ -209,7 +209,7 @@ export default function PlayerProfile({
   useEffect(() => {
     if (!userId) return;
     (async () => {
-      const data = await getUserDatabyId(userId);
+      const data = await getUserDataById(userId);
       if (!data.hasViewedGamePageTutorial) {
         setShowTutorial(true);
         updateTutorialState(userId, 'hasViewedGamePageTutorial');
@@ -274,10 +274,6 @@ export default function PlayerProfile({
               className="github"
               onClick={() => {
                 setEditGitHubId(true);
-
-
-
-                
               }}
             >
               <div>
@@ -366,7 +362,7 @@ export default function PlayerProfile({
                 setShowTutorial(!showTutorial);
               }}
             >
-              <TutirialIcon /> 教學
+              <TutorialIcon /> 教學
             </button>
             <button onClick={resetUser}>登出</button>
           </div>

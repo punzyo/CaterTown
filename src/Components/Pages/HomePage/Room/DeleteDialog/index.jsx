@@ -40,6 +40,12 @@ export default function DeleteDialog({ room, userId, setShowDeleteDialog }) {
   const handleLeaveRoom = async (roomId) => {
     await removeUserFromRoom({ userId, roomId });
   };
+  const handleRoomAction = (room) => {
+    room.isCreator ? handleDeleteRoom(room.id) : handleLeaveRoom(room.id);
+  };
+  const closeDialog = () => {
+    setShowDeleteDialog({ show: false, id: '' });
+  };
   return (
     <Wrapper
       onClick={(e) => {
@@ -48,22 +54,8 @@ export default function DeleteDialog({ room, userId, setShowDeleteDialog }) {
     >
       <span>{room.isCreator ? '確定要刪除此房間?' : '確定要退出此房間?'}</span>
       <div>
-        <button
-          onClick={() => {
-            room.isCreator
-              ? handleDeleteRoom(room.id)
-              : handleLeaveRoom(room.id);
-          }}
-        >
-          確定
-        </button>
-        <button
-          onClick={() => {
-            setShowDeleteDialog({ show: false, id: '' });
-          }}
-        >
-          取消
-        </button>
+        <button onClick={() => handleRoomAction(room)}>確定</button>
+        <button onClick={closeDialog}>取消</button>
       </div>
     </Wrapper>
   );

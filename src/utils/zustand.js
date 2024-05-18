@@ -1,7 +1,10 @@
 import { create } from 'zustand';
 export const useUserState = create(set => ({
   user: JSON.parse(localStorage.getItem('CaterTownUser')) || null, 
-  setUser: user => set({ user }), 
+  setUser: (userData) => {
+    localStorage.setItem('CaterTownUser', JSON.stringify(userData)); 
+    set({ user: userData }); 
+  },
   resetUser: () => {
     localStorage.removeItem('CaterTownUser'); 
     set({ user: null });
