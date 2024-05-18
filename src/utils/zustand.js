@@ -44,3 +44,4 @@ export const useGameSettings = create((set) => ({
   setIsFullScreen: (isFullScreen) => set({ isFullScreen }),
   setResetPosition: (resetPosition) => set({ resetPosition }),
 }));
+

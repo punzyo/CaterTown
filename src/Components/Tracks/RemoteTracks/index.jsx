@@ -6,11 +6,10 @@ import {
 } from '@livekit/components-react';
 import React, { useRef, useState, useEffect } from 'react';
 import AudioManager from '../AudioTracks';
-import VideoContainer from '../../VedioContainer';
+import VideoContainer from '../../VideoContainer';
 import { useGameSettings } from '../../../utils/zustand';
 import MemberIcon from '../../MemberIcon';
-import { usePlayerTracks } from '../../../utils/zustand';
-import { Track } from 'livekit-client';
+import { useRemoteTracks } from '../../../utils/hooks/useFilteredTracks';
 const Wrapper = styled.div`
   position: relative;
   top: -230px;
@@ -122,26 +121,8 @@ const MemberIconWrapper = styled.div`
   }
 `;
 export default function RemoteTracks({ nearbyPlayers }) {
-  const { allTracks } = usePlayerTracks();
-  const objTracks = allTracks?.reduce((acc, track) => {
-    const participantIdentity = track.participant.identity;
-    const isLocalCheck =
-      !track.participant.isLocal &&
-      nearbyPlayers.some((player) => player.charName === participantIdentity);
+  const tracks = useRemoteTracks(nearbyPlayers);
 
-    if (isLocalCheck) {
-      if (track.source === Track.Source.ScreenShare && track.publication) {
-        acc[participantIdentity] = track;
-      } else if (
-        track.source === Track.Source.Camera &&
-        !acc[participantIdentity]
-      ) {
-        acc[participantIdentity] = track;
-      }
-    }
-    return acc;
-  }, {});
-  const tracks = Object.values(objTracks);
   const { isFullScreen, setIsFullScreen } = useGameSettings();
   const [fullScreenTrack, setFullScreenTrack] = useState('');
   const refs = useRef({});

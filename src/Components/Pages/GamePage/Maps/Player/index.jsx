@@ -53,6 +53,7 @@ export default function Player({
   permissionLevel,
   githubId,
   pullRequests,
+children,
 }) {
   const characterImage = `/images/animals/${character}.png`;
   const backgroundPosition = `${catsXPositions[frame]} ${catsYPositions[direction]}`;
@@ -72,6 +73,7 @@ export default function Player({
       {isCurrentPlayer || permissionLevel !== 'member' ? (
         <PRMark githubId={githubId} pullRequests={pullRequests} />
       ) : null}
+      {children}
     </Wrapper>
   );
 }

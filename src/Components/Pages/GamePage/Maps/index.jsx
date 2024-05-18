@@ -388,6 +388,7 @@ export default function Map({
       position,
       playerChar,
       currentFrame,
+      playerCharName,
       direction,
       nearbyPlayers,
       gitHubId,

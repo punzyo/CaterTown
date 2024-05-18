@@ -1,23 +1,8 @@
-import { Track } from 'livekit-client';
 import { AudioTrack } from '@livekit/components-react';
-import { usePlayerTracks } from '../../../utils/zustand';
+import { useAudioTracks } from '../../../utils/hooks/useFilteredTracks';
 
-export default function AudioManager({
-  isLocal,
-  nearbyPlayers,
-  audioVolume,
-}) {
-  const { allTracks } = usePlayerTracks();
-  const audioTracks = allTracks
-    .filter((track) => track.source === Track.Source.Microphone)
-    .filter((track) =>
-      isLocal
-        ? track.participant.isLocal
-        : !track.participant.isLocal &&
-          nearbyPlayers.some(
-            (player) => player.charName === track.participant.identity
-          )
-    );
+export default function AudioManager({ isLocal, nearbyPlayers, audioVolume }) {
+  const audioTracks = useAudioTracks(isLocal, nearbyPlayers);
 
   return (
     <>
