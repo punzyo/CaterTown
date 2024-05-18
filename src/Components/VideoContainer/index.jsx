@@ -18,7 +18,6 @@ export const Wrapper = styled.div`
   top: 0;
   border-radius: 5px;
   z-index: ${(props) => (props.$isFullScreen ? '15' : '5')};
-  transition: width 0.3s ease-in-out;
   .lk-participant-media-video {
     width: 100%;
     border-radius: 5px;

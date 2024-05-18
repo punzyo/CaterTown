@@ -97,7 +97,7 @@ export default function BroadCast({
       expirationTime,
       content: broadCastContentInput.value,
     };
-    const response = await sendBroadcast({ roomId, broadcastData });
+     await sendBroadcast({ roomId, broadcastData });
 
     broadCastTitleInput.clear();
     broadCastContentInput.clear();
