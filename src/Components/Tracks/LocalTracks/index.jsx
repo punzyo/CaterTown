@@ -5,7 +5,7 @@ import {
   VideoTrack,
   TrackRefContext,
 } from '@livekit/components-react';
-import VideoContainer from '../VideoContainer';
+import VideoContainer from '../../VedioContainer';
 import { useGameSettings, usePlayerTracks } from '../../../utils/zustand';
 import { Track } from 'livekit-client';
 useGameSettings;

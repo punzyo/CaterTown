@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import Cat from '../../Cat';
 import useValidatedInput from '../../../utils/hooks/useValidatedInput';
 import { registerUserToAuth } from '../../../firebase/auth';
-import { resetUnreadMessage, saveUserToFirestore } from '../../../firebase/firestore';
+import {
+  resetUnreadMessage,
+  saveUserToFirestore,
+} from '../../../firebase/firestore';
 import Logo from '../../Logo';
 const Wrapper = styled.div`
   width: 100%;
@@ -15,7 +18,7 @@ const Wrapper = styled.div`
   gap: 10px;
   background-image: url('/signInBg.png');
   background-size: cover;
-  >button{
+  > button {
     position: absolute;
     left: 10px;
     top: 10px;
@@ -139,14 +142,14 @@ export default function SignUpPage() {
         email: email.value,
         password: password.value,
       });
-      if(!authID) return
-        const isSaveSucess = await saveUserToFirestore({
-          authID,
-          name: name.value,
-          email: email.value,
-        });
-        if(!isSaveSucess) return
-        navigate('/signin');
+      if (!authID) return;
+      const isSaveSucess = await saveUserToFirestore({
+        authID,
+        name: name.value,
+        email: email.value,
+      });
+      if (!isSaveSucess) return;
+      navigate('/signIn');
     } catch (error) {
       console.error('註冊過程中發生錯誤:', error);
       alert('註冊過程中發生錯誤');
@@ -154,7 +157,7 @@ export default function SignUpPage() {
   };
   return (
     <Wrapper>
-      <Logo/>
+      <Logo />
       <SignUpWrapper>
         <Top>
           <Cat image="brown_8" />
@@ -203,7 +206,7 @@ export default function SignUpPage() {
           </form>
           <SignInButton
             onClick={() => {
-              navigate('/signin');
+              navigate('/signIn');
             }}
           >
             Sign in

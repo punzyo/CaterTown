@@ -1,24 +1,10 @@
 import { create } from 'zustand';
-export const useUserState = create((set) => ({
-  user: {
-    name: '',
-    email: '',
-    id: '',
-  },
-  setUser: (userData) =>
-    set((state) => ({
-      ...state,
-      user: { ...state.user, ...userData },
-    })),
+export const useUserState = create(set => ({
+  user: JSON.parse(localStorage.getItem('CaterTownUser')) || null, 
+  setUser: user => set({ user }), 
   resetUser: () => {
-    localStorage.removeItem('CaterTownUser');
-    set({
-      user: {
-        name: '',
-        email: '',
-        id: '',
-      },
-    });
+    localStorage.removeItem('CaterTownUser'); 
+    set({ user: null });
   }
 }));
 export const usePullRequests = create((set, get) => ({

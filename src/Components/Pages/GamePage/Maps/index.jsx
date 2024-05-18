@@ -16,9 +16,9 @@ import {
 } from '../../../../assets/charNames.js';
 import { useUserState } from '../../../../utils/zustand.js';
 import RemoteTracks from '../../../Tracks/RemoteTracks/index.jsx';
-import PRMark from '../../../PRMark/index.jsx';
 import { useGameSettings } from '../../../../utils/zustand.js';
 import BroadcastMarquee from './BroadcastMarquee/index.jsx';
+import Player from './Player/index.jsx';
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -32,66 +32,6 @@ const MapWrapper = styled.div`
   width: ${map2.width}px;
   height: ${map2.height}px;
   user-select: none;
-`;
-
-const Player = styled.div`
-  position: absolute;
-  top: calc(50% - ${playerHeight / 2}px);
-  left: calc(50% - ${playerWidth / 2}px);
-  /* transform: translate(-50%, -50%); */
-  width: ${playerWidth}px;
-  height: ${playerHeight}px;
-  z-index: 10;
-  background-position: -767px -833px;
-  background-size: 2048px 1088px;
-  background-image: url(/images/animals/${(props) => props.$character}.png);
-  &::after {
-    content: '${(props) => props.$charName}';
-    font-size: 12px;
-    font-weight: bold;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 2px;
-    bottom: -5px;
-    height: 16px;
-    color: black;
-    white-space: nowrap;
-    display: flex;
-    justify-content: center;
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 5px;
-  }
-`;
-const OtherPlayer = styled.div`
-  position: absolute;
-  width: ${playerWidth}px;
-  height: ${playerHeight}px;
-  left: ${(props) => props.$left};
-  top: ${(props) => props.$top};
-  background-position: ${(props) => props.$backgroundPosition};
-  background-size: 2048px 1088px;
-  background-image: url(/images/animals/${(props) => props.$character}.png);
-  color: black;
-  transition: top 0.2s, left 0.2s;
-  z-index: 10;
-  &::after {
-    content: '${(props) => props.$charName}';
-    font-size: 12px;
-    font-weight: bold;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 2px;
-    bottom: -5px;
-    height: 16px;
-    color: black;
-    white-space: nowrap;
-    display: flex;
-    justify-content: center;
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 5px;
-  }
 `;
 
 const MapABC = styled.div`
@@ -170,8 +110,7 @@ export default function Map({
   const keysPressed = useRef(false);
   const canMove = useRef(true);
   const { resetPosition, setResetPosition, isFullScreen } = useGameSettings();
-  const directionYPositions = catsYPositions;
-  const framesXPositions = catsXPositions;
+
 
   useEffect(() => {
     if (!userId) return;
@@ -242,8 +181,8 @@ export default function Map({
 
       canMove.current = false;
       keysPressed.current = true;
-      const nextframe = (currentFrame + 1) % framesXPositions.length;
-      setCurrentFrame(nextframe);
+      const nextFrame = (currentFrame + 1) % catsXPositions.length;
+      setCurrentFrame(nextFrame);
       dispatchPosition({ type: 'move', payload: move });
 
       await updatePlayerPosition({
@@ -251,7 +190,7 @@ export default function Map({
         userData: {
           ...absolutePosition,
           direction: keyDirection,
-          frame: nextframe,
+          frame: nextFrame,
         },
         roomId,
         room: enterRoom,
@@ -406,28 +345,45 @@ export default function Map({
   );
 
   const playerElements = useMemo(
-    () =>
-      players
-        ?.filter((player) => player.userId !== userId)
-        .map((player) => (
-          <OtherPlayer
-            key={player.userId}
-            $top={`${player.position.top}px`}
-            $left={`${player.position.left}px`}
-            $backgroundPosition={`${framesXPositions[player.position.frame]} ${
-              directionYPositions[player.position.direction]
-            }`}
-            $character={player.character}
-            $charName={player.charName}
-          >
-            {permissionLevel !== 'member' && (
-              <PRMark githubId={player.gitHubId} pullRequests={pullRequests} />
-            )}
-          </OtherPlayer>
-        )),
+    () => players
+      ?.filter(player => player.userId !== userId)
+      .map(player => (
+        <Player
+          key={player.userId}
+          character={player.character}
+          charName={player.charName}
+          left={player.position.left}
+          top={player.position.top}
+          frame={player.position.frame}
+          direction={player.position.direction}
+          isCurrentPlayer={false}
+          permissionLevel={permissionLevel}
+          githubId={player.gitHubId}
+          pullRequests={pullRequests}
+        />
+      )),
     [players, userId, permissionLevel, pullRequests]
   );
 
+  const currentPlayerElement = useMemo(() => (
+    position && playerChar && (
+      <Player
+        character={playerChar}
+        charName={playerCharName}
+        left={position.left}
+        top={position.top}
+        frame={currentFrame}
+        direction={direction}
+        isCurrentPlayer={true}
+        permissionLevel={permissionLevel}
+        githubId={gitHubId}
+        pullRequests={pullRequests}
+      >
+        <RemoteTracks nearbyPlayers={nearbyPlayers} />
+      </Player>
+    )),
+    [position, playerChar, currentFrame, direction, nearbyPlayers, gitHubId, pullRequests, permissionLevel]
+  );
   return (
     <Wrapper>
       {broadcasts.length > 0 && (
@@ -447,18 +403,7 @@ export default function Map({
             {playerElements}
           </MapABC>
 
-          {position && playerChar && (
-            <Player
-              style={{
-                backgroundPosition: `${framesXPositions[currentFrame]} ${directionYPositions[direction]}`,
-              }}
-              $charName={playerCharName}
-              $character={`${playerChar}`}
-            >
-              <RemoteTracks nearbyPlayers={nearbyPlayers} />
-              {<PRMark githubId={gitHubId} pullRequests={pullRequests} />}
-            </Player>
-          )}
+          {position && playerChar && currentPlayerElement}
         </MapWrapper>
       ) : (
         <img

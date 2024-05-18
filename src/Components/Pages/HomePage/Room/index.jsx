@@ -14,13 +14,13 @@ const Wrapper = styled.div`
   gap: 5px;
   animation: fadeIn 0.5s ease-out;
   @keyframes fadeIn {
-      from {
-        opacity: 0.3;
-      }
-      to {
-        opacity: 1;
-      }
+    from {
+      opacity: 0.3;
     }
+    to {
+      opacity: 1;
+    }
+  }
   .top {
     display: flex;
     align-items: center;
@@ -53,19 +53,19 @@ const Wrapper = styled.div`
     background-position: center;
     border-radius: 10px;
     cursor: pointer;
-    .onlineMembers{
+    .onlineMembers {
       display: flex;
       justify-content: flex-end;
       position: absolute;
       padding: 0 10px;
-      left:10px;
+      left: 10px;
       top: 10px;
-      width:55px;
+      width: 55px;
       border-radius: 20px;
-      background-color: rgba(0, 0, 0,0.7);
+      background-color: rgba(0, 0, 0, 0.7);
       color: #fff;
       font-weight: bold;
-      &::before{
+      &::before {
         content: '';
         position: absolute;
         left: 10px;
@@ -95,7 +95,6 @@ const Wrapper = styled.div`
   }
 `;
 
-
 export default function Room({
   room,
   userId,
@@ -103,19 +102,19 @@ export default function Room({
   setShowDeleteDialog,
 }) {
   const navigate = useNavigate();
-  const onlineMembers= useOnlineUserCount(room.id)
+  const onlineMembers = useOnlineUserCount(room.id);
   return (
     <Wrapper>
       <div className="top">
         <span className="mapName">{room.roomName}</span>
         {
           <div
-          id="roomActionTrigger"
+            id="roomActionTrigger"
             onClick={() => {
               setShowDeleteDialog({ show: true, id: room.id });
             }}
           >
-            {room.isCreater ? <TrashCanIcon /> : <LeaveRoomIcon />}
+            {room.isCreator ? <TrashCanIcon /> : <LeaveRoomIcon />}
             {showDeleteDialog.show && showDeleteDialog.id === room.id && (
               <DeleteDialog
                 room={room}
@@ -132,9 +131,7 @@ export default function Room({
           navigate(`/catertown/${room.id}/${room.roomName}`);
         }}
       >
-        <div className="onlineMembers">
-          {onlineMembers}
-        </div>
+        <div className="onlineMembers">{onlineMembers}</div>
       </div>
       <div className="bottom">
         <div>

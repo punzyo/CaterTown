@@ -136,7 +136,7 @@ function Dialog({ onClose, userId }) {
       roomId,
       character,
       charName,
-      isCreater: true,
+      isCreator: true,
     });
     if (isUpdated) {
       clearInput();

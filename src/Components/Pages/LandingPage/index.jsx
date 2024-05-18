@@ -128,7 +128,7 @@ const Main = styled.main`
     ${theme.breakpoints.sm} {
       gap: 15px;
       grid-template-columns: repeat(1, 1fr);
-        }
+    }
     > div {
       border-radius: 10px;
       height: 100%;
@@ -137,7 +137,7 @@ const Main = styled.main`
       padding: 30px;
       ${theme.breakpoints.sm} {
         padding: 15px;
-        }
+      }
       h2 {
         margin-bottom: 10px;
         display: flex;
@@ -220,11 +220,11 @@ const SignIn = styled.div`
   }
 `;
 export default function LandingPage() {
-  const { user } = useUserState();
   const navigate = useNavigate();
-  useEffect(() => {
-    if (user.id) navigate('/home');
-  }, [user.id]);
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
   return (
     <>
       <Header>
@@ -233,18 +233,10 @@ export default function LandingPage() {
           <span>Cater town</span>
         </div>
         <div className="right">
-          <SignUp
-            onClick={() => {
-              navigate('/signup');
-            }}
-          >
+          <SignUp onClick={() => handleNavigation('/signUp')}>
             <button>註冊</button>
           </SignUp>
-          <SignIn
-            onClick={() => {
-              navigate('/signin');
-            }}
-          >
+          <SignIn onClick={() => handleNavigation('/signIn')}>
             <Button content="登入" />
           </SignIn>
         </div>
@@ -254,11 +246,7 @@ export default function LandingPage() {
           <div className="left">
             <div>
               <h1>讓你的團隊協作，沒有距離</h1>
-              <SignUp
-                onClick={() => {
-                  navigate('/signup');
-                }}
-              >
+              <SignUp onClick={() => handleNavigation('/signUp')}>
                 <button>註冊</button>
               </SignUp>
             </div>

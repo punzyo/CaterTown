@@ -274,6 +274,10 @@ export default function PlayerProfile({
               className="github"
               onClick={() => {
                 setEditGitHubId(true);
+
+
+
+                
               }}
             >
               <div>

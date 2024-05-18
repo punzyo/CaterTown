@@ -181,7 +181,7 @@ export default function SignInPage() {
           </form>
           <SignUpButton
             onClick={() => {
-              navigate('/signup');
+              navigate('/signUp');
             }}
           >
             Sign up

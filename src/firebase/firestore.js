@@ -85,7 +85,7 @@ export async function addRoomToUser({
   roomId,
   character,
   charName,
-  isCreater,
+  isCreator,
 }) {
   const roomDocRef = doc(db, 'users', userId, 'rooms', roomId);
 
@@ -97,7 +97,7 @@ export async function addRoomToUser({
         character,
         charName,
         joinDate: Timestamp.now(),
-        isCreater,
+        isCreator,
       },
       { merge: true }
     );

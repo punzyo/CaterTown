@@ -46,11 +46,11 @@ export default function DeleteDialog({ room, userId, setShowDeleteDialog }) {
         e.stopPropagation();
       }}
     >
-      <span>{room.isCreater ? '確定要刪除此房間?' : '確定要退出此房間?'}</span>
+      <span>{room.isCreator ? '確定要刪除此房間?' : '確定要退出此房間?'}</span>
       <div>
         <button
           onClick={() => {
-            room.isCreater
+            room.isCreator
               ? handleDeleteRoom(room.id)
               : handleLeaveRoom(room.id);
           }}

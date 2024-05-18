@@ -1,4 +1,5 @@
-import styled, { css } from 'styled-components';import Logo from '../Logo';
+import styled, { css } from 'styled-components';
+import Logo from '../Logo';
 import { useNavigate } from 'react-router-dom';
 import { useUserState } from '../../utils/zustand';
 import theme from '../../theme';
@@ -55,7 +56,7 @@ const Profile = styled.div`
   background-color: inherit;
   color: #fff;
   cursor: auto;
-  
+
   .userimg {
     width: 36px;
     height: 36px;
@@ -110,8 +111,8 @@ export default function Header({ children }) {
         </Profile>
         <SignOut
           onClick={() => {
-            navigate('/signup');
-            resetUser()
+            navigate('/signUp');
+            resetUser();
           }}
         >
           <button>登出</button>

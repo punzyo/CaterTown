@@ -158,7 +158,7 @@ export default function InvitePage() {
       roomId,
       character,
       charName,
-      isCreater: false,
+      isCreator: false,
     });
     if (joinedRoom) {
       charNameInput.clear();

@@ -13,13 +13,13 @@ const CheckAuth = () => {
       setUser(user);
       if (
         location.pathname === '/' ||
-        location.pathname === '/signin' ||
-        location.pathname === '/signup'
+        location.pathname === '/signIn' ||
+        location.pathname === '/signUp'
       ) {
         navigate('/home');
       }
     } else {
-      if (!['/signin', '/signup'].includes(location.pathname)) {
+      if (!['/signIn', '/signUp'].includes(location.pathname)) {
         navigate('/');
       }
     }
