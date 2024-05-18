@@ -9,7 +9,7 @@ export default function AudioManager({ isLocal, nearbyPlayers, audioVolume }) {
       {audioTracks.map((track) => {
         return (
           <AudioTrack
-            key={track.sid}
+            key={track.participant.sid}
             trackRef={track}
             volume={audioVolume[track.participant.identity]}
           />

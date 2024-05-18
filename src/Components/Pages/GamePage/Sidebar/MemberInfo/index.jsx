@@ -7,6 +7,7 @@ const Wrapper = styled.div`
   align-items: center;
   gap: 20px;
   border-radius: 5px;
+  user-select: none;
   &:hover {
     background-color: #333a64;
     cursor: pointer;

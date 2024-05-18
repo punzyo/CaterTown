@@ -6,6 +6,7 @@ const Wrapper = styled.div`
   background-position: -774px ${catsYPositions.down};
   background-size: 2048px 1088px;
   background-image: url(/images/animals/${(props) => props.$image}.png);
+  user-select: none;
 `;
 
 export default function Cat({ image }) {

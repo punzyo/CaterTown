@@ -1,5 +1,12 @@
 import styled from 'styled-components';
-import { useState, useEffect, useRef, useReducer, useMemo } from 'react';
+import {
+  useState,
+  useEffect,
+  useRef,
+  useReducer,
+  useMemo,
+  useCallback,
+} from 'react';
 import { useParams } from 'react-router-dom';
 import { updatePlayerPosition } from '@/utils/firebase/firestore.js';
 import {
@@ -83,6 +90,20 @@ const MarqueeWrapper = styled.div`
     overflow: visible !important;
   }
 `;
+const keyMap = {
+  ArrowUp: { top: map2.unit, direction: 'up' },
+  w: { top: map2.unit, direction: 'up' },
+  W: { top: map2.unit, direction: 'up' },
+  ArrowDown: { top: -map2.unit, direction: 'down' },
+  s: { top: -map2.unit, direction: 'down' },
+  S: { top: -map2.unit, direction: 'down' },
+  ArrowLeft: { left: map2.unit, direction: 'left' },
+  a: { left: map2.unit, direction: 'left' },
+  A: { left: map2.unit, direction: 'left' },
+  ArrowRight: { left: -map2.unit, direction: 'right' },
+  d: { left: -map2.unit, direction: 'right' },
+  D: { left: -map2.unit, direction: 'right' },
+};
 export default function Map({
   players,
   playerCharName,
@@ -103,66 +124,37 @@ export default function Map({
   const [playerChar, setPlayerChar] = useState(null);
   const [nearbyPlayers, setNearbyPlayers] = useState([]);
   const [room, setRoom] = useState('');
-  const movingTimer = useRef(null);
-  const keysPressed = useRef(false);
   const canMove = useRef(true);
   const { resetPosition, setResetPosition, isFullScreen } = useGameSettings();
 
-  useEffect(() => {
-    if (!userId) return;
-    const handleKeyPress = async (e) => {
+  const handleKeyPress = useCallback(
+    (e) => {
       if (
+        isFullScreen ||
         e.target.tagName === 'INPUT' ||
         e.target.tagName === 'TEXTAREA' ||
-        e.target.isContentEditable ||
-        isFullScreen
+        e.target.isContentEditable
       ) {
         return;
       }
-      let move = { top: 0, left: 0 };
-      let keyDirection;
-      switch (e.key) {
-        case 'ArrowUp':
-        case 'w':
-        case 'W':
-          move.top = map2.unit;
-          keyDirection = 'up';
-          break;
-        case 'ArrowDown':
-        case 's':
-        case 'S':
-          move.top = -map2.unit;
-          keyDirection = 'down';
-          break;
-        case 'ArrowLeft':
-        case 'a':
-        case 'A':
-          move.left = map2.unit;
-          keyDirection = 'left';
-          break;
-        case 'ArrowRight':
-        case 'd':
-        case 'D':
-          move.left = -map2.unit;
-          keyDirection = 'right';
-          break;
-        default:
-          return;
-      }
-      setDirection(keyDirection);
-      if (!canMove.current) return;
+      const move = keyMap[e.key];
+      if (!move || !canMove.current) return;
 
-      const absolutePosition = playerPosToAbsolute({
-        top: position.top + move.top,
-        left: position.left + move.left,
+      setDirection(move.direction);
+
+      const newTop = position.top + (move.top || 0);
+      const newLeft = position.left + (move.left || 0);
+      const absolutePosition = calculatePlayerPosition({
+        top: newTop,
+        left: newLeft,
       });
       const playerGrid = {
         x: Math.round(absolutePosition.left / map2.unit),
         y: Math.round(absolutePosition.top / map2.unit),
       };
-      if (map2Collision[`${playerGrid.x},${playerGrid.y}`]) {
-        return;
-      } else if (
+
+      if (
+        map2Collision[`${playerGrid.x},${playerGrid.y}`] ||
         playerGrid.x < 0 ||
         playerGrid.y < 0 ||
         playerGrid.x >= map2.unitWidth ||
@@ -170,43 +162,43 @@ export default function Map({
       ) {
         return;
       }
-      //player can move
+
+      dispatchPosition({
+        type: 'move',
+        payload: { top: move.top, left: move.left },
+      });
+      const nextFrame = (currentFrame + 1) % catsXPositions.length;
+      setCurrentFrame(nextFrame);
+
       let enterRoom = map2Room[`${playerGrid.x},${playerGrid.y}`];
       if (enterRoom === undefined) enterRoom = room;
       setRoom(enterRoom);
 
-      canMove.current = false;
-      keysPressed.current = true;
-      const nextFrame = (currentFrame + 1) % catsXPositions.length;
-      setCurrentFrame(nextFrame);
-      dispatchPosition({ type: 'move', payload: move });
-
-      await updatePlayerPosition({
+      updatePlayerPosition({
         userId,
         userData: {
           ...absolutePosition,
-          direction: keyDirection,
+          direction: move.direction,
           frame: nextFrame,
         },
         roomId,
         room: enterRoom,
       });
 
+      canMove.current = false;
       setTimeout(() => {
         canMove.current = true;
       }, 100);
-    };
-    const handleKeyUp = () => {
-      clearTimeout(movingTimer.current);
-      keysPressed.current = false;
-    };
-    window.addEventListener('keyup', handleKeyUp);
+    },
+    [position, isFullScreen]
+  );
+
+  useEffect(() => {
     window.addEventListener('keydown', handleKeyPress);
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
-      window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [position, isFullScreen]);
+  }, [handleKeyPress]);
 
   useEffect(() => {
     //initializate player position
@@ -216,14 +208,14 @@ export default function Map({
       const playerPosition = playerData[0].position;
       setDirection(playerPosition.direction);
       setCurrentFrame(playerPosition.frame);
-      const mapPosition = playerAbsoluteToMapPos(playerPosition);
+      const mapPosition = calculatePlayerPosition(playerPosition);
       dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
 
       setRoom(playerData[0].room);
     };
-
     updatePosition();
   }, [players]);
+
   useEffect(() => {
     if (!players || !position) return;
     countNearbyPlayers(players);
@@ -239,7 +231,7 @@ export default function Map({
   useEffect(() => {
     if (!resetPosition) return;
     (async () => {
-      const newPosition = playerAbsoluteToMapPos(map2.startingPoint);
+      const newPosition = calculatePlayerPosition(map2.startingPoint);
       setDirection(map2.startingPoint.direction);
       setCurrentFrame(map2.startingPoint.frame);
       dispatchPosition({ type: 'SET_POSITION', payload: newPosition });
@@ -258,7 +250,7 @@ export default function Map({
   }, [resetPosition]);
   const countNearbyPlayers = (players) => {
     const gridRange = 96;
-    const myPosition = playerPosToAbsolute(position);
+    const myPosition = calculatePlayerPosition(position);
     let nearbyPlayers;
     if (!room) {
       nearbyPlayers = players.filter((player) => {
@@ -289,22 +281,13 @@ export default function Map({
     return;
   };
 
-  const playerPosToAbsolute = (position) => {
-    const absoluteLeft =
+  const calculatePlayerPosition = (position) => {
+    const calculatedLeft =
       map2.width / 2 - playerWidth / 2 - map2.border - position.left;
-    const absoluteTop =
+    const calculatedTop =
       map2.height / 2 - playerHeight / 2 - map2.border - position.top;
-    return { left: absoluteLeft, top: absoluteTop };
+    return { left: calculatedLeft, top: calculatedTop };
   };
-
-  const playerAbsoluteToMapPos = (position) => {
-    const mapLeft =
-      map2.width / 2 - playerWidth / 2 - map2.border - position.left;
-    const mapTop =
-      map2.height / 2 - playerHeight / 2 - map2.border - position.top;
-    return { left: mapLeft, top: mapTop };
-  };
-
   const getItemStyles = (itemName) => {
     const item = mapIndex[itemName];
     if (!item) return {};
