@@ -13,7 +13,33 @@ const Wrapper = styled.div`
   cursor: pointer;
   color: white;
 `;
-export default function PRMark({ githubId, pullRequests }) {
+interface PullRequest {
+  title: string;
+  baseBranch: string;
+  id: number;
+  avatar_url: string;
+  repo: string;
+  description: string;
+  user: string;
+  createdAt: string;
+  state: string;
+  url: string;
+  action: string;
+  headBranch: string;
+}
+
+interface PullRequestsByGitHubId {
+  [key: string]: {
+    prs: PullRequest[];
+  };
+}
+
+interface PRMarkProps {
+  githubId: string;
+  pullRequests: PullRequestsByGitHubId;
+}
+
+export default function PRMark({ githubId, pullRequests }: PRMarkProps) {
   const { toggleShowPullRequests } = usePullRequests();
   const openPullRequests = pullRequests[githubId]?.prs;
   const handlePRMarkClick = () => {

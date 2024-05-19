@@ -31,8 +31,11 @@ const InputWrapper = styled.div`
     }
   }
 `;
-
-export default function SearchBar({ onChange, placeholder }) {
+interface SearchBarProps {
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+}
+export default function SearchBar({ onChange, placeholder }: SearchBarProps) {
   return (
     <InputWrapper>
       <div className="icon">
