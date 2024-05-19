@@ -1,10 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import theme from "./theme";
-
-const BaseGlobalStyle = createGlobalStyle`/* 
-
-*/
-
+const BaseGlobalStyle = createGlobalStyle`
 /***** base *****/
 
 * {
@@ -51,16 +46,7 @@ a {
 }
 
 
-.hide {
-  display: none;
-}
 
-${theme.breakpoints.sm} {
-  .hide {
-    display: none;
-  }
-
-}
 `;
 
 export default BaseGlobalStyle;

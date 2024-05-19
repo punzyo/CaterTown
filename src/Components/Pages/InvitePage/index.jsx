@@ -198,7 +198,7 @@ export default function InvitePage() {
                 </SilderWrapper>
               </div>
               <JoinButton>
-                <Button clickFunc={handleJoinRoom} content={'加入房間'} />
+                <Button onClickFunc={handleJoinRoom} content={'加入房間'} />
               </JoinButton>
             </GameSettings>
           </MainWrapper>

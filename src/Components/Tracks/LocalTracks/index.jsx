@@ -40,7 +40,7 @@ export default function LocalTracks() {
                 }
                 isSpeaking={trackRef.participant.isSpeaking}
                 isFullScreen={fullScreenTrack === trackRef.participant.identity}
-                clickFunc={() => {
+                onClickFunc={() => {
                   if (fullScreenTrack === trackRef.participant.identity) {
                     setFullScreenTrack(null);
                     setIsFullScreen(false);

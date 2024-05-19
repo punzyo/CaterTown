@@ -130,7 +130,7 @@ const UnreadIcon = styled.div`
   justify-content: center;
 `;
 
-export default function PublicMessage({
+export default function MessageWindow({
   playerCharName,
   userId,
   roomId,
@@ -267,7 +267,6 @@ export default function PublicMessage({
           <CloseIcon onClick={handleIconClick}>
             {minimizeMessages ? <MaximizeIcon /> : <MinimizeIcon />}
           </CloseIcon>
-          <></>
         </MessageController>
         <Messages $minimizeMessages={minimizeMessages}>
           {isPublicChannel

@@ -71,7 +71,7 @@ export default function VideoContainer({
   isSpeaking,
   isFullScreen,
   children,
-  clickFunc,
+  onClickFunc,
   hidePlaceholder,
 }) {
   const { showSidebar } = useGameSettings();
@@ -83,7 +83,7 @@ export default function VideoContainer({
     >
       <ConnectionQualityIndicator />
       {children}
-      <FullscreenButton isFullScreen={isFullScreen} clickFunc={clickFunc} />
+      <FullscreenButton isFullScreen={isFullScreen} onClickFunc={onClickFunc} />
       {!hidePlaceholder && (
         <Placeholder>
           <UserIcon />

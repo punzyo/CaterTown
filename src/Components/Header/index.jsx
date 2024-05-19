@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 import Logo from '@/Components/Logo';
 import { useNavigate } from 'react-router-dom';
 import { useUserState } from '@/utils/zustand';
-import theme from '@/theme';
 import { TabbyCat } from '../Icons/CatIcons';
 const containerStyles = css`
   border-radius: 10px;
@@ -30,7 +29,7 @@ const Wrapper = styled.header`
       color: #fff;
       font-size: 50px;
       letter-spacing: 6px;
-      ${theme.breakpoints.sm} {
+      ${({ theme }) => theme.breakpoints.sm} {
         font-size: 36px;
         letter-spacing: 4px;
       }

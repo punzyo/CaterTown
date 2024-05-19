@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import theme from '@/theme';
 import { useState, useEffect, useMemo } from 'react';
-import Dialog from './Dialog';
+import CreateRoomDialog from './CreateRoomDialog';
 import { useUserRooms } from '@/utils/hooks/useUserRooms';
 import { useUserState } from '@/utils/zustand';
 import Button from '@/Components/Buttons/Button';
@@ -54,7 +53,7 @@ const RoomWrapper = styled.div`
     font-weight: 700;
     color: #fff;
   }
-  ${theme.breakpoints.sm} {
+  ${({ theme }) => theme.breakpoints.sm} {
     font-size: 14px;
     gap: 25px;
     grid-template-columns: repeat(2, 1fr);
@@ -180,18 +179,19 @@ export default function HomePage() {
   const openDialog = () => {
     setDialogOpen(true);
   };
-  const closeDialog = () => setDialogOpen(false);
+  const closeDialog = () => {
+    setDialogOpen(false);
+  };
 
   return (
     <Wrapper
       onClick={() => {
-        if (dialogOpen) closeDialog();
         if (showDeleteDialog.show) setShowDeleteDialog({ show: false, id: '' });
       }}
     >
       <Header>
         <CreateSpace id="create_space">
-          <Button clickFunc={openDialog} content={'建立房間'}></Button>
+          <Button onClickFunc={openDialog} content={'建立房間'}></Button>
         </CreateSpace>
         <TutorialButton onClick={handleTutorialClick}>
           教學
@@ -223,7 +223,7 @@ export default function HomePage() {
           )}
         </RoomWrapper>
       </MainPage>
-      {dialogOpen && <Dialog onClose={closeDialog} userId={userId} />}
+      {dialogOpen && <CreateRoomDialog onClose={closeDialog} userId={userId} />}
     </Wrapper>
   );
 }

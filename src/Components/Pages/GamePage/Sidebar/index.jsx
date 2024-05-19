@@ -4,7 +4,7 @@ import InviteButton from '@/Components/Buttons/InviteButton';
 import CloseButton from '@/Components/Buttons/CloseButton';
 import { useGameSettings } from '@/utils/zustand';
 import MemberInfo from './MemberInfo';
-import PublicMessage from '../PublicMessage';
+import MessageWindow from '../MessageWindow';
 import SearchBar from '@/Components/SearchBar';
 import { useState, useMemo } from 'react';
 import { usePrivateMessages } from '@/utils/hooks/usePrivateMessages';
@@ -100,7 +100,7 @@ export default function Sidebar({
           message="邀請連結已複製!"
         />
         <CloseButton
-          clickFunc={() => {
+          onClickFunc={() => {
             setShowSidebar(false);
           }}
         />
@@ -143,7 +143,7 @@ export default function Sidebar({
           ))}
         </MemberWrapper>
       )}
-      <PublicMessage
+      <MessageWindow
         userId={userId}
         playerCharName={playerCharName}
         roomId={roomId}

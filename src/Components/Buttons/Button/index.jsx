@@ -18,6 +18,6 @@ const ButtonStyle = styled.button`
     background-color:#E2C154;
   }
 `;
-export default function Button({ clickFunc, content }) {
-  return <ButtonStyle onClick={clickFunc}>{content}</ButtonStyle>;
+export default function Button({ onClickFunc, content }) {
+  return <ButtonStyle onClick={onClickFunc}>{content}</ButtonStyle>;
 }

@@ -2,11 +2,13 @@ import BaseGlobalStyle from '@/BaseGlobalStyle';
 import { useUserState } from './utils/zustand';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { routesConfig } from './routesConfig';
+import { ThemeProvider } from 'styled-components';
+import theme from './theme';
 export default function App() {
   const { user } = useUserState();
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <BaseGlobalStyle />
       <Routes>
         {routesConfig.map(
@@ -34,6 +36,6 @@ export default function App() {
         )}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </>
+    </ThemeProvider>
   );
 }

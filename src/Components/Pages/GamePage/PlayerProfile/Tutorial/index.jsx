@@ -4,20 +4,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useState } from 'react';
 import { tutorialContent } from './tutorialContent';
-const Mask = styled.div`
-  position: fixed;
-  top: 0px;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.2);
-  z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  cursor: auto;
-`;
+import Dialog from '@/Components/Dialog';
 const Wrapper = styled.div`
   position: relative;
   cursor: auto;
@@ -128,8 +115,8 @@ export default function Tutorial({setShowTutorial}) {
   };
   const currentContent = tutorialContent[category];
   return (
-    <Mask
-      onClick={(e) => {
+    <Dialog
+      onClickFunc={(e) => {
         e.stopPropagation();
         setShowTutorial(false)
       }}
@@ -166,6 +153,6 @@ export default function Tutorial({setShowTutorial}) {
           ))}
         </Slider>
       </Wrapper>
-    </Mask>
+    </Dialog>
   );
 }

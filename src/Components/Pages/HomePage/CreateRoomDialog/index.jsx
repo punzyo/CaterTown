@@ -11,6 +11,7 @@ import {
 import { catImages } from '@/assets/charNames';
 import CloseButton from '@/Components/Buttons/CloseButton';
 import Cat from '@/Components/Cat';
+import Dialog from '@/Components/Dialog';
 const SliderWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -96,7 +97,7 @@ const CreateRoom = styled.div`
   }
 `;
 
-function Dialog({ onClose, userId }) {
+export default function CreateRoomDialog({ onClose, userId }) {
   const roomNameInput = useValidatedInput('', /^[^*%]+$/, 15);
   const charNameInput = useValidatedInput('', /^[^*%]+$/, 15);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -149,19 +150,7 @@ function Dialog({ onClose, userId }) {
     setSelectedImageIndex(0);
   };
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-      }}
-    >
+    <Dialog onClickFunc={onClose}>
       <DialogWrapper
         style={{ background: 'white', padding: '20px', borderRadius: '5px' }}
         onClick={(e) => e.stopPropagation()}
@@ -170,7 +159,7 @@ function Dialog({ onClose, userId }) {
           <Cat image="brown_7" />
           創建你的房間!
         </Title>
-        <CloseButton clickFunc={onClose} />
+        <CloseButton onClickFunc={onClose} />
 
         <InputWrapper
           $isValid={roomNameInput.isValid}
@@ -208,8 +197,6 @@ function Dialog({ onClose, userId }) {
           <button onClick={clickCreateRoom}>建立房間</button>
         </CreateRoom>
       </DialogWrapper>
-    </div>
+    </Dialog>
   );
 }
-
-export default Dialog;

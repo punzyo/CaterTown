@@ -259,7 +259,7 @@ export default function GamePage() {
               {!isConnected && (
                 <JoinButton>
                   <Button
-                    clickFunc={() =>
+                    onClickFunc={() =>
                       getToken({ roomId, charName: playerCharName })
                     }
                     content={isConnecting ? 'Loading...' : '多人通訊'}

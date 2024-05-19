@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import theme from '@/theme';
 import { useNavigate } from 'react-router-dom';
 import Button from '@/Components/Buttons/Button';
 import Logo from '@/Components/Logo';
@@ -51,7 +50,7 @@ const Main = styled.main`
   color: white;
   letter-spacing: 1px;
   background-color: #373e6c;
-  ${theme.breakpoints.sm} {
+  ${({ theme }) => theme.breakpoints.sm}{
     gap: 25px;
     padding: 50px 15px;
   }

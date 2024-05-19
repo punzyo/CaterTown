@@ -153,7 +153,7 @@ export default function RemoteTracks({ nearbyPlayers }) {
                     isFullScreen={
                       fullScreenTrack === trackRef.participant.identity
                     }
-                    clickFunc={() => {
+                    onClickFunc={() => {
                       if (fullScreenTrack) {
                         setFullScreenTrack(null);
                         setIsFullScreen(false);

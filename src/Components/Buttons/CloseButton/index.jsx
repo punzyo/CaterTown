@@ -8,9 +8,9 @@ const Button = styled.button`
   background-color: inherit;
 `;
 
-export default function CloseButton({clickFunc}) {
+export default function CloseButton({ onClickFunc }) {
   return (
-    <Button onClick={clickFunc}>
+    <Button onClick={onClickFunc}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
