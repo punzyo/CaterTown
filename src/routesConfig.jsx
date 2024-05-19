@@ -1,9 +1,9 @@
-import LandingPage from './Components/Pages/LandingPage/index.jsx';
-import HomePage from './Components/Pages/HomePage/index.jsx';
-import GamePage from './Components/Pages/GamePage/index.jsx';
-import InvitePage from './Components/Pages/InvitePage/index.jsx';
-import SignUpPage from './Components/Pages/SignUpPage/index.jsx';
-import SignInPage from './Components/Pages/SignInPage/index.jsx';
+import LandingPage from './Components/Pages/LandingPage/index';
+import HomePage from './Components/Pages/HomePage/index';
+import GamePage from './Components/Pages/GamePage/index';
+import InvitePage from './Components/Pages/InvitePage/index';
+import SignUpPage from './Components/Pages/SignUpPage/index';
+import SignInPage from './Components/Pages/SignInPage/index';
 export const routesConfig = [
   {
     path: '/',

@@ -17,12 +17,12 @@ import {
   map2Collision,
   map2Room,
 } from './map2.js';
-import { catsXPositions } from '@/assets/charNames.js';
-import { useUserState } from '@/utils/zustand.js';
-import RemoteTracks from '@/Components/Tracks/RemoteTracks/index.jsx';
-import { useGameSettings } from '@/utils/zustand.js';
-import BroadcastMarquee from './BroadcastMarquee/index.jsx';
-import Player from './Player/index.jsx';
+import { catsXPositions } from '@/assets/charNames.ts';
+import { useUserState } from '@/utils/zustand';
+import RemoteTracks from '@/Components/Tracks/RemoteTracks/index';
+import { useGameSettings } from '@/utils/zustand';
+import BroadcastMarquee from './BroadcastMarquee/index';
+import Player from './Player/index';
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -329,7 +329,7 @@ export default function Map({
         ?.filter((player) => player.userId !== userId)
         .map((player) => (
           <Player
-          userId={player.userId}
+            userId={player.userId}
             key={player.userId}
             character={player.character}
             charName={player.charName}
@@ -351,7 +351,7 @@ export default function Map({
       position &&
       playerChar && (
         <Player
-        userId={userId}
+          userId={userId}
           character={playerChar}
           charName={playerCharName}
           left={position.left}
@@ -408,7 +408,7 @@ export default function Map({
             objectFit: 'cover',
             marginRight: '300px',
           }}
-          alt='loading'
+          alt="loading"
         />
       )}
     </Wrapper>

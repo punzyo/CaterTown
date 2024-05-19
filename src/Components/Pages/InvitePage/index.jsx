@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { catImages } from '@/assets/charNames';
-import { useUserState } from '@/utils/zustand.js';
+import { useUserState } from '@/utils/zustand';
 import useValidatedInput from '@/utils/hooks/useValidatedInput.js';
 import {
   addRoomToUser,
@@ -9,10 +9,10 @@ import {
   initPlayerData,
   isNameAvailable,
 } from '@/utils/firebase/firestore.js';
-import Button from '@/Components/Buttons/Button/index.jsx';
+import Button from '@/Components/Buttons/Button';
 import styled from 'styled-components';
-import SimpleSlider from '@/Components/Silder/index.jsx';
-import Header from '@/Components/Header/index.jsx';
+import SimpleSlider from '@/Components/Silder/index';
+import Header from '@/Components/Header';
 import { map2 } from '../GamePage/Maps/map2.js';
 const Wrapper = styled.main`
   width: 100%;

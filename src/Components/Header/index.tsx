@@ -3,6 +3,9 @@ import Logo from '@/Components/Logo';
 import { useNavigate } from 'react-router-dom';
 import { useUserState } from '@/utils/zustand';
 import { TabbyCat } from '../Icons/CatIcons';
+import React, { ReactNode } from 'react';
+
+
 const containerStyles = css`
   border-radius: 10px;
   font-size: 16px;
@@ -89,7 +92,10 @@ const SignOut = styled.div`
     color: ${({ theme }) => theme.colors.white};
   }
 `;
-export default function Header({ children }) {
+interface HeaderProps {
+  children: ReactNode;
+}
+export default function Header({ children }:HeaderProps) {
   const navigate = useNavigate();
   const { user, resetUser } = useUserState();
   const handleSignOut = () => {
@@ -109,7 +115,7 @@ export default function Header({ children }) {
             <TabbyCat />
           </div>
           <div>
-            <span>{user.name}</span>
+            <span>{user?.name}</span>
           </div>
         </Profile>
         <SignOut onClick={handleSignOut}>

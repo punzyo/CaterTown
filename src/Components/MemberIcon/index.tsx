@@ -1,12 +1,16 @@
 import styled from 'styled-components';
 import Cat from '../Cat';
 import OnlineStatus from '../OnlineStatus';
-const Wrapper = styled.div`
+
+interface WrapperProps {
+  $background: boolean;
+}
+const Wrapper = styled.div<WrapperProps>`
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: ${(props) => (props.$background===true ? 'white' : 'inherit')};
-  border: 1px solid  ${(props) => (props.$background===true ? '#545c8f' : 'inherit')};
+  background-color: ${({ $background }) => ($background ? 'white' : 'inherit')};
+  border: 1px solid ${({ $background }) => ($background ? '#545c8f' : 'inherit')};
   border-radius: 50%;
   div:first-child {
     position: absolute;
@@ -29,9 +33,16 @@ const UnreadIcon = styled.div`
   align-items: center;
   justify-content: center;
 `;
-export default function MemberIcon({ image, isOnline, unreadMessages,background }) {
+interface MemberIconProps {
+  image: string;
+  isOnline: boolean | null;
+  unreadMessages: number;
+  background: boolean;
+}
+
+export default function MemberIcon({ image, isOnline, unreadMessages,background }:MemberIconProps) {
   return (
-    <Wrapper $isOnline={isOnline} $background={background}>
+    <Wrapper $background={background}>
       <Cat image={image} />
       {isOnline !== null && <OnlineStatus isOnline={isOnline} />}
       {!!unreadMessages && <UnreadIcon>{unreadMessages}</UnreadIcon>}

@@ -21,7 +21,7 @@ export default function Logo() {
   return (
     <LogoWrapper
       onClick={() => {
-        if (user.id) {
+        if (user?.id) {
           navigate('/home');
         } else navigate('/');
       }}

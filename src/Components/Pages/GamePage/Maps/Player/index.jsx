@@ -58,7 +58,7 @@ export default function Player({
 
   return (
     <Wrapper
-      data-testId={userId}
+      data-testid={userId}
       style={{
         backgroundPosition: backgroundPosition,
         backgroundImage: `url(${characterImage})`,

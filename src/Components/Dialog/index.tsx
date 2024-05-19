@@ -1,4 +1,10 @@
-export default function Dialog({ children, onClickFunc }) {
+import { ReactNode, MouseEvent } from 'react';
+interface DialogProps {
+  children: ReactNode;
+  onClickFunc: (event: MouseEvent<HTMLDivElement>) => void;
+}
+
+export default function Dialog({ children, onClickFunc }: DialogProps) {
   return (
     <div
       style={{
@@ -11,7 +17,7 @@ export default function Dialog({ children, onClickFunc }) {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0,0,0,0.5)',
-        cursor:'auto',
+        cursor: 'auto',
         zIndex: 10,
       }}
       onClick={onClickFunc}

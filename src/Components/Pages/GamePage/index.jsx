@@ -1,23 +1,23 @@
-import Map from './Maps/index.jsx';
+import Map from './Maps/index';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useRoomStatus } from '@/utils/hooks/useRoomStatus.js';
-import { useUserState } from '@/utils/zustand.js';
+import { useUserState } from '@/utils/zustand';
 import { usePlayer } from '@/utils/hooks/usePlayer.js';
 import '@livekit/components-styles';
 import { ControlBar, LiveKitRoom } from '@livekit/components-react';
-import LocalTracks from '@/Components/Tracks/LocalTracks/index.jsx';
-import TracksProvider from '@/Components/Tracks/TracksProvider/index.jsx';
-import { useGameSettings } from '@/utils/zustand.js';
+import LocalTracks from '@/Components/Tracks/LocalTracks/index';
+import TracksProvider from '@/Components/Tracks/TracksProvider/index';
+import { useGameSettings } from '@/utils/zustand';
 import { useConditionalPullRequests } from '@/utils/hooks/useConditionalPullRequests.js';
-import PlayerProfile from './PlayerProfile/index.jsx';
+import PlayerProfile from './PlayerProfile/index';
 import { useBroadcasts } from '@/utils/hooks/useBroadcasts.js';
-import Button from '@/Components/Buttons/Button/index.jsx';
-import { usePullRequests } from '@/utils/zustand.js';
-import ExitRoomIcon from '@/Components/Icons/ExitRoomIcon.jsx';
-import GroupIcon from '@/Components/Icons/GroupIcon.jsx';
-import Sidebar from './Sidebar/index.jsx';
+import Button from '@/Components/Buttons/Button/index';
+import { usePullRequests } from '@/utils/zustand';
+import ExitRoomIcon from '@/Components/Icons/ExitRoomIcon';
+import GroupIcon from '@/Components/Icons/GroupIcon';
+import Sidebar from './Sidebar/index';
 
 const Wrapper = styled.main`
   color: white;
