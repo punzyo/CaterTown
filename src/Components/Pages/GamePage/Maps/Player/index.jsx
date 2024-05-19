@@ -40,6 +40,7 @@ const Wrapper = styled.div`
   }
 `;
 export default function Player({
+  userId,
   character,
   charName,
   left,
@@ -57,6 +58,7 @@ export default function Player({
 
   return (
     <Wrapper
+      data-testId={userId}
       style={{
         backgroundPosition: backgroundPosition,
         backgroundImage: `url(${characterImage})`,

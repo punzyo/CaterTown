@@ -329,6 +329,7 @@ export default function Map({
         ?.filter((player) => player.userId !== userId)
         .map((player) => (
           <Player
+          userId={player.userId}
             key={player.userId}
             character={player.character}
             charName={player.charName}
@@ -350,6 +351,7 @@ export default function Map({
       position &&
       playerChar && (
         <Player
+        userId={userId}
           character={playerChar}
           charName={playerCharName}
           left={position.left}
@@ -406,6 +408,7 @@ export default function Map({
             objectFit: 'cover',
             marginRight: '300px',
           }}
+          alt='loading'
         />
       )}
     </Wrapper>
