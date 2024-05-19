@@ -1,2 +1,1 @@
-export * from './props';
-export * from './firebase'
+export * from './types';

@@ -17,7 +17,7 @@ import {
   arrayRemove,
 } from 'firebase/firestore';
 import { deleteRealTimeData, setRealTimeData } from './realtime';
-import { PlayerPosition } from '@/types';
+import { PlayerPosition, BroadcastData } from '@/types';
 
 export const db = getFirestore(app);
 
@@ -346,14 +346,7 @@ export async function sendBroadcast({
   broadcastData,
 }: {
   roomId: string;
-  broadcastData: {
-    userId: string;
-    charName: string;
-    title: string;
-    publishTime: Timestamp;
-    expirationTime: string;
-    content: string;
-  };
+  broadcastData: BroadcastData;
 }): Promise<void> {
   try {
     const roomRef = doc(db, 'rooms', roomId);
@@ -438,7 +431,7 @@ export async function deleteRoomFromAllUsers(roomId: string): Promise<void> {
       }
     }
     await deleteDoc(roomRef);
-    await deleteRealTimeData(`rooms/${roomId}`, roomId);
+    await deleteRealTimeData(`rooms/${roomId}`);
   } catch (error) {
     console.error('Error in deleting room and associated data:', error);
   }
