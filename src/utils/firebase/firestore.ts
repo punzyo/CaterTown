@@ -17,27 +17,39 @@ import {
   arrayRemove,
 } from 'firebase/firestore';
 import { deleteRealTimeData, setRealTimeData } from './realtime';
+import { PlayerPosition } from '@/types';
 
 export const db = getFirestore(app);
 
-export async function updatePlayerPosition({ userId, userData, roomId, room }) {
+export async function updatePlayerPosition({
+  userId,
+  position,
+  roomId,
+  room,
+}: {
+  userId: string;
+  position: PlayerPosition;
+  roomId: string;
+  room: string;
+}): Promise<void> {
   const userPositionRef = doc(db, `rooms/${roomId}/users`, userId);
 
   try {
     await updateDoc(userPositionRef, {
-      position: {
-        top: userData.top,
-        left: userData.left,
-        direction: userData.direction,
-        frame: userData.frame,
-      },
+      position,
       room,
     });
   } catch (error) {
     console.error('Error updating position: ', error);
   }
 }
-export async function createRoom({ roomName, map }) {
+export async function createRoom({
+  roomName,
+  map,
+}: {
+  roomName: string;
+  map: string;
+}): Promise<string | undefined> {
   try {
     const roomDocRef = await addDoc(collection(db, 'rooms'), {
       name: roomName,
@@ -60,7 +72,14 @@ export async function initPlayerData({
   charName,
   character,
   permissionLevel,
-}) {
+}: {
+  userId: string;
+  roomId: string;
+  position: PlayerPosition;
+  charName: string;
+  character: string;
+  permissionLevel: string;
+}): Promise<void> {
   const userDocRef = doc(collection(db, `rooms/${roomId}/users`), userId);
 
   try {
@@ -85,7 +104,14 @@ export async function addRoomToUser({
   character,
   charName,
   isCreator,
-}) {
+}: {
+  userId: string;
+  roomName: string;
+  roomId: string;
+  character: string;
+  charName: string;
+  isCreator: boolean;
+}): Promise<boolean> {
   const roomDocRef = doc(db, 'users', userId, 'rooms', roomId);
 
   try {
@@ -110,7 +136,7 @@ export async function addRoomToUser({
   }
 }
 
-export async function getUserDataById(userId) {
+export async function getUserDataById(userId: string): Promise<any> {
   const userDocRef = doc(db, 'users', userId);
   try {
     const docSnap = await getDoc(userDocRef);
@@ -121,7 +147,15 @@ export async function getUserDataById(userId) {
   }
 }
 
-export async function sendPublicMessage({ roomId, charName, message }) {
+export async function sendPublicMessage({
+  roomId,
+  charName,
+  message,
+}: {
+  roomId: string;
+  charName: string;
+  message: string;
+}): Promise<void> {
   const messagesRef = doc(db, `rooms/${roomId}/publicMessages/messages`);
 
   try {
@@ -149,7 +183,13 @@ export async function sendPrivateMessage({
   charName,
   privateChannelId,
   message,
-}) {
+}: {
+  userId: string;
+  roomId: string;
+  charName: string;
+  privateChannelId: string;
+  message: string;
+}): Promise<void> {
   try {
     const sortedIds = [userId, privateChannelId].sort();
     const documentId = sortedIds.join('');
@@ -175,7 +215,15 @@ export async function sendPrivateMessage({
   }
 }
 
-export async function addUnreadMessage({ roomId, privateChannelId, userId }) {
+export async function addUnreadMessage({
+  roomId,
+  privateChannelId,
+  userId,
+}: {
+  roomId: string;
+  privateChannelId: string;
+  userId: string;
+}): Promise<void> {
   try {
     const unreadMsgRef = doc(
       db,
@@ -201,7 +249,15 @@ export async function addUnreadMessage({ roomId, privateChannelId, userId }) {
   }
 }
 
-export async function resetUnreadMessage({ roomId, privateChannelId, userId }) {
+export async function resetUnreadMessage({
+  roomId,
+  privateChannelId,
+  userId,
+}: {
+  roomId: string;
+  privateChannelId: string;
+  userId: string;
+}): Promise<void> {
   if (!privateChannelId) return;
   try {
     const unreadMsgRef = doc(db, `rooms/${roomId}/unReadMessages/${userId}`);
@@ -219,7 +275,15 @@ export async function resetUnreadMessage({ roomId, privateChannelId, userId }) {
   }
 }
 
-export async function saveUserToFirestore({ authID, name, email }) {
+export async function saveUserToFirestore({
+  authID,
+  name,
+  email,
+}: {
+  authID: string;
+  name: string;
+  email: string;
+}): Promise<boolean> {
   try {
     const userRef = doc(db, 'users', authID);
     await setDoc(userRef, {
@@ -231,12 +295,12 @@ export async function saveUserToFirestore({ authID, name, email }) {
     });
     return true;
   } catch (error) {
-    alert('發生錯誤: ' + error.message);
+    console.error(error);
     return false;
   }
 }
 
-export async function getUserFromFirestore(authID) {
+export async function getUserFromFirestore(authID: string): Promise<any> {
   try {
     const userRef = doc(db, 'users', authID);
     const docSnapshot = await getDoc(userRef);
@@ -251,7 +315,15 @@ export async function getUserFromFirestore(authID) {
     return null;
   }
 }
-export async function editPlayerGitHub({ userId, gitHubId, roomId }) {
+export async function editPlayerGitHub({
+  userId,
+  gitHubId,
+  roomId,
+}: {
+  userId: string;
+  gitHubId: string;
+  roomId: string;
+}): Promise<boolean> {
   const userDocRef = doc(db, 'rooms', roomId, 'users', userId);
 
   try {
@@ -269,7 +341,20 @@ export async function editPlayerGitHub({ userId, gitHubId, roomId }) {
   }
 }
 
-export async function sendBroadcast({ roomId, broadcastData }) {
+export async function sendBroadcast({
+  roomId,
+  broadcastData,
+}: {
+  roomId: string;
+  broadcastData: {
+    userId: string;
+    charName: string;
+    title: string;
+    publishTime: Timestamp;
+    expirationTime: string;
+    content: string;
+  };
+}): Promise<void> {
   try {
     const roomRef = doc(db, 'rooms', roomId);
     const broadcastsRef = collection(roomRef, 'broadcasts');
@@ -284,7 +369,13 @@ export async function sendBroadcast({ roomId, broadcastData }) {
   }
 }
 
-export async function deleteBroadcast({ roomId, docId }) {
+export async function deleteBroadcast({
+  roomId,
+  docId,
+}: {
+  roomId: string;
+  docId: string;
+}): Promise<void> {
   try {
     const broadcastRef = doc(db, 'rooms', roomId, 'broadcasts', docId);
     await deleteDoc(broadcastRef);
@@ -296,7 +387,11 @@ export async function editPermissionLevel({
   roomId,
   userId,
   newPermissionLevel,
-}) {
+}: {
+  roomId: string;
+  userId: string;
+  newPermissionLevel: string;
+}): Promise<boolean> {
   try {
     const userDocRef = doc(db, `rooms/${roomId}/users`, userId);
 
@@ -317,7 +412,7 @@ export async function editPermissionLevel({
   }
 }
 
-export async function deleteRoomFromAllUsers(roomId) {
+export async function deleteRoomFromAllUsers(roomId: string): Promise<void> {
   const roomRef = doc(db, 'rooms', roomId);
 
   try {
@@ -329,13 +424,13 @@ export async function deleteRoomFromAllUsers(roomId) {
       await deleteDoc(userRoomRef);
     }
 
-    const subcollections = [
+    const subCollections = [
       'publicMessages',
       'pullRequests',
       'unReadMessages',
       'users',
     ];
-    for (const subCollection of subcollections) {
+    for (const subCollection of subCollections) {
       const subRef = collection(db, `rooms/${roomId}/${subCollection}`);
       const subSnapshot = await getDocs(subRef);
       for (const subDoc of subSnapshot.docs) {
@@ -348,7 +443,13 @@ export async function deleteRoomFromAllUsers(roomId) {
     console.error('Error in deleting room and associated data:', error);
   }
 }
-export async function checkUserRoom({ roomId, userId }) {
+export async function checkUserRoom({
+  roomId,
+  userId,
+}: {
+  roomId: string;
+  userId: string;
+}): Promise<boolean | undefined> {
   const userRoomRef = doc(db, 'users', userId, 'rooms', roomId);
   try {
     const userRoomSnap = await getDoc(userRoomRef);
@@ -357,10 +458,17 @@ export async function checkUserRoom({ roomId, userId }) {
     return false;
   } catch (error) {
     console.error('Error : ', error);
+    return undefined;
   }
 }
 
-export async function removeUserFromRoom({ roomId, userId }) {
+export async function removeUserFromRoom({
+  roomId,
+  userId,
+}: {
+  roomId: string;
+  userId: string;
+}): Promise<void> {
   const userRoomRef = doc(db, 'users', userId, 'rooms', roomId);
 
   const roomRef = doc(db, 'rooms', roomId);
@@ -380,7 +488,13 @@ export async function removeUserFromRoom({ roomId, userId }) {
   }
 }
 
-export async function isNameAvailable({ roomId, charName }) {
+export async function isNameAvailable({
+  roomId,
+  charName,
+}: {
+  roomId: string;
+  charName: string;
+}): Promise<boolean> {
   try {
     const usersRef = collection(db, 'rooms', roomId, 'users');
     const charQuery = query(usersRef, where('charName', '==', charName));
@@ -397,7 +511,10 @@ export async function isNameAvailable({ roomId, charName }) {
   }
 }
 
-export async function updateTutorialState(userId, tutorialName) {
+export async function updateTutorialState(
+  userId: string,
+  tutorialName: string
+): Promise<void> {
   const userRef = doc(db, 'users', userId);
 
   try {

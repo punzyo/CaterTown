@@ -2,12 +2,17 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  User,
+  AuthError,
 } from 'firebase/auth';
 import { app } from './firebase';
 
 export const auth = getAuth(app);
 
-export async function registerUserToAuth({ email, password }) {
+export async function registerUserToAuth(
+  email: string,
+  password: string
+): Promise<string | false> {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -17,13 +22,16 @@ export async function registerUserToAuth({ email, password }) {
     const user = userCredential.user;
     return user.uid;
   } catch (error) {
-    handleAuthError(error);
+    handleAuthError(error as AuthError);
 
     return false;
   }
 }
 
-export async function signInToAuth(email, password) {
+export async function signInToAuth(
+  email: string,
+  password: string
+): Promise<User| null> {
   try {
     const userCredential = await signInWithEmailAndPassword(
       auth,
@@ -33,12 +41,12 @@ export async function signInToAuth(email, password) {
     const user = userCredential.user;
     return user;
   } catch (error) {
-    handleAuthError(error);
+    handleAuthError(error as AuthError);
   }
   return null;
 }
 
-const handleAuthError = (error) => {
+const handleAuthError = (error: AuthError) => {
   let errorMessage = '';
   switch (error.code) {
     case 'auth/email-already-in-use':

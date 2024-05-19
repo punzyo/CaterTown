@@ -2,7 +2,7 @@ import { ref, set, remove, getDatabase } from 'firebase/database';
 
 export const rtdb = getDatabase();
 
-export const setRealTimeData = async (path, data) => {
+export const setRealTimeData = async (path: string, data: unknown) => {
   const reference = ref(rtdb, path);
   try {
     await set(reference, data);
@@ -11,7 +11,7 @@ export const setRealTimeData = async (path, data) => {
   }
 };
 
-export const deleteRealTimeData = async (path) => {
+export const deleteRealTimeData = async (path: string) => {
   const reference = ref(rtdb, path);
   try {
     await remove(reference);
@@ -19,4 +19,3 @@ export const deleteRealTimeData = async (path) => {
     console.error('Error deleting real-time data:', error);
   }
 };
-

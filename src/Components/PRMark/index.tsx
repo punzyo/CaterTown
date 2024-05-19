@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { usePullRequests } from '@/utils/zustand';
+import { PullRequest } from '@/types';
 const Wrapper = styled.div`
   position: absolute;
   z-index: 15;
@@ -13,20 +14,7 @@ const Wrapper = styled.div`
   cursor: pointer;
   color: white;
 `;
-interface PullRequest {
-  title: string;
-  baseBranch: string;
-  id: number;
-  avatar_url: string;
-  repo: string;
-  description: string;
-  user: string;
-  createdAt: string;
-  state: string;
-  url: string;
-  action: string;
-  headBranch: string;
-}
+
 
 interface PullRequestsByGitHubId {
   [key: string]: {

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { Track } from 'livekit-client';
+import { PullRequest } from '@/types';
 interface User {
   id: string;
   name: string;
@@ -24,20 +25,7 @@ export const useUserState = create<UserState>((set) => ({
   },
 }));
 
-interface PullRequest {
-  title: string;
-  baseBranch: string;
-  id: number;
-  avatar_url: string;
-  repo: string;
-  description: string;
-  user: string;
-  createdAt: string;
-  state: string;
-  url: string;
-  action: string;
-  headBranch: string;
-}
+
 interface PullRequestState {
   showPullRequests: boolean;
   prGitHubId: string;

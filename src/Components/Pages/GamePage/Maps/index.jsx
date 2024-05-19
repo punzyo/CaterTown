@@ -176,7 +176,7 @@ export default function Map({
 
       updatePlayerPosition({
         userId,
-        userData: {
+        position: {
           ...absolutePosition,
           direction: move.direction,
           frame: nextFrame,
@@ -238,7 +238,7 @@ export default function Map({
       setRoom('');
       await updatePlayerPosition({
         userId,
-        userData: {
+        position: {
           ...map2.startingPoint,
         },
         roomId,

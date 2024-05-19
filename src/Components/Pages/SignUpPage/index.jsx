@@ -135,10 +135,10 @@ export default function SignUpPage() {
       return;
     }
     try {
-      const authID = await registerUserToAuth({
-        email: email.value,
-        password: password.value,
-      });
+      const authID = await registerUserToAuth(
+         email.value,
+         password.value,
+      );
       if (!authID) return;
       const isSaveSuccess = await saveUserToFirestore({
         authID,

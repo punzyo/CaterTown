@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import useValidatedInput from '@/utils/hooks/useValidatedInput';
-import SimpleSlider from '@/Components/Silder';
+import SimpleSlider from '@/Components/SimpleSlider';
 import { map2 } from '../../GamePage/Maps/map2';
 import {
   createRoom,

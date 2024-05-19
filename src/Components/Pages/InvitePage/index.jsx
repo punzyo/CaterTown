@@ -11,7 +11,7 @@ import {
 } from '@/utils/firebase/firestore.js';
 import Button from '@/Components/Buttons/Button';
 import styled from 'styled-components';
-import SimpleSlider from '@/Components/Silder/index';
+import SimpleSlider from '@/Components/SimpleSlider';
 import Header from '@/Components/Header';
 import { map2 } from '../GamePage/Maps/map2.js';
 const Wrapper = styled.main`
@@ -124,6 +124,7 @@ export default function InvitePage() {
       if (isInRoom) {
         navigate(`/catertown/${roomId}/${roomName}`);
       }
+      if(isInRoom === undefined) return
       setRoomChecked(true);
     })();
   }, [roomId, userId]);
