@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { TextEncoder, TextDecoder } from 'util';
 import React from 'react';
 global.TextEncoder = TextEncoder;
@@ -6,12 +6,12 @@ global.TextDecoder = TextDecoder;
 global.React = React;
 import '@testing-library/jest-dom';
 import Map from '../Components/Pages/GamePage/Maps/index';
-jest.setTimeout(30000);
+
 jest.mock('@/utils/zustand', () => ({
   useUserState: jest.fn(),
   useGameSettings: jest.fn(),
   usePullRequests: jest.fn(),
-  usePlayerTracks: jest.fn(), // Mock usePlayerTracks
+  usePlayerTracks: jest.fn(), 
 }));
 jest.mock('react-router-dom', () => ({
   useParams: jest.fn(),
@@ -68,8 +68,8 @@ describe('Map Component', () => {
     });
     mockUseParams.mockReturnValue({ roomId: 'testRoomId' });
     mockUpdatePlayerPosition.mockImplementation(() => Promise.resolve());
-    mockUsePullRequests.mockReturnValue([]); // Mock the return value of usePullRequests
-    mockUsePlayerTracks.mockReturnValue({ allTracks: [] }); // Mock the return value of usePlayerTracks  // Mock the return value of usePlayerTracks
+    mockUsePullRequests.mockReturnValue([]); 
+    mockUsePlayerTracks.mockReturnValue({ allTracks: [] }); 
   });
 
   it('should render loading state initially', () => {
