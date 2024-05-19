@@ -21,8 +21,11 @@ const Button = styled.button`
     fill: white;
   }
 `;
-
-const MessageWindow = styled.div`
+interface MessageWindowProps {
+  $x: number;
+  $y: number;
+}
+const MessageWindow = styled.div<MessageWindowProps>`
   position: absolute;
   white-space: nowrap;
   display: flex;
@@ -31,8 +34,8 @@ const MessageWindow = styled.div`
   background-color: white;
   border-radius: 2px;
   padding: 2px 5px;
-  left: ${({ x }) => x}px;
-  top: ${({ y }) => y - 20}px;
+  left: ${({ $x }) => $x}px;
+  top: ${({ $y }) => $y - 20}px;
   user-select: none;
   font-size: 14px;
   cursor: auto;
@@ -47,14 +50,22 @@ const MessageWindow = styled.div`
     }
   }
 `;
+interface InviteButtonProps {
+  link: string;
+  message: string;
+}
+export default function InviteButton({ link, message }: InviteButtonProps) {
+  const [showMessage, setShowMessage] = useState<boolean>(false);
+  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const showingMessage = useRef<boolean>(false);
 
-export default function InviteButton({ link, message }) {
-  const [showMessage, setShowMessage] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const buttonRef = useRef(null);
-  const showingMessage = useRef(false);
-
-  const inviteFriends = (e) => {
+  const inviteFriends = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     if (showingMessage.current) return;
     showingMessage.current = true;
     if (buttonRef.current) {
@@ -83,7 +94,7 @@ export default function InviteButton({ link, message }) {
     <Wrapper onClick={inviteFriends} id="inviteButton">
       <Button ref={buttonRef} className="inviteIcon">
         {showMessage && (
-          <MessageWindow x={mousePosition.x} y={mousePosition.y}>
+          <MessageWindow $x={mousePosition.x} $y={mousePosition.y}>
             {message}
           </MessageWindow>
         )}

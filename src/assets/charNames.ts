@@ -1,4 +1,4 @@
-export const catImages = [
+export const catImages :string[]  = [
   'black_0',
   'black_1',
   'black_2',

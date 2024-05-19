@@ -1,5 +1,8 @@
 import styled from 'styled-components';
-const Wrapper = styled.button`
+interface WrapperProps {
+  $isFullScreen: boolean;
+}
+const Wrapper = styled.button<WrapperProps>`
   position: absolute;
   right: 5px;
   bottom: 5px;
@@ -23,8 +26,11 @@ const Wrapper = styled.button`
     fill: white;
   }
 `;
-
-export default function FullscreenButton({ isFullScreen, onClickFunc }) {
+interface FullscreenButtonProps {
+  isFullScreen: boolean;
+  onClickFunc: () => void;
+}
+export default function FullscreenButton({ isFullScreen, onClickFunc }:FullscreenButtonProps) {
   return (
     <Wrapper $isFullScreen={isFullScreen} onClick={onClickFunc}>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">

@@ -7,8 +7,10 @@ const Button = styled.button`
   top: 20px;
   background-color: inherit;
 `;
-
-export default function CloseButton({ onClickFunc }) {
+interface CloseButtonProps {
+  onClickFunc: () => void;
+}
+export default function CloseButton({ onClickFunc }: CloseButtonProps) {
   return (
     <Button onClick={onClickFunc}>
       <svg

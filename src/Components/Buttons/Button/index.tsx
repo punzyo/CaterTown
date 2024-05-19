@@ -18,6 +18,10 @@ const ButtonStyle = styled.button`
     background-color:#E2C154;
   }
 `;
-export default function Button({ onClickFunc, content }) {
+interface ButtonProps {
+  onClickFunc: () => void;
+  content: string;
+}
+export default function Button({ onClickFunc, content }:ButtonProps) {
   return <ButtonStyle onClick={onClickFunc}>{content}</ButtonStyle>;
 }
