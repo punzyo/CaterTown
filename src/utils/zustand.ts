@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { Track } from 'livekit-client';
 interface User {
   id: string;
   name: string;
@@ -68,8 +69,8 @@ export const usePullRequests = create<PullRequestState>((set, get) => ({
   },
 }));
 interface PlayerTracksState {
-  allTracks: any[];
-  setTracks: (allTracks: any[]) => void;
+  allTracks: Track[];
+  setTracks: (allTracks: Track[]) => void;
 }
 
 export const usePlayerTracks = create<PlayerTracksState>((set) => ({
