@@ -11,12 +11,12 @@ jest.mock('@/utils/zustand', () => ({
   useUserState: jest.fn(),
   useGameSettings: jest.fn(),
   usePullRequests: jest.fn(),
-  usePlayerTracks: jest.fn(), 
+  usePlayerTracks: jest.fn(),
 }));
 jest.mock('react-router-dom', () => ({
   useParams: jest.fn(),
 }));
-jest.mock('@/utils/firebase/firestore.js', () => ({
+jest.mock('@/utils/firebase/firestore.ts', () => ({
   updatePlayerPosition: jest.fn(),
 }));
 jest.mock('../Components/Pages/GamePage/Maps/map2.js', () => ({
@@ -52,7 +52,7 @@ const mockUseUserState = require('@/utils/zustand').useUserState;
 const mockUseGameSettings = require('@/utils/zustand').useGameSettings;
 const mockUseParams = require('react-router-dom').useParams;
 const mockUpdatePlayerPosition =
-  require('@/utils/firebase/firestore.js').updatePlayerPosition;
+  require('@/utils/firebase/firestore.ts').updatePlayerPosition;
 const mockUsePullRequests = require('@/utils/zustand').usePullRequests;
 const mockUsePlayerTracks = require('@/utils/zustand').usePlayerTracks;
 
@@ -68,8 +68,8 @@ describe('Map Component', () => {
     });
     mockUseParams.mockReturnValue({ roomId: 'testRoomId' });
     mockUpdatePlayerPosition.mockImplementation(() => Promise.resolve());
-    mockUsePullRequests.mockReturnValue([]); 
-    mockUsePlayerTracks.mockReturnValue({ allTracks: [] }); 
+    mockUsePullRequests.mockReturnValue([]);
+    mockUsePlayerTracks.mockReturnValue({ allTracks: [] });
   });
 
   it('should render loading state initially', () => {

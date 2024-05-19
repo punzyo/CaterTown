@@ -8,7 +8,7 @@ import {
   useCallback,
 } from 'react';
 import { useParams } from 'react-router-dom';
-import { updatePlayerPosition } from '@/utils/firebase/firestore.js';
+import { updatePlayerPosition } from '@/utils/firebase/firestore.ts';
 import {
   mapIndex,
   playerHeight,

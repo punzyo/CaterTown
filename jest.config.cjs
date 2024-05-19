@@ -1,6 +1,7 @@
 module.exports = {
   testEnvironment: './jest.environment.cjs',
   transform: {
+    '^.+\\.tsx?$': 'ts-jest',
     '^.+\\.[tj]sx?$': 'babel-jest'
   },
   transformIgnorePatterns: [

@@ -8,7 +8,7 @@ import {
   checkUserRoom,
   initPlayerData,
   isNameAvailable,
-} from '@/utils/firebase/firestore.js';
+} from '@/utils/firebase/firestore.ts';
 import Button from '@/Components/Buttons/Button';
 import styled from 'styled-components';
 import SimpleSlider from '@/Components/SimpleSlider';
@@ -124,7 +124,7 @@ export default function InvitePage() {
       if (isInRoom) {
         navigate(`/catertown/${roomId}/${roomName}`);
       }
-      if(isInRoom === undefined) return
+      if (isInRoom === undefined) return;
       setRoomChecked(true);
     })();
   }, [roomId, userId]);
