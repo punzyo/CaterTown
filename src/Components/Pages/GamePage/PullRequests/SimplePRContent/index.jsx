@@ -10,10 +10,10 @@ const Wrapper = styled.div`
   justify-content: center;
 
   border-radius: 10px;
-  background-color: #242b53;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue2};
   letter-spacing: 0.5px;
   &:hover {
-    background-color: #313a71;
+    background-color: ${({ theme }) => theme.colors.hoverBlue2};
   }
   > a {
     display: flex;
@@ -29,7 +29,7 @@ const DetailPRWrapper = styled.div`
   right: 160px;
   width: 300px;
   z-index: 500;
-  background-color: #242b53;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue2};
   opacity: 0.9;
   border-radius: 10px;
   padding: 10px;
@@ -92,7 +92,7 @@ const DetailPRBottom = styled.div`
       background: inherit;
     }
     &::-webkit-scrollbar-thumb {
-      background: #888;
+      background: ${({ theme }) => theme.colors.grey};
     }
     &::-webkit-scrollbar-thumb:hover {
       background: #222;

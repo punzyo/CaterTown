@@ -34,13 +34,13 @@ const SearchWrapper = styled.div`
   justify-content: flex-end;
   align-items: center;
   padding: 20px 30px 0px 30px;
-  background-color: #282d4e;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue3};
   .inputWrapper {
     width: 200px;
   }
 `;
 const MainPage = styled.div`
-  background-color: #282d4e;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue3};
   min-height: 100%;
 `;
 const RoomWrapper = styled.div`
@@ -51,7 +51,7 @@ const RoomWrapper = styled.div`
   .mapName {
     padding: 0 5px;
     font-weight: 700;
-    color: #fff;
+    color: ${({ theme }) => theme.colors.white};
   }
   ${({ theme }) => theme.breakpoints.sm} {
     font-size: 14px;
@@ -64,7 +64,7 @@ const TutorialButton = styled.button`
   width: 80px;
   height: 40px;
   border-radius: 5px;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.white};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,7 +74,7 @@ const TutorialButton = styled.button`
   font-weight: bold;
   cursor: pointer;
   &:hover {
-    background-color: #464f89;
+    background-color: ${({ theme }) => theme.colors.hoverBlue6};
   }
   svg {
     width: 20px;

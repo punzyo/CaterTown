@@ -24,7 +24,7 @@ const MessageWrapper = styled.div`
   position: absolute;
   bottom: 60px;
   right: 0px;
-  background-color: #202540;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue1};
   border-radius: 5px 5px 0 0;
 `;
 const Message = styled.div`
@@ -38,7 +38,7 @@ const MessageController = styled.div`
   height: 30px;
   border-bottom: 1px solid;
   border: 1px solid black;
-  background-color: #202540;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue1};
   display: flex;
   align-items: center;
 `;
@@ -56,14 +56,15 @@ const Channel = styled.div`
   justify-content: center;
   background-color: ${(props) => (props.$selected ? '#3D477C' : '')};
   &:hover {
-    background-color: ${(props) => (props.$selected ? '' : '#4A5798')};
+    background-color: ${(props) =>
+      props.$selected ? '' : '${({ theme }) => theme.colors.hoverBlue5}'};
   }
   cursor: pointer;
 `;
 const Messages = styled.div`
   width: 100%;
   height: ${(props) => (props.$minimizeMessages ? '0px' : '300px')};
-  background-color: #202540;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue1};
   padding-top: ${(props) => (props.$minimizeMessages ? '0px' : '5px')};
   overflow-y: scroll;
 `;
@@ -75,8 +76,9 @@ const CloseIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  border-left: 1px solid black;
   &:hover {
-    background-color: #2e355d;
+    background-color: ${({ theme }) => theme.colors.hoverBlue3};
   }
   svg {
     fill: white;

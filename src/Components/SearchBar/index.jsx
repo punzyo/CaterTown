@@ -5,14 +5,14 @@ const InputWrapper = styled.div`
   cursor: auto;
   width: 100%;
   height: 40px;
-  border: 1px solid #909ce2;
+  border: 1px solid ${({ theme }) => theme.colors.borderBlue0};
   display: flex;
   align-items: center;
   .icon {
     display: flex;
     align-items: center;
     svg {
-      color: #fff;
+      color: ${({ theme }) => theme.colors.white};
       width: 35px;
       height: 20px;
     }
@@ -24,7 +24,7 @@ const InputWrapper = styled.div`
     border: none;
     outline: none;
     font-size: 16px;
-    color: #fff;
+    color: ${({ theme }) => theme.colors.white};
     background-color: inherit;
     &::placeholder {
       font-weight: 500;

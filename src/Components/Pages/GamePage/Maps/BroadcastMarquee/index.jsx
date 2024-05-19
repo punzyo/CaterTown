@@ -26,7 +26,7 @@ const Wrapper = styled.div`
   height: 80px;
   padding: 10px;
   border-radius: 5px;
-  background-color: #282d4e;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue3};
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -48,7 +48,7 @@ const Wrapper = styled.div`
         border-radius: 5px;
         cursor: pointer;
         &:hover {
-          background-color: #3e477c;
+          background-color: ${({ theme }) => theme.colors.hoverBlue3};
         }
       }
     }
@@ -64,21 +64,17 @@ export default function BroadcastMarquee({ broadcasts, userId, roomId }) {
   };
 
   const Dialog = ({ docId, setShowDialog }) => {
-    const handleCancelClick= (e)=>{
+    const handleCancelClick = (e) => {
       e.stopPropagation();
       setShowDialog(false);
-    }
+    };
     return (
       <Wrapper>
         <div>
           <span>要刪除此廣播嗎?</span>
           <div>
             <button onClick={() => handleBroadcastDelete(docId)}>確認</button>
-            <button
-              onClick={handleCancelClick}
-            >
-              取消
-            </button>
+            <button onClick={handleCancelClick}>取消</button>
           </div>
         </div>
       </Wrapper>

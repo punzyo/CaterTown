@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import MemberIcon from '@/Components/MemberIcon';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { editPermissionLevel } from '@/utils/firebase/firestore';
 const Wrapper = styled.div`
   position: absolute;
@@ -12,8 +12,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: #282d4e;
-  border: 1px solid #3e477c;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue3};
+  border: 1px solid ${({ theme }) => theme.colors.borderBlue0};
   border-radius: 5px;
   cursor: auto;
   > div {
@@ -38,7 +38,7 @@ const Wrapper = styled.div`
       text-align: center;
     }
     &:hover {
-      background-color: #3e477c;
+      background-color: ${({ theme }) => theme.colors.hoverBlue3};
     }
     border-radius: 4px;
     > svg {

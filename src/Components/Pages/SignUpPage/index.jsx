@@ -93,13 +93,13 @@ const SignUpButton = styled.button`
   height: 40px;
   margin-top: 10px;
   border-radius: 10px;
-  background-color: #191d33;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue0};
   font-size: 18px;
   color: white;
   border: none;
   cursor: pointer;
   &:hover {
-    background-color: #242b53;
+    background-color: ${({ theme }) => theme.colors.hoverBlue0};
   }
 `;
 const SignInButton = styled.button`

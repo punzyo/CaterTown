@@ -16,7 +16,7 @@ const Wrapper = styled.header`
   width: 100%;
   height: 80px;
   padding: 10px 15px;
-  background-color: #333a64;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue4};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,7 +26,7 @@ const Wrapper = styled.header`
     gap: 10px;
     height: 100%;
     span {
-      color: #fff;
+      color: ${({ theme }) => theme.colors.white};
       font-size: 50px;
       letter-spacing: 6px;
       ${({ theme }) => theme.breakpoints.sm} {
@@ -54,7 +54,7 @@ const Profile = styled.div`
   align-items: center;
   gap: 10px;
   background-color: inherit;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.white};
   cursor: auto;
 
   .userImg {
@@ -77,16 +77,16 @@ const SignOut = styled.div`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  background-color: #4979bc;
-  color: #fff;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue6};
+  color: ${({ theme }) => theme.colors.white};
   &:hover {
-    background-color: #558cda;
+    background-color: ${({ theme }) => theme.colors.hoverBlue7};
   }
   button {
     font-size: 16px;
     font-weight: bold;
     background-color: inherit;
-    color: #fff;
+    color: ${({ theme }) => theme.colors.white};
   }
 `;
 export default function Header({ children }) {

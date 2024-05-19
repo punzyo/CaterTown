@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   justify-content: center;
   cursor: pointer;
   &:hover {
-    background-color: #333a64;
+    background-color: ${({ theme }) => theme.colors.hoverBlue5};
   }
 `;
 const Button = styled.button`

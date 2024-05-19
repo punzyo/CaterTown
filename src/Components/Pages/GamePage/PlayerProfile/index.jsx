@@ -43,7 +43,7 @@ const Wrapper = styled.div`
   }
 
   &:hover {
-    background-color: #2e355d;
+    background-color: ${({ theme }) => theme.colors.hoverBlue4};
     cursor: pointer;
   }
 `;
@@ -58,9 +58,9 @@ const ProfileWrapper = styled.div`
   bottom: 75px;
   left: 0;
   padding: 10px;
-  background-color: #272d52;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue3};
   border-radius: 5px;
-  border: 1px solid #3e477c;
+  border: 1px solid ${({ theme }) => theme.colors.borderBlue0};
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -91,7 +91,9 @@ const ProfileWrapper = styled.div`
     padding: 5px 0;
     .github:hover {
       background-color: ${(props) =>
-        props.$editGitHubId ? 'inherit' : '#3e477c'};
+        props.$editGitHubId
+          ? 'inherit'
+          : '${({ theme }) => theme.colors.hoverBlue3}'};
       .githubIcon {
         opacity: 1;
       }
@@ -107,7 +109,7 @@ const ProfileWrapper = styled.div`
     }
     > div {
       &:hover {
-        background-color: #3e477c;
+        background-color: ${({ theme }) => theme.colors.hoverBlue3};
         cursor: pointer;
       }
       height: 36px;
@@ -136,20 +138,20 @@ const ProfileWrapper = styled.div`
     input {
       height: 90%;
       padding: 5px;
-      border: 1px solid #3e477c;
+      border: 1px solid ${({ theme }) => theme.colors.borderBlue0};
       outline: none;
       border-radius: 5px;
       background-color: inherit;
       width: 115px;
       &:focus {
-        border: 1px solid #3e477c;
+        border: 1px solid ${({ theme }) => theme.colors.borderBlue0};
       }
     }
   }
   .hr {
     width: 95%;
     height: 1px;
-    background-color: #3e477c;
+    background-color: ${({ theme }) => theme.colors.backgroundBlue5};
     margin: 5px auto;
   }
   .bottom {
@@ -170,7 +172,7 @@ const ProfileWrapper = styled.div`
 
       gap: 5px;
       &:hover {
-        background-color: #2e355d;
+        background-color: ${({ theme }) => theme.colors.hoverBlue3};
         cursor: pointer;
       }
     }

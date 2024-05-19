@@ -87,12 +87,12 @@ const CreateRoom = styled.div`
     width: 100%;
     height: 40px;
     border-radius: 5px;
-    background-color: #2e619c;
+    background-color: ${({ theme }) => theme.colors.backgroundBlue4};
     color: white;
     font-weight: bold;
     cursor: pointer;
     &:hover {
-      background-color: #4979bc;
+      background-color: ${({ theme }) => theme.colors.hoverBlue3};
     }
   }
 `;

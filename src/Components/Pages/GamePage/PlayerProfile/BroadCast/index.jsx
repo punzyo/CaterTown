@@ -26,18 +26,18 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     cursor: pointer;
-    background-color: #4979bc;
+    background-color: ${({ theme }) => theme.colors.backgroundBlue6};
     font-size: 14px;
-    color: #fff;
+    color: ${({ theme }) => theme.colors.white};
     &:hover {
-      background-color: #558cda;
+      background-color: ${({ theme }) => theme.colors.hoverBlue7};
     }
   }
   select {
     border-radius: 5px;
     padding: 5px;
     background-color: inherit;
-    border: 1px solid #3e477c;
+    border: 1px solid ${({ theme }) => theme.colors.borderBlue0};
     outline: none;
     option {
       background-color: inherit;
@@ -60,7 +60,7 @@ const Wrapper = styled.div`
       flex-grow: 1;
       height: 145px;
       background-color: inherit;
-      border: 1px solid #3e477c;
+      border: 1px solid ${({ theme }) => theme.colors.borderBlue0};
       border-radius: 5px;
       resize: none;
       outline: none;
@@ -97,7 +97,7 @@ export default function BroadCast({
       expirationTime,
       content: broadCastContentInput.value,
     };
-     await sendBroadcast({ roomId, broadcastData });
+    await sendBroadcast({ roomId, broadcastData });
 
     broadCastTitleInput.clear();
     broadCastContentInput.clear();

@@ -35,13 +35,13 @@ const Wrapper = styled.div`
       cursor: pointer;
       border-radius: 5px;
       &:hover {
-        background-color: #333a64;
+        background-color: ${({ theme }) => theme.colors.hoverBlue5};
       }
     }
     svg {
       width: 16px;
       height: 16px;
-      fill: #fff;
+      fill: ${({ theme }) => theme.colors.white};
     }
   }
 
@@ -63,7 +63,7 @@ const Wrapper = styled.div`
       width: 55px;
       border-radius: 20px;
       background-color: rgba(0, 0, 0, 0.7);
-      color: #fff;
+      color: ${({ theme }) => theme.colors.white};
       font-weight: bold;
       &::before {
         content: '';
@@ -82,7 +82,7 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: #fff;
+    color: ${({ theme }) => theme.colors.white};
     div {
       display: flex;
       align-items: center;

@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   height: 95px;
   padding: 10px;
   border-radius: 5px;
-  background-color: #414b80;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue5};
   font-weight: bold;
   color: white;
   text-align: center;
@@ -27,7 +27,7 @@ const Wrapper = styled.div`
       border-radius: 5px;
       color: inherit;
       &:hover {
-        background-color: #5f6dbb;
+        background-color: ${({ theme }) => theme.colors.hoverBlue5};
       }
     }
   }

@@ -17,8 +17,8 @@ import { map2 } from '../GamePage/Maps/map2.js';
 const Wrapper = styled.main`
   width: 100%;
   height: 100%;
-  background-color: #282d4e;
-  color: #fff;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue3};
+  color: ${({ theme }) => theme.colors.white};
 `;
 
 const MainWrapper = styled.div`
@@ -41,7 +41,7 @@ const Title = styled.h1`
 const GameSettings = styled.div`
   width: 500px;
   padding: 20px 30px;
-  background-color: #333a64;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue4};
   border-radius: 10px;
   display: flex;
   flex-direction: column;

@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   border-radius: 5px;
   user-select: none;
   &:hover {
-    background-color: #333a64;
+    background-color: ${({ theme }) => theme.colors.hoverBlue5};
     cursor: pointer;
   }
 `;

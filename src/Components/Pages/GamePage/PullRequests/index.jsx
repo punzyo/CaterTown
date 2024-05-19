@@ -18,7 +18,7 @@ const PRWRapper = styled.div`
   align-items: center;
   padding: 10px;
   opacity: 0.9;
-  background-color: #202540;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue1};
 `;
 const SmallPRWrapper = styled.div`
   width: 100%;

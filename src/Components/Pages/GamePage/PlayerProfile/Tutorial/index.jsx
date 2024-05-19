@@ -78,7 +78,10 @@ const Category = styled.button`
   width: 33.3%;
   border-radius: 20px;
   height: 30px;
-  background-color: ${(props) => (props.$isSelected ? '#f1d67e' : '#eee3bf')};
+  background-color: ${(props) =>
+    props.$isSelected
+      ? '${({ theme }) => theme.colors.backgroundYellow0}'
+      : '${({ theme }) => theme.colors.hoverYellow0}'};
   border: ${(props) => (props.$isSelected ? '1px' : '1px')} solid
     rgba(0, 0, 0, 0.4);
 
@@ -87,7 +90,10 @@ const Category = styled.button`
   z-index: ${(props) => (props.$isSelected ? '5' : props.$last ? '-1' : '0')};
   margin-left: -5px;
   &:hover {
-    background-color: ${(props) => (props.$isSelected ? '' : '#edda9c')};
+    background-color: ${(props) =>
+      props.$isSelected
+        ? ''
+        : '${({ theme }) => theme.colors.backgroundYellow1}'};
   }
 `;
 const Title = styled.h2`
@@ -95,8 +101,7 @@ const Title = styled.h2`
   padding: 0 20px;
 `;
 
-
-export default function Tutorial({setShowTutorial}) {
+export default function Tutorial({ setShowTutorial }) {
   const BASIC = 'basic';
   const COMMUNICATION = 'communication';
   const PERMISSION = 'permission';
@@ -118,12 +123,14 @@ export default function Tutorial({setShowTutorial}) {
     <Dialog
       onClickFunc={(e) => {
         e.stopPropagation();
-        setShowTutorial(false)
+        setShowTutorial(false);
       }}
     >
-      <Wrapper  onClick={(e) => {
-        e.stopPropagation();
-      }}>
+      <Wrapper
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <CategoryWrapper>
           {categories.map((cat, index) => (
             <Category
@@ -141,7 +148,10 @@ export default function Tutorial({setShowTutorial}) {
             <div key={index}>
               <Title>{item.title}</Title>
               {item.mediaType === 'gif' ? (
-                <img src={`/tutorial/${category}/${category}_${index}.gif`} alt={item.title} />
+                <img
+                  src={`/tutorial/${category}/${category}_${index}.gif`}
+                  alt={item.title}
+                />
               ) : (
                 <img
                   src={`/tutorial/${category}/${category}_${index}.png`}

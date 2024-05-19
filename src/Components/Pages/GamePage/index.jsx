@@ -36,7 +36,7 @@ const BottomBar = styled.div`
   position: fixed;
   bottom: 0;
   padding: 10px 25px;
-  background-color: #202540;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue1};
 
   z-index: 13;
 `;
@@ -58,7 +58,7 @@ const ExitRoom = styled.button`
   height: 60px;
   border-radius: 10px;
   padding: 10px;
-  background-color: #333a64;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue4};
   &:hover {
     background-color: #dd293f;
   }
@@ -77,10 +77,10 @@ const Group = styled.button`
   height: 60px;
   border-radius: 10px;
   padding: 10px;
-  background-color: #333a64;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue4};
   cursor: pointer;
   &:hover {
-    background-color: #3e477c;
+    background-color: ${({ theme }) => theme.colors.hoverBlue3};
   }
   svg {
     width: 40px;

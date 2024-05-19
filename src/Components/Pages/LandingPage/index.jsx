@@ -17,7 +17,7 @@ const Header = styled.header`
   width: 100%;
   height: 80px;
   padding: 10px 30px;
-  background-color: #333a64;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue4};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -27,7 +27,7 @@ const Header = styled.header`
     gap: 50px;
     height: 100%;
     span {
-      color: #fff;
+      color: ${({ theme }) => theme.colors.white};
       font-size: 50px;
       letter-spacing: 6px;
     }
@@ -50,14 +50,14 @@ const Main = styled.main`
   color: white;
   letter-spacing: 1px;
   background-color: #373e6c;
-  ${({ theme }) => theme.breakpoints.sm}{
+  ${({ theme }) => theme.breakpoints.sm} {
     gap: 25px;
     padding: 50px 15px;
   }
   .top {
     height: 450px;
     display: flex;
-    ${theme.breakpoints.sm} {
+    ${({ theme }) => theme.breakpoints.sm} {
       height: 300px;
     }
     .left {
@@ -78,7 +78,7 @@ const Main = styled.main`
         font-size: 3.5rem;
         font-weight: 700;
         line-height: 1.2;
-        ${theme.breakpoints.sm} {
+        ${({ theme }) => theme.breakpoints.sm} {
           font-size: 2.8rem;
         }
       }
@@ -124,17 +124,16 @@ const Main = styled.main`
     margin: 80px 0;
     gap: 50px;
     grid-template-columns: repeat(3, 1fr);
-    ${theme.breakpoints.sm} {
+    ${({ theme }) => theme.breakpoints.sm} {
       gap: 15px;
       grid-template-columns: repeat(1, 1fr);
     }
     > div {
       border-radius: 10px;
       height: 100%;
-      border-top: 1px solid #373e6c;
-      background-color: #282d52;
+      background-color: ${({ theme }) => theme.colors.backgroundBlue3};
       padding: 30px;
-      ${theme.breakpoints.sm} {
+      ${({ theme }) => theme.breakpoints.sm} {
         padding: 15px;
       }
       h2 {
@@ -199,16 +198,16 @@ const SignUp = styled.div`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  background-color: #4979bc;
-  color: #fff;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue6};
+  color: ${({ theme }) => theme.colors.white};
   &:hover {
-    background-color: #558cda;
+    background-color: ${({ theme }) => theme.colors.hoverBlue7};
   }
   button {
     font-size: 16px;
     font-weight: bold;
     background-color: inherit;
-    color: #fff;
+    color: ${({ theme }) => theme.colors.white};
   }
 `;
 const SignIn = styled.div`

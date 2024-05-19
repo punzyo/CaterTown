@@ -18,9 +18,9 @@ const Wrapper = styled.div`
   transition: right 0.3s ease-in-out;
   padding: 15px;
   top: 0;
-  background-color: #202540;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue1};
   z-index: ${(props) => (props.$isFullScreen ? '5' : '12')};
-  border-bottom: 1px solid #3e477c;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderBlue0};
 
   button {
     color: white;

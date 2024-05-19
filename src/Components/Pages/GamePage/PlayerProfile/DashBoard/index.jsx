@@ -5,7 +5,7 @@ import { useState } from 'react';
 import LinkIcon from '@/Components/Icons/LinkIcon';
 import BroadcastIcon from '@/Components/Icons/BroadcastIcon';
 import ChangePermissionIcon from '@/Components/Icons/ChangePermissionIcon';
-const PermissionWrapper = styled.div`
+const Wrapper = styled.div`
   position: absolute;
   left: 10px;
   bottom: 160px;
@@ -14,8 +14,8 @@ const PermissionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: #444c75;
-  border: 1px solid #3e477c;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue4};
+  border: 1px solid ${({ theme }) => theme.colors.borderBlue0};
   border-radius: 5px;
   > div {
     width: 100%;
@@ -26,7 +26,7 @@ const PermissionWrapper = styled.div`
     gap: 5px;
     border-radius: 5px;
     &:hover {
-      background-color: #29336b;
+      background-color: ${({ theme }) => theme.colors.hoverBlue3};
       cursor: pointer;
     }
     span {
@@ -41,8 +41,8 @@ const BroadcastWrapper = styled.div`
   width: 500px;
   height: 250px;
   padding: 10px;
-  background-color: #282d4e;
-  border: 1px solid #3e477c;
+  background-color: ${({ theme }) => theme.colors.backgroundBlue3};
+  border: 1px solid ${({ theme }) => theme.colors.borderBlue0};
   border-radius: 5px;
 `;
 export default function DashBoard({
@@ -82,7 +82,7 @@ export default function DashBoard({
     setShowBroadcast(false);
   };
   return (
-    <PermissionWrapper
+    <Wrapper
       onClick={(e) => {
         e.stopPropagation();
       }}
@@ -128,6 +128,6 @@ export default function DashBoard({
           )}
         </div>
       )}
-    </PermissionWrapper>
+    </Wrapper>
   );
 }

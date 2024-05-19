@@ -78,7 +78,7 @@ const AudioController = styled.input`
   &::-webkit-slider-runnable-track {
     height: 8px;
     border-radius: 10px;
-    background: #888;
+    background: ${({ theme }) => theme.colors.grey};
     cursor: pointer;
   }
   &::before {
@@ -98,7 +98,7 @@ const AudioController = styled.input`
     height: 15px;
     width: 15px;
     border-radius: 50%;
-    background-color: #fff !important;
+    background-color: ${({ theme }) => theme.colors.white} !important;
     cursor: pointer;
   }
 `;
