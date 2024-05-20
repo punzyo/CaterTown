@@ -4,6 +4,7 @@ import { Timestamp } from 'firebase/firestore';
 import { deleteBroadcast } from '@/utils/firebase/firestore';
 import { useState } from 'react';
 import Markdown from 'react-markdown';
+import type { BroadcastData } from '@/types';
 const StyledMarquee = styled(Marquee)`
   background-color: rgba(0 0, 0, 0.7);
   padding: 10px;
@@ -11,10 +12,12 @@ const StyledMarquee = styled(Marquee)`
     text-decoration: underline;
   }
 `;
-
-const Messages = styled.span`
-  cursor: ${(props) =>
-    props.$canEdit ? `url(/images/trashIconO.png), pointer` : 'auto'};
+interface MessagesProps {
+  $canEdit: boolean;
+}
+const Messages = styled.span<MessagesProps>`
+  cursor: ${({ $canEdit }) =>
+    $canEdit ? `url(/images/trashIconO.png), pointer` : 'auto'};
   white-space: nowrap;
 `;
 const Wrapper = styled.div`
@@ -54,17 +57,31 @@ const Wrapper = styled.div`
     }
   }
 `;
-
-export default function BroadcastMarquee({ broadcasts, userId, roomId }) {
+interface BroadcastMarquee {
+  broadcasts: BroadcastData[];
+  userId: string;
+  roomId: string;
+}
+export default function BroadcastMarquee({
+  broadcasts,
+  userId,
+  roomId,
+}: BroadcastMarquee) {
   const [showDialog, setShowDialog] = useState(false);
   const [docId, setDocId] = useState('');
 
-  const handleBroadcastDelete = (docId) => {
+  const handleBroadcastDelete = (docId: string) => {
     deleteBroadcast({ roomId, docId });
   };
 
-  const Dialog = ({ docId, setShowDialog }) => {
-    const handleCancelClick = (e) => {
+  const Dialog = ({
+    docId,
+    setShowDialog,
+  }: {
+    docId: string;
+    setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  }) => {
+    const handleCancelClick = (e:React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       setShowDialog(false);
     };
@@ -116,7 +133,7 @@ export default function BroadcastMarquee({ broadcasts, userId, roomId }) {
               onClick={() => {
                 if (broadcast.userId !== userId) return;
                 setShowDialog(true);
-                setDocId(broadcast.id);
+                setDocId(broadcast.id as string);
               }}
             >
               <Markdown

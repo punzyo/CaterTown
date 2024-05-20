@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { usePullRequests } from '@/utils/zustand';
-import { PullRequest } from '@/types';
+import type { PullRequests } from '@/types';
 const Wrapper = styled.div`
   position: absolute;
   z-index: 15;
@@ -16,22 +16,16 @@ const Wrapper = styled.div`
 `;
 
 
-interface PullRequestsByGitHubId {
-  [key: string]: {
-    prs: PullRequest[];
-  };
-}
-
 interface PRMarkProps {
-  githubId: string;
-  pullRequests: PullRequestsByGitHubId;
+  gitHubId: string;
+  pullRequests: PullRequests;
 }
 
-export default function PRMark({ githubId, pullRequests }: PRMarkProps) {
+export default function PRMark({ gitHubId, pullRequests }: PRMarkProps) {
   const { toggleShowPullRequests } = usePullRequests();
-  const openPullRequests = pullRequests[githubId]?.prs;
+  const openPullRequests = pullRequests[gitHubId]?.prs;
   const handlePRMarkClick = () => {
-    toggleShowPullRequests(githubId);
+    toggleShowPullRequests(gitHubId);
   };
   return (
     <>

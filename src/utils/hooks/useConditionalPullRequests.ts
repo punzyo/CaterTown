@@ -1,14 +1,21 @@
 import { useEffect, useState } from 'react';
 import { collection, doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/utils/firebase/firestore';
+import type { PullRequest, PullRequests } from '@/types';
+interface UseConditionalPullRequestsParams {
+  userId: string;
+  roomId: string;
+  gitHubId: string;
+  permissionLevel: string;
+}
 
 export const useConditionalPullRequests = ({
   userId,
   roomId,
   gitHubId,
   permissionLevel,
-}) => {
-  const [data, setData] = useState([]);
+}: UseConditionalPullRequestsParams) => {
+  const [data, setData] = useState<PullRequests>({});
 
   useEffect(() => {
     if (!roomId || !userId || !gitHubId || !permissionLevel) return;
@@ -19,11 +26,11 @@ export const useConditionalPullRequests = ({
       unsubscribe = onSnapshot(
         prCollectionRef,
         (querySnapshot) => {
-          let pullRequests = {};
+          let pullRequests: Record<string, { prs: PullRequest[] }> = {};
           querySnapshot.docs.forEach((doc) => {
             const prData = doc.data();
             const openPRs = prData.prs
-              ? prData.prs.filter((pr) => pr.state === 'open')
+              ? prData.prs.filter((pr: PullRequest) => pr.state === 'open')
               : [];
             if (openPRs.length > 0) {
               pullRequests[doc.id] = { ...prData, prs: openPRs };
@@ -43,7 +50,7 @@ export const useConditionalPullRequests = ({
           if (docSnapshot.exists()) {
             const prData = docSnapshot.data();
             const openPRs = prData.prs
-              ? prData.prs.filter((pr) => pr.state === 'open')
+              ? prData.prs.filter((pr: PullRequest) => pr.state === 'open')
               : [];
             if (openPRs.length > 0) {
               setData({ [docSnapshot.id]: { ...prData, prs: openPRs } });

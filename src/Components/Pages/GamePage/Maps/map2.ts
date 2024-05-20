@@ -1,5 +1,5 @@
-export const playerWidth = '60';
-export const playerHeight = '60';
+export const playerWidth = 60;
+export const playerHeight = 60;
 
 export const mapIndex = {
   U: {

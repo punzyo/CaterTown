@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '@/utils/firebase/firestore';
+import type { RoomType } from '@/types';
 
-export const useUserRooms = (userId) => {
-  const [userRooms, setUserRooms] = useState();
+export const useUserRooms = (userId:string) => {
+  const [userRooms, setUserRooms] = useState<RoomType[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,12 +15,12 @@ export const useUserRooms = (userId) => {
     const unsubscribe = onSnapshot(
       roomsCollectionRef,
       (querySnapshot) => {
-        const rooms = querySnapshot.docs.map((doc) => ({
+        const rooms: RoomType[] = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        }));
+        })as RoomType);
 
-        rooms.sort((a, b) => b.joinDate - a.joinDate);
+        rooms.sort((a, b) => b.joinDate.toMillis() - a.joinDate.toMillis()); 
         setUserRooms(rooms);
         setLoading(false);
       },

@@ -3,14 +3,21 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/utils/firebase/firestore';
 import { resetUnreadMessage } from '@/utils/firebase/firestore';
 
+interface UseUnreadMessagesParams {
+  userId: string;
+  roomId: string;
+  privateChannelId: string;
+  isPublicChannel: boolean;
+  minimizeMessages: boolean;
+}
 export function useUnreadMessages({
   userId,
   roomId,
   privateChannelId,
   isPublicChannel,
   minimizeMessages,
-}) {
-  const [messages, setMessages] = useState([]);
+}:UseUnreadMessagesParams) {
+  const [messages, setMessages] = useState({});
 
   useEffect(() => {
     if (!roomId || !userId) return;
@@ -36,7 +43,7 @@ export function useUnreadMessages({
             setMessages(data.messages || []);
           }
         } else {
-          setMessages([]);
+          setMessages({});
         }
       },
       (err) => {

@@ -2,27 +2,34 @@ import styled from 'styled-components';
 import PRMark from '@/Components/PRMark';
 import { playerWidth, playerHeight } from '../map2';
 import { catsXPositions, catsYPositions } from '@/assets/charNames';
-const Wrapper = styled.div`
+import type { PlayerPosition, PlayerType, PullRequests } from '@/types';
+interface WrapperProps{
+  $isCurrentPlayer: boolean;
+  $left: number;
+  $top: number;
+  $character: string;
+  $charName: string;
+}
+const Wrapper = styled.div<WrapperProps>`
   position: absolute;
   width: ${playerWidth}px;
   height: ${playerHeight}px;
-  left: ${(props) =>
-    props.$isCurrentPlayer
+  left: ${({$isCurrentPlayer, $left}) =>
+    $isCurrentPlayer
       ? `calc(50% - ${playerWidth / 2}px)`
-      : `${props.$left}px`};
+      : `${$left}px`};
 
   top: ${(props) =>
     props.$isCurrentPlayer
       ? `calc(50% - ${playerHeight / 2}px)`
       : `${props.$top}px`};
-  background-position: ${(props) => props.$backgroundPosition};
   background-size: 2048px 1088px;
-  background-image: url(/images/animals/${(props) => props.$character}.png);
+  background-image: url(/images/animals/${({$character}) => $character}.png);
   color: black;
   transition: top 0.2s, left 0.2s;
   z-index: 10;
   &::after {
-    content: '${(props) => props.$charName}';
+    content: '${({$charName}) => $charName}';
     font-size: 12px;
     font-weight: bold;
     position: absolute;
@@ -39,6 +46,13 @@ const Wrapper = styled.div`
     border-radius: 5px;
   }
 `;
+interface PlayerProps
+  extends Omit<PlayerType, 'room' | 'position'>,
+    PlayerPosition {
+  isCurrentPlayer: boolean;
+  pullRequests: PullRequests; 
+  children: React.ReactNode;
+}
 export default function Player({
   userId,
   character,
@@ -49,10 +63,10 @@ export default function Player({
   direction,
   isCurrentPlayer,
   permissionLevel,
-  githubId,
+  gitHubId,
   pullRequests,
   children,
-}) {
+}: PlayerProps) {
   const characterImage = `/images/animals/${character}.png`;
   const backgroundPosition = `${catsXPositions[frame]} ${catsYPositions[direction]}`;
 
@@ -70,7 +84,7 @@ export default function Player({
       $character={character}
     >
       {isCurrentPlayer || permissionLevel !== 'member' ? (
-        <PRMark githubId={githubId} pullRequests={pullRequests} />
+        <PRMark gitHubId={gitHubId} pullRequests={pullRequests} />
       ) : null}
       {children}
     </Wrapper>

@@ -13,12 +13,26 @@ export interface PullRequest {
   action: string;
   headBranch: string;
 }
+export interface PullRequests {
+  [key: string]: {
+    prs: PullRequest[];
+  };
+}
 
 export interface PlayerPosition {
   top: number;
   left: number;
   direction: string;
   frame: number;
+}
+export interface RoomType {
+  character: string;
+  charName: string;
+  isCreator: string;
+  id: string;
+  userId: string;
+  joinDate: Timestamp;
+  roomName: string;
 }
 
 export interface PlayerType {
@@ -36,10 +50,16 @@ export interface NearbyPlayer {
   character: string;
 }
 export interface BroadcastData {
+  id?: string;
   userId: string;
   charName: string;
   title: string;
   publishTime: Timestamp;
   expirationTime: string;
   content: string;
+}
+export interface MessageType {
+  charName: string;
+  message: string;
+  postTime?: Date;
 }

@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { catImages } from '@/assets/charNames';
 import { useUserState } from '@/utils/zustand';
-import useValidatedInput from '@/utils/hooks/useValidatedInput.js';
+import useValidatedInput from '@/utils/hooks/useValidatedInput.ts';
 import {
   addRoomToUser,
   checkUserRoom,
@@ -13,7 +13,7 @@ import Button from '@/Components/Buttons/Button';
 import styled from 'styled-components';
 import SimpleSlider from '@/Components/SimpleSlider';
 import Header from '@/Components/Header';
-import { map2 } from '../GamePage/Maps/map2.js';
+import { map2 } from '../GamePage/Maps/map2.ts';
 const Wrapper = styled.main`
   width: 100%;
   height: 100%;

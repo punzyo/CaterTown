@@ -16,7 +16,7 @@ import {
   map2,
   map2Collision,
   map2Room,
-} from './map2.js';
+} from './map2.ts';
 import { catsXPositions } from '@/assets/charNames.ts';
 import { useUserState } from '@/utils/zustand';
 import RemoteTracks from '@/Components/Tracks/RemoteTracks/index';
@@ -339,7 +339,7 @@ export default function Map({
             direction={player.position.direction}
             isCurrentPlayer={false}
             permissionLevel={permissionLevel}
-            githubId={player.gitHubId}
+            gitHubId={player.gitHubId}
             pullRequests={pullRequests}
           />
         )),
@@ -360,7 +360,7 @@ export default function Map({
           direction={direction}
           isCurrentPlayer={true}
           permissionLevel={permissionLevel}
-          githubId={gitHubId}
+          gitHubId={gitHubId}
           pullRequests={pullRequests}
         >
           <RemoteTracks nearbyPlayers={nearbyPlayers} />

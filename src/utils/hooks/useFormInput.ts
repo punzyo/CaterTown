@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 
-export function useFormInput(initialValue) {
-  const [value, setValue] = useState(initialValue);
+export function useFormInput(initialValue: string | number) {
+  const [value, setValue] = useState<string | number>(initialValue);
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
-  function handleChange(e) {
-
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setValue(e.target.value);
   }
   function clear() {

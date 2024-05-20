@@ -3,7 +3,7 @@ import { ref, onDisconnect, onValue, update } from 'firebase/database';
 import { useLocation } from 'react-router-dom';
 import { rtdb } from '@/utils/firebase/realtime';
 
-export function useRoomStatus({ userId, roomId }) {
+export function useRoomStatus({ userId, roomId }:{userId:string,roomId:string}) {
   const [onlineStatus, setOnlineStatus] = useState({});
   const location = useLocation();
   useEffect(() => {

@@ -14,7 +14,7 @@ jest.mock('react-router-dom', () => ({
 jest.mock('@/utils/firebase/firestore.ts', () => ({
   updatePlayerPosition: jest.fn(),
 }));
-jest.mock('../Components/Pages/GamePage/Maps/map2.js', () => ({
+jest.mock('../Components/Pages/GamePage/Maps/map2.ts', () => ({
   mapIndex: {
     rockFloor6: {
       width: 2,

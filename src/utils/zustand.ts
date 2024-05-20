@@ -32,7 +32,7 @@ interface PullRequestState {
   setPrGitHubId: (prGitHubId: string) => void;
   setPullRequests: (pullRequests: PullRequest[]) => void;
   setShowPullRequests: (showPullRequests: boolean) => void;
-  toggleShowPullRequests: (githubId: string) => void;
+  toggleShowPullRequests: (gitHubId: string) => void;
 }
 export const usePullRequests = create<PullRequestState>((set, get) => ({
   showPullRequests: false,
@@ -44,12 +44,12 @@ export const usePullRequests = create<PullRequestState>((set, get) => ({
     set({ pullRequests });
   },
   setShowPullRequests: (showPullRequests) => set({ showPullRequests }),
-  toggleShowPullRequests: (githubId) => {
-    if (githubId === get().prGitHubId) {
+  toggleShowPullRequests: (gitHubId) => {
+    if (gitHubId === get().prGitHubId) {
       set((state) => ({ showPullRequests: !state.showPullRequests }));
     } else {
       set({
-        prGitHubId: githubId,
+        prGitHubId: gitHubId,
         showPullRequests: true,
       });
     }
