@@ -1,4 +1,12 @@
-export const tutorialContent = {
+interface TutorialItem {
+  title: string;
+  content: string;
+  mediaType?: string;
+}
+interface TutorialContent {
+  [key: string]: TutorialItem[];
+}
+export const tutorialContent: TutorialContent = {
   basic: [
     {
       title: '角色移動',

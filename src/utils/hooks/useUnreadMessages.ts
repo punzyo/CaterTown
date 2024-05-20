@@ -17,7 +17,7 @@ export function useUnreadMessages({
   isPublicChannel,
   minimizeMessages,
 }:UseUnreadMessagesParams) {
-  const [messages, setMessages] = useState({});
+  const [messages, setMessages] = useState<{ [key: string]: { count: number } }>({});
 
   useEffect(() => {
     if (!roomId || !userId) return;

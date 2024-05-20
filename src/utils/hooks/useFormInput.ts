@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 
-export function useFormInput(initialValue: string | number) {
-  const [value, setValue] = useState<string | number>(initialValue);
+export function useFormInput(initialValue: string) {
+  const [value, setValue] = useState<string>(initialValue);
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) {
     setValue(e.target.value);
   }
   function clear() {

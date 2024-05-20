@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import MemberIcon from '@/Components/MemberIcon';
 import { useState } from 'react';
 import { editPermissionLevel } from '@/utils/firebase/firestore';
+import type { PlayerType } from '@/types';
 const Wrapper = styled.div`
   position: absolute;
   left: 90%;
@@ -70,10 +71,13 @@ const Wrapper = styled.div`
     }
   }
 `;
-const EditMessage = styled.div`
+interface EditMessageProps{
+  $editSuccess: boolean;
+}
+const EditMessage = styled.div<EditMessageProps>`
   font-size: 10px;
   position: absolute;
-  color: ${(props) => (props.$editSuccess ? 'green' : 'red')};
+  color: ${({$editSuccess}) => ($editSuccess ? 'green' : 'red')};
   bottom: -10px;
   left: 10px;
   width: 100%;
@@ -90,7 +94,7 @@ const EditMessage = styled.div`
   svg {
     width: 8px !important;
     height: 8px !important;
-    fill: ${(props) => (props.$editSuccess ? 'green' : 'red')} !important;
+    fill: ${({$editSuccess}) => ($editSuccess ? 'green' : 'red')} !important;
   }
 `;
 const MemberIconWrapper = styled.div`
@@ -107,24 +111,30 @@ const MemberIconWrapper = styled.div`
     height: 100%;
   }
 `;
+interface ChangePermissionProps{
+  players:PlayerType[];
+  roomId: string;
+  userId: string;
+  permissionLevel: string;
+}
 export default function ChangePermission({
   players,
   roomId,
   userId,
   permissionLevel,
-}) {
-  const [showSettings, setShowSettings] = useState(
+}:ChangePermissionProps) {
+  const [showSettings, setShowSettings] = useState<{ [key: string]: boolean }>(
     players.reduce((acc, player) => {
       acc[player.userId] = false;
       return acc;
-    }, {})
+    }, {} as { [key: string]: boolean })
   );
   const [showEditMessage, setShowEditMessage] = useState(false);
   const [editMessage, setEditMessage] = useState('');
   const [editSuccess, setEditSuccess] = useState(true);
-  const [currentEditingUserId, setCurrentEditingUserId] = useState(null);
+  const [currentEditingUserId, setCurrentEditingUserId] = useState<string | null>(null);
 
-  const handlePermissionClick = async (userId, newPermissionLevel) => {
+  const handlePermissionClick = async (userId:string, newPermissionLevel:string) => {
     setCurrentEditingUserId(userId);
     const isSuccess = await editPermissionLevel({
       roomId,
@@ -140,13 +150,17 @@ export default function ChangePermission({
     }, 3000);
   };
 
-  const toggleShowSetting = (userId) => {
+  const toggleShowSetting = (userId:string) => {
     setShowSettings((prev) => ({
       ...prev,
       [userId]: !prev[userId],
     }));
   };
-  const renderPermissionOptions = (player, currentLevel, levels) => {
+  const renderPermissionOptions = (
+    player: PlayerType,
+    currentLevel: string,
+    levels: string[]
+  ) => {
     return levels.map(
       (p) =>
         currentLevel !== p &&

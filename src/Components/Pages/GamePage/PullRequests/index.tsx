@@ -73,7 +73,7 @@ export default function PullRequests() {
               {pullRequests.map((pr, index) => {
                 if (showMorePRs == false && index >= 3) return;
                 return (
-                  <SimplePRContent key={pr.id} pullRequests={pr} index={index}>
+                  <SimplePRContent key={pr.id} pullRequests={pr}>
                     <a href={pr.url} target="_blank">
                       {pr.title}
                     </a>

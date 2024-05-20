@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import MemberIcon from '@/Components/MemberIcon';
 import { resetUnreadMessage } from '@/utils/firebase/firestore';
+import type { PlayerType } from '@/types';
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
@@ -18,6 +19,17 @@ const MemberIconWrapper = styled.div`
   width: 50px;
   height: 50px;
 `;
+interface MemberInfoProps {
+  member: PlayerType;
+  roomId: string;
+  userId: string;
+  isOnline: boolean;
+  changeChannel: (playerId: string) => void;
+  privateChannel: string;
+  unreadMessages: { [key: string]: { count: number } };
+  setMinimizeMessages: React.Dispatch<React.SetStateAction<boolean>>;
+  setPrivateCharName: React.Dispatch<React.SetStateAction<string>>;
+}
 export default function MemberInfo({
   member,
   roomId,
@@ -28,8 +40,8 @@ export default function MemberInfo({
   unreadMessages,
   setPrivateCharName,
   setMinimizeMessages,
-}) {
-  const resetUnreadMessageHandler = async (playerId) => {
+}: MemberInfoProps) {
+  const resetUnreadMessageHandler = async (playerId: string) => {
     await resetUnreadMessage({
       roomId,
       userId,

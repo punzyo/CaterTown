@@ -5,6 +5,7 @@ import { useState } from 'react';
 import LinkIcon from '@/Components/Icons/LinkIcon';
 import BroadcastIcon from '@/Components/Icons/BroadcastIcon';
 import ChangePermissionIcon from '@/Components/Icons/ChangePermissionIcon';
+import { PlayerType } from '@/types';
 const Wrapper = styled.div`
   position: absolute;
   left: 10px;
@@ -45,6 +46,17 @@ const BroadcastWrapper = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.borderBlue0};
   border-radius: 5px;
 `;
+interface DashBoardProps {
+  roomId: string;
+  userId: string;
+  playerCharName: string;
+  players: PlayerType[];
+  showPermission: boolean;
+  setShowPermission: React.Dispatch<React.SetStateAction<boolean>>;
+  showBroadcast: boolean;
+  setShowBroadcast: React.Dispatch<React.SetStateAction<boolean>>;
+  permissionLevel: string;
+}
 export default function DashBoard({
   roomId,
   userId,
@@ -55,7 +67,7 @@ export default function DashBoard({
   showBroadcast,
   setShowBroadcast,
   permissionLevel,
-}) {
+}:DashBoardProps) {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const getWebhookLink = () => {
     if (showSuccessMessage) return;
@@ -121,9 +133,6 @@ export default function DashBoard({
               permissionLevel={permissionLevel}
               players={players}
               roomId={roomId}
-              onclick={(e) => {
-                e.stopPropagation();
-              }}
             />
           )}
         </div>

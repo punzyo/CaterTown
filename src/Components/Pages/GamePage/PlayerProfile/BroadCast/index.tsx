@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-
 import { useFormInput } from '@/utils/hooks/useFormInput';
 import { sendBroadcast } from '@/utils/firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
@@ -68,15 +67,21 @@ const Wrapper = styled.div`
     }
   }
 `;
+interface BroadCastProps {
+  roomId: string;
+  userId: string;
+  playerCharName: string;
+  setShowBroadcast: React.Dispatch<React.SetStateAction<boolean>>;
+}
 export default function BroadCast({
   roomId,
   userId,
   playerCharName,
   setShowBroadcast,
-}) {
+}: BroadCastProps) {
   const broadCastTitleInput = useFormInput('');
   const broadCastContentInput = useFormInput('');
-  const hourSelectedInput = useFormInput(1);
+  const hourSelectedInput = useFormInput('1');
 
   const handleBroadcastClick = async () => {
     if (!broadCastTitleInput.value || !broadCastContentInput.value) return;
@@ -134,8 +139,8 @@ export default function BroadCast({
         <label htmlFor="content">內容</label>
         <textarea
           id="content"
-          cols="30"
-          rows="10"
+          cols={30}
+          rows={10}
           value={broadCastContentInput.value}
           onChange={broadCastContentInput.onChange}
         ></textarea>

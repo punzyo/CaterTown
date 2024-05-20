@@ -3,7 +3,7 @@ import { collection, query, onSnapshot } from 'firebase/firestore';
 import { db } from '@/utils/firebase/firestore';
 import { PlayerType } from '@/types';
 
-export const usePlayer = (roomId:string) => {
+export const usePlayer = (roomId: string | undefined) => {
   const [players, setPlayers] = useState<PlayerType[] | undefined>(undefined);
 
   useEffect(() => {
@@ -12,11 +12,11 @@ export const usePlayer = (roomId:string) => {
     const q = query(positionsRef);
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const playersData: PlayerType[]= [];
+      const playersData: PlayerType[] = [];
       querySnapshot.forEach((doc) => {
         playersData.push({
           ...doc.data(),
-        }as PlayerType);
+        } as PlayerType);
       });
       setPlayers(playersData);
     });

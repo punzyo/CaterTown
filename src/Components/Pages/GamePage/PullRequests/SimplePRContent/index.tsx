@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import Markdown from 'react-markdown';
+import type { PullRequest } from '@/types';
 const Wrapper = styled.div`
   position: relative;
   width: 100%;
@@ -99,7 +100,7 @@ const DetailPRBottom = styled.div`
     }
   }
 `;
-export default function SimplePRContent({ pullRequests, children }) {
+export default function SimplePRContent({ pullRequests, children }:{pullRequests:PullRequest,children: React.ReactNode}) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (

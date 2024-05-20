@@ -69,7 +69,11 @@ const CategoryWrapper = styled.div`
   z-index: -1;
   margin-left: 10px;
 `;
-const Category = styled.button`
+interface CategoryProps {
+  $isSelected: boolean;
+  $last: boolean;
+}
+const Category = styled.button<CategoryProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -78,20 +82,20 @@ const Category = styled.button`
   width: 33.3%;
   border-radius: 20px;
   height: 30px;
-  background-color: ${(props) =>
-    props.$isSelected
+  background-color: ${({$isSelected}) =>
+    $isSelected
       ? '${({ theme }) => theme.colors.backgroundYellow0}'
       : '${({ theme }) => theme.colors.hoverYellow0}'};
-  border: ${(props) => (props.$isSelected ? '1px' : '1px')} solid
+  border: ${({$isSelected}) => ($isSelected ? '1px' : '1px')} solid
     rgba(0, 0, 0, 0.4);
 
   border-bottom: none;
   border-radius: 15px 15px 0 0;
-  z-index: ${(props) => (props.$isSelected ? '5' : props.$last ? '-1' : '0')};
+  z-index: ${({$isSelected, $last}) => ($isSelected ? '5' : $last ? '-1' : '0')};
   margin-left: -5px;
   &:hover {
-    background-color: ${(props) =>
-      props.$isSelected
+    background-color: ${({$isSelected}) =>
+    $isSelected
         ? ''
         : '${({ theme }) => theme.colors.backgroundYellow1}'};
   }
@@ -101,7 +105,7 @@ const Title = styled.h2`
   padding: 0 20px;
 `;
 
-export default function Tutorial({ setShowTutorial }) {
+export default function Tutorial({ setShowTutorial }:{setShowTutorial:React.Dispatch<React.SetStateAction<boolean>>}) {
   const BASIC = 'basic';
   const COMMUNICATION = 'communication';
   const PERMISSION = 'permission';

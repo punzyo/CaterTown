@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import MemberIcon from '@/Components/MemberIcon';
 import OnlineStatus from '@/Components/OnlineStatus';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import GitHubIcon from '@/Components/Icons/GitHubIcon';
 import { useGameSettings, useUserState } from '@/utils/zustand';
 import { useFormInput } from '@/utils/hooks/useFormInput';
@@ -13,6 +13,7 @@ import {
 import DashBoard from './DashBoard';
 import Tutorial from './Tutorial';
 import TutorialIcon from '@/Components/Icons/TutorialIcon';
+import type { PlayerType } from '@/types';
 const Wrapper = styled.div`
   position: relative;
   min-width: 160px;
@@ -51,7 +52,10 @@ const IconWrapper = styled.div`
   width: 50px;
   height: 50px;
 `;
-const ProfileWrapper = styled.div`
+interface ProfileWrapperProps {
+  $editGitHubId: boolean;
+}
+const ProfileWrapper = styled.div<ProfileWrapperProps>`
   position: absolute;
   width: 270px;
   height: 275px;
@@ -90,8 +94,8 @@ const ProfileWrapper = styled.div`
     gap: 10px;
     padding: 5px 0;
     .github:hover {
-      background-color: ${(props) =>
-        props.$editGitHubId
+      background-color: ${({ $editGitHubId }) =>
+        $editGitHubId
           ? 'inherit'
           : '${({ theme }) => theme.colors.hoverBlue3}'};
       .githubIcon {
@@ -127,7 +131,6 @@ const ProfileWrapper = styled.div`
       border-radius: 5px;
       > svg {
         margin-left: auto;
-        /* cursor: pointer; */
       }
     }
     svg {
@@ -186,7 +189,18 @@ const ProfileWrapper = styled.div`
     }
   }
 `;
-
+interface PlayerProfileProps {
+  players: PlayerType[];
+  roomId: string;
+  roomName: string;
+  userId: string;
+  image: string;
+  playerCharName: string;
+  gitHubId: string;
+  permissionLevel: string;
+  showProfile: boolean;
+  setShowProfile: React.Dispatch<React.SetStateAction<boolean>>;
+}
 export default function PlayerProfile({
   players,
   roomId,
@@ -198,7 +212,7 @@ export default function PlayerProfile({
   permissionLevel,
   showProfile,
   setShowProfile,
-}) {
+}: PlayerProfileProps) {
   const { setResetPosition } = useGameSettings();
   const { resetUser } = useUserState();
   const [editGitHubId, setEditGitHubId] = useState(false);
@@ -219,7 +233,7 @@ export default function PlayerProfile({
     })();
   }, [userId]);
 
-  const handleGitHubSubmit = async (e) => {
+  const handleGitHubSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setEditGitHubId(false);
     if (gitHubIdInput.value === gitHubId || gitHubIdInput.value === '') return;
@@ -335,7 +349,6 @@ export default function PlayerProfile({
               {permissionLevel !== 'member' && showDashBoard && (
                 <DashBoard
                   roomId={roomId}
-                  roomName={roomName}
                   userId={userId}
                   playerCharName={playerCharName}
                   players={players}

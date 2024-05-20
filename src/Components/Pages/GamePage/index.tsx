@@ -2,23 +2,23 @@ import Map from './Maps/index';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useRoomStatus } from '@/utils/hooks/useRoomStatus.ts';
+import { useRoomStatus } from '@/utils/hooks/useRoomStatus';
 import { useUserState } from '@/utils/zustand';
-import { usePlayer } from '@/utils/hooks/usePlayer.ts';
+import { usePlayer } from '@/utils/hooks/usePlayer';
 import '@livekit/components-styles';
 import { ControlBar, LiveKitRoom } from '@livekit/components-react';
 import LocalTracks from '@/Components/Tracks/LocalTracks/index';
 import TracksProvider from '@/Components/Tracks/TracksProvider/index';
 import { useGameSettings } from '@/utils/zustand';
-import { useConditionalPullRequests } from '@/utils/hooks/useConditionalPullRequests.ts';
+import { useConditionalPullRequests } from '@/utils/hooks/useConditionalPullRequests';
 import PlayerProfile from './PlayerProfile/index';
-import { useBroadcasts } from '@/utils/hooks/useBroadcasts.ts';
+import { useBroadcasts } from '@/utils/hooks/useBroadcasts';
 import Button from '@/Components/Buttons/Button/index';
 import { usePullRequests } from '@/utils/zustand';
 import ExitRoomIcon from '@/Components/Icons/ExitRoomIcon';
 import GroupIcon from '@/Components/Icons/GroupIcon';
 import Sidebar from './Sidebar/index';
-
+import type { PlayerType } from '@/types';
 const Wrapper = styled.main`
   color: white;
   width: 100%;
@@ -127,10 +127,10 @@ const JoinButton = styled.div`
 
 export default function GamePage() {
   const { roomId, roomName } = useParams();
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState('');
   const liveKitUrl = import.meta.env.VITE_LIVEKIT_SERVER_URL;
   const { user } = useUserState();
-  const userId = user.id;
+  const userId = user?.id;
 
   const onlineStatus = useRoomStatus({ userId, roomId });
   const players = usePlayer(roomId);
@@ -140,8 +140,8 @@ export default function GamePage() {
   const [permissionLevel, setPermissionLevel] = useState(null);
 
   const navigate = useNavigate();
-  const [onlineMembers, setOnlineMembers] = useState([]);
-  const [offlineMembers, setOfflineMembers] = useState([]);
+  const [onlineMembers, setOnlineMembers] = useState<PlayerType[]>([]);
+  const [offlineMembers, setOfflineMembers] = useState<PlayerType[]>([]);
   const { showSidebar, setShowSidebar } = useGameSettings();
   const openPullRequests = useConditionalPullRequests({
     userId,
@@ -166,8 +166,8 @@ export default function GamePage() {
 
   useEffect(() => {
     if (!players || !onlineStatus) return;
-    const online = [];
-    const offline = [];
+    const online: PlayerType[] = [];
+    const offline: PlayerType[] = [];
     players.forEach((player) => {
       const isOnline = onlineStatus[player.userId]?.online || false;
       if (player.userId === userId) {
@@ -180,7 +180,7 @@ export default function GamePage() {
     setOfflineMembers(offline);
   }, [players, onlineStatus, userId]);
 
-  const getToken = async ({ roomId, charName }) => {
+  const getToken = async ({ roomId, charName }:{ roomId:string, charName:string }) => {
     if (isConnecting) return;
     setIsConnecting(true);
     const response = await fetch(
@@ -191,7 +191,7 @@ export default function GamePage() {
     const token = await response.text();
     setToken(token);
   };
-  const handleConnected = (isConnected) => {
+  const handleConnected = (isConnected:boolean) => {
     setIsConnected(isConnected);
     setIsConnecting(false);
   };

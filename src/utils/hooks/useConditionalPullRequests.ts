@@ -3,10 +3,10 @@ import { collection, doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/utils/firebase/firestore';
 import type { PullRequest, PullRequests } from '@/types';
 interface UseConditionalPullRequestsParams {
-  userId: string;
-  roomId: string;
-  gitHubId: string;
-  permissionLevel: string;
+  userId: string | undefined;
+  roomId: string | undefined;
+  gitHubId: string | null;
+  permissionLevel: string | null;
 }
 
 export const useConditionalPullRequests = ({

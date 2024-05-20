@@ -55,13 +55,13 @@ export interface BroadcastData {
   charName: string;
   title: string;
   publishTime: Timestamp;
-  expirationTime: string;
+  expirationTime: Timestamp | string;
   content: string;
 }
 export interface MessageType {
   charName: string;
   message: string;
-  postTime?: Date;
+  postTime?: Timestamp;
 }
 export interface UserData {
   email: string;

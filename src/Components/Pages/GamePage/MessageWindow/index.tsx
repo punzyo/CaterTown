@@ -9,13 +9,17 @@ import {
 import { useState, useEffect, useRef } from 'react';
 import MaximizeIcon from '@/Components/Icons/MaximizeIcon';
 import MinimizeIcon from '@/Components/Icons/MinimizeIcon';
-const Wrapper = styled.div`
+import type { MessageType } from '@/types';
+interface WrapperProps {
+  $minimizeMessages: boolean;
+}
+const Wrapper = styled.div<WrapperProps>`
   width: 350px;
-  height: ${(props) => (props.$minimizeMessages ? '0px' : '300px')};
+  height: ${({ $minimizeMessages }) => ($minimizeMessages ? '0px' : '300px')};
   position: absolute;
   display: flex;
   flex-direction: column;
-  bottom: ${(props) => (props.$minimizeMessages ? '-32px' : '-0.5px')};
+  bottom: ${($minimizeMessages) => ($minimizeMessages ? '-32px' : '-0.5px')};
   right: 300px;
 `;
 const MessageWrapper = styled.div`
@@ -47,21 +51,25 @@ const ChannelWrapper = styled.div`
   height: 100%;
   display: flex;
 `;
-const Channel = styled.div`
+interface ChannelProps {
+  $selected: boolean;
+}
+const Channel = styled.div<ChannelProps>`
   position: relative;
   width: 50%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) => (props.$selected ? '#3D477C' : '')};
+  background-color: ${({ $selected }) => ($selected ? '#3D477C' : '')};
   &:hover {
-    background-color: ${(props) =>
-      props.$selected ? '' : '${({ theme }) => theme.colors.hoverBlue5}'};
+    background-color: ${({ $selected }) =>
+      $selected ? '' : '${({ theme }) => theme.colors.hoverBlue5}'};
   }
   cursor: pointer;
 `;
-const Messages = styled.div`
+interface MessagesProps extends WrapperProps {}
+const Messages = styled.div<MessagesProps>`
   width: 100%;
   height: ${(props) => (props.$minimizeMessages ? '0px' : '300px')};
   background-color: ${({ theme }) => theme.colors.backgroundBlue1};
@@ -131,7 +139,20 @@ const UnreadIcon = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
+interface MessageWindow {
+  playerCharName: string;
+  userId: string;
+  roomId: string;
+  publicMessages: MessageType[] | undefined;
+  privateChannel: string;
+  isPublicChannel: boolean;
+  privateMessages: MessageType[] | undefined;
+  privateCharName: string;
+  minimizeMessages: boolean;
+  setIsPublicChannel: React.Dispatch<React.SetStateAction<boolean>>;
+  setMinimizeMessages: React.Dispatch<React.SetStateAction<boolean>>;
+  unreadMessages: { [key: string]: { count: number } };
+}
 export default function MessageWindow({
   playerCharName,
   userId,
@@ -145,9 +166,9 @@ export default function MessageWindow({
   minimizeMessages,
   setMinimizeMessages,
   unreadMessages,
-}) {
+}: MessageWindow) {
   const messageInput = useFormInput('');
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [unreadPublicMessages, setUnreadPublicMessages] = useState(0);
   const messageInit = useRef(true);
 
@@ -178,7 +199,7 @@ export default function MessageWindow({
     }
   }, [minimizeMessages]);
 
-  const sendMessage = async (e) => {
+  const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!messageInput.value) return;
     if (isPublicChannel) {
@@ -222,7 +243,7 @@ export default function MessageWindow({
       });
     }
   };
-  const renderMessages = (messages) => {
+  const renderMessages = (messages: MessageType[] | undefined) => {
     if (!messages || !Array.isArray(messages)) return null;
 
     return messages.map((message, index) => (

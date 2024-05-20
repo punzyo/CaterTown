@@ -4,22 +4,27 @@ import InviteButton from '@/Components/Buttons/InviteButton';
 import CloseButton from '@/Components/Buttons/CloseButton';
 import { useGameSettings } from '@/utils/zustand';
 import MemberInfo from './MemberInfo';
-import MessageWindow from '../MessageWindow';
+import MessageWindow from '@/Components/Pages/GamePage/MessageWindow'
 import SearchBar from '@/Components/SearchBar';
 import { useState, useMemo } from 'react';
 import { usePrivateMessages } from '@/utils/hooks/usePrivateMessages';
 import { useUnreadMessages } from '@/utils/hooks/useUnreadMessages';
 import { usePublicMessages } from '@/utils/hooks/usePublicMessages';
-const Wrapper = styled.div`
+import type { PlayerType } from '@/types';
+interface WrapperProps{
+  $isOpen: boolean;
+  $isFullScreen: boolean;
+}
+const Wrapper = styled.div<WrapperProps>`
   width: 300px;
   height: calc(100% - 100px);
   position: fixed;
-  right: ${(props) => (props.$isOpen ? '0' : '-300px')};
+  right: ${({$isOpen }) => ($isOpen ? '0' : '-300px')};
   transition: right 0.3s ease-in-out;
   padding: 15px;
   top: 0;
   background-color: ${({ theme }) => theme.colors.backgroundBlue1};
-  z-index: ${(props) => (props.$isFullScreen ? '5' : '12')};
+  z-index: ${({$isFullScreen}) => ($isFullScreen ? '5' : '12')};
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderBlue0};
 
   button {
@@ -41,7 +46,16 @@ const MemberWrapper = styled.div`
   gap: 10px;
   overflow-y: auto;
 `;
-
+interface SidebarProps{
+  userId:string;
+  roomId:string;
+  onlineMembers:PlayerType[]
+  offlineMembers:PlayerType[]
+  players:PlayerType[]
+  playerCharName:string;
+  roomName:string;
+  onlineStatus:{ [key: string]: { online: boolean } }
+}
 export default function Sidebar({
   userId,
   roomId,
@@ -51,13 +65,13 @@ export default function Sidebar({
   playerCharName,
   roomName,
   onlineStatus,
-}) {
+}:SidebarProps) {
   const { isFullScreen, showSidebar, setShowSidebar } = useGameSettings();
   const [privateChannel, setPrivateChannel] = useState('');
   const [minimizeMessages, setMinimizeMessages] = useState(true);
   const publicMessages = usePublicMessages(roomId);
   const [isPublicChannel, setIsPublicChannel] = useState(true);
-  const [privateCharName, setPrivateCharName] = useState(null);
+  const [privateCharName, setPrivateCharName] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const privateMessages = usePrivateMessages({
     userId,
@@ -71,7 +85,7 @@ export default function Sidebar({
     isPublicChannel,
     minimizeMessages,
   });
-  const changeChannel = (playerId) => {
+  const changeChannel = (playerId:string) => {
     setIsPublicChannel(false);
     setPrivateChannel(playerId);
   };
@@ -143,7 +157,7 @@ export default function Sidebar({
           ))}
         </MemberWrapper>
       )}
-      <MessageWindow
+     <MessageWindow
         userId={userId}
         playerCharName={playerCharName}
         roomId={roomId}
@@ -151,7 +165,6 @@ export default function Sidebar({
         isPublicChannel={isPublicChannel}
         setIsPublicChannel={setIsPublicChannel}
         privateChannel={privateChannel}
-        setPrivateChannel={setPrivateChannel}
         privateMessages={privateMessages}
         privateCharName={privateCharName}
         minimizeMessages={minimizeMessages}
