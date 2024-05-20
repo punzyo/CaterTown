@@ -6,6 +6,7 @@ import { signInToAuth } from '@/utils/firebase/auth';
 import { getUserFromFirestore } from '@/utils/firebase/firestore';
 import { useUserState } from '@/utils/zustand';
 import Logo from '@/Components/Logo';
+import type { InputWrapperProps } from '@/types';
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -61,7 +62,8 @@ const Bottom = styled.div`
     display: block;
   }
 `;
-const InputWrapper = styled.div`
+
+const InputWrapper = styled.div<InputWrapperProps>`
   width: 100%;
   input {
     outline: none;
@@ -73,8 +75,8 @@ const InputWrapper = styled.div`
     border-radius: 5px;
     &:focus {
       border: 1px solid
-        ${(props) =>
-          props.$value ? (props.$isValid ? 'green' : 'red') : '#1e84d8'};
+        ${({$value,$isValid}) =>
+          $value ? ($isValid ? 'green' : 'red') : '#1e84d8'};
     }
   }
 `;
@@ -111,7 +113,7 @@ export default function SignInPage() {
   const emailInput = useValidatedInput('', /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   const passwordInput = useValidatedInput('', /^.{6,}$/);
 
-  const handleSignIn = async (e) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!emailInput.isValid) {
       alert('請輸入正確的電子郵件');
@@ -122,6 +124,7 @@ export default function SignInPage() {
       return;
     }
     const user = await signInToAuth(emailInput.value, passwordInput.value);
+    if (!user) return;
     const userData = await getUserFromFirestore(user.uid);
     setUser(userData);
     navigate('/');

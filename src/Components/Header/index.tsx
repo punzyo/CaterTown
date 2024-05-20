@@ -93,7 +93,7 @@ const SignOut = styled.div`
   }
 `;
 interface HeaderProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 export default function Header({ children }:HeaderProps) {
   const navigate = useNavigate();

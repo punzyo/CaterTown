@@ -63,6 +63,7 @@ export async function createRoom({
     return roomDocRef.id;
   } catch (e) {
     console.error('Error adding document: ', e);
+    return undefined
   }
 }
 export async function initPlayerData({

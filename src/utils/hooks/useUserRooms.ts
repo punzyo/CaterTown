@@ -3,7 +3,7 @@ import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '@/utils/firebase/firestore';
 import type { RoomType } from '@/types';
 
-export const useUserRooms = (userId:string) => {
+export const useUserRooms = (userId:string | undefined) => {
   const [userRooms, setUserRooms] = useState<RoomType[]>([]);
   const [loading, setLoading] = useState(true);
 

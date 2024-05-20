@@ -6,7 +6,8 @@ import TrashCanIcon from '@/Components/Icons/TrashCanIcon';
 import LeaveRoomIcon from '@/Components/Icons/LeaveRoomIcon';
 import DeleteDialog from './DeleteDialog';
 import { useOnlineUserCount } from '@/utils/hooks/useOnlineUserCount';
-
+import type { DeleteDialogState } from './DeleteDialog';
+import type { RoomType } from '@/types';
 const Wrapper = styled.div`
   height: 400px;
   display: flex;
@@ -94,60 +95,69 @@ const Wrapper = styled.div`
     }
   }
 `;
-
+interface RoomProps {
+  room: RoomType;
+  userId: string | undefined;
+  showDeleteDialog: DeleteDialogState;
+  setShowDeleteDialog: React.Dispatch<React.SetStateAction<DeleteDialogState>>;
+}
 export default function Room({
   room,
   userId,
   showDeleteDialog,
   setShowDeleteDialog,
-}) {
+}: RoomProps) {
   const navigate = useNavigate();
   const onlineMembers = useOnlineUserCount(room.id);
   return (
-    <Wrapper>
-      <div className="top">
-        <span className="mapName">{room.roomName}</span>
-        {
+    <>
+      {userId && (
+        <Wrapper>
+          <div className="top">
+            <span className="mapName">{room.roomName}</span>
+            {
+              <div
+                id="roomActionTrigger"
+                onClick={() => {
+                  setShowDeleteDialog({ show: true, id: room.id });
+                }}
+              >
+                {room.isCreator ? <TrashCanIcon /> : <LeaveRoomIcon />}
+                {showDeleteDialog.show && showDeleteDialog.id === room.id && (
+                  <DeleteDialog
+                    room={room}
+                    userId={userId}
+                    setShowDeleteDialog={setShowDeleteDialog}
+                  />
+                )}
+              </div>
+            }
+          </div>
           <div
-            id="roomActionTrigger"
+            className="middle"
             onClick={() => {
-              setShowDeleteDialog({ show: true, id: room.id });
+              navigate(`/catertown/${room.id}/${room.roomName}`);
             }}
           >
-            {room.isCreator ? <TrashCanIcon /> : <LeaveRoomIcon />}
-            {showDeleteDialog.show && showDeleteDialog.id === room.id && (
-              <DeleteDialog
-                room={room}
-                userId={userId}
-                setShowDeleteDialog={setShowDeleteDialog}
-              />
-            )}
+            <div className="onlineMembers">{onlineMembers}</div>
           </div>
-        }
-      </div>
-      <div
-        className="middle"
-        onClick={() => {
-          navigate(`/catertown/${room.id}/${room.roomName}`);
-        }}
-      >
-        <div className="onlineMembers">{onlineMembers}</div>
-      </div>
-      <div className="bottom">
-        <div>
-          <Cat image={room.character}></Cat>
-          <span>{room.charName}</span>
-        </div>
-        <div className="right">
-          <span className="date">
-            {new Date(room.joinDate.toDate()).toISOString().slice(0, 10)}
-          </span>
-          <InviteButton
-            link={`${window.location.origin}/invite/${room.id}/${room.roomName}`}
-            message="邀請連結已複製!"
-          />
-        </div>
-      </div>
-    </Wrapper>
+          <div className="bottom">
+            <div>
+              <Cat image={room.character}></Cat>
+              <span>{room.charName}</span>
+            </div>
+            <div className="right">
+              <span className="date">
+                {new Date(room.joinDate.toDate()).toISOString().slice(0, 10)}
+              </span>
+              <InviteButton
+                link={`${window.location.origin}/invite/${room.id}/${room.roomName}`}
+                message="邀請連結已複製!"
+              />
+            </div>
+          </div>
+        </Wrapper>
+      )}
+    </>
   );
 }

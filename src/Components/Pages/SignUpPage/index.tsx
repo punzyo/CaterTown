@@ -5,6 +5,7 @@ import useValidatedInput from '@/utils/hooks/useValidatedInput';
 import { registerUserToAuth } from '@/utils/firebase/auth';
 import { saveUserToFirestore } from '@/utils/firebase/firestore';
 import Logo from '@/Components/Logo';
+import type { InputWrapperProps } from '@/types';
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -71,7 +72,8 @@ const Bottom = styled.div`
     display: block;
   }
 `;
-const InputWrapper = styled.div`
+
+const InputWrapper = styled.div<InputWrapperProps>`
   width: 100%;
   input {
     outline: none;
@@ -83,8 +85,8 @@ const InputWrapper = styled.div`
     border-radius: 5px;
     &:focus {
       border: 1px solid
-        ${(props) =>
-          props.$value ? (props.$isValid ? 'green' : 'red') : '#1e84d8'};
+        ${({$value,$isValid}) =>
+          $value ? ($isValid ? 'green' : 'red') : '#1e84d8'};
     }
   }
 `;
@@ -120,7 +122,7 @@ export default function SignUpPage() {
   const email = useValidatedInput('', /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   const password = useValidatedInput('', /^.{6,}$/);
 
-  const handleSignUp = async (e) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.isValid) {
       alert('請確認名稱填寫正確');

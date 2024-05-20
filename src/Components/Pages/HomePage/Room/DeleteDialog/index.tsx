@@ -3,6 +3,7 @@ import {
   deleteRoomFromAllUsers,
   removeUserFromRoom,
 } from '@/utils/firebase/firestore';
+import type { RoomType } from '@/types';
 const Wrapper = styled.div`
   position: absolute;
   right: 0;
@@ -32,15 +33,28 @@ const Wrapper = styled.div`
     }
   }
 `;
-export default function DeleteDialog({ room, userId, setShowDeleteDialog }) {
-  const handleDeleteRoom = async (roomId) => {
+export interface DeleteDialogState {
+  show: boolean;
+  id: string;
+}
+interface DeleteDialogProps {
+  room: RoomType;
+  userId: string;
+  setShowDeleteDialog: React.Dispatch<React.SetStateAction<DeleteDialogState>>;
+}
+export default function DeleteDialog({
+  room,
+  userId,
+  setShowDeleteDialog,
+}: DeleteDialogProps) {
+  const handleDeleteRoom = async (roomId: string) => {
     await deleteRoomFromAllUsers(roomId);
   };
 
-  const handleLeaveRoom = async (roomId) => {
+  const handleLeaveRoom = async (roomId: string) => {
     await removeUserFromRoom({ userId, roomId });
   };
-  const handleRoomAction = (room) => {
+  const handleRoomAction = (room: RoomType) => {
     room.isCreator ? handleDeleteRoom(room.id) : handleLeaveRoom(room.id);
   };
   const closeDialog = () => {

@@ -15,6 +15,7 @@ import {
   getUserDataById,
   updateTutorialState,
 } from '@/utils/firebase/firestore';
+import type { UserData } from '@/types';
 const Wrapper = styled.main`
   width: 100%;
   height: 100%;
@@ -86,14 +87,14 @@ const TutorialButton = styled.button`
 export default function HomePage() {
   const { user } = useUserState();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const userId = user.id;
+  const userId = user?.id;
   const { userRooms, loading } = useUserRooms(userId);
   const [showDeleteDialog, setShowDeleteDialog] = useState({
     show: false,
     id: '',
   });
   const [searchTerm, setSearchTerm] = useState('');
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState<UserData | undefined>();
   const filteredRooms = useMemo(() => {
     if (!searchTerm) return userRooms;
     return userRooms.filter((room) =>
@@ -109,7 +110,7 @@ export default function HomePage() {
   }, [userId]);
 
   useEffect(() => {
-    if (!userData) return;
+    if (!userData || !userId) return;
     if (userData && !userData.hasViewedHomePageTutorial1) {
       runTutorial();
       updateTutorialState(userId, 'hasViewedHomePageTutorial1');
@@ -223,7 +224,7 @@ export default function HomePage() {
           )}
         </RoomWrapper>
       </MainPage>
-      {dialogOpen && <CreateRoomDialog onClose={closeDialog} userId={userId} />}
+      {dialogOpen && userId && <CreateRoomDialog onClose={closeDialog} userId={userId} />}
     </Wrapper>
   );
 }

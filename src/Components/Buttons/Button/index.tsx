@@ -19,7 +19,7 @@ const ButtonStyle = styled.button`
   }
 `;
 interface ButtonProps {
-  onClickFunc: () => void;
+  onClickFunc?: () => void;
   content: string;
 }
 export default function Button({ onClickFunc, content }:ButtonProps) {

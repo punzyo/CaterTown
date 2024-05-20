@@ -12,6 +12,7 @@ import { catImages } from '@/assets/charNames';
 import CloseButton from '@/Components/Buttons/CloseButton';
 import Cat from '@/Components/Cat';
 import Dialog from '@/Components/Dialog';
+import type { InputWrapperProps } from '@/types';
 const SliderWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -60,7 +61,7 @@ const Title = styled.div`
     background-position: -260px 188px;
   }
 `;
-const InputWrapper = styled.div`
+const InputWrapper = styled.div<InputWrapperProps>`
   width: 85%;
   label {
     font-weight: bold;
@@ -75,8 +76,8 @@ const InputWrapper = styled.div`
     border-radius: 5px;
     &:focus {
       border: 1px solid
-        ${(props) =>
-          props.$value ? (props.$isValid ? 'green' : 'red') : '#1e84d8'};
+        ${({ $value, $isValid }) =>
+          $value ? ($isValid ? 'green' : 'red') : '#1e84d8'};
     }
   }
 `;
@@ -97,11 +98,17 @@ const CreateRoom = styled.div`
   }
 `;
 
-export default function CreateRoomDialog({ onClose, userId }) {
+export default function CreateRoomDialog({
+  onClose,
+  userId,
+}: {
+  onClose: () => void;
+  userId: string;
+}) {
   const roomNameInput = useValidatedInput('', /^[^*%]+$/, 15);
   const charNameInput = useValidatedInput('', /^[^*%]+$/, 15);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const handleSlideChange = (index) => {
+  const handleSlideChange = (index:number) => {
     setSelectedImageIndex(index);
   };
   const clickCreateRoom = async () => {
@@ -117,12 +124,10 @@ export default function CreateRoomDialog({ onClose, userId }) {
     const character = catImages[selectedImageIndex];
 
     const roomId = await createRoom({
-      userId,
       roomName,
-      charName,
-      character,
       map,
     });
+    if(!roomId) return 
     await initPlayerData({
       roomId,
       userId,

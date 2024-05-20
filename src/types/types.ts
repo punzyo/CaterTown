@@ -63,3 +63,15 @@ export interface MessageType {
   message: string;
   postTime?: Date;
 }
+export interface UserData {
+  email: string;
+  hasViewedGamePageTutorial: boolean;
+  hasViewedHomePageTutorial1: boolean;
+  hasViewedHomePageTutorial2: boolean;
+  name: string;
+}
+
+export interface InputWrapperProps{
+  $value:string;
+  $isValid:boolean;
+}

@@ -2,18 +2,19 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { catImages } from '@/assets/charNames';
 import { useUserState } from '@/utils/zustand';
-import useValidatedInput from '@/utils/hooks/useValidatedInput.ts';
+import useValidatedInput from '@/utils/hooks/useValidatedInput';
 import {
   addRoomToUser,
   checkUserRoom,
   initPlayerData,
   isNameAvailable,
-} from '@/utils/firebase/firestore.ts';
+} from '@/utils/firebase/firestore';
 import Button from '@/Components/Buttons/Button';
 import styled from 'styled-components';
 import SimpleSlider from '@/Components/SimpleSlider';
 import Header from '@/Components/Header';
-import { map2 } from '../GamePage/Maps/map2.ts';
+import { map2 } from '../GamePage/Maps/map2';
+import type { InputWrapperProps } from '@/types';
 const Wrapper = styled.main`
   width: 100%;
   height: 100%;
@@ -80,7 +81,8 @@ const SilderWrapper = styled.div`
     }
   }
 `;
-const InputWrapper = styled.div`
+
+const InputWrapper = styled.div<InputWrapperProps>`
   width: 100%;
   input {
     outline: none;
@@ -92,8 +94,8 @@ const InputWrapper = styled.div`
     border-radius: 5px;
     &:focus {
       border: 1px solid
-        ${(props) =>
-          props.$value ? (props.$isValid ? 'green' : 'red') : '#1e84d8'};
+        ${({$value,$isValid}) =>
+          $value ? ($isValid ? 'green' : 'red') : '#1e84d8'};
     }
   }
 `;
@@ -112,7 +114,7 @@ export default function InvitePage() {
   const charNameInput = useValidatedInput('', /^[^*%]+$/, 15);
   const { user } = useUserState();
 
-  const userId = user.id;
+  const userId = user?.id;
   const { roomId, roomName } = useParams();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [roomChecked, setRoomChecked] = useState(false);
@@ -129,15 +131,15 @@ export default function InvitePage() {
     })();
   }, [roomId, userId]);
 
-  const handleSlideChange = (index) => {
+  const handleSlideChange = (index:number) => {
     setSelectedImageIndex(index);
   };
   const handleJoinRoom = async () => {
+    if(!userId || !roomId || !roomName) return
     if (!charNameInput.isValid) {
       alert('名稱不符合規定');
       return;
     }
-    const userId = user.id;
     const charName = charNameInput.value;
     const character = catImages[selectedImageIndex];
     const canUseName = await isNameAvailable({ roomId, charName });

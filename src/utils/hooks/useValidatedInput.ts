@@ -3,7 +3,7 @@ import { useState } from 'react';
 export default function useValidatedInput(
   initialValue: string,
   regex: RegExp,
-  maxLength: number
+  maxLength?: number 
 ) {
   const [value, setValue] = useState(initialValue);
   const [isValid, setIsValid] = useState(false);
