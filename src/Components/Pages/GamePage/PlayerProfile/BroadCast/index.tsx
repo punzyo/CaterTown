@@ -92,7 +92,9 @@ export default function BroadCast({
       currentDate.getTime() + hoursToAdd * 3600 * 1000
     );
 
-    const expirationTime = expirationTimeObj.toISOString();
+    const expirationTime = Timestamp.fromDate(
+      new Date(expirationTimeObj.toISOString())
+    );
 
     const broadcastData = {
       userId,

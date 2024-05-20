@@ -74,19 +74,18 @@ type State = {
   left: number;
 } | null;
 
-type Action = 
+type Action =
   | { type: 'move'; payload: { top: number; left: number } }
   | { type: 'setPosition'; payload: { top: number; left: number } };
 
-  function positionReducer(state: State, action: Action): State {
-    if (state === null) {
-
-      if (action.type === 'setPosition') {
-        return action.payload;
-      }
-      return state;
+function positionReducer(state: State, action: Action): State {
+  if (state === null) {
+    if (action.type === 'setPosition') {
+      return action.payload;
     }
-    switch (action.type) {
+    return state;
+  }
+  switch (action.type) {
     case 'move':
       return {
         ...state,
@@ -135,10 +134,10 @@ const keyMap: Record<string, KeyMapValue> = {
   D: { left: -map2.unit, direction: 'right' },
 };
 interface MapProps {
-  players: PlayerType[];
+  players: PlayerType[] | undefined;
   playerCharName: string;
-  setPlayerCharName: React.Dispatch<React.SetStateAction<string>>;
-  setPermissionLevel: React.Dispatch<React.SetStateAction<string>>;
+  setPlayerCharName: React.Dispatch<React.SetStateAction<string | null>>;
+  setPermissionLevel: React.Dispatch<React.SetStateAction<string | null>>;
   setGitHubId: React.Dispatch<React.SetStateAction<string>>;
   permissionLevel: string;
   gitHubId: string;
@@ -163,7 +162,9 @@ export default function Map({
   const [currentFrame, setCurrentFrame] = useState(0);
   const [direction, setDirection] = useState('');
   const [playerChar, setPlayerChar] = useState('');
-  const [nearbyPlayers, setNearbyPlayers] = useState<{ charName: string; character: string }[]>([]);
+  const [nearbyPlayers, setNearbyPlayers] = useState<
+    { charName: string; character: string }[]
+  >([]);
   const [room, setRoom] = useState('');
   const canMove = useRef(true);
   const { resetPosition, setResetPosition, isFullScreen } = useGameSettings();
@@ -292,7 +293,7 @@ export default function Map({
     })();
   }, [resetPosition]);
   const countNearbyPlayers = (players: PlayerType[]) => {
-    if(!position) return
+    if (!position) return;
     const gridRange = 96;
     const myPosition = calculatePlayerPosition(position);
     let nearbyPlayers;

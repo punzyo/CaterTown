@@ -14,7 +14,6 @@ export default function AudioManager({
   audioVolume,
 }: AudioManagerProps) {
   const audioTracks = useAudioTracks(isLocal, nearbyPlayers);
-  console.log('aaa', audioTracks);
   return (
     <>
       {audioTracks.map((track: TrackReferenceOrPlaceholder) => {

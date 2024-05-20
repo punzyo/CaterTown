@@ -63,7 +63,7 @@ export async function createRoom({
     return roomDocRef.id;
   } catch (e) {
     console.error('Error adding document: ', e);
-    return undefined
+    return undefined;
   }
 }
 export async function initPlayerData({
@@ -352,12 +352,7 @@ export async function sendBroadcast({
   try {
     const roomRef = doc(db, 'rooms', roomId);
     const broadcastsRef = collection(roomRef, 'broadcasts');
-    addDoc(broadcastsRef, {
-      ...broadcastData,
-      expirationTime: Timestamp.fromDate(
-        new Date(broadcastData.expirationTime)
-      ),
-    });
+    addDoc(broadcastsRef, broadcastData);
   } catch (error) {
     console.error('Error adding broadcast:', error);
   }

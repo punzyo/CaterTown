@@ -192,7 +192,6 @@ const ProfileWrapper = styled.div<ProfileWrapperProps>`
 interface PlayerProfileProps {
   players: PlayerType[];
   roomId: string;
-  roomName: string;
   userId: string;
   image: string;
   playerCharName: string;
@@ -204,7 +203,6 @@ interface PlayerProfileProps {
 export default function PlayerProfile({
   players,
   roomId,
-  roomName,
   userId,
   image,
   playerCharName,

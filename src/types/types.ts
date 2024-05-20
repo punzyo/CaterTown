@@ -55,7 +55,7 @@ export interface BroadcastData {
   charName: string;
   title: string;
   publishTime: Timestamp;
-  expirationTime: Timestamp | string;
+  expirationTime: Timestamp;
   content: string;
 }
 export interface MessageType {

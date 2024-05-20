@@ -8,7 +8,7 @@ import {
   isNameAvailable,
   initPlayerData,
   addRoomToUser,
-} from '@/utils/firebase/firestore.ts';
+} from '@/utils/firebase/firestore';
 import { ThemeProvider } from 'styled-components';
 
   const mockTheme = {
@@ -28,7 +28,7 @@ jest.mock('@/utils/zustand', () => ({
   useUserState: jest.fn(),
 }));
 
-jest.mock('@/utils/firebase/firestore.ts', () => ({
+jest.mock('@/utils/firebase/firestore', () => ({
   checkUserRoom: jest.fn(),
   isNameAvailable: jest.fn(),
   initPlayerData: jest.fn(),

@@ -134,10 +134,10 @@ export default function GamePage() {
 
   const onlineStatus = useRoomStatus({ userId, roomId });
   const players = usePlayer(roomId);
-  const [playerCharName, setPlayerCharName] = useState(null);
+  const [playerCharName, setPlayerCharName] = useState<string | null>(null);
 
-  const [gitHubId, setGitHubId] = useState(null);
-  const [permissionLevel, setPermissionLevel] = useState(null);
+  const [gitHubId, setGitHubId] = useState('');
+  const [permissionLevel, setPermissionLevel] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const [onlineMembers, setOnlineMembers] = useState<PlayerType[]>([]);
@@ -180,8 +180,14 @@ export default function GamePage() {
     setOfflineMembers(offline);
   }, [players, onlineStatus, userId]);
 
-  const getToken = async ({ roomId, charName }:{ roomId:string, charName:string }) => {
-    if (isConnecting) return;
+  const getToken = async ({
+    roomId,
+    charName,
+  }: {
+    roomId: string;
+    charName: string;
+  }) => {
+    if (isConnecting || !roomId || !charName) return;
     setIsConnecting(true);
     const response = await fetch(
       `${liveKitUrl}/getToken?roomId=${encodeURIComponent(
@@ -191,115 +197,120 @@ export default function GamePage() {
     const token = await response.text();
     setToken(token);
   };
-  const handleConnected = (isConnected:boolean) => {
+  const handleConnected = (isConnected: boolean) => {
     setIsConnected(isConnected);
     setIsConnecting(false);
   };
+  if (!players || !roomName || !userId || !roomId || !onlineStatus) return;
   return (
-    <Wrapper
-      onClick={() => {
-        setShowProfile(false);
-      }}
-    >
-      <LiveKitRoom
-        video={false}
-        audio={false}
-        token={token}
-        serverUrl={import.meta.env.VITE_LIVEKIT_CLOUD_URL}
-        data-lk-theme="default"
-        style={{ backgroundColor: 'inherit' }}
-        onConnected={() => {
-          handleConnected(true);
-        }}
-        onDisconnected={() => {
-          handleConnected(false);
-        }}
-      >
-        <TracksProvider></TracksProvider>
-        <Map
-          broadcasts={broadcasts}
-          players={players}
-          playerCharName={playerCharName}
-          setPlayerCharName={setPlayerCharName}
-          permissionLevel={permissionLevel}
-          setPermissionLevel={setPermissionLevel}
-          gitHubId={gitHubId}
-          setGitHubId={setGitHubId}
-          pullRequests={openPullRequests}
-        />
-        <BottomBar>
-          <BottomContent>
-            <LocalTracks />
-            <PlayerProfile
-              showProfile={showProfile}
-              setShowProfile={setShowProfile}
+    <>
+      {playerCharName && permissionLevel && (
+        <Wrapper
+          onClick={() => {
+            setShowProfile(false);
+          }}
+        >
+          <LiveKitRoom
+            video={false}
+            audio={false}
+            token={token}
+            serverUrl={import.meta.env.VITE_LIVEKIT_CLOUD_URL}
+            data-lk-theme="default"
+            style={{ backgroundColor: 'inherit' }}
+            onConnected={() => {
+              handleConnected(true);
+            }}
+            onDisconnected={() => {
+              handleConnected(false);
+            }}
+          >
+            <TracksProvider></TracksProvider>
+            (
+            <Map
+              broadcasts={broadcasts}
               players={players}
-              roomId={roomId}
-              roomName={roomName}
-              userId={userId}
-              image={onlineMembers[0]?.character}
               playerCharName={playerCharName}
-              gitHubId={gitHubId}
-              charName={playerCharName}
+              setPlayerCharName={setPlayerCharName}
               permissionLevel={permissionLevel}
+              setPermissionLevel={setPermissionLevel}
+              gitHubId={gitHubId}
+              setGitHubId={setGitHubId}
+              pullRequests={openPullRequests}
             />
-            <ControlWrapper>
-              {isConnected && (
-                <ControlBar
-                  controls={{
-                    camera: true,
-                    microphone: true,
-                    screenShare: true,
-                    leave: true,
-                  }}
-                  saveUserChoices={true}
-                  variation="minimal"
+            )
+            <BottomBar>
+              <BottomContent>
+                <LocalTracks />
+                <PlayerProfile
+                  showProfile={showProfile}
+                  setShowProfile={setShowProfile}
+                  players={players}
+                  roomId={roomId}
+                  userId={userId}
+                  image={onlineMembers[0]?.character}
+                  playerCharName={playerCharName}
+                  gitHubId={gitHubId}
+                  permissionLevel={permissionLevel}
                 />
-              )}
-              {!isConnected && (
-                <JoinButton>
-                  <Button
-                    onClickFunc={() =>
-                      getToken({ roomId, charName: playerCharName })
-                    }
-                    content={isConnecting ? 'Loading...' : '多人通訊'}
-                  />
-                </JoinButton>
-              )}
-            </ControlWrapper>
-          </BottomContent>
-          <BottomRight>
-            <Group
-              onClick={() => {
-                setShowSidebar(!showSidebar);
-              }}
-            >
-              <GroupIcon />
-              <div className="onlineCount">
-                <div></div>
-                <span>{onlineMembers.length}</span>
-              </div>
-            </Group>
-            <ExitRoom
-              onClick={() => {
-                navigate('/home');
-              }}
-            >
-              <ExitRoomIcon />
-            </ExitRoom>
-          </BottomRight>
-        </BottomBar>
-        <Sidebar
-          userId={userId}
-          roomId={roomId}
-          onlineMembers={onlineMembers}
-          offlineMembers={offlineMembers}
-          players={players}
-          playerCharName={playerCharName}
-          roomName={roomName}
-          onlineStatus={onlineStatus}
-        />
-      </LiveKitRoom>
-    </Wrapper>
+                <ControlWrapper>
+                  {isConnected && (
+                    <ControlBar
+                      controls={{
+                        camera: true,
+                        microphone: true,
+                        screenShare: true,
+                        leave: true,
+                      }}
+                      saveUserChoices={true}
+                      variation="minimal"
+                    />
+                  )}
+                  {!isConnected && (
+                    <JoinButton>
+                      <Button
+                        onClickFunc={() =>
+                          getToken({ roomId, charName: playerCharName })
+                        }
+                        content={isConnecting ? 'Loading...' : '多人通訊'}
+                      />
+                    </JoinButton>
+                  )}
+                </ControlWrapper>
+              </BottomContent>
+              <BottomRight>
+                <Group
+                  onClick={() => {
+                    setShowSidebar(!showSidebar);
+                  }}
+                >
+                  <GroupIcon />
+                  <div className="onlineCount">
+                    <div></div>
+                    <span>{onlineMembers.length}</span>
+                  </div>
+                </Group>
+                <ExitRoom
+                  onClick={() => {
+                    navigate('/home');
+                  }}
+                >
+                  <ExitRoomIcon />
+                </ExitRoom>
+              </BottomRight>
+            </BottomBar>
+            <Sidebar
+              userId={userId}
+              roomId={roomId}
+              onlineMembers={onlineMembers}
+              offlineMembers={offlineMembers}
+              players={players}
+              playerCharName={playerCharName}
+              roomName={roomName}
+              onlineStatus={onlineStatus}
+            />
+          </LiveKitRoom>
+        </Wrapper>
+      )}
+    </>
   );
 }
