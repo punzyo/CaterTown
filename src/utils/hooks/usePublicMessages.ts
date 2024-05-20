@@ -3,8 +3,10 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/utils/firebase/firestore';
 import { MessageType } from '@/types';
 
-export const usePublicMessages = (roomId:string) => {
-  const [messages, setMessages] = useState<MessageType[] | undefined>(undefined);
+export const usePublicMessages = (roomId: string) => {
+  const [messages, setMessages] = useState<MessageType[] | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     if (!roomId) return;

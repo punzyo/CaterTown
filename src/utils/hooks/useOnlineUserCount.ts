@@ -7,7 +7,7 @@ interface User {
 }
 
 type Users = Record<string, User>;
-export function useOnlineUserCount(roomId:string) {
+export function useOnlineUserCount(roomId: string) {
   const [onlineCount, setOnlineCount] = useState(0);
   const location = useLocation();
 

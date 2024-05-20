@@ -3,7 +3,7 @@ import { doc, collection, onSnapshot } from 'firebase/firestore';
 import { db } from '@/utils/firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 import type { BroadcastData } from '@/types';
-export const useBroadcasts = ({ roomId }: { roomId: string |undefined }) => {
+export const useBroadcasts = ({ roomId }: { roomId: string | undefined }) => {
   const [broadcasts, setBroadcasts] = useState<BroadcastData[]>([]);
 
   useEffect(() => {

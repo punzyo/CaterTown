@@ -13,7 +13,7 @@ export function useRoomStatus({
   const [onlineStatus, setOnlineStatus] = useState<{
     [key: string]: { online: boolean };
   }>({});
-  if(!userId || !roomId) return
+  if (!userId || !roomId) return;
   const location = useLocation();
   useEffect(() => {
     const userStatusRef = ref(rtdb, `rooms/${roomId}/users/${userId}`);
