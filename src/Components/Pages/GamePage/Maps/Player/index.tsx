@@ -51,7 +51,7 @@ interface PlayerProps
     PlayerPosition {
   isCurrentPlayer: boolean;
   pullRequests: PullRequests; 
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 export default function Player({
   userId,

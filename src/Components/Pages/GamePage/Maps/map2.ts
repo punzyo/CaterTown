@@ -1,7 +1,13 @@
 export const playerWidth = 60;
 export const playerHeight = 60;
-
-export const mapIndex = {
+interface MapIndex {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  collision: boolean;
+}
+export const mapIndex: Record<string, MapIndex>  = {
   U: {
     width: 4,
     height: 1,
@@ -847,8 +853,29 @@ export const mapIndex = {
     collision: false,
   },
 };
+interface StartingPoint {
+  top: number;
+  left: number;
+  direction: 'up' | 'down' | 'left' | 'right';
+  frame: number;
+}
 
-export const map2 = {
+interface ObjectPosition {
+  left: number;
+  top: number;
+}
+
+interface Map2 {
+  unit: number;
+  width: number;
+  height: number;
+  border: number;
+  unitWidth: number;
+  unitHeight: number;
+  startingPoint: StartingPoint;
+  objects: Record<string, ObjectPosition[]>;
+}
+export const map2: Map2 = {
   unit: 48,
   width: 1920,
   height: 1440,
@@ -4155,7 +4182,7 @@ export const map2 = {
   },
 };
 
-export const map2Collision = {
+export const map2Collision:Record<string, boolean> = {
   '19,7': true,
   '18,7': true,
   '17,7': true,
@@ -4710,7 +4737,7 @@ export const map2Collision = {
   '36,12': true,
 };
 
-export const map2Room = {
+export const map2Room:Record<string, string> = {
   '7,7': 'room1',
   '6,7': 'room1',
   '32,7': 'room2',

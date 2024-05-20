@@ -8,7 +8,7 @@ import {
   useCallback,
 } from 'react';
 import { useParams } from 'react-router-dom';
-import { updatePlayerPosition } from '@/utils/firebase/firestore.ts';
+import { updatePlayerPosition } from '@/utils/firebase/firestore';
 import {
   mapIndex,
   playerHeight,
@@ -16,13 +16,14 @@ import {
   map2,
   map2Collision,
   map2Room,
-} from './map2.ts';
-import { catsXPositions } from '@/assets/charNames.ts';
+} from './map2';
+import { catsXPositions } from '@/assets/charNames';
 import { useUserState } from '@/utils/zustand';
 import RemoteTracks from '@/Components/Tracks/RemoteTracks/index';
 import { useGameSettings } from '@/utils/zustand';
 import BroadcastMarquee from './BroadcastMarquee/index';
 import Player from './Player/index';
+import type { PlayerType, PullRequests, BroadcastData } from '@/types/types.js';
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -37,31 +38,55 @@ const MapWrapper = styled.div`
   height: ${map2.height}px;
   user-select: none;
 `;
-
-const MapBorder = styled.div`
+interface MapBorderProps {
+  $top: string;
+  $left: string;
+  $backgroundPosition?: string;
+}
+const MapBorder = styled.div<MapBorderProps>`
   position: relative;
-  top: ${(props) => props.$top};
-  left: ${(props) => props.$left};
+  top: ${({ $top }) => $top};
+  left: ${({ $left }) => $left};
   width: ${map2.width}px;
   height: ${map2.height}px;
   border: ${map2.border}px solid gray;
   transition: top 0.2s, left 0.2s;
 `;
-const MapImage = styled.div.attrs((props) => ({
+interface MapImageProps extends MapBorderProps {
+  $width: string;
+  $height: string;
+  $backgroundPosition: string;
+}
+const MapImage = styled.div.attrs<MapImageProps>((props) => ({
   style: {
     width: `${props.$width}`,
     height: `${props.$height}`,
     left: `${props.$left}`,
     top: `${props.$top}`,
-    backgroundPosition: props.$backgroundPosition,
+    backgroundPosition: `${props.$backgroundPosition}`,
   },
 }))`
   position: absolute;
   background-image: url(/images/map/map1_48x48.png);
 `;
+type State = {
+  top: number;
+  left: number;
+} | null;
 
-function positionReducer(state, action) {
-  switch (action.type) {
+type Action = 
+  | { type: 'move'; payload: { top: number; left: number } }
+  | { type: 'setPosition'; payload: { top: number; left: number } };
+
+  function positionReducer(state: State, action: Action): State {
+    if (state === null) {
+
+      if (action.type === 'setPosition') {
+        return action.payload;
+      }
+      return state;
+    }
+    switch (action.type) {
     case 'move':
       return {
         ...state,
@@ -74,7 +99,7 @@ function positionReducer(state, action) {
             ? state.left + action.payload.left
             : state.left,
       };
-    case 'SET_POSITION':
+    case 'setPosition':
       return action.payload;
     default:
       return state;
@@ -90,7 +115,12 @@ const MarqueeWrapper = styled.div`
     overflow: visible !important;
   }
 `;
-const keyMap = {
+interface KeyMapValue {
+  top?: number;
+  left?: number;
+  direction: 'up' | 'down' | 'left' | 'right';
+}
+const keyMap: Record<string, KeyMapValue> = {
   ArrowUp: { top: map2.unit, direction: 'up' },
   w: { top: map2.unit, direction: 'up' },
   W: { top: map2.unit, direction: 'up' },
@@ -104,6 +134,17 @@ const keyMap = {
   d: { left: -map2.unit, direction: 'right' },
   D: { left: -map2.unit, direction: 'right' },
 };
+interface MapProps {
+  players: PlayerType[];
+  playerCharName: string;
+  setPlayerCharName: React.Dispatch<React.SetStateAction<string>>;
+  setPermissionLevel: React.Dispatch<React.SetStateAction<string>>;
+  setGitHubId: React.Dispatch<React.SetStateAction<string>>;
+  permissionLevel: string;
+  gitHubId: string;
+  pullRequests: PullRequests;
+  broadcasts: BroadcastData[];
+}
 export default function Map({
   players,
   playerCharName,
@@ -114,26 +155,28 @@ export default function Map({
   setGitHubId,
   pullRequests,
   broadcasts,
-}) {
+}: MapProps) {
   const { user } = useUserState();
-  const userId = user.id;
+  const userId = user?.id;
   const { roomId } = useParams();
   const [position, dispatchPosition] = useReducer(positionReducer, null);
-  const [currentFrame, setCurrentFrame] = useState(null);
-  const [direction, setDirection] = useState();
-  const [playerChar, setPlayerChar] = useState(null);
-  const [nearbyPlayers, setNearbyPlayers] = useState([]);
+  const [currentFrame, setCurrentFrame] = useState(0);
+  const [direction, setDirection] = useState('');
+  const [playerChar, setPlayerChar] = useState('');
+  const [nearbyPlayers, setNearbyPlayers] = useState<{ charName: string; character: string }[]>([]);
   const [room, setRoom] = useState('');
   const canMove = useRef(true);
   const { resetPosition, setResetPosition, isFullScreen } = useGameSettings();
 
   const handleKeyPress = useCallback(
-    (e) => {
+    (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (!players || !userId || !roomId || !position) return;
       if (
         isFullScreen ||
-        e.target.tagName === 'INPUT' ||
-        e.target.tagName === 'TEXTAREA' ||
-        e.target.isContentEditable
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.isContentEditable
       ) {
         return;
       }
@@ -165,7 +208,7 @@ export default function Map({
 
       dispatchPosition({
         type: 'move',
-        payload: { top: move.top, left: move.left },
+        payload: { top: move.top || 0, left: move.left || 0 },
       });
       const nextFrame = (currentFrame + 1) % catsXPositions.length;
       setCurrentFrame(nextFrame);
@@ -209,7 +252,7 @@ export default function Map({
       setDirection(playerPosition.direction);
       setCurrentFrame(playerPosition.frame);
       const mapPosition = calculatePlayerPosition(playerPosition);
-      dispatchPosition({ type: 'SET_POSITION', payload: mapPosition });
+      dispatchPosition({ type: 'setPosition', payload: mapPosition });
 
       setRoom(playerData[0].room);
     };
@@ -229,12 +272,12 @@ export default function Map({
     setGitHubId(playerData[0].gitHubId);
   }, [players]);
   useEffect(() => {
-    if (!resetPosition) return;
+    if (!resetPosition || !userId || !roomId) return;
     (async () => {
       const newPosition = calculatePlayerPosition(map2.startingPoint);
       setDirection(map2.startingPoint.direction);
       setCurrentFrame(map2.startingPoint.frame);
-      dispatchPosition({ type: 'SET_POSITION', payload: newPosition });
+      dispatchPosition({ type: 'setPosition', payload: newPosition });
       setRoom('');
       await updatePlayerPosition({
         userId,
@@ -248,7 +291,8 @@ export default function Map({
       setResetPosition(false);
     })();
   }, [resetPosition]);
-  const countNearbyPlayers = (players) => {
+  const countNearbyPlayers = (players: PlayerType[]) => {
+    if(!position) return
     const gridRange = 96;
     const myPosition = calculatePlayerPosition(position);
     let nearbyPlayers;
@@ -281,15 +325,15 @@ export default function Map({
     return;
   };
 
-  const calculatePlayerPosition = (position) => {
+  const calculatePlayerPosition = (position: { top: number; left: number }) => {
     const calculatedLeft =
       map2.width / 2 - playerWidth / 2 - map2.border - position.left;
     const calculatedTop =
       map2.height / 2 - playerHeight / 2 - map2.border - position.top;
     return { left: calculatedLeft, top: calculatedTop };
   };
-  const getItemStyles = (itemName) => {
-    const item = mapIndex[itemName];
+  const getItemStyles = (itemType: string) => {
+    const item = mapIndex[itemType];
     if (!item) return {};
 
     const width = item.width * map2.unit;
@@ -315,7 +359,7 @@ export default function Map({
               $height={`${itemStyles.height}px`}
               $left={`${pos.left * map2.unit}px`}
               $top={`${pos.top * map2.unit}px`}
-              $backgroundPosition={itemStyles.backgroundPosition}
+              $backgroundPosition={itemStyles.backgroundPosition as string}
             />
           );
         })
@@ -349,7 +393,8 @@ export default function Map({
   const currentPlayerElement = useMemo(
     () =>
       position &&
-      playerChar && (
+      playerChar &&
+      userId && (
         <Player
           userId={userId}
           character={playerChar}
@@ -380,7 +425,7 @@ export default function Map({
   );
   return (
     <Wrapper>
-      {broadcasts.length > 0 && (
+      {broadcasts.length > 0 && userId && roomId && (
         <MarqueeWrapper>
           <BroadcastMarquee
             broadcasts={broadcasts}
@@ -396,7 +441,6 @@ export default function Map({
             {mapElements}
             {playerElements}
           </MapBorder>
-
           {position && playerChar && currentPlayerElement}
         </MapWrapper>
       ) : (
