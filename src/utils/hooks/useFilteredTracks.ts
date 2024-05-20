@@ -1,8 +1,14 @@
 import { usePlayerTracks } from '../zustand';
 import { Track } from 'livekit-client';
-
-const filterTracks = (allTracks, filterCondition) => {
-  const objTracks = allTracks?.reduce((acc, track) => {
+import type { NearbyPlayer } from '@/types';
+import type { TrackReferenceOrPlaceholder } from '@livekit/components-react';
+const filterTracks = (
+  allTracks: TrackReferenceOrPlaceholder[],
+  filterCondition: (track: TrackReferenceOrPlaceholder) => boolean
+): TrackReferenceOrPlaceholder[] => {
+  const objTracks = allTracks?.reduce<
+    Record<string, TrackReferenceOrPlaceholder>
+  >((acc, track) => {
     const participantIdentity = track.participant.identity;
     if (filterCondition(track)) {
       if (track.source === Track.Source.ScreenShare && track.publication) {
@@ -16,19 +22,23 @@ const filterTracks = (allTracks, filterCondition) => {
     }
     return acc;
   }, {});
+
   return Object.values(objTracks);
 };
 
 export const useLocalTracks = () => {
   const { allTracks } = usePlayerTracks();
-  return filterTracks(allTracks, (track) => track.participant.isLocal);
+  return filterTracks(
+    allTracks,
+    (track: TrackReferenceOrPlaceholder) => track.participant.isLocal
+  );
 };
 
-export const useRemoteTracks = (nearbyPlayers) => {
+export const useRemoteTracks = (nearbyPlayers: NearbyPlayer[]) => {
   const { allTracks } = usePlayerTracks();
   return filterTracks(
     allTracks,
-    (track) =>
+    (track: TrackReferenceOrPlaceholder) =>
       !track.participant.isLocal &&
       nearbyPlayers.some(
         (player) => player.charName === track.participant.identity
@@ -36,7 +46,10 @@ export const useRemoteTracks = (nearbyPlayers) => {
   );
 };
 
-export const useAudioTracks = (isLocal, nearbyPlayers) => {
+export const useAudioTracks = (
+  isLocal: boolean,
+  nearbyPlayers: NearbyPlayer[]
+) => {
   const { allTracks } = usePlayerTracks();
   return allTracks
     .filter((track) => track.source === Track.Source.Microphone)

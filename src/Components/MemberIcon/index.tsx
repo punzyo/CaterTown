@@ -3,7 +3,7 @@ import Cat from '../Cat';
 import OnlineStatus from '../OnlineStatus';
 
 interface WrapperProps {
-  $background: boolean;
+  $background?: boolean ;
 }
 const Wrapper = styled.div<WrapperProps>`
   position: relative;
@@ -34,10 +34,10 @@ const UnreadIcon = styled.div`
   justify-content: center;
 `;
 interface MemberIconProps {
-  image: string;
+  image?: string;
   isOnline: boolean | null;
-  unreadMessages: number;
-  background: boolean;
+  unreadMessages?: number ;
+  background?: boolean;
 }
 
 export default function MemberIcon({ image, isOnline, unreadMessages,background }:MemberIconProps) {

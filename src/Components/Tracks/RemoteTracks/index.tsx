@@ -10,6 +10,8 @@ import VideoContainer from '@/Components/VideoContainer';
 import { useGameSettings } from '@/utils/zustand';
 import MemberIcon from '@/Components/MemberIcon';
 import { useRemoteTracks } from '@/utils/hooks/useFilteredTracks';
+import type { NearbyPlayer } from '@/types';
+import { isTrackReference } from '@livekit/components-react';
 const Wrapper = styled.div`
   position: relative;
   top: -230px;
@@ -59,7 +61,10 @@ const Wrapper = styled.div`
     }
   }
 `;
-const AudioController = styled.input`
+interface AudioControllerProps {
+  $widthPercent: number;
+}
+const AudioController = styled.input<AudioControllerProps>`
   position: relative;
   appearance: none;
   -webkit-appearance: none;
@@ -82,7 +87,7 @@ const AudioController = styled.input`
     cursor: pointer;
   }
   &::before {
-    width: ${(props) => props.$widthPercent}%;
+    width: ${({ $widthPercent }) => $widthPercent}%;
     height: 8px;
     border-radius: 10px;
     content: '';
@@ -120,13 +125,17 @@ const MemberIconWrapper = styled.div`
     background-position: -785px -75px;
   }
 `;
-export default function RemoteTracks({ nearbyPlayers }) {
+export default function RemoteTracks({
+  nearbyPlayers,
+}: {
+  nearbyPlayers: NearbyPlayer[];
+}) {
   const tracks = useRemoteTracks(nearbyPlayers);
 
   const { isFullScreen, setIsFullScreen } = useGameSettings();
-  const [fullScreenTrack, setFullScreenTrack] = useState('');
-  const refs = useRef({});
-  const [audioVolume, setAudioVolume] = useState({});
+  const [fullScreenTrack, setFullScreenTrack] = useState<string | null>(null);
+  const refs = useRef<{ [key: string]: React.RefObject<HTMLVideoElement> }>({});
+  const [audioVolume, setAudioVolume] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
     tracks.forEach((track) => {
@@ -163,10 +172,12 @@ export default function RemoteTracks({ nearbyPlayers }) {
                       }
                     }}
                   >
-                    <VideoTrack
-                      trackRef={trackRef}
-                      ref={refs.current[trackRef.participant.identity]}
-                    />
+                    {isTrackReference(trackRef) && (
+                      <VideoTrack
+                        trackRef={trackRef}
+                        ref={refs.current[trackRef.participant.identity]}
+                      />
+                    )}
 
                     <AudioController
                       type="range"

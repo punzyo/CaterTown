@@ -12,7 +12,7 @@ import TracksProvider from '@/Components/Tracks/TracksProvider/index';
 import { useGameSettings } from '@/utils/zustand';
 import { useConditionalPullRequests } from '@/utils/hooks/useConditionalPullRequests.js';
 import PlayerProfile from './PlayerProfile/index';
-import { useBroadcasts } from '@/utils/hooks/useBroadcasts.js';
+import { useBroadcasts } from '@/utils/hooks/useBroadcasts.ts';
 import Button from '@/Components/Buttons/Button/index';
 import { usePullRequests } from '@/utils/zustand';
 import ExitRoomIcon from '@/Components/Icons/ExitRoomIcon';

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import type { Track } from 'livekit-client';
-import { PullRequest } from '@/types';
+import type { TrackReferenceOrPlaceholder } from '@livekit/components-react';
+import type { PullRequest } from '@/types';
 interface User {
   id: string;
   name: string;
@@ -24,7 +24,6 @@ export const useUserState = create<UserState>((set) => ({
     set({ user: null });
   },
 }));
-
 
 interface PullRequestState {
   showPullRequests: boolean;
@@ -57,8 +56,8 @@ export const usePullRequests = create<PullRequestState>((set, get) => ({
   },
 }));
 interface PlayerTracksState {
-  allTracks: Track[];
-  setTracks: (allTracks: Track[]) => void;
+  allTracks: TrackReferenceOrPlaceholder[];
+  setTracks: (allTracks: TrackReferenceOrPlaceholder[]) => void;
 }
 
 export const usePlayerTracks = create<PlayerTracksState>((set) => ({

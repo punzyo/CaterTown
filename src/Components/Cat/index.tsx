@@ -13,7 +13,7 @@ const Wrapper = styled.div<WrapperProps>`
   user-select: none;
 `;
 interface CatProps {
-  image: string;
+  image?: string;
 }
 export default function Cat({ image }: CatProps) {
   return <Wrapper $image={`${image}`} />;

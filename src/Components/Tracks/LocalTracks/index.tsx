@@ -8,6 +8,10 @@ import {
 import VideoContainer from '@/Components/VideoContainer';
 import { useGameSettings } from '@/utils/zustand';
 import { useLocalTracks } from '@/utils/hooks/useFilteredTracks';
+import type {
+  TrackReferenceOrPlaceholder,
+} from '@livekit/components-react';
+import { isTrackReference } from '@livekit/components-react';
 useGameSettings;
 const TracksWrapper = styled.div`
   display: flex;
@@ -25,14 +29,15 @@ const TracksWrapper = styled.div`
 export default function LocalTracks() {
   const tracks = useLocalTracks();
   const { setIsFullScreen } = useGameSettings();
-  const [fullScreenTrack, setFullScreenTrack] = useState(null);
-
+  const [fullScreenTrack, setFullScreenTrack] = useState<string | null>(null);
+  
   return (
     <TracksWrapper>
       <TrackLoop tracks={tracks}>
         <TrackRefContext.Consumer>
-          {(trackRef) =>
-            trackRef && (
+          {(trackRef: TrackReferenceOrPlaceholder | undefined) =>
+            trackRef &&
+            isTrackReference(trackRef) && (
               <VideoContainer
                 hidePlaceholder={
                   trackRef.participant.isCameraEnabled ||
