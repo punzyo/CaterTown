@@ -75,7 +75,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
     border-radius: 5px;
     &:focus {
       border: 1px solid
-        ${({$value,$isValid}) =>
+        ${({ $value, $isValid }) =>
           $value ? ($isValid ? 'green' : 'red') : '#1e84d8'};
     }
   }

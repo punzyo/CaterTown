@@ -3,14 +3,15 @@ import Cat from '../Cat';
 import OnlineStatus from '../OnlineStatus';
 
 interface WrapperProps {
-  $background?: boolean ;
+  $background?: boolean;
 }
 const Wrapper = styled.div<WrapperProps>`
   position: relative;
   width: 100%;
   height: 100%;
   background-color: ${({ $background }) => ($background ? 'white' : 'inherit')};
-  border: 1px solid ${({ $background }) => ($background ? '#545c8f' : 'inherit')};
+  border: 1px solid
+    ${({ $background }) => ($background ? '#545c8f' : 'inherit')};
   border-radius: 50%;
   div:first-child {
     position: absolute;
@@ -36,11 +37,16 @@ const UnreadIcon = styled.div`
 interface MemberIconProps {
   image?: string;
   isOnline: boolean | null;
-  unreadMessages?: number ;
+  unreadMessages?: number;
   background?: boolean;
 }
 
-export default function MemberIcon({ image, isOnline, unreadMessages,background }:MemberIconProps) {
+export default function MemberIcon({
+  image,
+  isOnline,
+  unreadMessages,
+  background,
+}: MemberIconProps) {
   return (
     <Wrapper $background={background}>
       <Cat image={image} />

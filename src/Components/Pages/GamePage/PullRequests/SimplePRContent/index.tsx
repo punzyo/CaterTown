@@ -100,7 +100,13 @@ const DetailPRBottom = styled.div`
     }
   }
 `;
-export default function SimplePRContent({ pullRequests, children }:{pullRequests:PullRequest,children: React.ReactNode}) {
+export default function SimplePRContent({
+  pullRequests,
+  children,
+}: {
+  pullRequests: PullRequest;
+  children: React.ReactNode;
+}) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (

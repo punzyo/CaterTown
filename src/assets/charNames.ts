@@ -1,4 +1,4 @@
-export const catImages :string[]  = [
+export const catImages: string[] = [
   'black_0',
   'black_1',
   'black_2',
@@ -51,7 +51,7 @@ export const catImages :string[]  = [
   'yellow_0',
 ];
 
-export const catsYPositions: Record<string, string>  = {
+export const catsYPositions: Record<string, string> = {
   down: '-67px',
   left: '-320px',
   up: '-573px',

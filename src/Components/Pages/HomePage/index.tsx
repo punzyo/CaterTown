@@ -224,7 +224,9 @@ export default function HomePage() {
           )}
         </RoomWrapper>
       </MainPage>
-      {dialogOpen && userId && <CreateRoomDialog onClose={closeDialog} userId={userId} />}
+      {dialogOpen && userId && (
+        <CreateRoomDialog onClose={closeDialog} userId={userId} />
+      )}
     </Wrapper>
   );
 }

@@ -15,7 +15,6 @@ const Wrapper = styled.div`
   color: white;
 `;
 
-
 interface PRMarkProps {
   gitHubId: string;
   pullRequests: PullRequests;

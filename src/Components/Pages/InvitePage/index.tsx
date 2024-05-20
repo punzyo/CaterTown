@@ -94,7 +94,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
     border-radius: 5px;
     &:focus {
       border: 1px solid
-        ${({$value,$isValid}) =>
+        ${({ $value, $isValid }) =>
           $value ? ($isValid ? 'green' : 'red') : '#1e84d8'};
     }
   }
@@ -131,11 +131,11 @@ export default function InvitePage() {
     })();
   }, [roomId, userId]);
 
-  const handleSlideChange = (index:number) => {
+  const handleSlideChange = (index: number) => {
     setSelectedImageIndex(index);
   };
   const handleJoinRoom = async () => {
-    if(!userId || !roomId || !roomName) return
+    if (!userId || !roomId || !roomName) return;
     if (!charNameInput.isValid) {
       alert('名稱不符合規定');
       return;

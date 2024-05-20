@@ -219,7 +219,7 @@ const SignIn = styled.div`
 `;
 export default function LandingPage() {
   const navigate = useNavigate();
-  const handleNavigation = (path:string) => {
+  const handleNavigation = (path: string) => {
     navigate(path);
   };
 

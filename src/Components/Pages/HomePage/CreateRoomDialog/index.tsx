@@ -108,7 +108,7 @@ export default function CreateRoomDialog({
   const roomNameInput = useValidatedInput('', /^[^*%]+$/, 15);
   const charNameInput = useValidatedInput('', /^[^*%]+$/, 15);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const handleSlideChange = (index:number) => {
+  const handleSlideChange = (index: number) => {
     setSelectedImageIndex(index);
   };
   const clickCreateRoom = async () => {
@@ -127,7 +127,7 @@ export default function CreateRoomDialog({
       roomName,
       map,
     });
-    if(!roomId) return 
+    if (!roomId) return;
     await initPlayerData({
       roomId,
       userId,

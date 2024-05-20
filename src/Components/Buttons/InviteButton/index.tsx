@@ -63,9 +63,7 @@ export default function InviteButton({ link, message }: InviteButtonProps) {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const showingMessage = useRef<boolean>(false);
 
-  const inviteFriends = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
+  const inviteFriends = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (showingMessage.current) return;
     showingMessage.current = true;
     if (buttonRef.current) {

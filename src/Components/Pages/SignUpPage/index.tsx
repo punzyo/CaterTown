@@ -85,7 +85,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
     border-radius: 5px;
     &:focus {
       border: 1px solid
-        ${({$value,$isValid}) =>
+        ${({ $value, $isValid }) =>
           $value ? ($isValid ? 'green' : 'red') : '#1e84d8'};
     }
   }
@@ -137,10 +137,7 @@ export default function SignUpPage() {
       return;
     }
     try {
-      const authID = await registerUserToAuth(
-         email.value,
-         password.value,
-      );
+      const authID = await registerUserToAuth(email.value, password.value);
       if (!authID) return;
       const isSaveSuccess = await saveUserToFirestore({
         authID,

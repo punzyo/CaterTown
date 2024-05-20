@@ -71,7 +71,7 @@ export interface UserData {
   name: string;
 }
 
-export interface InputWrapperProps{
-  $value:string;
-  $isValid:boolean;
+export interface InputWrapperProps {
+  $value: string;
+  $isValid: boolean;
 }

@@ -14,14 +14,14 @@ const ButtonStyle = styled.button`
     box-shadow: 0 1px #c1a23c;
     transform: translateY(3px);
   }
-  &:hover{
-    background-color:#E2C154;
+  &:hover {
+    background-color: #e2c154;
   }
 `;
 interface ButtonProps {
   onClickFunc?: () => void;
   content: string;
 }
-export default function Button({ onClickFunc, content }:ButtonProps) {
+export default function Button({ onClickFunc, content }: ButtonProps) {
   return <ButtonStyle onClick={onClickFunc}>{content}</ButtonStyle>;
 }

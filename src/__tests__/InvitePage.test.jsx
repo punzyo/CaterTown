@@ -11,14 +11,15 @@ import {
 } from '@/utils/firebase/firestore';
 import { ThemeProvider } from 'styled-components';
 
-  const mockTheme = {
-    colors: {
-      backgroundBlue3: '#123456',
-      white: '#ffffff',
-    },breakpoints: {
-        sm: '@media screen and (max-width:1080px)',
-      },
-  };
+const mockTheme = {
+  colors: {
+    backgroundBlue3: '#123456',
+    white: '#ffffff',
+  },
+  breakpoints: {
+    sm: '@media screen and (max-width:1080px)',
+  },
+};
 jest.mock('react-router-dom', () => ({
   useParams: jest.fn(),
   useNavigate: jest.fn(),
@@ -55,15 +56,19 @@ describe('InvitePage Component', () => {
 
   it('renders InvitePage and handles interactions correctly', async () => {
     render(
-        <ThemeProvider theme={mockTheme}>
-          <InvitePage />
-        </ThemeProvider>
-      );
-    expect(screen.queryByText(`您已被邀請至房間 ${mockParams.roomName}!`)).not.toBeInTheDocument();
+      <ThemeProvider theme={mockTheme}>
+        <InvitePage />
+      </ThemeProvider>
+    );
+    expect(
+      screen.queryByText(`您已被邀請至房間 ${mockParams.roomName}!`)
+    ).not.toBeInTheDocument();
 
     await waitFor(() => expect(checkUserRoom).toHaveBeenCalled());
 
-    expect(screen.getByText(`您已被邀請至房間 ${mockParams.roomName}!`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`您已被邀請至房間 ${mockParams.roomName}!`)
+    ).toBeInTheDocument();
 
     const nameInput = screen.getByLabelText('角色名稱');
     fireEvent.change(nameInput, { target: { value: 'testCharName' } });
@@ -72,10 +77,17 @@ describe('InvitePage Component', () => {
     const joinButton = screen.getByText('加入房間');
     fireEvent.click(joinButton);
 
-    await waitFor(() => expect(isNameAvailable).toHaveBeenCalledWith({ roomId: mockParams.roomId, charName: 'testCharName' }));
+    await waitFor(() =>
+      expect(isNameAvailable).toHaveBeenCalledWith({
+        roomId: mockParams.roomId,
+        charName: 'testCharName',
+      })
+    );
     await waitFor(() => expect(initPlayerData).toHaveBeenCalled());
     await waitFor(() => expect(addRoomToUser).toHaveBeenCalled());
 
-    expect(mockNavigate).toHaveBeenCalledWith(`/catertown/${mockParams.roomId}/${mockParams.roomName}`);
+    expect(mockNavigate).toHaveBeenCalledWith(
+      `/catertown/${mockParams.roomId}/${mockParams.roomName}`
+    );
   });
 });

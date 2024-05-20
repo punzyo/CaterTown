@@ -30,7 +30,10 @@ interface FullscreenButtonProps {
   isFullScreen: boolean;
   onClickFunc: () => void;
 }
-export default function FullscreenButton({ isFullScreen, onClickFunc }:FullscreenButtonProps) {
+export default function FullscreenButton({
+  isFullScreen,
+  onClickFunc,
+}: FullscreenButtonProps) {
   return (
     <Wrapper $isFullScreen={isFullScreen} onClick={onClickFunc}>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">

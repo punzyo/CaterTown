@@ -67,7 +67,7 @@ export default function DashBoard({
   showBroadcast,
   setShowBroadcast,
   permissionLevel,
-}:DashBoardProps) {
+}: DashBoardProps) {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const getWebhookLink = () => {
     if (showSuccessMessage) return;

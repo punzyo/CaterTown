@@ -81,7 +81,7 @@ export default function BroadcastMarquee({
     docId: string;
     setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
   }) => {
-    const handleCancelClick = (e:React.MouseEvent<HTMLButtonElement>) => {
+    const handleCancelClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       setShowDialog(false);
     };

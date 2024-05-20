@@ -4,14 +4,14 @@ import InviteButton from '@/Components/Buttons/InviteButton';
 import CloseButton from '@/Components/Buttons/CloseButton';
 import { useGameSettings } from '@/utils/zustand';
 import MemberInfo from './MemberInfo';
-import MessageWindow from '@/Components/Pages/GamePage/MessageWindow'
+import MessageWindow from '@/Components/Pages/GamePage/MessageWindow';
 import SearchBar from '@/Components/SearchBar';
 import { useState, useMemo } from 'react';
 import { usePrivateMessages } from '@/utils/hooks/usePrivateMessages';
 import { useUnreadMessages } from '@/utils/hooks/useUnreadMessages';
 import { usePublicMessages } from '@/utils/hooks/usePublicMessages';
 import type { PlayerType } from '@/types';
-interface WrapperProps{
+interface WrapperProps {
   $isOpen: boolean;
   $isFullScreen: boolean;
 }
@@ -19,12 +19,12 @@ const Wrapper = styled.div<WrapperProps>`
   width: 300px;
   height: calc(100% - 100px);
   position: fixed;
-  right: ${({$isOpen }) => ($isOpen ? '0' : '-300px')};
+  right: ${({ $isOpen }) => ($isOpen ? '0' : '-300px')};
   transition: right 0.3s ease-in-out;
   padding: 15px;
   top: 0;
   background-color: ${({ theme }) => theme.colors.backgroundBlue1};
-  z-index: ${({$isFullScreen}) => ($isFullScreen ? '5' : '12')};
+  z-index: ${({ $isFullScreen }) => ($isFullScreen ? '5' : '12')};
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderBlue0};
 
   button {
@@ -46,15 +46,15 @@ const MemberWrapper = styled.div`
   gap: 10px;
   overflow-y: auto;
 `;
-interface SidebarProps{
-  userId:string;
-  roomId:string;
-  onlineMembers:PlayerType[]
-  offlineMembers:PlayerType[]
-  players:PlayerType[]
-  playerCharName:string;
-  roomName:string;
-  onlineStatus:{ [key: string]: { online: boolean } }
+interface SidebarProps {
+  userId: string;
+  roomId: string;
+  onlineMembers: PlayerType[];
+  offlineMembers: PlayerType[];
+  players: PlayerType[];
+  playerCharName: string;
+  roomName: string;
+  onlineStatus: { [key: string]: { online: boolean } };
 }
 export default function Sidebar({
   userId,
@@ -65,7 +65,7 @@ export default function Sidebar({
   playerCharName,
   roomName,
   onlineStatus,
-}:SidebarProps) {
+}: SidebarProps) {
   const { isFullScreen, showSidebar, setShowSidebar } = useGameSettings();
   const [privateChannel, setPrivateChannel] = useState('');
   const [minimizeMessages, setMinimizeMessages] = useState(true);
@@ -85,7 +85,7 @@ export default function Sidebar({
     isPublicChannel,
     minimizeMessages,
   });
-  const changeChannel = (playerId:string) => {
+  const changeChannel = (playerId: string) => {
     setIsPublicChannel(false);
     setPrivateChannel(playerId);
   };
@@ -157,7 +157,7 @@ export default function Sidebar({
           ))}
         </MemberWrapper>
       )}
-     <MessageWindow
+      <MessageWindow
         userId={userId}
         playerCharName={playerCharName}
         roomId={roomId}

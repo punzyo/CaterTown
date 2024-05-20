@@ -26,7 +26,7 @@ export default function AudioManager({
             />
           );
         }
-        return null
+        return null;
       })}
     </>
   );

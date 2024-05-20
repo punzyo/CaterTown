@@ -7,7 +7,7 @@ interface MapIndex {
   y: number;
   collision: boolean;
 }
-export const mapIndex: Record<string, MapIndex>  = {
+export const mapIndex: Record<string, MapIndex> = {
   U: {
     width: 4,
     height: 1,
@@ -4182,7 +4182,7 @@ export const map2: Map2 = {
   },
 };
 
-export const map2Collision:Record<string, boolean> = {
+export const map2Collision: Record<string, boolean> = {
   '19,7': true,
   '18,7': true,
   '17,7': true,
@@ -4737,7 +4737,7 @@ export const map2Collision:Record<string, boolean> = {
   '36,12': true,
 };
 
-export const map2Room:Record<string, string> = {
+export const map2Room: Record<string, string> = {
   '7,7': 'room1',
   '6,7': 'room1',
   '32,7': 'room2',
