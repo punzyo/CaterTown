@@ -1,9 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { TextEncoder, TextDecoder } from 'util';
-import React from 'react';
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
-global.React = React;
 import '@testing-library/jest-dom';
 import Map from '../Components/Pages/GamePage/Maps/index';
 
