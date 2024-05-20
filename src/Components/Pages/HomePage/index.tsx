@@ -105,6 +105,7 @@ export default function HomePage() {
     if (!userId) return;
     (async () => {
       const data = await getUserDataById(userId);
+      if(!data) return;
       setUserData(data);
     })();
   }, [userId]);

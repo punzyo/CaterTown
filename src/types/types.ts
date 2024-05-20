@@ -63,6 +63,7 @@ export interface MessageType {
   message: string;
   postTime?: Timestamp;
 }
+
 export interface UserData {
   email: string;
   hasViewedGamePageTutorial: boolean;

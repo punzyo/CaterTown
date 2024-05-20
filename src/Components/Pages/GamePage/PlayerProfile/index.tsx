@@ -224,7 +224,7 @@ export default function PlayerProfile({
     if (!userId) return;
     (async () => {
       const data = await getUserDataById(userId);
-      if (!data.hasViewedGamePageTutorial) {
+      if (!data?.hasViewedGamePageTutorial) {
         setShowTutorial(true);
         updateTutorialState(userId, 'hasViewedGamePageTutorial');
       }

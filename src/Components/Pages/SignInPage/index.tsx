@@ -126,6 +126,7 @@ export default function SignInPage() {
     const user = await signInToAuth(emailInput.value, passwordInput.value);
     if (!user) return;
     const userData = await getUserFromFirestore(user.uid);
+    if (!userData) return;
     setUser(userData);
     navigate('/');
     emailInput.clear();

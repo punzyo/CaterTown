@@ -17,7 +17,7 @@ import {
   arrayRemove,
 } from 'firebase/firestore';
 import { deleteRealTimeData, setRealTimeData } from './realtime';
-import { PlayerPosition, BroadcastData } from '@/types';
+import { PlayerPosition, BroadcastData, UserData } from '@/types';
 
 export const db = getFirestore(app);
 
@@ -137,12 +137,12 @@ export async function addRoomToUser({
   }
 }
 
-export async function getUserDataById(userId: string): Promise<any> {
+export async function getUserDataById(userId: string){
   const userDocRef = doc(db, 'users', userId);
   try {
     const docSnap = await getDoc(userDocRef);
     const data = docSnap.data();
-    return data;
+    return data as UserData;
   } catch (error) {
     console.error(error);
   }
@@ -300,16 +300,18 @@ export async function saveUserToFirestore({
     return false;
   }
 }
-
-export async function getUserFromFirestore(authID: string): Promise<any> {
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+export async function getUserFromFirestore(authID: string){
   try {
     const userRef = doc(db, 'users', authID);
     const docSnapshot = await getDoc(userRef);
     if (docSnapshot.exists()) {
       const userData = docSnapshot.data();
-      return { id: authID, ...userData };
-    } else {
-      return null;
+      return { id: authID, ...userData } as User;
     }
   } catch (error) {
     console.error('Error getting user data', error);
