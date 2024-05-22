@@ -57,7 +57,6 @@ export default function MemberInfo({
     if (member.userId === userId) {
       return;
     }
-    console.log('3');
     
     changeChannel(member.userId);
     setPrivateCharName(member.charName);

@@ -235,7 +235,6 @@ export default function MessageWindow({
     });
   };
   const handleIconClick = async () => {
-    console.log(minimizeMessages, privateChannel);
 
     if (!minimizeMessages && privateChannel) {
       await resetUnreadMessage({
