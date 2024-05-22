@@ -6,7 +6,7 @@ export default function useValidatedInput(
   maxLength?: number
 ) {
   const [value, setValue] = useState(initialValue);
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = e.target.value;

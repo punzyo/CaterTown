@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background-image: url('/signInBg.png');
+  background-image: url('/images/signInBg.png');
   background-size: cover;
   > button {
     position: absolute;

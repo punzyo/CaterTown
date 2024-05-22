@@ -82,21 +82,18 @@ const Category = styled.button<CategoryProps>`
   width: 33.3%;
   border-radius: 20px;
   height: 30px;
-  background-color: ${({ $isSelected }) =>
-    $isSelected
-      ? '${({ theme }) => theme.colors.backgroundYellow0}'
-      : '${({ theme }) => theme.colors.hoverYellow0}'};
+  background-color: ${({ $isSelected, theme }) =>
+    $isSelected ? theme.colors.backgroundYellow0 : theme.colors.hoverYellow0};
   border: ${({ $isSelected }) => ($isSelected ? '1px' : '1px')} solid
     rgba(0, 0, 0, 0.4);
-
   border-bottom: none;
   border-radius: 15px 15px 0 0;
   z-index: ${({ $isSelected, $last }) =>
     $isSelected ? '5' : $last ? '-1' : '0'};
   margin-left: -5px;
   &:hover {
-    background-color: ${({ $isSelected }) =>
-      $isSelected ? '' : '${({ theme }) => theme.colors.backgroundYellow1}'};
+    background-color: ${({ $isSelected, theme }) =>
+      $isSelected ? '' : theme.colors.backgroundYellow1};
   }
 `;
 const Title = styled.h2`

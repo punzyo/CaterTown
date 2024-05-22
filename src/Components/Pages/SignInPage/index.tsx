@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background-image: url('/signInBg.png');
+  background-image: url('/images/signInBg.png');
   background-size: cover;
   > button {
     position: absolute;
@@ -110,8 +110,8 @@ const SignUpButton = styled.button`
 export default function SignInPage() {
   const { setUser } = useUserState();
   const navigate = useNavigate();
-  const emailInput = useValidatedInput('', /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-  const passwordInput = useValidatedInput('', /^.{6,}$/);
+  const emailInput = useValidatedInput('test01@mail.com', /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+  const passwordInput = useValidatedInput('000000', /^.{6,}$/);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,6 +123,8 @@ export default function SignInPage() {
       alert('請輸入密碼');
       return;
     }
+
+    
     const user = await signInToAuth(emailInput.value, passwordInput.value);
     if (!user) return;
     const userData = await getUserFromFirestore(user.uid);
