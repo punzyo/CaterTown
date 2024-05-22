@@ -12,7 +12,10 @@ import MemberIcon from '@/Components/MemberIcon';
 import { useRemoteTracks } from '@/utils/hooks/useFilteredTracks';
 import type { NearbyPlayer } from '@/types';
 import { isTrackReference } from '@livekit/components-react';
-import { TrackReference,TrackReferenceOrPlaceholder } from '@livekit/components-react';
+import {
+  TrackReference,
+  TrackReferenceOrPlaceholder,
+} from '@livekit/components-react';
 const Wrapper = styled.div`
   position: relative;
   top: -230px;
@@ -173,7 +176,7 @@ export default function RemoteTracks({
                       }
                     }}
                   >
-                    {(trackRef) && (
+                    {trackRef && (
                       <VideoTrack
                         trackRef={trackRef as TrackReference}
                         ref={refs.current[trackRef.participant.identity]}
