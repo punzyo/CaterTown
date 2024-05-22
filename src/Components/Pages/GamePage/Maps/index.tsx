@@ -136,22 +136,19 @@ const keyMap: Record<string, KeyMapValue> = {
 interface MapProps {
   players: PlayerType[] | undefined;
   playerCharName: string;
-  setPlayerCharName: React.Dispatch<React.SetStateAction<string | null>>;
   setPermissionLevel: React.Dispatch<React.SetStateAction<string | null>>;
-  setGitHubId: React.Dispatch<React.SetStateAction<string>>;
+  playerChar:string;
   permissionLevel: string;
-  gitHubId: string;
+  gitHubId: string ;
   pullRequests: PullRequests;
   broadcasts: BroadcastData[];
 }
 export default function Map({
   players,
   playerCharName,
-  setPlayerCharName,
   permissionLevel,
-  setPermissionLevel,
   gitHubId,
-  setGitHubId,
+  playerChar,
   pullRequests,
   broadcasts,
 }: MapProps) {
@@ -161,7 +158,7 @@ export default function Map({
   const [position, dispatchPosition] = useReducer(positionReducer, null);
   const [currentFrame, setCurrentFrame] = useState(0);
   const [direction, setDirection] = useState('');
-  const [playerChar, setPlayerChar] = useState('');
+
   const [nearbyPlayers, setNearbyPlayers] = useState<
     { charName: string; character: string }[]
   >([]);
@@ -264,14 +261,7 @@ export default function Map({
     if (!players || !position) return;
     countNearbyPlayers(players);
   }, [players, position]);
-  useEffect(() => {
-    if (!players) return;
-    const playerData = players.filter((player) => player.userId === userId);
-    setPlayerChar(playerData[0].character);
-    setPlayerCharName(playerData[0].charName);
-    setPermissionLevel(playerData[0].permissionLevel);
-    setGitHubId(playerData[0].gitHubId);
-  }, [players]);
+
   useEffect(() => {
     if (!resetPosition || !userId || !roomId) return;
     (async () => {
@@ -367,7 +357,7 @@ export default function Map({
       ),
     []
   );
-
+ 
   const playerElements = useMemo(
     () =>
       players
@@ -424,6 +414,7 @@ export default function Map({
       permissionLevel,
     ]
   );
+
   return (
     <Wrapper>
       {broadcasts.length > 0 && userId && roomId && (

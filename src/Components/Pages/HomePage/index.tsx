@@ -85,6 +85,7 @@ const TutorialButton = styled.button`
 `;
 
 export default function HomePage() {
+  
   const { user } = useUserState();
   const [dialogOpen, setDialogOpen] = useState(false);
   const userId = user?.id;

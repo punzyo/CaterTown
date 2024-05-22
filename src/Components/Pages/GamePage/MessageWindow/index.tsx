@@ -101,7 +101,7 @@ const CloseIcon = styled.div`
 `;
 const MessageInput = styled.form`
   position: absolute;
-  bottom: 0px;
+  bottom: 30px;
   width: 100%;
   height: 30px;
   background-color: #eee;
@@ -235,6 +235,8 @@ export default function MessageWindow({
     });
   };
   const handleIconClick = async () => {
+    console.log(minimizeMessages, privateChannel);
+
     if (!minimizeMessages && privateChannel) {
       await resetUnreadMessage({
         roomId,
@@ -242,6 +244,7 @@ export default function MessageWindow({
         userId,
       });
     }
+    setMinimizeMessages(!minimizeMessages);
   };
   const renderMessages = (messages: MessageType[] | undefined) => {
     if (!messages || !Array.isArray(messages)) return null;
@@ -287,7 +290,9 @@ export default function MessageWindow({
               </Channel>
             )}
           </ChannelWrapper>
-          <CloseIcon onClick={handleIconClick}>
+          <CloseIcon
+            onClick={handleIconClick}
+          >
             {minimizeMessages ? <MaximizeIcon /> : <MinimizeIcon />}
           </CloseIcon>
         </MessageController>

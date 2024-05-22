@@ -129,13 +129,14 @@ export default function GamePage() {
   const { roomId, roomName } = useParams();
   const [token, setToken] = useState('');
   const liveKitUrl = import.meta.env.VITE_LIVEKIT_SERVER_URL;
+  
   const { user } = useUserState();
   const userId = user?.id;
 
   const onlineStatus = useRoomStatus({ userId, roomId });
   const players = usePlayer(roomId);
   const [playerCharName, setPlayerCharName] = useState<string | null>(null);
-
+  const [playerChar, setPlayerChar] = useState('');
   const [gitHubId, setGitHubId] = useState('');
   const [permissionLevel, setPermissionLevel] = useState<string | null>(null);
 
@@ -179,7 +180,14 @@ export default function GamePage() {
     setOnlineMembers(online);
     setOfflineMembers(offline);
   }, [players, onlineStatus, userId]);
-
+  useEffect(() => {
+    if (!players) return;
+    const playerData = players.filter((player) => player.userId === userId);
+    setPlayerChar(playerData[0].character);
+    setPlayerCharName(playerData[0].charName);
+    setPermissionLevel(playerData[0].permissionLevel);
+    setGitHubId(playerData[0].gitHubId);
+  }, [players]);
   const getToken = async ({
     roomId,
     charName,
@@ -201,10 +209,11 @@ export default function GamePage() {
     setIsConnected(isConnected);
     setIsConnecting(false);
   };
-  if (!players || !roomName || !userId || !roomId || !onlineStatus) return;
+  
+  if (!players || !roomName || !userId || !roomId || !onlineStatus || !playerCharName || !permissionLevel) return;
   return (
     <>
-      {playerCharName && permissionLevel && (
+      { (
         <Wrapper
           onClick={() => {
             setShowProfile(false);
@@ -225,19 +234,16 @@ export default function GamePage() {
             }}
           >
             <TracksProvider></TracksProvider>
-            (
             <Map
               broadcasts={broadcasts}
               players={players}
               playerCharName={playerCharName}
-              setPlayerCharName={setPlayerCharName}
+              playerChar={playerChar}
               permissionLevel={permissionLevel}
               setPermissionLevel={setPermissionLevel}
               gitHubId={gitHubId}
-              setGitHubId={setGitHubId}
               pullRequests={openPullRequests}
             />
-            )
             <BottomBar>
               <BottomContent>
                 <LocalTracks />

@@ -30,7 +30,7 @@ export default function PRMark({ gitHubId, pullRequests }: PRMarkProps) {
     <>
       {openPullRequests?.length > 0 && (
         <Wrapper onClick={handlePRMarkClick}>
-          <img src="/PR_mark.webp" alt="exclamation mark" />
+          <img src="/images/PR_mark.webp" alt="exclamation mark" />
         </Wrapper>
       )}
     </>
