@@ -50,7 +50,7 @@
 ### Setting up GitHub webhook
 Navigate to the settings of your GitHub repository, add a webhook, paste the Payload URL, set the Content type to application/json, and choose to receive notifications only for Pull Requests.
 
-![Setting webhook](/public/tutorial/permission/permission_3.gif)
+![Setting webhook](https://firebasestorage.googleapis.com/v0/b/midterm-48c1c.appspot.com/o/permission_3.mp4?alt=media&token=6ca06093-9c7d-4318-b6d7-0390dc27d28a)
 
 - After setting up the GitHub webhook, users with the appropriate permissions can see an exclamation mark above their character's head. Clicking on it displays information about the pull request (PR).
 ![PR](/public/tutorial/basic/basic_6.gif)
