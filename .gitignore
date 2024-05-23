@@ -32,3 +32,5 @@ firestore.rules
 
 #env
 .env
+.env.development
+.env.production
