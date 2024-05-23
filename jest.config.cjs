@@ -1,6 +1,7 @@
 module.exports = {
   testEnvironment: './jest.environment.cjs',
   transform: {
+    '^.+\\.tsx?$': 'ts-jest',
     '^.+\\.[tj]sx?$': 'babel-jest'
   },
   transformIgnorePatterns: [
@@ -11,5 +12,6 @@ module.exports = {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
     '^@/(.*)$': '<rootDir>/src/$1'
   },
+  "setupFiles": ["<rootDir>/setupTests.js"],
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[tj]s?(x)'],
 };
