@@ -44,17 +44,18 @@
 
 ## Demo
 
-- Users can move across the map using the WASD or arrow keys
-![Move](/public/tutorial/basic/basic_0.gif)
+- Users can move across the map using the WASD or arrow keys  
+  <img src="/public/tutorial/basic/basic_0.gif" style="width:500px"/>
+  
 - After integrating multi-user communication, characters within two squares can identify others participating in the group chat.
-![PR](/public/tutorial/communication/communication_1.gif)
+  <img src="/public/tutorial/communication/communication_1.gif" style="width:500px"/>
+
 - Upon entering a specific area (room), communication is shared with all members present in that room.
-![PR](/public/tutorial/communication/communication_3.gif)
+  <img src="/public/tutorial/communication/communication_3.gif" style="width:500px"/>
 
 ### Setting up GitHub webhook
-Navigate to the settings of your GitHub repository, add a webhook, paste the Payload URL, set the Content type to application/json, and choose to receive notifications only for Pull Requests.
+Navigate to the settings of your GitHub repository, add a webhook, paste the Payload URL, set the Content type to application/json, and choose to receive notifications only for Pull Requests.  
+<img src="/public/tutorial/permission/permission_3.gif" style="width:500px"/>
 
-![Setting webhook](/public/tutorial/permission/permission_3.gif)
-
-- After setting up the GitHub webhook, users with the appropriate permissions can see an exclamation mark above their character's head. Clicking on it displays information about the pull request (PR).
-![PR](/public/tutorial/basic/basic_6.gif)
+- After setting up the GitHub webhook, users with the appropriate permissions can see an exclamation mark above their character's head. Clicking on it displays information about the pull request (PR).  
+  <img src="/public/tutorial/basic/basic_6.gif" style="width:500px"/>
