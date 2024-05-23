@@ -1,5 +1,9 @@
 
-![Logo](https://firebasestorage.googleapis.com/v0/b/midterm-48c1c.appspot.com/o/Cater%20Logo.png?alt=media&token=c9634c33-ed4d-41d5-925f-d0c3489e53d0)
+<p align="center">
+  <img src="https://firebasestorage.googleapis.com/v0/b/midterm-48c1c.appspot.com/o/Cater%20Logo.png?alt=media&token=c9634c33-ed4d-41d5-925f-d0c3489e53d0" style="margin: 0 auto; display: block;">
+</p>
+
+
 # Cater Town
 
 [Cater Town](https://catertown.site/) offers a virtual environment where users can choose their characters and move through the platform to collaborate remotely. It features text communication, audio-visual connections, and tracking the progress of GitHub pull requests.
@@ -50,7 +54,7 @@
 ### Setting up GitHub webhook
 Navigate to the settings of your GitHub repository, add a webhook, paste the Payload URL, set the Content type to application/json, and choose to receive notifications only for Pull Requests.
 
-![Setting webhook](https://firebasestorage.googleapis.com/v0/b/midterm-48c1c.appspot.com/o/permission_3.mp4?alt=media&token=6ca06093-9c7d-4318-b6d7-0390dc27d28a)
+![Setting webhook](/public/tutorial/permission/permission_3.gif)
 
 - After setting up the GitHub webhook, users with the appropriate permissions can see an exclamation mark above their character's head. Clicking on it displays information about the pull request (PR).
 ![PR](/public/tutorial/basic/basic_6.gif)
