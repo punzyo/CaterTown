@@ -54,7 +54,7 @@ password: 000000
 - Users can move across the map using the WASD or arrow keys  
   <img src="/public/tutorial/basic/basic_0.gif" style="width:500px"/>
   
-- After integrating multi-user communication, characters within two squares can identify others participating in the group chat. 
+- After integrating multi-user communication, characters within two squares can identify others participating in the group chat.  
   <img src="/public/tutorial/communication/communication_1.gif" style="width:500px"/>
 
 - Upon entering a specific area (room), communication is shared with all members present in that room.
