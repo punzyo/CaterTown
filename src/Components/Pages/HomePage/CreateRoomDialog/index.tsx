@@ -114,9 +114,11 @@ export default function CreateRoomDialog({
   const clickCreateRoom = async () => {
     if (!roomNameInput.isValid) {
       alert('房間名稱不符規則');
+      return
     }
     if (!charNameInput.isValid) {
       alert('角色名稱不符規則');
+      return
     }
     const roomName = roomNameInput.value;
     const charName = charNameInput.value;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 
 export default function useValidatedInput(
   initialValue: string,
@@ -6,7 +6,7 @@ export default function useValidatedInput(
   maxLength?: number
 ) {
   const [value, setValue] = useState(initialValue);
-  const [isValid, setIsValid] = useState(true);
+  const [isValid, setIsValid] = useState(regex.test(initialValue));
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = e.target.value;
